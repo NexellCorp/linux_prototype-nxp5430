@@ -30,7 +30,6 @@ extern "C"
 
 //--------------------------------------------------------------------------
 /// @brief	register map
-#if 1
 typedef struct
 {
 	volatile U32	VIP_CONFIG;			// 0x000 : VIP Configuration Register
@@ -44,7 +43,9 @@ typedef struct
 	volatile U32	VIP_FIFOCTRL;		// 0x020 : VIP FIFO Control Register
 	volatile U32	VIP_HCOUNT;			// 0x024 : VIP Horizontal Counter Register
 	volatile U32	VIP_VCOUNT;			// 0x028 : VIP Vertical Counter Register
-	volatile U8		__Reserved00[0x200-0x2C];	// 0x02C ~ 0x1FF
+	volatile U32	VIP_PADCLK_SEL;		// 0x02C : VIP PAD clock sel 0: clkgen 1:PAD clk
+	volatile U32	VIP_INFIFOCLR;		// 0x030 : VIP input FIFO clear
+	volatile U8		__Reserved00[0x200-0x34];	// 0x02C ~ 0x1FF
 	volatile U32	VIP_CDENB;			// 0x200 : VIP Clipper & Decimator Enable Register
 	volatile U32	VIP_ODINT;			// 0x204 : VIP Operation Done Interrupt Register
 	volatile U32	VIP_IMGWIDTH;		// 0x208 : VIP Image Width Register
@@ -59,120 +60,48 @@ typedef struct
 	volatile U32	DECI_DELTAH;		// 0x22C : VIP Decimator Delta Height Register
 	volatile S32	DECI_CLEARW;		// 0x230 : VIP Decimator Clear Width Register
 	volatile S32	DECI_CLEARH;		// 0x234 : VIP Decimator Clear Height Register
-	volatile U32	DECI_LUSEG;			// 0x238 : VIP Decimator Lu Segment Register
-	volatile U32	DECI_CRSEG;			// 0x23C : VIP Decimator Cr Segment Register
-	volatile U32	DECI_CBSEG;			// 0x240 : VIP Decimator Cb Segment Register
+	volatile U32	__Reserved01;		// 0x238 :
+	volatile U32	__Reserved02;		// 0x23C :
+	volatile U32	__Reserved03;		// 0x240 :
 	volatile U32	DECI_FORMAT;		// 0x244 : VIP Decimator NX_VIP_FORMAT Register
-	volatile U32	DECI_ROTFLIP;		// 0x248 : VIP Decimator Rotation & Flip Register
-	volatile U32	DECI_LULEFT;		// 0x24C : VIP Decimator Lu Left Register
-	volatile U32	DECI_CRLEFT;		// 0x250 : VIP Decimator Cr Left Register
-	volatile U32	DECI_CBLEFT;		// 0x254 : VIP Decimator Cb Left Register
-	volatile U32	DECI_LURIGHT;		// 0x258 : VIP Decimator Lu Right Register
-	volatile U32	DECI_CRRIGHT;		// 0x25C : VIP Decimator Cr Right Register
-	volatile U32	DECI_CBRIGHT;		// 0x260 : VIP Decimator Cb Right Register
-	volatile U32	DECI_LUTOP;			// 0x264 : VIP Decimator Lu Top Register
-	volatile U32	DECI_CRTOP;			// 0x268 : VIP Decimator Cr Top Register
-	volatile U32	DECI_CBTOP;			// 0x26C : VIP Decimator Cb Top Register
-	volatile U32	DECI_LUBOTTOM;		// 0x270 : VIP Decimator Lu Bottom Register
-	volatile U32	DECI_CRBOTTOM;		// 0x274 : VIP Decimator Cr Bottom Register
-	volatile U32	DECI_CBBOTTOM;		// 0x278 : VIP Decimator Cb Bottom Register
-	volatile U32	CLIP_LUSEG;			// 0x27C : VIP Clipper Lu Segment Register
-	volatile U32	CLIP_CRSEG;			// 0x280 : VIP Clipper Cr Segment Register
-	volatile U32	CLIP_CBSEG;			// 0x284 : VIP Clipper Cb Segment Register
+	volatile U32	DECI_LUADDR;		// 0x248 :
+	volatile U32	DECI_LUSTRIDE;		// 0x24C :
+	volatile U32	DECI_CRADDR;		// 0x250 :
+	volatile U32	DECI_CRSTRIDE;		// 0x254 :
+	volatile U32	DECI_CBADDR ;		// 0x258 :
+	volatile U32	DECI_CBSTRIDE;		// 0x25C :
+	volatile U32	__Reserved04;		// 0x260 :
+	volatile U32	__Reserved05;		// 0x264 :
+	volatile U32	__Reserved06;		// 0x268 :
+	volatile U32	__Reserved07;		// 0x26C :
+	volatile U32	__Reserved08;		// 0x270 :
+	volatile U32	__Reserved09;		// 0x274 :
+	volatile U32	__Reserved10;		// 0x278 :
+	volatile U32	__Reserved11;		// 0x27C :
+	volatile U32	__Reserved12;		// 0x280 :
+	volatile U32	__Reserved13;		// 0x284 :
 	volatile U32	CLIP_FORMAT;		// 0x288 : VIP Clipper Format Register
-	volatile U32	CLIP_ROTFLIP;		// 0x28C : VIP Clipper Rotation & Flip Register
-	volatile U32	CLIP_LULEFT;		// 0x290 : VIP Clipper Lu Left Register
-	volatile U32	CLIP_CRLEFT;		// 0x294 : VIP Clipper Cr Left Register
-	volatile U32	CLIP_CBLEFT;		// 0x298 : VIP Clipper Cb Left Register
-	volatile U32	CLIP_LURIGHT;		// 0x29C : VIP Clipper Lu Right Register
-	volatile U32	CLIP_CRRIGHT;		// 0x2A0 : VIP Clipper Cr Right Register
-	volatile U32	CLIP_CBRIGHT;		// 0x2A4 : VIP Clipper Cb Right Register
-	volatile U32	CLIP_LUTOP;			// 0x2A8 : VIP Clipper Lu Top Register
-	volatile U32	CLIP_CRTOP;			// 0x2AC : VIP Clipper Cr Top Register
-	volatile U32	CLIP_CBTOP;			// 0x2B0 : VIP Clipper Cb Top Register
-	volatile U32	CLIP_LUBOTTOM;		// 0x2B4 : VIP Clipper Lu Bottom Register
-	volatile U32	CLIP_CRBOTTOM;		// 0x2B8 : VIP Clipper Cr Bottom Register
-	volatile U32	CLIP_CBBOTTOM;		// 0x2BC : VIP Clipper Cb Bottom Register
+	volatile U32	CLIP_LUADDR;		// 0x28C :
+	volatile U32	CLIP_LUSTRIDE;		// 0x290 :
+	volatile U32	CLIP_CRADDR;		// 0x294 :
+	volatile U32	CLIP_CRSTRIDE;		// 0x298 :
+	volatile U32	CLIP_CBADDR;		// 0x29C :
+	volatile U32	CLIP_CBSTRIDE;		// 0x2A0 :
+	volatile U32	__Reserved14;		// 0x2A4 :
+	volatile U32	__Reserved15;		// 0x2A8 :
+	volatile U32	__Reserved16;		// 0x2AC :
+	volatile U32	__Reserved17;		// 0x2B0 :
+	volatile U32	__Reserved18;		// 0x2B4 :
+	volatile U32	__Reserved19;		// 0x2B8 :
+	volatile U32	__Reserved20;		// 0x2BC :
 	volatile U32	VIP_SCANMODE;		// 0x2C0 : VIP Clipper & Decimator Scan Mode Register
-	volatile U32	CLIP_YUYVENB;		// 0x2C4 : VIP Clipper Linear YUYV Enable Register
-	volatile U32	CLIP_BASEADDRH;		// 0x2C8 : VIP Clipper Linear Base Address High Register
-	volatile U32	CLIP_BASEADDRL;		// 0x2CC : VIP Clipper Linear Base Address Low Register
-	volatile U32	CLIP_STRIDEH;		// 0x2D0 : VIP Clipper Linear Stride High Register
-	volatile U32	CLIP_STRIDEL;		// 0x2D4 : VIP Clipper Linear Stride Low Register
-	volatile U32	VIP_VIP1;			// 0x2D8 : VIP SIP Enable Register
+	volatile U32	__Reserved21;		// 0x2C4 :
+	volatile U32	__Reserved22;		// 0x2C8 :
+	volatile U32	__Reserved23;		// 0x2CC :
+	volatile U32	__Reserved24;		// 0x2D0 :
+	volatile U32	__Reserved25;		// 0x2D4 :
+	volatile U32	VIP_VIP1;			// 0x2D8 :
 } NX_VIP_RegisterSet;
-#else
-	typedef struct
-	{
-		volatile U16	VIP_CONFIG;			// 0x000 : VIP Configuration Register
-		volatile U16	VIP_HVINT;			// 0x002 : VIP Interrupt Control Register
-		volatile U16	VIP_SYNCCTRL;		// 0x004 : VIP Sync Control Register
-		volatile U16	VIP_SYNCMON;		// 0x006 : VIP Sync Monitor Register
-		volatile U16	VIP_VBEGIN;			// 0x008 : VIP Vertical Sync Start Register
-		volatile U16	VIP_VEND;			// 0x00A : VIP Vertical Sync End Register
-		volatile U16	VIP_HBEGIN;			// 0x00C : VIP Horizontal Sync Start Register
-		volatile U16	VIP_HEND;			// 0x00E : VIP Horizontal Sync End Register
-		volatile U16	VIP_FIFOCTRL;		// 0x010 : VIP FIFO Control Register
-		volatile U16	VIP_HCOUNT;			// 0x012 : VIP Horizontal Counter Register
-		volatile U16	VIP_VCOUNT;			// 0x014 : VIP Vertical Counter Register
-		volatile U8		__Reserved00[0x200-0x16];	// 0x016 ~ 0x1FF
-		volatile U16	VIP_CDENB;			// 0x200 : VIP Clipper & Decimator Enable Register
-		volatile U16	VIP_ODINT;			// 0x202 : VIP Operation Done Interrupt Register
-		volatile U16	VIP_IMGWIDTH;		// 0x204 : VIP Image Width Register
-		volatile U16	VIP_IMGHEIGHT;		// 0x206 : VIP Image Height Register
-		volatile U16	CLIP_LEFT;			// 0x208 : VIP Clipper Left Register
-		volatile U16	CLIP_RIGHT;			// 0x20A : VIP Clipper Right Register
-		volatile U16	CLIP_TOP;			// 0x20C : VIP Clipper Top Register
-		volatile U16	CLIP_BOTTOM;		// 0x20E : VIP Clipper Bottom Register
-		volatile U16	DECI_TARGETW;		// 0x210 : VIP Decimator Target Width Register
-		volatile U16	DECI_TARGETH;		// 0x212 : VIP Decimator Target Height Register
-		volatile U16	DECI_DELTAW;		// 0x214 : VIP Decimator Delta Width Register
-		volatile U16	DECI_DELTAH;		// 0x216 : VIP Decimator Delta Height Register
-		volatile S16	DECI_CLEARW;		// 0x218 : VIP Decimator Clear Width Register
-		volatile S16	DECI_CLEARH;		// 0x21A : VIP Decimator Clear Height Register
-		volatile U16	DECI_LUSEG;			// 0x21C : VIP Decimator Lu Segment Register
-		volatile U16	DECI_CRSEG;			// 0x21E : VIP Decimator Cr Segment Register
-		volatile U16	DECI_CBSEG;			// 0x220 : VIP Decimator Cb Segment Register
-		volatile U16	DECI_FORMAT;		// 0x222 : VIP Decimator NX_VIP_FORMAT Register
-		volatile U16	DECI_ROTFLIP;		// 0x224 : VIP Decimator Rotation & Flip Register
-		volatile U16	DECI_LULEFT;		// 0x226 : VIP Decimator Lu Left Register
-		volatile U16	DECI_CRLEFT;		// 0x228 : VIP Decimator Cr Left Register
-		volatile U16	DECI_CBLEFT;		// 0x22A : VIP Decimator Cb Left Register
-		volatile U16	DECI_LURIGHT;		// 0x22C : VIP Decimator Lu Right Register
-		volatile U16	DECI_CRRIGHT;		// 0x22E : VIP Decimator Cr Right Register
-		volatile U16	DECI_CBRIGHT;		// 0x230 : VIP Decimator Cb Right Register
-		volatile U16	DECI_LUTOP;			// 0x232 : VIP Decimator Lu Top Register
-		volatile U16	DECI_CRTOP;			// 0x234 : VIP Decimator Cr Top Register
-		volatile U16	DECI_CBTOP;			// 0x236 : VIP Decimator Cb Top Register
-		volatile U16	DECI_LUBOTTOM;		// 0x238 : VIP Decimator Lu Bottom Register
-		volatile U16	DECI_CRBOTTOM;		// 0x23A : VIP Decimator Cr Bottom Register
-		volatile U16	DECI_CBBOTTOM;		// 0x23C : VIP Decimator Cb Bottom Register
-		volatile U16	CLIP_LUSEG;			// 0x23E : VIP Clipper Lu Segment Register
-		volatile U16	CLIP_CRSEG;			// 0x240 : VIP Clipper Cr Segment Register
-		volatile U16	CLIP_CBSEG;			// 0x242 : VIP Clipper Cb Segment Register
-		volatile U16	CLIP_FORMAT;		// 0x244 : VIP Clipper Format Register
-		volatile U16	CLIP_ROTFLIP;		// 0x246 : VIP Clipper Rotation & Flip Register
-		volatile U16	CLIP_LULEFT;		// 0x248 : VIP Clipper Lu Left Register
-		volatile U16	CLIP_CRLEFT;		// 0x24A : VIP Clipper Cr Left Register
-		volatile U16	CLIP_CBLEFT;		// 0x24C : VIP Clipper Cb Left Register
-		volatile U16	CLIP_LURIGHT;		// 0x24E : VIP Clipper Lu Right Register
-		volatile U16	CLIP_CRRIGHT;		// 0x250 : VIP Clipper Cr Right Register
-		volatile U16	CLIP_CBRIGHT;		// 0x252 : VIP Clipper Cb Right Register
-		volatile U16	CLIP_LUTOP;			// 0x254 : VIP Clipper Lu Top Register
-		volatile U16	CLIP_CRTOP;			// 0x256 : VIP Clipper Cr Top Register
-		volatile U16	CLIP_CBTOP;			// 0x258 : VIP Clipper Cb Top Register
-		volatile U16	CLIP_LUBOTTOM;		// 0x25A : VIP Clipper Lu Bottom Register
-		volatile U16	CLIP_CRBOTTOM;		// 0x25C : VIP Clipper Cr Bottom Register
-		volatile U16	CLIP_CBBOTTOM;		// 0x25E : VIP Clipper Cb Bottom Register
-		volatile U16	VIP_SCANMODE;		// 0x260 : VIP Clipper & Decimator Scan Mode Register
-		volatile U16	CLIP_YUYVENB;		// 0x262 : VIP Clipper Linear YUYV Enable Register
-		volatile U16	CLIP_BASEADDRH;		// 0x264 : VIP Clipper Linear Base Address High Register
-		volatile U16	CLIP_BASEADDRL;		// 0x266 : VIP Clipper Linear Base Address Low Register
-		volatile U16	CLIP_STRIDEH;		// 0x268 : VIP Clipper Linear Stride High Register
-		volatile U16	CLIP_STRIDEL;		// 0x26A : VIP Clipper Linear Stride Low Register
-		volatile U16	VIP_VIP1;			// 0x26C : VIP SIP Enable Register
-	} NX_VIP_RegisterSet;
-#endif
 
 	/// @brief VIP Interrupt for interrupt interface
 	enum
@@ -230,11 +159,22 @@ typedef struct
 	///	@brief	the data format
 	typedef enum
 	{
-		NX_VIP_FORMAT_420				= 0UL,	/// Block Separated YUV 420
-		NX_VIP_FORMAT_422				= 1UL,	/// Block Separated YUV 422
-		NX_VIP_FORMAT_444				= 2UL,	/// Block Separated YUV 444
-		NX_VIP_FORMAT_YUYV				= 3UL	/// Linear YUV 422 (YUYV)
-	}	NX_VIP_FORMAT;
+		NX_VIP_FORMAT_420				= 0UL,	/// Separated YUV 420
+		NX_VIP_FORMAT_422				= 1UL,	/// Separated YUV 422
+		NX_VIP_FORMAT_444				= 2UL,	/// Separated YUV 444
+		NX_VIP_FORMAT_L422              = 3UL,	/// Non-Separated YUYV 422
+		NX_VIP_FORMAT_YUYV              = 3UL,	/// Non-Separated YUYV 422
+
+		NX_VIP_FORMAT_420_CBCR			= 4UL,	/// Separated YUV 420 CBCR packed
+		NX_VIP_FORMAT_422_CBCR			= 5UL,	/// Separated YUV 422 CBCR packed
+		NX_VIP_FORMAT_444_CBCR			= 6UL,	/// Separated YUV 444 CBCR packed
+		NX_VIP_FORMAT_RESERVED00        = 7UL,	/// Reserved
+
+		NX_VIP_FORMAT_420_CRCB			= 8UL,	/// Separated YUV 420 CRCB packed
+		NX_VIP_FORMAT_422_CRCB			= 9UL,	/// Separated YUV 422 CRCB packed
+		NX_VIP_FORMAT_444_CRCB			= 10UL,	/// Separated YUV 444 CRCB packed
+		NX_VIP_FORMAT_RESERVED01        = 11UL	/// Reserved
+	} NX_VIP_FORMAT;
 
 	/// @brief	input port select
 	typedef enum
@@ -242,6 +182,13 @@ typedef struct
 		NX_VIP_INPUTPORT_A				= 0UL,	///	Input port A(VIDCLK0, VIDHSYNC0, VIDVSYNC0, FIELD/DVALID, VID0)
 		NX_VIP_INPUTPORT_B				= 1UL	///	Input port B(VIDCLK1, VIDHSYNC1, VIDVSYNC1, SIPFIELD/DVALID, VID1)
 	}	NX_VIP_INPUTPORT;
+
+	///	@brief	data channel width
+	typedef enum
+	{
+		NX_VIP_VD_8BIT	= 0,	///< 8bit VD
+		NX_VIP_VD_16BIT	= 1,	///< 16bit VD
+	} NX_VIP_VD_BITS;
 
 //------------------------------------------------------------------------------
 ///	@name	VIP Interface
@@ -296,6 +243,14 @@ void  NX_VIP_ClearInterruptPendingAll( U32 ModuleIndex );
 S32   NX_VIP_GetInterruptPendingNumber( U32 ModuleIndex );
 //@}
 
+//------------------------------------------------------------------------------
+///	@name	PAD Interface
+//------------------------------------------------------------------------------
+//@{
+U32 NX_VIP_GetNumberOfPADMode ( U32 ModuleIndex );
+void NX_VIP_EnablePAD ( U32 ModuleIndex, U32 ModeIndex );
+//@}
+
 
 //------------------------------------------------------------------------------
 /// @name VIP Configure Function
@@ -310,6 +265,8 @@ NX_VIP_INPUTPORT	NX_VIP_GetInputPort( U32 ModuleIndex );
 void	NX_VIP_SetDataMode( U32 ModuleIndex, NX_VIP_DATAORDER DataOrder, U32 DataWidth );
 void	NX_VIP_GetDataMode( U32 ModuleIndex, NX_VIP_DATAORDER *DataOrder, U32 *pDataWidth	);
 
+void	NX_VIP_SetSync( U32 ModuleIndex, CBOOL bExtSync, NX_VIP_VD_BITS SourceBits,
+						U32 AVW, U32 AVH, U32 HSW, U32 HFP, U32 HBP, U32 VSW, U32 VFP, U32 VBP );
 void	NX_VIP_SetHVSync( U32 ModuleIndex, CBOOL bExtSync, U32 AVW, U32 AVH,
 								U32 HSW, U32 HFP, U32 HBP,
 								U32 VSW, U32 VFP, U32 VBP );
@@ -347,14 +304,9 @@ U32		NX_VIP_GetVerCount( U32 ModuleIndex );
 void	NX_VIP_SetClipRegion( U32 ModuleIndex, U32 Left, U32 Top, U32 Right, U32 Bottom );
 void	NX_VIP_GetClipRegion( U32 ModuleIndex, U32 *pLeft, U32 *pTop, U32 *pRight, U32 *pBottom );
 
-void	NX_VIP_SetClipperFormat( U32 ModuleIndex, NX_VIP_FORMAT Format, CBOOL bRotation, CBOOL bHFlip, CBOOL bVFlip );
-void	NX_VIP_GetClipperFormat( U32 ModuleIndex, NX_VIP_FORMAT *pFormat, CBOOL *pbRotation, CBOOL *pbHFlip, CBOOL *pbVFlip );
+void	NX_VIP_SetClipperFormat( U32 ModuleIndex, NX_VIP_FORMAT Format );
+void	NX_VIP_GetClipperFormat( U32 ModuleIndex, NX_VIP_FORMAT *pFormat );
 void	NX_VIP_SetClipperAddr( U32 ModuleIndex, NX_VIP_FORMAT Format, U32 Width, U32 Height, U32 LuAddr, U32 CbAddr, U32 CrAddr, U32 StrideY, U32 StrideCbCr );
-void	NX_VIP_SetClipperAddr2D( U32 ModuleIndex, U32 LuSAddr, U32 LuEAddr, U32 CbSAddr, U32 CbEAddr, U32 CrSAddr, U32 CrEAddr );
-void	NX_VIP_GetClipperAddr2D( U32 ModuleIndex, U32 *pLuSAddr, U32 *pLuEAddr, U32 *pCbSAddr, U32 *pCbEAddr,
-								U32 *pCrSAddr, U32 *pCrEAddr );
-void	NX_VIP_SetClipperAddrYUYV( U32 ModuleIndex, U32 BaseAddr, U32 Stride );
-void	NX_VIP_GetClipperAddrYUYV( U32 ModuleIndex, U32 *pBaseAddr, U32 *pStride );
 //@}
 
 //------------------------------------------------------------------------------
@@ -365,17 +317,14 @@ void	NX_VIP_SetDecimation( U32 ModuleIndex, U32 SrcWidth, U32 SrcHeight, U32 Dst
 void	NX_VIP_GetDecimation( U32 ModuleIndex, U32 *pDstWidth, U32 *pDstHeight,
 							U32 *pDeltaWidth, U32 *pDeltaHeight, S32 *pClearWidth, S32 *pClearHeight );
 
-void	NX_VIP_SetDecimatorFormat( U32 ModuleIndex, NX_VIP_FORMAT Format, CBOOL bRotation, CBOOL bHFlip, CBOOL bVFlip );
-void	NX_VIP_GetDecimatorFormat( U32 ModuleIndex, NX_VIP_FORMAT *pFormat, CBOOL *pbRotation, CBOOL *pbHFlip, CBOOL *pbVFlip );
+void	NX_VIP_SetDecimatorFormat( U32 ModuleIndex, NX_VIP_FORMAT Format );
+void	NX_VIP_GetDecimatorFormat( U32 ModuleIndex, NX_VIP_FORMAT *pFormat );
+void	NX_VIP_SetDecimatorAddr( U32 ModuleIndex, NX_VIP_FORMAT Format, U32 Width, U32 Height, U32 LuAddr, U32 CbAddr, U32 CrAddr, U32 YStride, U32 CBCRStride );
 void    NX_VIP_GetDeciSource(U32 ModuleIndex, U32 *pSrcWidth, U32 *pSrcHeight);
-/* psw0523 fix for stride setting */
-// void	NX_VIP_SetDecimatorAddr( U32 ModuleIndex, NX_VIP_FORMAT Format, U32 Width, U32 Height, U32 LuAddr, U32 CbAddr, U32 CrAddr, U32 Stride );
-void	NX_VIP_SetDecimatorAddr( U32 ModuleIndex, NX_VIP_FORMAT Format, U32 Width, U32 Height, U32 LuAddr, U32 CbAddr, U32 CrAddr, U32 StrideY, U32 StrideCbCr );
-void	NX_VIP_SetDecimatorAddr2D( U32 ModuleIndex, U32 LuSAddr, U32 LuEAddr, U32 CbSAddr, U32 CbEAddr, U32 CrSAddr, U32 CrEAddr );
-void	NX_VIP_GetDecimatorAddr2D( U32 ModuleIndex, U32 *pLuSAddr, U32 *pLuEAddr, U32 *pCbSAddr, U32 *pCbEAddr,
-							U32 *pCrSAddr, U32 *pCrEAddr );
+
 //@}
 
+CBOOL  NX_VIP_SmokeTest ( U32 ModuleIndex );
 //@}
 
 #ifdef	__cplusplus

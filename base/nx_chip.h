@@ -58,7 +58,7 @@ extern "C" {
 #define NUMBER_OF_WDT_MODULE                                1
 #define NUMBER_OF_MPEGTSI_MODULE                            1
 #define NUMBER_OF_DISPLAYTOP_MODULE                         1
-#define NUMBER_OF_VIP_MODULE                                3
+#define NUMBER_OF_VIP_MODULE                                2
 #define NUMBER_OF_MIPI_MODULE                               1
 #define NUMBER_OF_MALI400_MODULE                            1
 #define NUMBER_OF_ADC_MODULE                                1

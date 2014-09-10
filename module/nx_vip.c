@@ -15,6 +15,8 @@
 //------------------------------------------------------------------------------
 #include "nx_chip.h"
 #include "nx_vip.h"
+/*#include <nx_framework.h>*/
+/*#include <string.h> // for memset*/
 
 static	NX_VIP_RegisterSet *__g_pRegister[NUMBER_OF_VIP_MODULE];
 
@@ -44,7 +46,7 @@ CBOOL	NX_VIP_Initialize( void )
 
 	if( CFALSE == bInit )
 	{
-		/* memset( __g_pRegister, 0, sizeof(__g_pRegister) ); */
+		/*memset( __g_pRegister, 0, sizeof(__g_pRegister) );*/
 		bInit = CTRUE;
 	}
 
@@ -641,6 +643,95 @@ S32		NX_VIP_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 }
 
 //------------------------------------------------------------------------------
+//	PAD Interface
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get number of PAD mode
+ *	@param[in]	ModuleIndex	an index of module.
+ *	@return		number of PAD mode.
+ *	@see		NX_VIP_EnablePAD
+ */
+U32 NX_VIP_GetNumberOfPADMode ( U32 ModuleIndex )
+{
+	// NXP4330 only
+	const U32 number_of_pad_mode[] = {1,2};
+	return number_of_pad_mode[ModuleIndex];
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Enable PAD for a module.
+ *	@param[in]	ModuleIndex	an index of module.
+ *	@see		NX_VIP_GetNumberOfPADMode
+ */
+#if 0
+void NX_VIP_EnablePAD ( U32 ModuleIndex, U32 ModeIndex )
+{
+	// NXP4330 only
+	if( ModuleIndex==1 && ModeIndex==1 )
+	{
+		U32 i;
+		const U32 PADNumber[] =	{
+		    PADINDEX_OF_VIP1_i_ExtCLK2   ,
+		    PADINDEX_OF_VIP1_i_ExtHSYNC2 ,
+		    PADINDEX_OF_VIP1_i_ExtVSYNC2 ,
+		    PADINDEX_OF_VIP1_i_VD2_0_    ,
+		    PADINDEX_OF_VIP1_i_VD2_1_    ,
+		    PADINDEX_OF_VIP1_i_VD2_2_    ,
+		    PADINDEX_OF_VIP1_i_VD2_3_    ,
+		    PADINDEX_OF_VIP1_i_VD2_4_    ,
+		    PADINDEX_OF_VIP1_i_VD2_5_    ,
+		    PADINDEX_OF_VIP1_i_VD2_6_    ,
+		    PADINDEX_OF_VIP1_i_VD2_7_    ,
+		};
+
+		for(i=0; i<sizeof( PADNumber)/sizeof(PADNumber[0]); i++)
+		{
+            NX_SWITCHDEVICE_Set_Switch_Enable ( PADNumber[i] );
+			NX_GPIO_SetPadFunctionEnable       ( PADNumber[i], ModeIndex );
+		}
+	}
+	else
+	{
+		U32 i;
+		const U32 PADNumber[][NUMBER_OF_VIP_MODULE] =	{
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_ExtCLK   ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_ExtHSYNC ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_ExtVSYNC ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_DValid   ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_0_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_1_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_2_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_3_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_4_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_5_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_6_    ) },
+		     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_7_    ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_8_    ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_9_    ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_10_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_11_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_12_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_13_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_14_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VD_15_   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, i_VCLK27   ) },
+		//     { PADINDEX_WITH_CHANNEL_LIST( VIP, o_VCLK27    ) },
+		};
+		NX_CASSERT( NUMBER_OF_VIP_MODULE == (sizeof(PADNumber[0])/sizeof(PADNumber[0][0])) );
+		NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
+
+		for(i=0; i<sizeof( PADNumber)/sizeof(PADNumber[0]); i++)
+		{
+			NX_SWITCHDEVICE_Set_Switch_Enable ( PADNumber[i][ModuleIndex] );
+			NX_PAD_SetPadFunctionEnable       ( PADNumber[i][ModuleIndex], ModeIndex );
+		}
+	}
+}
+#endif
+
+//------------------------------------------------------------------------------
 //	Module customized operations
 //------------------------------------------------------------------------------
 /**
@@ -680,6 +771,9 @@ NX_VIP_SetVIPEnable
 	temp = pRegister->VIP_CONFIG;
 	if( bVIPEnb )	temp |= (U16) VIPENB;
 	else			temp &= (U16)~VIPENB;
+
+	WriteIODW(&pRegister->VIP_INFIFOCLR, 0xFFFF); // clear input FIFO
+	WriteIODW(&pRegister->VIP_INFIFOCLR, 0     ); // clear input FIFO
 
 //	pRegister->VIP_CONFIG = temp;
 	WriteIODW(&pRegister->VIP_CONFIG, temp);
@@ -901,18 +995,19 @@ NX_VIP_GetDataMode
  *	@see		NX_VIP_GetHVSync
  */
 void
-NX_VIP_SetHVSync
+NX_VIP_SetSync
 (
-	U32 		ModuleIndex,
-	CBOOL		bExtSync,
-	U32			AVW,
-	U32			AVH,
-	U32			HSW,
-	U32			HFP,
-	U32			HBP,
-	U32			VSW,
-	U32			VFP,
-	U32			VBP
+	U32 		   ModuleIndex,
+	CBOOL		   bExtSync,
+	NX_VIP_VD_BITS SourceBits,
+	U32			   AVW,
+	U32			   AVH,
+	U32			   HSW,
+	U32			   HFP,
+	U32			   HBP,
+	U32			   VSW,
+	U32			   VFP,
+	U32			   VBP
 )
 {
 	const U32 DRANGE		= 1UL<<9;
@@ -927,6 +1022,13 @@ NX_VIP_SetHVSync
 
 	pRegister = __g_pRegister[ModuleIndex];
 
+	// SyncGen의 신호들이 제멋대로 움직이는 것을 막기 위해
+	// begin/end값들을 일단 최대값으로 채워둔다.
+	WriteIODW(&pRegister->VIP_VBEGIN, 0xFFFFFFFF);
+	WriteIODW(&pRegister->VIP_VEND  , 0xFFFFFFFF);
+	WriteIODW(&pRegister->VIP_HBEGIN, 0xFFFFFFFF);
+	WriteIODW(&pRegister->VIP_HEND  , 0xFFFFFFFF);
+
 	temp = (U32)pRegister->VIP_CONFIG;
 	temp &= ~DRANGE;	// Reserved 0.
 	if( bExtSync )
@@ -937,102 +1039,108 @@ NX_VIP_SetHVSync
 	{
 		temp &= ~EXTSYNCENB;
 	}
-
-//	pRegister->VIP_CONFIG = (U16)temp;
 	WriteIODW(&pRegister->VIP_CONFIG, (U16)temp);
-
-	temp = (U32)pRegister->VIP_SYNCCTRL;
-	temp |= 0x0300;		// EXTHSPOL = EXTVSPOL = 1
-
-//	pRegister->VIP_SYNCCTRL = (U16)temp;
-	WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
 	NX_ASSERT( 32768 > AVW && 0 == (AVW & 1) );
 	NX_ASSERT( 32768 > AVH );
 
-	if( bExtSync )
+	switch( SourceBits )
 	{
-	//	pRegister->VIP_IMGWIDTH	= (U16)(AVW>>1);
+	case NX_VIP_VD_8BIT	:
 		WriteIODW(&pRegister->VIP_IMGWIDTH, (U16)(AVW>>1));
+		WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
+		break;
+	case NX_VIP_VD_16BIT:
+		WriteIODW(&pRegister->VIP_IMGWIDTH , (U16)AVW);
+		WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
+		break;
+	default:
+		break;
 	}
-	else
-	{
-	//	pRegister->VIP_IMGWIDTH	= (U16)((AVW>>1) + 2);
-		WriteIODW(&pRegister->VIP_IMGWIDTH, (U16)((AVW>>1) + 2));
-	}
-
-//	pRegister->VIP_IMGHEIGHT	= (U16)AVH;
-	WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
 
 	if( bExtSync )
 	{
-		NX_ASSERT( 0 < VBP );
+		NX_ASSERT( 0 <= VBP );
 		NX_ASSERT( 65536 >= (VBP + AVH));
-		NX_ASSERT( 0 < HBP );
+		NX_ASSERT( 0 <= HBP );
 		NX_ASSERT( 65536 >= (HBP + AVW));
+		if( 0!=VBP )
+		{
+			temp = (U32)pRegister->VIP_SYNCCTRL;
+			temp &= ~(3<<11); // { VSYNCGENSOURCE(0:H-Sync 1:Video-clock),ExtVSyncMode (0:Sync 1:Blank)}
+			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-	//	pRegister->VIP_VBEGIN	= (U16)(VBP - 1);
-		WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VBP - 1));
+			WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VBP - 1));
+			WriteIODW(&pRegister->VIP_VEND, (U16)(VBP + AVH - 1));
+		}
+		else
+		{
+			temp = (U32)pRegister->VIP_SYNCCTRL;
+			temp |= (3<<11); // { VSYNCGENSOURCE(0:H-Sync 1:Video-clock),ExtVSyncMode (0:Sync 1:Blank)}
+			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-	//	pRegister->VIP_VEND		= (U16)(VBP + AVH - 1);
-		WriteIODW(&pRegister->VIP_VEND, (U16)(VBP + AVH - 1));
+			WriteIODW(&pRegister->VIP_VBEGIN, (U16)(HFP + HSW + HBP + 1));
+			WriteIODW(&pRegister->VIP_VEND, (U16)((HFP + HSW + HBP)*2 + 1));
+		}
+		if( 0!=HBP )
+		{
+			temp = (U32)pRegister->VIP_SYNCCTRL;
+			temp &= ~(1<<10);// ExtHSyncMode (0:Sync 1:Blank)
+			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-	//	pRegister->VIP_HBEGIN	= (U16)(HBP - 1);
-		WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HBP - 1));
+			WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HBP - 1));
+			WriteIODW(&pRegister->VIP_HEND, (U16)(HBP + AVW - 1));
+		}
+		else
+		{
+			temp = (U32)pRegister->VIP_SYNCCTRL;
+			temp |= (1<<10);// ExtHSyncMode (0:Sync 1:Blank)
+			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-	//	pRegister->VIP_HEND		= (U16)(HBP + AVW - 1);
-		WriteIODW(&pRegister->VIP_HEND, (U16)(HBP + AVW - 1));
+			WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
+			WriteIODW(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
+		}
 	}
 	else
 	{
 		NX_ASSERT( 65536 > (VFP + VSW) );
-		NX_ASSERT( 7 <= HFP );
-		NX_ASSERT( 65536 > (HFP + HSW - 7) );
-
-	//	pRegister->VIP_VBEGIN	= (U16)(VFP + 1);
+		//NX_ASSERT( 7 <= HFP );
+		//NX_ASSERT( 65536 > (HFP + HSW - 7) );
 		WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VFP + 1));
-
-	//	pRegister->VIP_VEND		= (U16)(VFP + VSW + 1);
 		WriteIODW(&pRegister->VIP_VEND, (U16)(VFP + VSW + 1));
-
-	//	pRegister->VIP_HBEGIN	= (U16)(HFP - 7);
 		WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
-
-	//	pRegister->VIP_HEND		= (U16)(HFP + HSW - 7);
 		WriteIODW(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
 	}
 }
+void
+NX_VIP_SetHVSync
+(
+	U32 		ModuleIndex,
+	CBOOL		bExtSync,
+	U32			AVW,
+	U32			AVH,
+	U32			HSW,
+	U32			HFP,
+	U32			HBP,
+	U32			VSW,
+	U32			VFP,
+	U32			VBP
+)
+{
+	NX_VIP_SetSync( ModuleIndex, bExtSync,NX_VIP_VD_8BIT,AVW,AVH,HSW,HFP,HBP,VSW,VFP,VBP );
+}
 
-// It's only for NX4330
 void	NX_VIP_SetHVSyncForMIPI( U32 ModuleIndex, U32 AVW, U32 AVH,
 								U32 HSW, U32 HFP, U32 HBP,
 								U32 VSW, U32 VFP, U32 VBP )
 {
-	const U32 DRANGE		= 1UL<<9;
-	const U32 EXTSYNCENB	= 1UL<<8;
-	register U32 temp;
-	register NX_VIP_RegisterSet	*pRegister;
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-	pRegister = __g_pRegister[ModuleIndex];
-	temp = (U32)pRegister->VIP_CONFIG;
-	temp &= ~DRANGE;	// Reserved 0.
-	temp &= ~EXTSYNCENB;
-	WriteIODW(&pRegister->VIP_CONFIG, (U16)temp);
-	temp = (U32)pRegister->VIP_SYNCCTRL;
-	temp |= 0x0300;		// EXTHSPOL = EXTVSPOL = 1
-	WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
-	NX_ASSERT( 32768 > AVW && 0 == (AVW & 1) );
-	NX_ASSERT( 32768 > AVH );
-	WriteIODW(&pRegister->VIP_IMGWIDTH, (U16)((AVW>>1)));
-	WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
-	NX_ASSERT( 65536 > (VFP + VSW) );
-	NX_ASSERT( 7 <= HFP );
-	NX_ASSERT( 65536 > (HFP + HSW - 7) );
-	WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VFP + 1));
-	WriteIODW(&pRegister->VIP_VEND, (U16)(VFP + VSW + 1));
-	WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
-	WriteIODW(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
+	CBOOL bExtSync		   = CTRUE ;
+	CBOOL bExtDValid       = CTRUE ;
+	CBOOL Bypass_ExtDValid = CTRUE ;
+	CBOOL Bypass_ExtSync   = CFALSE;
+
+	NX_VIP_SetSync( ModuleIndex, bExtSync,NX_VIP_VD_16BIT,AVW>>1,AVH,HSW,HFP,0,VSW,VFP,0 );
+	NX_VIP_SetDValidMode( ModuleIndex, bExtDValid, Bypass_ExtDValid, Bypass_ExtSync );
 }
 
 //------------------------------------------------------------------------------
@@ -1535,7 +1643,7 @@ NX_VIP_SetClipRegion
 	NX_ASSERT( 32768 > Bottom );
 	NX_ASSERT( Left < Right );
 	NX_ASSERT( Top < Bottom );
-	NX_ASSERT( 0 == ((Right-Left)%16) );
+	NX_ASSERT( 0 == ((Right-Left)%32) );
 	NX_ASSERT( 0 == ((Bottom-Top)&1) );
 
 	pRegister = __g_pRegister[ModuleIndex];
@@ -1609,10 +1717,10 @@ NX_VIP_GetClipRegion
  *				in the interlace scan mode.
  *	@see		NX_VIP_GetDecimation
  */
+
 /* psw0523 add for GetDecimationSource() */
 static U32 DeciSrcWidth[2];
 static U32 DeciSrcHeight[2];
-
 void
 NX_VIP_SetDecimation
 (
@@ -1631,7 +1739,7 @@ NX_VIP_SetDecimation
 	NX_ASSERT( 32768 > SrcHeight );
 	NX_ASSERT( DstWidth <= SrcWidth );
 	NX_ASSERT( DstHeight <= SrcHeight );
-	NX_ASSERT( 0 == (DstWidth%16) );
+	NX_ASSERT( 0 == (DstWidth%32) );
 	NX_ASSERT( 0 == (DstHeight&1) );
 
 	pRegister = __g_pRegister[ModuleIndex];
@@ -1654,19 +1762,10 @@ NX_VIP_SetDecimation
 //	pRegister->DECI_CLEARH	= (S16)((DstHeight<<1) - SrcHeight);
 	WriteIODW((volatile U16 *)&pRegister->DECI_CLEARH, (S16)((DstHeight<<1) - SrcHeight));
 
-	/* psw0523 add */
     DeciSrcWidth[ModuleIndex] = SrcWidth;
     DeciSrcHeight[ModuleIndex] = SrcHeight;
 }
 
-/* psw0523 add */
-void NX_VIP_GetDeciSource(U32 ModuleIndex, U32 *pSrcWidth, U32 *pSrcHeight)
-{
-    if (pSrcWidth)
-        *pSrcWidth = DeciSrcWidth[ModuleIndex];
-    if (pSrcHeight)
-        *pSrcHeight = DeciSrcHeight[ModuleIndex];
-}
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get the paramters for the decimation.
@@ -1730,45 +1829,18 @@ void
 NX_VIP_SetClipperFormat
 (
 	U32  			ModuleIndex,
-	NX_VIP_FORMAT	Format,
-	CBOOL			bRotation,
-	CBOOL			bHFlip,
-	CBOOL			bVFlip
+	NX_VIP_FORMAT	Format
 )
 {
-	const U32 ROTATION	= 1UL<<2;
-	const U32 VFLIP		= 1UL<<1;
-	const U32 HFLIP		= 1UL<<0;
-
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	NX_ASSERT( 4 > Format );
-	NX_ASSERT( (NX_VIP_FORMAT_YUYV != Format) || (CFALSE == bRotation) );
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	if( NX_VIP_FORMAT_YUYV == Format )
-	{
-	//	pRegister->CLIP_YUYVENB = 1;
-		WriteIODW(&pRegister->CLIP_YUYVENB, 1);
-	}
-	else
-	{
-	//	pRegister->CLIP_YUYVENB	= 0;
-		WriteIODW(&pRegister->CLIP_YUYVENB, 0);
-
-	//	pRegister->CLIP_FORMAT	= (U16)Format;
-		WriteIODW(&pRegister->CLIP_FORMAT, (U16)Format);
-	}
-
-//	pRegister->CLIP_ROTFLIP	= (U16)(((bRotation) ? ROTATION : 0)
-//										| ((bVFlip	) ? VFLIP	: 0)
-//										| ((bHFlip	) ? HFLIP	: 0));
-	WriteIODW(&pRegister->CLIP_ROTFLIP, (U16)(((bRotation) ? ROTATION : 0)
-										| ((bVFlip	) ? VFLIP	: 0)
-										| ((bHFlip	) ? HFLIP	: 0)));
+	WriteIODW(&pRegister->CLIP_FORMAT, (U16)Format);
 }
 
 //------------------------------------------------------------------------------
@@ -1792,17 +1864,9 @@ void
 NX_VIP_GetClipperFormat
 (
 	U32  			 ModuleIndex,
-	NX_VIP_FORMAT	*pFormat,
-	CBOOL			*pbRotation,
-	CBOOL			*pbHFlip,
-	CBOOL			*pbVFlip
+	NX_VIP_FORMAT	*pFormat
 )
 {
-	const U32 ROTATION	= 1UL<<2;
-	const U32 VFLIP		= 1UL<<1;
-	const U32 HFLIP		= 1UL<<0;
-	register U32 temp;
-
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
@@ -1812,14 +1876,8 @@ NX_VIP_GetClipperFormat
 
 	if( CNULL != pFormat )
 	{
-		if( pRegister->CLIP_YUYVENB )	*pFormat = NX_VIP_FORMAT_YUYV;
-		else								*pFormat = (NX_VIP_FORMAT)pRegister->CLIP_FORMAT;
+		*pFormat = (NX_VIP_FORMAT)pRegister->CLIP_FORMAT;
 	}
-
-	temp = (U32)pRegister->CLIP_ROTFLIP;
-	if( CNULL != pbRotation )	*pbRotation = (temp & ROTATION) ? CTRUE : CFALSE;
-	if( CNULL != pbHFlip	)	*pbHFlip	= (temp & HFLIP	) ? CTRUE : CFALSE;
-	if( CNULL != pbVFlip	)	*pbVFlip	= (temp & VFLIP	) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1837,16 +1895,9 @@ void
 NX_VIP_SetDecimatorFormat
 (
 	U32  			ModuleIndex,
-	NX_VIP_FORMAT	Format,
-	CBOOL			bRotation,
-	CBOOL			bHFlip,
-	CBOOL			bVFlip
+	NX_VIP_FORMAT	Format
 )
 {
-	const U32 ROTATION	= 1UL<<2;
-	const U32 VFLIP		= 1UL<<1;
-	const U32 HFLIP		= 1UL<<0;
-
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
@@ -1857,13 +1908,6 @@ NX_VIP_SetDecimatorFormat
 
 //	pRegister->DECI_FORMAT	= (U16)Format;
 	WriteIODW(&pRegister->DECI_FORMAT, (U16)Format);
-
-//	pRegister->DECI_ROTFLIP	= (U16)(((bRotation) ? ROTATION : 0)
-//										| ((bVFlip	) ? VFLIP	: 0)
-//										| ((bHFlip	) ? HFLIP	: 0));
-	WriteIODW(&pRegister->DECI_ROTFLIP, (U16)(((bRotation) ? ROTATION : 0)
-										| ((bVFlip	) ? VFLIP	: 0)
-										| ((bHFlip	) ? HFLIP	: 0)));
 }
 
 //------------------------------------------------------------------------------
@@ -1885,17 +1929,9 @@ void
 NX_VIP_GetDecimatorFormat
 (
 	U32  			 ModuleIndex,
-	NX_VIP_FORMAT	*pFormat,
-	CBOOL			*pbRotation,
-	CBOOL			*pbHFlip,
-	CBOOL			*pbVFlip
+	NX_VIP_FORMAT	*pFormat
 )
 {
-	const U32 ROTATION	= 1UL<<2;
-	const U32 VFLIP		= 1UL<<1;
-	const U32 HFLIP		= 1UL<<0;
-	register U32 temp;
-
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
@@ -1904,11 +1940,6 @@ NX_VIP_GetDecimatorFormat
 	pRegister = __g_pRegister[ModuleIndex];
 
 	if( CNULL != pFormat )		*pFormat = (NX_VIP_FORMAT)pRegister->DECI_FORMAT;
-
-	temp = (U32)pRegister->DECI_ROTFLIP;
-	if( CNULL != pbRotation )	*pbRotation = (temp & ROTATION) ? CTRUE : CFALSE;
-	if( CNULL != pbHFlip	)	*pbHFlip	= (temp & HFLIP	) ? CTRUE : CFALSE;
-	if( CNULL != pbVFlip	)	*pbVFlip	= (temp & VFLIP	) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1938,7 +1969,6 @@ NX_VIP_GetDecimatorFormat
  *				scan mode. Therefore you have to allocate and set memory pool which
  *				can store a frame image.\n
  *				Memory address must align by 8.\n
- *	@see		NX_VIP_SetClipperAddr2D, NX_VIP_GetClipperAddr2D
  */
 void
 NX_VIP_SetClipperAddr
@@ -1950,347 +1980,34 @@ NX_VIP_SetClipperAddr
 	U32				LuAddr,
 	U32				CbAddr,
 	U32				CrAddr,
-	U32 StrideY,
-    U32 StrideCbCr
+	U32             StrideY,
+	U32             StrideCbCr
 )
 {
-	register U32 segment, left, top;
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	NX_ASSERT( 3 > Format );
-	NX_ASSERT( 32768 > (((LuAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((LuAddr & 0x3FFF8000)>>15) + Height) );
+	NX_ASSERT( 0 == (LuAddr%16) );
+	NX_ASSERT( 0 == (CrAddr%16) );
+	NX_ASSERT( 0 == (CbAddr%16) );
+	NX_ASSERT( 0 == (StrideY%16) );
+	NX_ASSERT( 0 == (StrideCbCr%16) );
+	NX_ASSERT( 0 == (Width%32) );
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	segment   =	LuAddr >> 30;
-	left	  =	LuAddr & 0x00007FFFUL;
-	top		  = (LuAddr & 0x3FFF8000UL) >> 15;
-
-//	pRegister->CLIP_LUSEG		= (U16)segment;
-	WriteIODW(&pRegister->CLIP_LUSEG, (U16)segment);
-
-//	pRegister->CLIP_LULEFT		= (U16)left;
-	WriteIODW(&pRegister->CLIP_LULEFT, (U16)left);
-
-//	pRegister->CLIP_LURIGHT		= (U16)(left + Width);
-	WriteIODW(&pRegister->CLIP_LURIGHT, (U16)(left + Width));
-
-//	pRegister->CLIP_LUTOP		= (U16)top;
-	WriteIODW(&pRegister->CLIP_LUTOP, (U16)top);
-
-//	pRegister->CLIP_LUBOTTOM	= (U16)(top + Height);
-	WriteIODW(&pRegister->CLIP_LUBOTTOM, (U16)(top + Height));
-
-
-	if( NX_VIP_FORMAT_420 == Format )
-	{
-		NX_ASSERT( 0 == (Width&1) );
-		NX_ASSERT( 0 == (Height&1) );
-		Width	>>= 1;
-		Height	>>= 1;
-	}
-	else if( NX_VIP_FORMAT_422 == Format )
-	{
-		NX_ASSERT( 0 == (Width&1) );
-		Width	>>= 1;
-	}
-
-	NX_ASSERT( 32768 > (((CbAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((CbAddr & 0x3FFF8000)>>15) + Height) );
-	NX_ASSERT( 32768 > (((CrAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((CrAddr & 0x3FFF8000)>>15) + Height) );
-
-	segment =	CbAddr >> 30;
-	left	=	CbAddr & 0x00007FFFUL;
-	top		= (CbAddr & 0x3FFF8000UL) >> 15;
-
-//	pRegister->CLIP_CBSEG		= (U16)segment;
-	WriteIODW(&pRegister->CLIP_CBSEG, (U16)segment);
-
-//	pRegister->CLIP_CBLEFT		= (U16)left;
-	WriteIODW(&pRegister->CLIP_CBLEFT, (U16)left);
-
-//	pRegister->CLIP_CBRIGHT		= (U16)(left + Width);
-	WriteIODW(&pRegister->CLIP_CBRIGHT, (U16)(left + Width));
-
-//	pRegister->CLIP_CBTOP		= (U16)top;
-	WriteIODW(&pRegister->CLIP_CBTOP, (U16)top);
-
-//	pRegister->CLIP_CBBOTTOM	= (U16)(top + Height);
-	WriteIODW(&pRegister->CLIP_CBBOTTOM, (U16)(top + Height));
-
-	segment =	CrAddr >> 30;
-	left	=	CrAddr & 0x00007FFFUL;
-	top		= (CrAddr & 0x3FFF8000UL) >> 15;
-
-//	pRegister->CLIP_CRSEG		= (U16)segment;
-	WriteIODW(&pRegister->CLIP_CRSEG, (U16)segment);
-
-//	pRegister->CLIP_CRLEFT		= (U16)left;
-	WriteIODW(&pRegister->CLIP_CRLEFT, (U16)left);
-
-//	pRegister->CLIP_CRRIGHT		= (U16)(left + Width);
-	WriteIODW(&pRegister->CLIP_CRRIGHT, (U16)(left + Width));
-
-//	pRegister->CLIP_CRTOP		= (U16)top;
-	WriteIODW(&pRegister->CLIP_CRTOP, (U16)top);
-
-//	pRegister->CLIP_CRBOTTOM	= (U16)(top + Height);
-	WriteIODW(&pRegister->CLIP_CRBOTTOM, (U16)(top + Height));
-
-
-//	pRegister->CLIP_STRIDEH		= (U16)(Stride >> 16);
-	WriteIODW(&pRegister->CLIP_STRIDEH, StrideY);
-
-//	pRegister->CLIP_STRIDEL		= (U16)(Stride & 0xFFFFUL);
-	WriteIODW(&pRegister->CLIP_STRIDEL, StrideCbCr);
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set the base address to store the output image of the Clipper.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[in]	LuSAddr	Specifies the base address of the upper-left corner of Y data in a segment.
- *	@param[in]	LuEAddr	Specifies the base address of the lower-right corner of Y data in a segment.
- *	@param[in]	CbSAddr	Specifies the base address of the upper-left corner of Cb data in a segment.
- *	@param[in]	CbEAddr	Specifies the base address of the lower-right corner of Cb data in a segment.
- *	@param[in]	CrSAddr	Specifies the base address of the upper-left corner of Cr data in a segment.
- *	@param[in]	CrEAddr	Specifies the base address of the lower-right corner of Cr data in a segment.
- *	@return		None.
- *	@remark		This function is for YUV 420, 422, 444 not YUYV. You have to call
- *				the function NX_VIP_SetClipperAddr for YUYV NX_VIP_FORMAT.\n
- *				The NX_VIP_FORMAT of arguments is as follows,
- *				- [31:24] : Specifies the index of the segment.
- *				- [23:12] : Sepcifies the y-coordinate in the segment.
- *				- [11: 0] : Specifies the x-coordinate in the segment.
- *				.
- *				The Clipper stores a frame image even if the scan mode is interlace
- *				scan mode. Therefore you have to allocate and set memory pool which
- *				can store a frame image.\n
- *				Memory address must align by 8.\n
- *	@see		NX_VIP_SetClipperAddr, NX_VIP_GetClipperAddr2D
- */
-void
-NX_VIP_SetClipperAddr2D
-(
-	U32 ModuleIndex,
-	U32	LuSAddr,
-	U32	LuEAddr,
-	U32	CbSAddr,
-	U32	CbEAddr,
-	U32	CrSAddr,
-	U32	CrEAddr
-)
-{
-	register NX_VIP_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	NX_ASSERT( (LuSAddr & 0xC0000000) == (LuEAddr & 0xC0000000) );
-	NX_ASSERT( (CbSAddr & 0xC0000000) == (CbEAddr & 0xC0000000) );
-	NX_ASSERT( (CrSAddr & 0xC0000000) == (CrEAddr & 0xC0000000) );
-
-	NX_ASSERT( (0 == (LuSAddr&0x00038007)) && (0 == (LuEAddr&0x00038007)) );
-	NX_ASSERT( (0 == (CbSAddr&0x00038007)) && (0 == (CbEAddr&0x00038007)) );
-	NX_ASSERT( (0 == (CrSAddr&0x00038007)) && (0 == (CrEAddr&0x00038007)) );
-
-	pRegister = __g_pRegister[ModuleIndex];
-
-//	pRegister->CLIP_LUSEG		= (U16)(LuSAddr >> 24);
-	WriteIODW(&pRegister->CLIP_LUSEG, (U16)(LuSAddr >> 30));
-
-//	pRegister->CLIP_CRSEG		= (U16)(CrSAddr >> 24);
-	WriteIODW(&pRegister->CLIP_CRSEG, (U16)(CrSAddr >> 30));
-
-//	pRegister->CLIP_CBSEG		= (U16)(CbSAddr >> 24);
-	WriteIODW(&pRegister->CLIP_CBSEG, (U16)(CbSAddr >> 30));
-
-//	pRegister->CLIP_LULEFT		= (U16)(LuSAddr);
-	WriteIODW(&pRegister->CLIP_LULEFT, (U16)(LuSAddr));
-
-//	pRegister->CLIP_CRLEFT		= (U16)(CrSAddr);
-	WriteIODW(&pRegister->CLIP_CRLEFT, (U16)(CrSAddr));
-
-//	pRegister->CLIP_CBLEFT		= (U16)(CbSAddr);
-	WriteIODW(&pRegister->CLIP_CBLEFT, (U16)(CbSAddr));
-
-//	pRegister->CLIP_LURIGHT		= (U16)(LuEAddr);
-	WriteIODW(&pRegister->CLIP_LURIGHT, (U16)(LuEAddr));
-
-//	pRegister->CLIP_CRRIGHT		= (U16)(CrEAddr);
-	WriteIODW(&pRegister->CLIP_CRRIGHT, (U16)(CrEAddr));
-
-//	pRegister->CLIP_CBRIGHT		= (U16)(CbEAddr);
-	WriteIODW(&pRegister->CLIP_CBRIGHT, (U16)(CbEAddr));
-
-//	pRegister->CLIP_LUTOP		= (U16)(LuSAddr >> 12);
-	WriteIODW(&pRegister->CLIP_LUTOP, (U16)(LuSAddr >> 15));
-
-//	pRegister->CLIP_CRTOP		= (U16)(CrSAddr >> 12);
-	WriteIODW(&pRegister->CLIP_CRTOP, (U16)(CrSAddr >> 15));
-
-//	pRegister->CLIP_CBTOP		= (U16)(CbSAddr >> 12);
-	WriteIODW(&pRegister->CLIP_CBTOP, (U16)(CbSAddr >> 15));
-
-//	pRegister->CLIP_LUBOTTOM	= (U16)(LuEAddr >> 12);
-	WriteIODW(&pRegister->CLIP_LUBOTTOM, (U16)(LuEAddr >> 15));
-
-//	pRegister->CLIP_CRBOTTOM	= (U16)(CrEAddr >> 12);
-	WriteIODW(&pRegister->CLIP_CRBOTTOM, (U16)(CrEAddr >> 15));
-
-//	pRegister->CLIP_CBBOTTOM	= (U16)(CbEAddr >> 12);
-	WriteIODW(&pRegister->CLIP_CBBOTTOM, (U16)(CbEAddr >> 15));
-
+	WriteIODW(&pRegister->CLIP_LUADDR  , LuAddr     );
+	WriteIODW(&pRegister->CLIP_LUSTRIDE, StrideY    );
+	WriteIODW(&pRegister->CLIP_CRADDR  , CrAddr     );
+	WriteIODW(&pRegister->CLIP_CRSTRIDE, StrideCbCr );
+	WriteIODW(&pRegister->CLIP_CBADDR  , CbAddr     );
+	WriteIODW(&pRegister->CLIP_CBSTRIDE, StrideCbCr );
 
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get the base address to store the output image of the Clipper.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[out] pLuSAddr	Indicates the base address of the upper-left corner of Y data in a segment.
- *	@param[out] pLuEAddr	Indicates the base address of the lower-right corner of Y data in a segment.
- *	@param[out] pCbSAddr	Indicates the base address of the upper-left corner of Cb data in a segment.
- *	@param[out] pCbEAddr	Indicates the base address of the lower-right corner of Cb data in a segment.
- *	@param[out] pCrSAddr	Indicates the base address of the upper-left corner of Cr data in a segment.
- *	@param[out] pCrEAddr	Indicates the base address of the lower-right corner of Cr data in a segment.
- *	@return		None.
- *	@remark		This function is for YUV 420, 422, 444 not YUYV. You have to call
- *				the function NX_VIP_GetClipperAddrYUYV for YUYV NX_VIP_FORMAT.\n
- *				The NX_VIP_FORMAT of arguments is as follows,
- *				- [31:24] : Specifies the index of the segment.
- *				- [23:12] : Sepcifies the y-coordinate in the segment.
- *				- [11: 0] : Specifies the x-coordinate in the segment.
- *				.
- *				The Clipper stores a frame image even if the scan mode is interlace
- *				scan mode.\n
- *				Arguments which does not required can be CNULL.
- *	@see		NX_VIP_SetClipperAddr, NX_VIP_SetClipperAddr2D
- */
-void
-NX_VIP_GetClipperAddr2D
-(
-	U32  ModuleIndex,
-	U32	*pLuSAddr,
-	U32	*pLuEAddr,
-	U32	*pCbSAddr,
-	U32	*pCbEAddr,
-	U32	*pCrSAddr,
-	U32	*pCrEAddr
-)
-{
-	register NX_VIP_RegisterSet	*pRegister;
 
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	pRegister = __g_pRegister[ModuleIndex];
-
-	if( CNULL != pLuSAddr )		*pLuSAddr = (((U32)pRegister->CLIP_LUSEG	)<<30)
-											| (((U32)pRegister->CLIP_LUTOP	)<<15)
-											| (((U32)pRegister->CLIP_LULEFT	)<< 0);
-	if( CNULL != pLuEAddr )		*pLuEAddr = (((U32)pRegister->CLIP_LUSEG	)<<30)
-											| (((U32)pRegister->CLIP_LUBOTTOM)<<15)
-											| (((U32)pRegister->CLIP_LURIGHT )<< 0);
-	if( CNULL != pCbSAddr )		*pCbSAddr = (((U32)pRegister->CLIP_CBSEG	)<<30)
-											| (((U32)pRegister->CLIP_CBTOP	)<<15)
-											| (((U32)pRegister->CLIP_CBLEFT	)<< 0);
-	if( CNULL != pCbEAddr )		*pCbEAddr = (((U32)pRegister->CLIP_CBSEG	)<<30)
-											| (((U32)pRegister->CLIP_CBBOTTOM)<<15)
-											| (((U32)pRegister->CLIP_CBRIGHT )<< 0);
-	if( CNULL != pCrSAddr )		*pCrSAddr = (((U32)pRegister->CLIP_CRSEG	)<<30)
-											| (((U32)pRegister->CLIP_CRTOP	)<<15)
-											| (((U32)pRegister->CLIP_CRLEFT	)<< 0);
-	if( CNULL != pCrEAddr )		*pCrEAddr = (((U32)pRegister->CLIP_CRSEG	)<<30)
-											| (((U32)pRegister->CLIP_CRBOTTOM)<<15)
-											| (((U32)pRegister->CLIP_CRRIGHT )<< 0);
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set the base address to store the output image of the Clipper.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[in]	BaseAddr	Specifies the base address of linear YUV data(YUYV).
- *							This argument must be a multiple of 8.
- *	@param[in]	Stride		Specifies the stride of linear YUV data(YUYV).
- *							Generally, Stride has bytes per a line.
- *	@return		None.
- *	@remark		This function is for linear YUYV NX_VIP_FORMAT. You have to call the function
- *				NX_VIP_SetClipperAddr2D for separated YUV
- *				420, 422, 444 NX_VIP_FORMAT.
- *				The Clipper stores a frame image even if the scan mode is interlace
- *				scan mode. Therefore you have to allocate and set memory pool which
- *				can store a frame image.
- *	@see		NX_VIP_GetClipperAddrYUVY
- */
-void
-NX_VIP_SetClipperAddrYUYV
-(
-	U32 ModuleIndex,
-	U32	BaseAddr,
-	U32	Stride
-)
-{
-	register NX_VIP_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	NX_ASSERT( 0 == (BaseAddr%8) );
-	NX_ASSERT( 0 == (Stride%8) );
-
-	pRegister = __g_pRegister[ModuleIndex];
-
-//	pRegister->CLIP_BASEADDRH	= (U16)(BaseAddr >> 16);
-	WriteIODW(&pRegister->CLIP_BASEADDRH, (U16)(BaseAddr >> 16));
-
-//	pRegister->CLIP_BASEADDRL	= (U16)(BaseAddr & 0xFFFFUL);
-	WriteIODW(&pRegister->CLIP_BASEADDRL, (U16)(BaseAddr & 0xFFFFUL));
-
-//	pRegister->CLIP_STRIDEH		= (U16)(Stride >> 16);
-	WriteIODW(&pRegister->CLIP_STRIDEH, (U16)(Stride >> 16));
-
-//	pRegister->CLIP_STRIDEL		= (U16)(Stride & 0xFFFFUL);
-	WriteIODW(&pRegister->CLIP_STRIDEL, (U16)(Stride & 0xFFFFUL));
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get the base address to store the output image of the Clipper.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[out] pBaseAddr	Specifies the base address of linear YUV data(YUYV).
- *	@param[out] pStride		Specifies the stride of linear YUV data(YUYV). Generally, Stride has bytes per a line.
- *	@return		None.
- *	@remark		This function is for linear YUYV NX_VIP_FORMAT. You have to call the function
- *				NX_VIP_GetClipperAddr2D for Block
- *				Separated YUV 420, 422, 444 NX_VIP_FORMAT.
- *				The Clipper stores a frame image even if the scan mode is interlace
- *				scan mode.\n
- *				Arguments which does not required can be CNULL.
- *	@see		NX_VIP_SetClipperAddrYUYV
- */
-void
-NX_VIP_GetClipperAddrYUYV
-(
-	U32  ModuleIndex,
-	U32	*pBaseAddr,
-	U32	*pStride
-)
-{
-	register NX_VIP_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	pRegister = __g_pRegister[ModuleIndex];
-
-	if( CNULL != pBaseAddr )	*pBaseAddr = (((U32)pRegister->CLIP_BASEADDRH)<<16) | ((U32)pRegister->CLIP_BASEADDRL);
-	if( CNULL != pStride	)	*pStride   = (((U32)pRegister->CLIP_STRIDEH	)<<16) | ((U32)pRegister->CLIP_STRIDEL	);
-}
 
 //------------------------------------------------------------------------------
 /**
@@ -2314,10 +2031,7 @@ NX_VIP_GetClipperAddrYUYV
  *				.
  *				The Decimator can only store the even field data when the scan mode
  *				is interlace.
- *	@see		NX_VIP_SetDecimatorAddr2D, NX_VIP_GetDecimatorAddr2D
  */
-/* psw0523 fix for stride */
-#if 0
 void
 NX_VIP_SetDecimatorAddr
 (
@@ -2328,26 +2042,10 @@ NX_VIP_SetDecimatorAddr
 	U32				LuAddr,
 	U32				CbAddr,
 	U32				CrAddr,
-	U32 Stride
+    U32             YStride,
+    U32             CBCRStride
 )
-#else
-void
-NX_VIP_SetDecimatorAddr
-(
-	U32  			ModuleIndex,
-	NX_VIP_FORMAT	NX_VIP_FORMAT,
-	U32				Width,
-	U32				Height,
-	U32				LuAddr,
-	U32				CbAddr,
-	U32				CrAddr,
-	U32 StrideY,
-    U32 StrideCbCr
-)
-#endif
 {
-	register U32 segment, left, top;
-
 	register NX_VIP_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
@@ -2355,20 +2053,16 @@ NX_VIP_SetDecimatorAddr
 
 	NX_ASSERT( 3 > NX_VIP_FORMAT );
 
-	NX_ASSERT( 32768 > (((LuAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((LuAddr & 0x3FFF8000)>>15) + Height) );
+	NX_ASSERT( 0 == (LuAddr%16) );
+	NX_ASSERT( 0 == (CbAddr%16) );
+	NX_ASSERT( 0 == (CrAddr%16) );
+	NX_ASSERT( 0 == (Width%32) );
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	segment   =	LuAddr >> 30;
-	left	  =	LuAddr & 0x00007FFFUL;
-	top		  = (LuAddr & 0x3FFF8000UL) >> 15;
-
-	pRegister->DECI_LUSEG		= (U16)segment;
-	pRegister->DECI_LULEFT		= (U16)left;
-	pRegister->DECI_LURIGHT		= (U16)(left + Width);
-	pRegister->DECI_LUTOP		= (U16)top;
-	pRegister->DECI_LUBOTTOM	= (U16)(top + Height);
+	WriteIODW(&pRegister->DECI_LUADDR  , LuAddr     );
+	/*WriteIODW(&pRegister->DECI_LUSTRIDE, Width      );*/
+	WriteIODW(&pRegister->DECI_LUSTRIDE, YStride      );
 
 	if( NX_VIP_FORMAT_420 == NX_VIP_FORMAT )
 	{
@@ -2383,158 +2077,41 @@ NX_VIP_SetDecimatorAddr
 		Width	>>= 1;
 	}
 
-	NX_ASSERT( 32768 > (((CbAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((CbAddr & 0x3FFF8000)>>15) + Height) );
-	NX_ASSERT( 32768 > (((CrAddr & 0x00007FFF)>> 0) + Width ) );
-	NX_ASSERT( 32768 > (((CrAddr & 0x3FFF8000)>>15) + Height) );
-
-	segment =	CbAddr >> 30;
-	left	=	CbAddr & 0x00007FFFUL;
-	top		= (CbAddr & 0x3FFF8000UL) >> 15;
-
-	pRegister->DECI_CBSEG		= (U16)segment;
-	pRegister->DECI_CBLEFT		= (U16)left;
-	pRegister->DECI_CBRIGHT		= (U16)(left + Width);
-	pRegister->DECI_CBTOP		= (U16)top;
-	pRegister->DECI_CBBOTTOM	= (U16)(top + Height);
-
-	segment =	CrAddr >> 30;
-	left	=	CrAddr & 0x00007FFFUL;
-	top		= (CrAddr & 0x3FFF8000UL) >> 15;
-
-	pRegister->DECI_CRSEG		= (U16)segment;
-	pRegister->DECI_CRLEFT		= (U16)left;
-	pRegister->DECI_CRRIGHT		= (U16)(left + Width);
-	pRegister->DECI_CRTOP		= (U16)top;
-	pRegister->DECI_CRBOTTOM	= (U16)(top + Height);
-
-//	pRegister->CLIP_STRIDEH		= (U16)(Stride >> 16);
-	pRegister->CLIP_STRIDEH = (U16)StrideY;
-
-//	pRegister->CLIP_STRIDEL		= (U16)(Stride & 0xFFFFUL);
-	pRegister->CLIP_STRIDEL = (U16)StrideCbCr;
+	WriteIODW(&pRegister->DECI_CRADDR  , CrAddr     );
+	/*WriteIODW(&pRegister->DECI_CRSTRIDE, Width      );*/
+	WriteIODW(&pRegister->DECI_CRSTRIDE, CBCRStride      );
+	WriteIODW(&pRegister->DECI_CBADDR  , CbAddr     );
+	/*WriteIODW(&pRegister->DECI_CBSTRIDE, Width      );*/
+	WriteIODW(&pRegister->DECI_CBSTRIDE, CBCRStride      );
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set the base address to store the output image of the Decimator.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[in]	LuSAddr	Specifies the base address of the upper-left corner of Y data in a segment.
- *	@param[in]	LuEAddr	Specifies the base address of the lower-right corner of Y data in a segment.
- *	@param[in]	CbSAddr	Specifies the base address of the upper-left corner of Cb data in a segment.
- *	@param[in]	CbEAddr	Specifies the base address of the lower-right corner of Cb data in a segment.
- *	@param[in]	CrSAddr	Specifies the base address of the upper-left corner of Cr data in a segment.
- *	@param[in]	CrEAddr	Specifies the base address of the lower-right corner of Cr data in a segment.
- *	@return		None.
- *	@remark		The NX_VIP_FORMAT of arguments is as follows,
- *				- [31:24] : Specifies the index of the segment.
- *				- [23:12] : Sepcifies the y-coordinate in the segment.
- *				- [11: 0] : Specifies the x-coordinate in the segment.
- *				.
- *				The Decimator can only store the even field data when the scan mode
- *				is interlace.
- *	@see		NX_VIP_SetDecimatorAddr, NX_VIP_GetDecimatorAddr2D
- */
-void
-NX_VIP_SetDecimatorAddr2D
-(
-	U32 ModuleIndex,
-	U32	LuSAddr,
-	U32	LuEAddr,
-	U32	CbSAddr,
-	U32	CbEAddr,
-	U32	CrSAddr,
-	U32	CrEAddr
-)
-{
-	register NX_VIP_RegisterSet	*pRegister;
 
+CBOOL  NX_VIP_SmokeTest ( U32 ModuleIndex )
+{
+	register NX_VIP_RegisterSet* pRegister;
 	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	NX_ASSERT( (LuSAddr & 0xC0000000) == (LuEAddr & 0xC0000000) );
-	NX_ASSERT( (CbSAddr & 0xC0000000) == (CbEAddr & 0xC0000000) );
-	NX_ASSERT( (CrSAddr & 0xC0000000) == (CrEAddr & 0xC0000000) );
-
-	NX_ASSERT( (0 == (LuSAddr&0x00038007)) && (0 == (LuEAddr&0x00038007)) );
-	NX_ASSERT( (0 == (CbSAddr&0x00038007)) && (0 == (CbEAddr&0x00038007)) );
-	NX_ASSERT( (0 == (CrSAddr&0x00038007)) && (0 == (CrEAddr&0x00038007)) );
-
 	pRegister = __g_pRegister[ModuleIndex];
 
-	pRegister->DECI_LUSEG		= (U16)(LuSAddr >> 30);
-	pRegister->DECI_CRSEG		= (U16)(CrSAddr >> 30);
-	pRegister->DECI_CBSEG		= (U16)(CbSAddr >> 30);
-	pRegister->DECI_LULEFT		= (U16)(LuSAddr);
-	pRegister->DECI_CRLEFT		= (U16)(CrSAddr);
-	pRegister->DECI_CBLEFT		= (U16)(CbSAddr);
-	pRegister->DECI_LURIGHT		= (U16)(LuEAddr);
-	pRegister->DECI_CRRIGHT		= (U16)(CrEAddr);
-	pRegister->DECI_CBRIGHT		= (U16)(CbEAddr);
-	pRegister->DECI_LUTOP		= (U16)(LuSAddr >> 15);
-	pRegister->DECI_CRTOP		= (U16)(CrSAddr >> 15);
-	pRegister->DECI_CBTOP		= (U16)(CbSAddr >> 15);
-	pRegister->DECI_LUBOTTOM	= (U16)(LuEAddr >> 15);
-	pRegister->DECI_CRBOTTOM	= (U16)(CrEAddr >> 15);
-	pRegister->DECI_CBBOTTOM	= (U16)(CbEAddr >> 15);
+	// reset value reading
+	if( 0x00000200 != pRegister->VIP_FIFOCTRL ){ return CFALSE; }
+	if( 0x00000003 != pRegister->VIP_SYNCMON  ){ return CFALSE; }
+
+	// write data
+	WriteIODW(&pRegister->VIP_IMGWIDTH, 0xC0DEBEEF );
+
+	// read data, check that reserved bits are reserved.
+	if( 0x00003EEF != pRegister->VIP_IMGWIDTH ){ return CFALSE; }
+
+	return CTRUE;
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get the base address to store the output image of the Decimator.
- *  @param[in]  ModuleIndex	An index of module ( 0 : VIP 0, 1 : VIP 1 ).
- *	@param[out] pLuSAddr	Indicates the base address of the upper-left corner of Y data in a segment.
- *	@param[out] pLuEAddr	Indicates the base address of the lower-right corner of Y data in a segment.
- *	@param[out] pCbSAddr	Indicates the base address of the upper-left corner of Cb data in a segment.
- *	@param[out] pCbEAddr	Indicates the base address of the lower-right corner of Cb data in a segment.
- *	@param[out] pCrSAddr	Indicates the base address of the upper-left corner of Cr data in a segment.
- *	@param[out] pCrEAddr	Indicates the base address of the lower-right corner of Cr data in a segment.
- *	@return		None.
- *	@remark		The NX_VIP_FORMAT of arguments is as follows,
- *				- [31:24] : Specifies the index of the segment.
- *				- [23:12] : Sepcifies the y-coordinate in the segment.
- *				- [11: 0] : Specifies the x-coordinate in the segment.
- *				.
- *				The Decimator can only store the even field data when the scan mode
- *				is interlace.\n
- *				Arguments which does not required can be CNULL.
- *	@see		NX_VIP_SetDecimatorAddr, NX_VIP_SetDecimatorAddr2D
- */
-void
-NX_VIP_GetDecimatorAddr2D
-(
-	U32  ModuleIndex,
-	U32	*pLuSAddr,
-	U32	*pLuEAddr,
-	U32	*pCbSAddr,
-	U32	*pCbEAddr,
-	U32	*pCrSAddr,
-	U32	*pCrEAddr
-)
+/* psw0523 add */
+void NX_VIP_GetDeciSource(U32 ModuleIndex, U32 *pSrcWidth, U32 *pSrcHeight)
 {
-	register NX_VIP_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-
-	pRegister = __g_pRegister[ModuleIndex];
-
-	if( CNULL != pLuSAddr )		*pLuSAddr = (((U32)pRegister->DECI_LUSEG	)<<30)
-											| (((U32)pRegister->DECI_LUTOP	)<<15)
-											| (((U32)pRegister->DECI_LULEFT	)<< 0);
-	if( CNULL != pLuEAddr )		*pLuEAddr = (((U32)pRegister->DECI_LUSEG	)<<30)
-											| (((U32)pRegister->DECI_LUBOTTOM)<<15)
-											| (((U32)pRegister->DECI_LURIGHT )<< 0);
-	if( CNULL != pCbSAddr )		*pCbSAddr = (((U32)pRegister->DECI_CBSEG	)<<30)
-											| (((U32)pRegister->DECI_CBTOP	)<<15)
-											| (((U32)pRegister->DECI_CBLEFT	)<< 0);
-	if( CNULL != pCbEAddr )		*pCbEAddr = (((U32)pRegister->DECI_CBSEG	)<<30)
-											| (((U32)pRegister->DECI_CBBOTTOM)<<15)
-											| (((U32)pRegister->DECI_CBRIGHT )<< 0);
-	if( CNULL != pCrSAddr )		*pCrSAddr = (((U32)pRegister->DECI_CRSEG	)<<30)
-											| (((U32)pRegister->DECI_CRTOP	)<<15)
-											| (((U32)pRegister->DECI_CRLEFT	)<< 0);
-	if( CNULL != pCrEAddr )		*pCrEAddr = (((U32)pRegister->DECI_CRSEG	)<<30)
-											| (((U32)pRegister->DECI_CRBOTTOM)<<15)
-											| (((U32)pRegister->DECI_CRRIGHT )<< 0);
+    if (pSrcWidth)
+        *pSrcWidth = DeciSrcWidth[ModuleIndex];
+    if (pSrcHeight)
+        *pSrcHeight = DeciSrcHeight[ModuleIndex];
 }
+
