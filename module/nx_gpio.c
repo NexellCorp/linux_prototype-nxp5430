@@ -18,7 +18,7 @@
 
 U32 __g_NX_GPIO_VALID_BIT[NUMBER_OF_GPIO_MODULE] =
 {
-	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF	// A, B, C, D, E
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF	// A, B, C, D, E
 };
 
 
@@ -58,8 +58,6 @@ static const U32 __g_GPIO_PAD_INFO[32][NUMBER_OF_GPIO_MODULE] =
     { PADINDEX_WITH_CHANNEL_LIST_ALPHA(GPIO, GPIO_31_) }
 };
 
-U32	__g_NX_GPIO_VALID_NUM_OF_INT[NUMBER_OF_GPIO_MODULE];
-
 static	struct
 {
 	struct NX_GPIO_RegisterSet *pRegister;
@@ -80,6 +78,7 @@ enum { NX_GPIO_MAX_BIT = 32 };
  *	@param[in]	Enable	\b CTRUE( Set ).\n
  *						\b CFALSE( Clear )
  *	@return		None.
+ *	@see		NX_GPIO_GetBit
  */
 
 
@@ -95,7 +94,7 @@ __inline void NX_GPIO_SetBit
 	NX_ASSERT( CNULL != Value );
 	NX_ASSERT( NX_GPIO_MAX_BIT > Bit );
 
-	newvalue = ReadIODW(Value);
+	newvalue = *Value;
 
 	newvalue &=		~(1UL		<< Bit );
 	newvalue |=		(U32)Enable << Bit ;
@@ -110,6 +109,7 @@ __inline void NX_GPIO_SetBit
  *	@param[in]	Bit		Bit number
  *	@return		\b CTRUE	indicate that bit is Seted.\n
  *				\b CFALSE	indicate that bit is cleared.
+ *	@see		NX_GPIO_SetBit
  */
 __inline CBOOL NX_GPIO_GetBit
 (
@@ -129,6 +129,7 @@ __inline CBOOL NX_GPIO_GetBit
  *	@param[in]	Bit			Bit number
  *	@param[in]	BitValue	Set value of bit
  *	@return		None.
+ *	@see		NX_GPIO_GetBit2
  */
 __inline void NX_GPIO_SetBit2
 (
@@ -137,14 +138,13 @@ __inline void NX_GPIO_SetBit2
 	U32 BitValue
 )
 {
-	register U32 newvalue = ReadIODW(Value);
+	register U32 newvalue = *Value;
 
 	NX_ASSERT( CNULL != Value );
 	NX_ASSERT( NX_GPIO_MAX_BIT > Bit );
 
 	newvalue = (U32)(newvalue & ~(3UL<<(Bit*2)));
 	newvalue = (U32)(newvalue | (BitValue<<(Bit*2)));
-
 	WriteIODW(Value, newvalue);
 }
 
@@ -154,6 +154,7 @@ __inline void NX_GPIO_SetBit2
  *	@param[in]	Value	Check this value of 2bit state
  *	@param[in]	Bit		Bit number
  *	@return		2bit value
+ *	@see		NX_GPIO_SetBit2
  */
 
 __inline U32 NX_GPIO_GetBit2
@@ -213,11 +214,8 @@ U32		NX_GPIO_GetNumberOfModule( void )
  */
 U32		NX_GPIO_GetPhysicalAddress( U32 ModuleIndex )
 {
-#if 	NUMBER_OF_GPIO_MODULE>1
-	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST_ALPHA( GPIO ) }; // PHY_BASEADDR_GPIOx_MODULE
-#else
-	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST( GPIO ) }; // PHY_BASEADDR_GPIOx_MODULE
-#endif
+	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST_ALPHA( GPIO ) }; // PHY_BASEADDR_GPIO?_MODULE
+
 	NX_CASSERT( NUMBER_OF_GPIO_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 
@@ -328,11 +326,7 @@ CBOOL	NX_GPIO_CheckBusy( U32 ModuleIndex )
 {
 	const U32 INTNumber[NUMBER_OF_GPIO_MODULE] =
 	{
-#if NUMBER_OF_GPIO_MODULE>1
 		INTNUM_LIST_ALPHA(GPIO)
-#else
-		INTNUM_LIST(GPIO)
-#endif
 	};
 
 	NX_CASSERT( NUMBER_OF_GPIO_MODULE == (sizeof(INTNumber)/sizeof(INTNumber[0])) );
@@ -356,9 +350,7 @@ void	NX_GPIO_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 	register	U32 ReadValue ;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( __g_NX_GPIO_VALID_NUM_OF_INT[ModuleIndex] > (U32)IntNum );
-	NX_ASSERT( (0==Enable) || (1==Enable) );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( (CFALSE==Enable) || (CTRUE==Enable) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -387,7 +379,7 @@ CBOOL	NX_GPIO_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 	register	struct NX_GPIO_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( __g_NX_GPIO_VALID_BIT[ModuleIndex] & 1UL<<IntNum );
+	NX_ASSERT( NX_GPIO_MAX_BIT > (U32)IntNum );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -463,7 +455,7 @@ CBOOL	NX_GPIO_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 	register	struct NX_GPIO_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( __g_NX_GPIO_VALID_BIT[ModuleIndex] & 1UL<<IntNum );
+	NX_ASSERT( NX_GPIO_MAX_BIT > (U32)IntNum );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -513,7 +505,7 @@ void	NX_GPIO_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 	register	struct NX_GPIO_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( __g_NX_GPIO_VALID_BIT[ModuleIndex] & 1UL<<IntNum );
+	NX_ASSERT( NX_GPIO_MAX_BIT > (U32)IntNum );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -559,7 +551,7 @@ void	NX_GPIO_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	register		U32	setvalue;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( (0==Enable) || (1==Enable) );
+	NX_ASSERT( (CFALSE==Enable) || (CTRUE==Enable) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -660,7 +652,8 @@ S32		NX_GPIO_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	NX_ASSERT( CNULL != pRegister );
 
-	intpend = (ReadIODW(&pRegister->GPIOxINTENB) & ReadIODW(&pRegister->GPIOxDET));
+
+	intpend = ReadIODW(&pRegister->GPIOxDET);
 
 	for( intnum=0 ; intnum<32 ; intnum++ )
 	{
@@ -740,7 +733,7 @@ void	NX_GPIO_SetOutputEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL OutputEnb )
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 	NX_ASSERT( 0 != (__g_NX_GPIO_VALID_BIT[ModuleIndex] & (1 << BitNumber)) );
-	NX_ASSERT( (0==OutputEnb) || (1==OutputEnb) );
+	NX_ASSERT( (CFALSE==OutputEnb) || (CTRUE==OutputEnb) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -798,7 +791,7 @@ void			NX_GPIO_SetDetectEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL DetectEnb
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 	NX_ASSERT( 0 != (__g_NX_GPIO_VALID_BIT[ModuleIndex] & (1 << BitNumber)) );
-	NX_ASSERT( (0==DetectEnb) || (1==DetectEnb) );
+	NX_ASSERT( (CFALSE==DetectEnb) || (CTRUE==DetectEnb) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -856,7 +849,7 @@ void	NX_GPIO_SetOutputEnable32 ( U32 ModuleIndex, CBOOL OutputEnb )
 	register struct NX_GPIO_RegisterSet	*pRegister;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-	NX_ASSERT( (0==OutputEnb) || (1==OutputEnb) );
+	NX_ASSERT( (CFALSE==OutputEnb) || (CTRUE==OutputEnb) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -905,7 +898,7 @@ void	NX_GPIO_SetOutputValue	( U32 ModuleIndex, U32 BitNumber, CBOOL Value )
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 	NX_ASSERT( 0 != (__g_NX_GPIO_VALID_BIT[ModuleIndex] & (1 << BitNumber)) );
-	NX_ASSERT( (0==Value) || (1==Value) );
+	NX_ASSERT( (CFALSE==Value) || (CTRUE==Value) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -1078,7 +1071,6 @@ U32		NX_GPIO_GetValidBit( U32 ModuleIndex )
 
 	return __g_NX_GPIO_VALID_BIT[ModuleIndex];
 }
-
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set GPIO Slew
@@ -1206,93 +1198,14 @@ NX_GPIO_DRVSTRENGTH		NX_GPIO_GetDriveStrength	( U32 ModuleIndex, U32 BitNumber )
 
 //------------------------------------------------------------------------------
 /**
- *	@brief		Set GPIO Pull Select
- *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	updown	0:pull-down 1:pull-up
- *	@return		None
- */
-void		NX_GPIO_SetPullSelect	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL updown)
-{
-	register struct NX_GPIO_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-	NX_ASSERT( CNULL != pRegister );
-
-	NX_GPIO_SetBit(&pRegister->GPIOx_PULLSEL, BitNumber, (CBOOL)updown);
-}
-
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get GPIO PullSel
- *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		GPIO PullSel value
- */
-NX_GPIO_PULL		NX_GPIO_GetPullSelect	( U32 ModuleIndex, U32 BitNumber )
-{
-	register struct NX_GPIO_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-	NX_ASSERT( CNULL != pRegister );
-
-	return (NX_GPIO_PULL)NX_GPIO_GetBit(ReadIODW(&pRegister->GPIOx_PULLSEL), BitNumber);
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set GPIO Pull selection 32
- *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@param[in]	Value			32bit input data (
- *	@return		None
- */
-void		NX_GPIO_SetPullSelect32	( U32 ModuleIndex, U32 updown)
-{
-	register struct NX_GPIO_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-	NX_ASSERT( CNULL != pRegister );
-
-	WriteIODW(&pRegister->GPIOx_PULLSEL, updown );
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get GPIO PullSel
- *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		GPIO PullSel value
- */
-U32		NX_GPIO_GetPullSelect32	( U32 ModuleIndex )
-{
-	register struct NX_GPIO_RegisterSet	*pRegister;
-
-	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-	NX_ASSERT( CNULL != pRegister );
-
-	return ReadIODW(&pRegister->GPIOx_PULLSEL);
-}
-
-//------------------------------------------------------------------------------
-/**
  *	@brief		Set GPIO PullEnb
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber		Bit number ( 0 ~ 31 )
  *	@param[in]	PullEnb			CTRUE: pull enable, CFALSE: pull disable
+ *   @parma[in]  updown			0 : Pull Down	1: Pull Up	2: PullEnb - Disable 
  *	@return		None
  */
-void		NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, CBOOL PullEnb )
+void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL PullSel )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
 
@@ -1302,7 +1215,13 @@ void		NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, CBOOL PullEnb )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	NX_GPIO_SetBit(&pRegister->GPIOx_PULLENB, BitNumber, PullEnb);
+	if( PullSel == NX_GPIO_PULL_DOWN || PullSel == NX_GPIO_PULL_UP  )
+	{
+		NX_GPIO_SetBit(&pRegister->GPIOx_PULLSEL, BitNumber, (CBOOL)PullSel);
+		NX_GPIO_SetBit(&pRegister->GPIOx_PULLENB, BitNumber, CTRUE );
+	}
+	else
+		NX_GPIO_SetBit(&pRegister->GPIOx_PULLENB, BitNumber, CFALSE);
 }
 
 //------------------------------------------------------------------------------
@@ -1310,20 +1229,25 @@ void		NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, CBOOL PullEnb )
  *	@brief		Get GPIO PullEnb
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber		Bit number ( 0 ~ 31 )
- *	@return		GPIO PullEnb value
+ *	@return		GPIO PullUp Enable  -> return PullSel 
+ *			      GPIO PullUp  Disble  -> return PullEnb
  */
-CBOOL		NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber )
+NX_GPIO_PULL NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
-	register U32 regvalue;
+//	register U32 regvalue;
+	register CBOOL bEnb;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	bEnb 	  = NX_GPIO_GetBit(ReadIODW(&pRegister->GPIOx_PULLENB),BitNumber);
+	NX_ASSERT( CNULL != pRegister );	
 
-	NX_ASSERT( CNULL != pRegister );
-
-	return (CBOOL)NX_GPIO_GetBit(ReadIODW(&pRegister->GPIOx_PULLENB),BitNumber);
+	if( bEnb == CTRUE )
+		return (NX_GPIO_PULL)NX_GPIO_GetBit(ReadIODW(&pRegister->GPIOx_PULLSEL), BitNumber);
+	else
+		return (NX_GPIO_PULL)(NX_GPIO_PULL_OFF);
 }
 
 //------------------------------------------------------------------------------
@@ -1331,9 +1255,10 @@ CBOOL		NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber )
  *	@brief		Set GPIO PullEnb
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	Value			32bit input data
+ *   @param[in]  Value			Pull Up/Down ( 0 : Pull Down, 1 : Pull Down )
  *	@return		None
  */
-void		NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 Value )
+void	NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 PullEnb, U32 PullSel )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
 
@@ -1343,28 +1268,71 @@ void		NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 Value )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->GPIOx_PULLENB, Value );
+	WriteIODW(&pRegister->GPIOx_PULLSEL, PullSel );
+	WriteIODW(&pRegister->GPIOx_PULLENB, PullEnb );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get GPIO PullEnb
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		GPIO PullEnb value
+ *   @param[in] PullEnb			Pull Enable 32bit Status 
+ *   @param[in] PullSel			Pull Select 32bit Status 
+ *	@return		None
  */
-U32		NX_GPIO_GetPullEnable32	( U32 ModuleIndex )
+U32		NX_GPIO_GetPullEnable32	( U32 ModuleIndex, U32* PullEnb, U32* PullSel )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
+	register U32 bEnb;
 
 	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
+	bEnb	  = ReadIODW(&pRegister->GPIOx_PULLENB);
 	NX_ASSERT( CNULL != pRegister );
 
-	return ReadIODW(&pRegister->GPIOx_PULLENB);
+	*PullEnb = ReadIODW(&pRegister->GPIOx_PULLENB);
+	*PullSel = ReadIODW(&pRegister->GPIOx_PULLSEL);
+
+	return 0;
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Input Mux Select0
+ *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
+ *	@param[in]	Value			32bit input data
+ *	@return		None
+ */
+void	NX_GPIO_SetInputMuxSelect0	( U32 ModuleIndex, U32 Value )
+{
+	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GPIOx_InputMuxSelect0, Value );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set  Input Mux Select1
+ *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
+ *	@param[in]	Value			32bit input data
+ *	@return		None
+ */
+void	NX_GPIO_SetInputMuxSelect1	( U32 ModuleIndex, U32 Value )
+{
+	NX_ASSERT( NUMBER_OF_GPIO_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GPIOx_InputMuxSelect1, Value );
+}
+
+//---------------------------------------------------------
+/*
+	pad info
+	http://nxconfluence.co.kr:8090/pages/editpage.action?pageId=2786185
+*/
+//---------------------------------------------------------
 
 /*
 static CBOOL  NX_GPIO_PadInfo_GetGpioUsed( U32 padinfo )

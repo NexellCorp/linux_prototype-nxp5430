@@ -132,7 +132,7 @@ extern "C"
 	{
 		NX_GPIO_PULL_DOWN		= 0UL,
 		NX_GPIO_PULL_UP			= 1UL,
-		NX_GPIO_PULL_OFF		= 2UL
+		NX_GPIO_PULL_OFF		= 2UL				// Add
 	}NX_GPIO_PULL;
 //------------------------------------------------------------------------------
 /// @name	Module Interface
@@ -208,14 +208,11 @@ void	NX_GPIO_SetSlew32	( U32 ModuleIndex, U32 Value );
 U32		NX_GPIO_GetSlew32	( U32 ModuleIndex );
 void	NX_GPIO_SetDriveStrength(U32 ModuleIndex, U32 BitNumber, NX_GPIO_DRVSTRENGTH drvstrength);
 NX_GPIO_DRVSTRENGTH		NX_GPIO_GetDriveStrength(U32 ModuleIndex, U32 BitNumber);
-void	NX_GPIO_SetPullSelect	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL updown );
-NX_GPIO_PULL	NX_GPIO_GetPullSelect	( U32 ModuleIndex, U32 BitNumber );
-void	NX_GPIO_SetPullSelect32	( U32 ModuleIndex, U32 Value );
-U32		NX_GPIO_GetPullSelect32	( U32 ModuleIndex );
-void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, CBOOL PullEnb );
-CBOOL	NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
-void	NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 Value );
-U32		NX_GPIO_GetPullEnable32	( U32 ModuleIndex );
+void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL PullSel );
+NX_GPIO_PULL NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
+void	NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 PullEnb, U32 PullSel );
+U32		NX_GPIO_GetPullEnable32	( U32 ModuleIndex, U32* PullEnb, U32* PullSel );
+
 
 U32				NX_GPIO_GetValidBit( U32 ModuleIndex );
 
