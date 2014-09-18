@@ -772,8 +772,11 @@ NX_VIP_SetVIPEnable
 	if( bVIPEnb )	temp |= (U16) VIPENB;
 	else			temp &= (U16)~VIPENB;
 
-	WriteIODW(&pRegister->VIP_INFIFOCLR, 0xFFFF); // clear input FIFO
-	WriteIODW(&pRegister->VIP_INFIFOCLR, 0     ); // clear input FIFO
+    /* psw0523 disable this: ISSUE BUG #4 */
+#if 0
+    WriteIODW(&pRegister->VIP_INFIFOCLR, 0xFFFF); // clear input FIFO
+    WriteIODW(&pRegister->VIP_INFIFOCLR, 0     ); // clear input FIFO
+#endif
 
 //	pRegister->VIP_CONFIG = temp;
 	WriteIODW(&pRegister->VIP_CONFIG, temp);
