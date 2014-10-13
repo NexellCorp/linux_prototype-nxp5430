@@ -235,7 +235,7 @@ void	NX_RTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 	regvalue |= (U32)Enable << IntNum;
 
 //	pRegister->RTCINTENB = regvalue;
-	WriteIODW(&pRegister->RTCINTENB, regvalue);
+	WriteIO32(&pRegister->RTCINTENB, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ void	NX_RTC_SetInterruptEnable32( U32 EnableFlag )
 	pRegister	= __g_pRegister;
 
 //	pRegister->RTCINTENB = EnableFlag & ENB_MASK;
-	WriteIODW(&pRegister->RTCINTENB, EnableFlag & ENB_MASK);
+	WriteIO32(&pRegister->RTCINTENB, EnableFlag & ENB_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -389,7 +389,7 @@ void	NX_RTC_ClearInterruptPending( S32 IntNum )
 	pRegister	= __g_pRegister;
 
 //	pRegister->RTCINTPND = (U32)(1 << IntNum);
-	WriteIODW(&pRegister->RTCINTPND, (U32)(1 << IntNum));
+	WriteIO32(&pRegister->RTCINTPND, (U32)(1 << IntNum));
 }
 
 //------------------------------------------------------------------------------
@@ -418,7 +418,7 @@ void	NX_RTC_ClearInterruptPending32( U32 PendingFlag )
 	pRegister	= __g_pRegister;
 
 //	pRegister->RTCINTPND = (U32)(PendingFlag & PEND_MASK);
-	WriteIODW(&pRegister->RTCINTPND, (U32)(PendingFlag & PEND_MASK));
+	WriteIO32(&pRegister->RTCINTPND, (U32)(PendingFlag & PEND_MASK));
 }
 
 //------------------------------------------------------------------------------
@@ -445,12 +445,12 @@ void	NX_RTC_SetInterruptEnableAll( CBOOL Enable )
 	if( Enable )
 	{
 	//	__g_pRegister->RTCINTENB = 0x03;
-		WriteIODW(&__g_pRegister->RTCINTENB, 0x03);
+		WriteIO32(&__g_pRegister->RTCINTENB, 0x03);
 	}
 	else
 	{
 	//	__g_pRegister->RTCINTENB = 0x00;
-		WriteIODW(&__g_pRegister->RTCINTENB, 0x00);
+		WriteIO32(&__g_pRegister->RTCINTENB, 0x00);
 	}
 }
 
@@ -525,7 +525,7 @@ void	NX_RTC_ClearInterruptPendingAll( void )
 	pRegister = __g_pRegister;
 
 //	pRegister->RTCINTPND = 0x03;
-	WriteIODW(&pRegister->RTCINTPND, 0x03);
+	WriteIO32(&pRegister->RTCINTPND, 0x03);
 }
 
 //------------------------------------------------------------------------------
@@ -579,7 +579,7 @@ void		NX_RTC_SetAlarmCounter( U32 AlarmCounter )
 	NX_ASSERT( CNULL != __g_pRegister );
 
 //	__g_pRegister->RTCALARM = AlarmCounter;
-	WriteIODW(&__g_pRegister->RTCALARM, AlarmCounter);
+	WriteIO32(&__g_pRegister->RTCALARM, AlarmCounter);
 }
 
 //------------------------------------------------------------------------------
@@ -645,7 +645,7 @@ void	NX_RTC_SetRTCCounter( U32 RTCCounter )
 	NX_ASSERT( CNULL != __g_pRegister );
 
 //	__g_pRegister->RTCCNTWRITE = RTCCounter;
-	WriteIODW(&__g_pRegister->RTCCNTWRITE, RTCCounter);
+	WriteIO32(&__g_pRegister->RTCCNTWRITE, RTCCounter);
 }
 
 //------------------------------------------------------------------------------
@@ -728,7 +728,7 @@ void	NX_RTC_SetRTCCounterWriteEnable( CBOOL enable )
 	regvalue |= (enable) << WRITEENB_POS;
 
 //	pRegister->RTCCTRL = regvalue;
-	WriteIODW(&pRegister->RTCCTRL, regvalue);
+	WriteIO32(&pRegister->RTCCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -748,7 +748,7 @@ void				NX_RTC_SetRestDelay( NX_RTC_RESETDELAY delay )
 	NX_ASSERT( CNULL != __g_pRegister );
 
 //	__g_pRegister->RTCCORERSTIMESEL = (U32)delay;
-	WriteIODW(&__g_pRegister->RTCCORERSTIMESEL, (U32)delay);
+	WriteIO32(&__g_pRegister->RTCCORERSTIMESEL, (U32)delay);
 }
 
 //------------------------------------------------------------------------------

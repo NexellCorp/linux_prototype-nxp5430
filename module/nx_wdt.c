@@ -153,9 +153,9 @@ CBOOL	NX_WDT_OpenModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// check reset value
-	NX_ASSERT( ReadIODW(&pRegister->WTCON) == 0x8021 );
-	NX_ASSERT( ReadIODW(&pRegister->WTDAT) == 0x8000 );
-	NX_ASSERT( ReadIODW(&pRegister->WTCNT) == 0x8000 );
+	NX_ASSERT( ReadIO32(&pRegister->WTCON) == 0x8021 );
+	NX_ASSERT( ReadIO32(&pRegister->WTDAT) == 0x8000 );
+	NX_ASSERT( ReadIO32(&pRegister->WTCNT) == 0x8000 );
 
 	return CTRUE;
 }
@@ -181,9 +181,9 @@ CBOOL	NX_WDT_CloseModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// set up reset value
-	WriteIODW(&pRegister->WTCON, 0x8021);
-	WriteIODW(&pRegister->WTDAT, 0x8000);
-	WriteIODW(&pRegister->WTCNT, 0x8000);
+	WriteIO32(&pRegister->WTCON, 0x8021);
+	WriteIO32(&pRegister->WTDAT, 0x8000);
+	WriteIO32(&pRegister->WTCNT, 0x8000);
 
 	return CTRUE;
 }
@@ -230,13 +230,13 @@ CBOOL	NX_WDT_CanPowerDown( U32 ModuleIndex )
  *	@return		Module's Reset number
  */
 U32 NX_WDT_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex)
-{	
+{
 	const U32 ResetPinNumber[2][NUMBER_OF_WDT_MODULE] =
 	{
 		{ RESETINDEX_LIST( WDT, PRESETn )},
 		{ RESETINDEX_LIST( WDT, nPOR )},
 	};
-	
+
 	return (U32)ResetPinNumber[ChannelIndex][ModuleIndex];
 }
 
@@ -305,12 +305,12 @@ void	NX_WDT_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	ReadValue	=	ReadIODW(&pRegister->WTCON) & ~PEND_MASK;
+	ReadValue	=	ReadIO32(&pRegister->WTCON) & ~PEND_MASK;
 
 	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
 	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
-	WriteIODW(&pRegister->WTCON, ReadValue);
+	WriteIO32(&pRegister->WTCON, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ CBOOL	NX_WDT_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 	//NX_ASSERT( 7 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -362,7 +362,7 @@ void	NX_WDT_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->WTCLRINT, ((1 << IntNum) & PEND_MASK) << PEND_POS );
+	WriteIO32(&pRegister->WTCLRINT, ((1 << IntNum) & PEND_MASK) << PEND_POS );
 }
 
 //--------------------------------------------------------------------------
@@ -373,22 +373,22 @@ void	NX_WDT_SetWTCON( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON, value);
 }
 U32		NX_WDT_GetWTCON( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCON));
 }
 
 void NX_WDT_SetResetEnable( U32 ModuleIndex, CBOOL enable )
 {
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-	
-	__g_ModuleVariables[ModuleIndex].pRegister->WTCON 
+
+	__g_ModuleVariables[ModuleIndex].pRegister->WTCON
 		= NX_BIT_SetBit32 (	__g_ModuleVariables[ModuleIndex].pRegister->WTCON, (U32)enable, 2  );
 }
 
@@ -397,14 +397,14 @@ void	NX_WDT_SetWTDAT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTDAT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTDAT, value);
 }
 U32		NX_WDT_GetWTDAT( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTDAT));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTDAT));
 }
 
 void	NX_WDT_SetWTCNT( U32 ModuleIndex, U32 value )
@@ -412,14 +412,14 @@ void	NX_WDT_SetWTCNT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCNT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCNT, value);
 }
 U32		NX_WDT_GetWTCNT( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCNT));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCNT));
 }
 
 void	NX_WDT_SetWTCLRINT( U32 ModuleIndex, U32 value )
@@ -427,7 +427,7 @@ void	NX_WDT_SetWTCLRINT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->WTCLRINT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->WTCLRINT, value);
 }
 
 

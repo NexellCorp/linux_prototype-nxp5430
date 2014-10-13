@@ -178,8 +178,8 @@ CBOOL	NX_SPDIFRX_OpenModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// check reset value
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CTRL) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_ENBIRQ) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CTRL) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_ENBIRQ) == 0x0 );
 
 	return CTRUE;
 }
@@ -205,8 +205,8 @@ CBOOL	NX_SPDIFRX_CloseModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// set up reset value
-	WriteIODW(&pRegister->SPDIF_CTRL, 0x0);
-	WriteIODW(&pRegister->SPDIF_ENBIRQ, 0x0);
+	WriteIO32(&pRegister->SPDIF_CTRL, 0x0);
+	WriteIO32(&pRegister->SPDIF_ENBIRQ, 0x0);
 
 	return CTRUE;
 }
@@ -301,12 +301,12 @@ void	NX_SPDIFRX_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	ReadValue	=	ReadIODW(&pRegister->SPDIF_ENBIRQ) & ~PEND_MASK;
+	ReadValue	=	ReadIO32(&pRegister->SPDIF_ENBIRQ) & ~PEND_MASK;
 
 	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
 	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
-	WriteIODW(&pRegister->SPDIF_ENBIRQ, ReadValue);
+	WriteIO32(&pRegister->SPDIF_ENBIRQ, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -330,7 +330,7 @@ CBOOL	NX_SPDIFRX_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 4 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -354,7 +354,7 @@ CBOOL	NX_SPDIFRX_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 4 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -382,7 +382,7 @@ void	NX_SPDIFRX_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->SPDIF_ENBIRQ, ((1 << IntNum) & PEND_MASK) << PEND_POS );
+	WriteIO32(&pRegister->SPDIF_ENBIRQ, ((1 << IntNum) & PEND_MASK) << PEND_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -416,7 +416,7 @@ void	NX_SPDIFRX_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 		SetValue	|=	INT_MASK << PEND_POS;
 	}
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ, SetValue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ CBOOL	NX_SPDIFRX_GetInterruptEnableAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) & (INT_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) & (INT_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -467,7 +467,7 @@ CBOOL	NX_SPDIFRX_GetInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -500,9 +500,9 @@ void	NX_SPDIFRX_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	IRQEnb	=	ReadIODW(&pRegister->SPDIF_ENBIRQ) & ENB_MASK;
+	IRQEnb	=	ReadIO32(&pRegister->SPDIF_ENBIRQ) & ENB_MASK;
 
-	WriteIODW(&pRegister->SPDIF_ENBIRQ, (PEND_MASK|IRQEnb) );
+	WriteIO32(&pRegister->SPDIF_ENBIRQ, (PEND_MASK|IRQEnb) );
 }
 
 //------------------------------------------------------------------------------
@@ -530,7 +530,7 @@ U32		NX_SPDIFRX_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	Pend	=	(ReadIODW(&pRegister->SPDIF_ENBIRQ)>>PEND_POS) & PEND_MASK;
+	Pend	=	(ReadIO32(&pRegister->SPDIF_ENBIRQ)>>PEND_POS) & PEND_MASK;
 
 	for( PendingIndex=0 ; PendingIndex<=20 ; PendingIndex++)
 		if(Pend & ((U32)0x1)<<PendingIndex)
@@ -571,14 +571,14 @@ void	NX_SPDIFRX_Set_SPDCTRL( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CTRL, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CTRL, value);
 }
 U32		NX_SPDIFRX_Get_SPDCTRL( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CTRL));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CTRL));
 }
 
 void	NX_SPDIFRX_Set_SPDENBIRQ( U32 ModuleIndex, U32 value )
@@ -586,14 +586,14 @@ void	NX_SPDIFRX_Set_SPDENBIRQ( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ, value);
 }
 U32		NX_SPDIFRX_Get_SPDENBIRQ( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_ENBIRQ));
 }
 
 U32		NX_SPDIFRX_Get_REGUSERA0( U32 ModuleIndex )
@@ -601,167 +601,167 @@ U32		NX_SPDIFRX_Get_REGUSERA0( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA0));
 }
 U32		NX_SPDIFRX_Get_REGUSERA1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA1));
 }
 U32		NX_SPDIFRX_Get_REGUSERA2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA2));
 }
 U32		NX_SPDIFRX_Get_REGUSERA3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA3));
 }
 U32		NX_SPDIFRX_Get_REGUSERA4( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA4));
 }
 U32		NX_SPDIFRX_Get_REGUSERA5( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA5));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERA5));
 }
 U32		NX_SPDIFRX_Get_REGUSERB0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB0));
 }
 U32		NX_SPDIFRX_Get_REGUSERB1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB1));
 }
 U32		NX_SPDIFRX_Get_REGUSERB2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB2));
 }
 U32		NX_SPDIFRX_Get_REGUSERB3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB3));
 }
 U32		NX_SPDIFRX_Get_REGUSERB4( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB4));
 }
 U32		NX_SPDIFRX_Get_REGUSERB5( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB5));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGUSERB5));
 }
 U32		NX_SPDIFRX_Get_REGSTATA0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA0));
 }
 U32		NX_SPDIFRX_Get_REGSTATA1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA1));
 }
 U32		NX_SPDIFRX_Get_REGSTATA2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA2));
 }
 U32		NX_SPDIFRX_Get_REGSTATA3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA3));
 }
 U32		NX_SPDIFRX_Get_REGSTATA4( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA4));
 }
 U32		NX_SPDIFRX_Get_REGSTATA5( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA5));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATA5));
 }
 U32		NX_SPDIFRX_Get_REGSTATB0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB0));
 }
 U32		NX_SPDIFRX_Get_REGSTATB1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB1));
 }
 U32		NX_SPDIFRX_Get_REGSTATB2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB2));
 }
 U32		NX_SPDIFRX_Get_REGSTATB3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB3));
 }
 U32		NX_SPDIFRX_Get_REGSTATB4( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB4));
 }
 U32		NX_SPDIFRX_Get_REGSTATB5( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB5));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->REGSTATB5));
 }
 //@}

@@ -215,7 +215,7 @@ U32		NX_I2S_GetDMAIndex_PCMIn( U32 ModuleIndex )
 {
     const U32 I2sDMAIndex[NUMBER_OF_I2S_MODULE] =
     {
-        DMAINDEX_WITH_CHANNEL_LIST(I2S, I2SRXDMA)
+        DMAINDEX_WITH_CHANNEL_LIST(I2S, I2SRXDMA)    
     };
 
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
@@ -359,7 +359,7 @@ void    NX_I2S_TxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~TDP_MASK;
     RegVal     |= Enable<<TDP_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_RxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable )
@@ -378,7 +378,7 @@ void    NX_I2S_RxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~RDP_MASK;
     RegVal     |= Enable<<RDP_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_TxChPauseEnable( U32 ModuleIndex, CBOOL Enable )
@@ -397,7 +397,7 @@ void    NX_I2S_TxChPauseEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~TCP_MASK;
     RegVal     |= Enable<<TCP_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_RxChPauseEnable( U32 ModuleIndex, CBOOL Enable )
@@ -416,7 +416,7 @@ void    NX_I2S_RxChPauseEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~RCP_MASK;
     RegVal     |= Enable<<RCP_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_TxDmaEnable( U32 ModuleIndex, CBOOL Enable )
@@ -435,7 +435,7 @@ void    NX_I2S_TxDmaEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~TXD_MASK;
     RegVal     |= Enable<<TXD_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_RxDmaEnable( U32 ModuleIndex, CBOOL Enable )
@@ -454,7 +454,7 @@ void    NX_I2S_RxDmaEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~RXD_MASK;
     RegVal     |= Enable<<RXD_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
 
 void    NX_I2S_I2SEnable( U32 ModuleIndex, CBOOL Enable )
@@ -473,8 +473,23 @@ void    NX_I2S_I2SEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~ACT_MASK;
     RegVal     |= Enable<<ACT_POS;
 
-    WriteIODW(&pRegister->CON, RegVal);
+    WriteIO32(&pRegister->CON, RegVal);
 }
+
+U32    NX_I2S_GetI2SEnable( U32 ModuleIndex )
+{
+    const U32 ACT_POS   = 0;
+    const U32 ACT_MASK  = 1UL<<ACT_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->CON >>ACT_POS) & ACT_MASK;
+}
+
 
 // i2s mod
 void    NX_I2S_SetBitLengthControl( U32 ModuleIndex, NX_I2S_BLC BitLength )
@@ -493,8 +508,24 @@ void    NX_I2S_SetBitLengthControl( U32 ModuleIndex, NX_I2S_BLC BitLength )
     RegVal     &= ~BLC_MASK;
     RegVal     |= BitLength<<BLC_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
+
+ U32   NX_I2S_GetBitLengthControl( U32 ModuleIndex )
+{
+    const U32 BLC_POS   = 13;
+    const U32 BLC_MASK  = 3UL<<BLC_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->MOD & BLC_MASK) >> BLC_POS;
+}
+
 
 void    NX_I2S_CodecClockDisable( U32 ModuleIndex, CBOOL Disable )
 {
@@ -512,13 +543,29 @@ void    NX_I2S_CodecClockDisable( U32 ModuleIndex, CBOOL Disable )
     RegVal     &= ~CCE_MASK;
     RegVal     |= Disable<<CCE_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
+
+U32    NX_I2S_GetCodecClockDisable( U32 ModuleIndex, CBOOL Disable )
+{
+    const U32 CCE_POS   = 12;
+    const U32 CCE_MASK  = 1UL<<CCE_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	return (pRegister->MOD & CCE_MASK) >> CCE_POS;
+}
+
 
 void    NX_I2S_SetMasterSlaveMode( U32 ModuleIndex, NX_I2S_IMS Mode )
 {
-    const U32 IMS_POS   = 10;
-    const U32 IMS_MASK  = 3UL<<IMS_POS;
+    const U32 IMS_POS   = 11;
+    const U32 IMS_MASK  = 1UL<<IMS_POS;
 
     register struct NX_I2S_RegisterSet* pRegister;
     register U32 RegVal;
@@ -531,9 +578,23 @@ void    NX_I2S_SetMasterSlaveMode( U32 ModuleIndex, NX_I2S_IMS Mode )
     RegVal     &= ~IMS_MASK;
     RegVal     |= Mode<<IMS_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
 
+U32    NX_I2S_GetMasterSlaveMode( U32 ModuleIndex )
+{
+    const U32 IMS_POS   = 11;
+    const U32 IMS_MASK  = 1UL<<IMS_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->MOD & IMS_MASK) >> IMS_POS;
+}
 void    NX_I2S_SetTxRxMode( U32 ModuleIndex, NX_I2S_TXR Mode )
 {
     const U32 TXR_POS   = 8;
@@ -550,10 +611,25 @@ void    NX_I2S_SetTxRxMode( U32 ModuleIndex, NX_I2S_TXR Mode )
     RegVal     &= ~TXR_MASK;
     RegVal     |= Mode<<TXR_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
 
-void    NX_I2S_SetLRClockPoarity( U32 ModuleIndex, NX_I2S_LRP Polarity )
+ U32   NX_I2S_GetTxRxMode( U32 ModuleIndex )
+{
+    const U32 TXR_POS   = 8;
+    const U32 TXR_MASK  = 3UL<<TXR_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->MOD & TXR_MASK) >> TXR_POS;
+}
+
+
+void    NX_I2S_SetLRClockPolarity( U32 ModuleIndex, NX_I2S_LRP Polarity )
 {
     const U32 LRP_POS   = 7;
     const U32 LRP_MASK  = 1UL<<LRP_POS;
@@ -569,8 +645,23 @@ void    NX_I2S_SetLRClockPoarity( U32 ModuleIndex, NX_I2S_LRP Polarity )
     RegVal     &= ~LRP_MASK;
     RegVal     |= Polarity<<LRP_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
+
+ U32   NX_I2S_GetLRClockPolarity( U32 ModuleIndex )
+{
+    const U32 LRP_POS   = 7;
+    const U32 LRP_MASK  = 1UL<<LRP_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->MOD & LRP_MASK) >> LRP_POS;
+}
+
 
 void    NX_I2S_SetSerialDataFormat( U32 ModuleIndex, NX_I2S_SDF DataFormat )
 {
@@ -588,7 +679,21 @@ void    NX_I2S_SetSerialDataFormat( U32 ModuleIndex, NX_I2S_SDF DataFormat )
     RegVal     &= ~SDF_MASK;
     RegVal     |= DataFormat<<SDF_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
+}
+
+ U32   NX_I2S_GetSerialDataFormat( U32 ModuleIndex )
+{
+    const U32 SDF_POS   = 5;
+    const U32 SDF_MASK  = 3UL<<SDF_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+    return (pRegister->MOD & SDF_MASK) >> SDF_POS;
 }
 
 void    NX_I2S_SetRootClockFrequency( U32 ModuleIndex, NX_I2S_ROOTCLOCK RootClock )
@@ -607,8 +712,25 @@ void    NX_I2S_SetRootClockFrequency( U32 ModuleIndex, NX_I2S_ROOTCLOCK RootCloc
     RegVal     &= ~RFS_MASK;
     RegVal     |= RootClock<<RFS_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
 }
+
+ U32   NX_I2S_GetRootClockFrequency( U32 ModuleIndex )
+{
+    const U32 RFS_POS   = 3;
+    const U32 RFS_MASK  = 3UL<<RFS_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+	RegVal		= (pRegister->MOD & RFS_MASK) >> RFS_POS;
+
+    return RegVal;
+}
+
 
 void    NX_I2S_SetBitClockFrequency( U32 ModuleIndex, NX_I2S_BITCLOCK BitClock )
 {
@@ -626,7 +748,24 @@ void    NX_I2S_SetBitClockFrequency( U32 ModuleIndex, NX_I2S_BITCLOCK BitClock )
     RegVal     &= ~BFS_MASK;
     RegVal     |= BitClock<<BFS_POS;
 
-    WriteIODW(&pRegister->MOD, RegVal);
+    WriteIO32(&pRegister->MOD, RegVal);
+}
+
+ U32   NX_I2S_GetBitClockFrequency( U32 ModuleIndex )
+{
+    const U32 BFS_POS   = 1;
+    const U32 BFS_MASK  = 3UL<<BFS_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+	RegVal		= (pRegister->MOD & BFS_MASK) >> BFS_POS;
+
+    return RegVal;
+
 }
 
 // fifo control
@@ -646,13 +785,13 @@ void    NX_I2S_TxFifoFlushEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~TFL_MASK;
     RegVal     |= Enable<<TFL_POS;
 
-    WriteIODW(&pRegister->FIC, RegVal);
+    WriteIO32(&pRegister->FIC, RegVal);
 }
 
 U32     NX_I2S_GetTxFifoDataCount( U32 ModuleIndex )
 {
     const U32 TFC_POS   = 8;
-    const U32 TFC_MASK  = 0x1F<<TFC_POS;
+    const U32 TFC_MASK  = 0x7F<<TFC_POS;
 
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
 
@@ -675,13 +814,13 @@ void    NX_I2S_RxFifoFlushEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~RFL_MASK;
     RegVal     |= Enable<<RFL_POS;
 
-    WriteIODW(&pRegister->FIC, RegVal);
+    WriteIO32(&pRegister->FIC, RegVal);
 }
 
 U32     NX_I2S_GetRxFifoDataCount( U32 ModuleIndex )
 {
     const U32 RFC_POS   = 0;
-    const U32 RFC_MASK  = 0x1F<<RFC_POS;
+    const U32 RFC_MASK  = 0x7F<<RFC_POS;
 
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
 
@@ -705,12 +844,30 @@ void    NX_I2S_PrescalerEnable( U32 ModuleIndex, CBOOL Enable )
     RegVal     &= ~PSE_MASK;
     RegVal     |= Enable<<PSE_POS;
 
-    WriteIODW(&pRegister->PSR, RegVal);
+    WriteIO32(&pRegister->PSR, RegVal);
 }
+
+U32    NX_I2S_GetPrescalerEnable( U32 ModuleIndex )
+{
+    const U32 PSE_POS   = 15;
+    const U32 PSE_MASK  = 1UL<<PSE_POS;
+
+    register struct NX_I2S_RegisterSet* pRegister;
+    register U32 RegVal;
+
+    NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
+
+    pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	return (pRegister->PSR & PSE_MASK) >> PSE_POS;
+}
+
+
 
 void    NX_I2S_SetPrescalerValue( U32 ModuleIndex, U32 PsVal )
 {
-    const U32 PSV_MASK  = 0xFF;
+    const U32 PSV_POS  = 8;
+	const U32 PSV_MASK = 1UL << PSV_POS;
 
     register struct NX_I2S_RegisterSet* pRegister;
     register U32 RegVal;
@@ -722,34 +879,36 @@ void    NX_I2S_SetPrescalerValue( U32 ModuleIndex, U32 PsVal )
 
     RegVal      = pRegister->PSR;
     RegVal     &= ~PSV_MASK;
-    RegVal     |= PsVal;
+    RegVal     |= (PsVal-1) << PSV_POS;
 
-    WriteIODW(&pRegister->PSR, RegVal);
+    WriteIO32(&pRegister->PSR, RegVal);
 }
 
 // txd register
 void    NX_I2S_SetTxData( U32 ModuleIndex, NX_I2S_CH ChannelIndex, NX_I2S_BITLENGTH BitLength, U32 TxData )
 {
-    const U32 TXD_POS[]   = {0, 16};
-    const U32 TXD_MASK[]  = {0xFFFF, 0xFF};
-
     register struct NX_I2S_RegisterSet* pRegister;
     register U32 RegVal;
 
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
-    NX_ASSERT( BitLength==NX_I2S_BITLENGTH_16 || BitLength==NX_I2S_BITLENGTH_8 );
-
-    U32 TxDataPos   = TXD_POS[ChannelIndex];
-    U32 TxDataMask  = TXD_MASK[BitLength];
+    NX_ASSERT( BitLength==NX_I2S_BITLENGTH_24 || BitLength==NX_I2S_BITLENGTH_16 || BitLength==NX_I2S_BITLENGTH_8 );
 
     pRegister   = __g_ModuleVariables[ModuleIndex].pRegister;
+	U32 tData	= 0;
+/*
+	if( BitLength == NX_I2S_BITLENGTH_8 )
+	{
+		tData  = (TxData & 0xFF);
+		tData |= (TxData & 0xFF00 ) << 8; 
+		WriteIO32(&pRegister->TXD, tData);
+	}
+	else
+*/
+		 WriteIO32(&pRegister->TXD, TxData);
+	//NX_MSG("0x%8X\r\n", TxData );
 
-    RegVal      = pRegister->TXD;
-    RegVal     &= ~(TxDataMask<<TxDataPos);
-    RegVal     |= TxData<<TxDataPos;
-
-    WriteIODW(&pRegister->TXD, RegVal);
 }
+
 
 // rxd register
 U32     NX_I2S_GetRxData( U32 ModuleIndex, NX_I2S_CH ChannelIndex, NX_I2S_BITLENGTH BitLength )
@@ -758,12 +917,13 @@ U32     NX_I2S_GetRxData( U32 ModuleIndex, NX_I2S_CH ChannelIndex, NX_I2S_BITLEN
     const U32 RXD_MASK[]  = {0xFFFF, 0xFF};
 
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
-    NX_ASSERT( BitLength==NX_I2S_BITLENGTH_16 || BitLength==NX_I2S_BITLENGTH_8 );
+    NX_ASSERT( BitLength==NX_I2S_BITLENGTH_24 || BitLength==NX_I2S_BITLENGTH_16 || BitLength==NX_I2S_BITLENGTH_8 );
 
     U32 RxDataPos   = RXD_POS[ChannelIndex];
     U32 RxDataMask  = RXD_MASK[BitLength];
 
-    return (U32)( (__g_ModuleVariables[ModuleIndex].pRegister->RXD & (RxDataMask<<RxDataPos))>>RxDataPos );
+    //return (U32)( (__g_ModuleVariables[ModuleIndex].pRegister->RXD & (RxDataMask<<RxDataPos))>>RxDataPos );
+	return (U32)(__g_ModuleVariables[ModuleIndex].pRegister->RXD);
 }
 
 

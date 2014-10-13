@@ -311,7 +311,7 @@ void	NX_CAN_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 	regvalue &=	~( 1UL << IntNum );
 	regvalue |= (U32)Enable << IntNum;
 
-	WriteIODW(&pRegister->INTCTRL, regvalue);
+	WriteIO32(&pRegister->INTCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -395,7 +395,7 @@ void	NX_CAN_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->INTPEND, 1UL << IntNum);
+	WriteIO32(&pRegister->INTPEND, 1UL << IntNum);
 }
 
 //------------------------------------------------------------------------------
@@ -428,7 +428,7 @@ void	NX_CAN_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	pRegister = __g_pRegister[ModuleIndex];
 	regvalue  = Enable ? 0xFFFFFFFF : 0 ;
 
-	WriteIODW(&pRegister->INTCTRL, regvalue);
+	WriteIO32(&pRegister->INTCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -506,7 +506,7 @@ void	NX_CAN_ClearInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->INTPEND, 0xFFFFFFFF);	// just write operation make pending clear
+	WriteIO32(&pRegister->INTPEND, 0xFFFFFFFF);	// just write operation make pending clear
 }
 
 //------------------------------------------------------------------------------

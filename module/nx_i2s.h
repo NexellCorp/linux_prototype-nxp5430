@@ -41,15 +41,16 @@ extern "C"
     typedef enum
     {
         NX_I2S_BLC_16BIT    = 0,    // 16 bit per channel
-        NX_I2S_BCL_8BIT     = 1,    // 8  bit per channel
+        NX_I2S_BLC_8BIT     = 1,    // 8  bit per channel
         NX_I2S_BLC_24BIT    = 2     // 24 bit per channel
     }   NX_I2S_BLC;
 
     typedef enum
     {
-        NX_I2S_IMS_DIVIDE   = 0,    // internal master mode
-        NX_I2S_IMS_BYPASS   = 1,    // external master mode
-        Nx_I2S_IMS_SLAVE    = 2     // slave mode
+        NX_I2S_IMS_DIVIDE   	  = 0,   // internal master mode
+        NX_I2S_IMS_BYPASS   	  = 1,   // external master mode
+        NX_I2S_IMS_PCLK_SLAVE     = 2,   // slave mode (PCLK)
+        NX_I2S_IMS_CODECLKI_SLAVE = 3,	 // slave mode (CODCLKI)
     }   NX_I2S_IMS;
 
     typedef enum
@@ -162,7 +163,7 @@ void    NX_I2S_SetBitLengthControl( U32 ModuleIndex, NX_I2S_BLC BitLength );
 void    NX_I2S_CodecClockDisable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_SetMasterSlaveMode( U32 ModuleIndex, NX_I2S_IMS Mode );
 void    NX_I2S_SetTxRxMode( U32 ModuleIndex, NX_I2S_TXR Mode );
-void    NX_I2S_SetLRClockPoarity( U32 ModuleIndex, NX_I2S_LRP Polarity );
+void    NX_I2S_SetLRClockPolarity( U32 ModuleIndex, NX_I2S_LRP Polarity );
 void    NX_I2S_SetSerialDataFormat( U32 ModuleIndex, NX_I2S_SDF DataFormat );
 void    NX_I2S_SetRootClockFrequency( U32 ModuleIndex, NX_I2S_ROOTCLOCK RootClock );
 void    NX_I2S_SetBitClockFrequency( U32 ModuleIndex, NX_I2S_BITCLOCK BitClock );

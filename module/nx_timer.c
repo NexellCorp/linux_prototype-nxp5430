@@ -315,12 +315,12 @@ void	NX_TIMER_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	ReadValue	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 
 	ReadValue	&=	(U32)(~(1UL << IntNum));
 	ReadValue	|=	(U32)Enable << IntNum ;
 
-	WriteIODW(&pRegister->TINT_CSTAT, ReadValue);
+	WriteIO32(&pRegister->TINT_CSTAT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -347,7 +347,7 @@ CBOOL	NX_TIMER_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)( (ReadIODW(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ CBOOL	NX_TIMER_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)( (ReadIODW(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -405,10 +405,10 @@ void	NX_TIMER_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
 	PendEnb |=	1UL<<(IntNum+PEND_POS);
 
-	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -442,7 +442,7 @@ void	NX_TIMER_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	else
 		SetValue	=	0;
 
-	WriteIODW(&pRegister->TINT_CSTAT, SetValue);
+	WriteIO32(&pRegister->TINT_CSTAT, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -469,7 +469,7 @@ CBOOL	NX_TIMER_GetInterruptEnableAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if( ReadIODW(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
 	{
 		return CTRUE;
 	}
@@ -501,7 +501,7 @@ CBOOL	NX_TIMER_GetInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if( ReadIODW(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -534,10 +534,10 @@ void	NX_TIMER_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 	PendEnb |=	PEND_MASK<<PEND_POS;
 
-	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -564,7 +564,7 @@ U32		NX_TIMER_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	NX_ASSERT( CNULL != pRegister );
 
-	Pend	=	(ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
+	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
 
 	for( PendingIndex = 0; PendingIndex<NX_TIMER_INT; PendingIndex++)
 		if(Pend & (1UL<<PendingIndex))
@@ -599,14 +599,14 @@ void	NX_TIMER_SetPrescaler(U32 Channel, U32 value)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
 
 	if(Channel & 0x6)
 		regvalue &= ((value-1) & 0xFF)<<8;		// timer channel 2, 3, 4
 	else
 		regvalue &= ((value-1) & 0xFF)<<0;		// timer channel 0, 1
 
-	WriteIODW(&pRegister->TCFG0, regvalue);
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -625,7 +625,7 @@ U32		NX_TIMER_GetPrescaler(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
 	if(Channel & 0x6)
 		return ((regvalue & 0xFF<<8)>>8)+1;		// timer channel 2, 3, 4
 	else
@@ -649,10 +649,10 @@ void	NX_TIMER_SetDeadZoneLength(U32 Channel, U32 Length)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
 	regvalue &= ~(0xFF<<16);
 	regvalue |= (Length & 0xFF)<<16;
-	WriteIODW(&pRegister->TCFG0, regvalue);
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
 //------------------------------------------------------------------------------
 /**
@@ -669,7 +669,7 @@ U32		NX_TIMER_GetDeadZoneLength(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U32)(ReadIODW(&pRegister->TCFG0)>>16)&0xFF;
+	return (U32)(ReadIO32(&pRegister->TCFG0)>>16)&0xFF;
 }
 
 //------------------------------------------------------------------------------
@@ -694,13 +694,13 @@ CBOOL	NX_TIMER_SetDeadZoneEnable(U32 Channel, CBOOL Enable)
 	if(Channel != 0)
 		return CFALSE;
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	if(Enable)
 		regvalue |= (1UL<<4);
 	else
 		regvalue &= ~(1UL<<4);
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 
 	return CTRUE;
 }
@@ -724,7 +724,7 @@ CBOOL	NX_TIMER_GetDeadZoneEnable(U32 Channel)
 	if(Channel != 0)
 		return CFALSE;
 
-	if(ReadIODW(&pRegister->TCON) & (1UL<<4))
+	if(ReadIO32(&pRegister->TCON) & (1UL<<4))
 		return CTRUE;
 
 	return CFALSE;
@@ -759,13 +759,13 @@ CBOOL	NX_TIMER_SetOutInvert(U32 Channel, CBOOL Enable)
 	else
 		updatevalue = 1UL<<(4*(modulechannel+1)+2);
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	if(Enable)
 		regvalue |= updatevalue;
 	else
 		regvalue &= ~updatevalue;
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 
 	return CTRUE;
 }
@@ -796,7 +796,7 @@ CBOOL	NX_TIMER_GetOutInvert(U32 Channel)
 	else
 		comparevalue = 1UL<<(4*(modulechannel+1)+2);
 
-	if(comparevalue & ReadIODW(&pRegister->TCON))
+	if(comparevalue & ReadIO32(&pRegister->TCON))
 		return CTRUE;
 
 	return CFALSE;
@@ -829,10 +829,10 @@ CBOOL	NX_TIMER_SetDividerPath(U32 Channel, NX_TIMER_DIVIDSELECT divider)
 
 	updatevalue = divider<<(4*modulechannel);
 
-	regvalue = ReadIODW(&pRegister->TCFG1);
+	regvalue = ReadIO32(&pRegister->TCFG1);
 	regvalue &= ~(0xF<<modulechannel);
 	regvalue |= updatevalue;
-	WriteIODW(&pRegister->TCFG1, regvalue);
+	WriteIO32(&pRegister->TCFG1, regvalue);
 
 	return CTRUE;
 }
@@ -855,7 +855,7 @@ NX_TIMER_DIVIDSELECT NX_TIMER_GetDividerPath(U32 Channel)
 
 	modulechannel = Channel%NX_TIMER_CHANNEL;
 
-	regvalue = ReadIODW(&pRegister->TCFG1);
+	regvalue = ReadIO32(&pRegister->TCFG1);
 	regvalue >>= (4*modulechannel);
 	regvalue &= 0xF;
 
@@ -875,7 +875,7 @@ void	NX_TIMER_SetShotMode(U32 Channel, NX_TIMER_LOADMODE ShotMode)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
 {
@@ -892,7 +892,7 @@ void	NX_TIMER_SetShotMode(U32 Channel, NX_TIMER_LOADMODE ShotMode)
 		regvalue |= ShotMode<<(4*(modulechannel+1)+3);
 }
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel)
 {
@@ -906,7 +906,7 @@ NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
 {
@@ -936,7 +936,7 @@ void	NX_TIMER_UpdateCounter(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	updatedonevalue = regvalue;
 	if(modulechannel == 0)
 	{
@@ -949,8 +949,8 @@ void	NX_TIMER_UpdateCounter(U32 Channel)
 		updatedonevalue &= ~(1<<(4*(modulechannel+1)+1));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
-	WriteIODW(&pRegister->TCON, updatedonevalue);
+	WriteIO32(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, updatedonevalue);
 }
 
 void	NX_TIMER_Run(U32 Channel)
@@ -965,7 +965,7 @@ void	NX_TIMER_Run(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
 {
@@ -975,7 +975,7 @@ void	NX_TIMER_Run(U32 Channel)
 		regvalue |= 1<<(4*(modulechannel+1));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 void	NX_TIMER_Stop(U32 Channel)
 {
@@ -989,7 +989,7 @@ void	NX_TIMER_Stop(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
 {
@@ -999,7 +999,7 @@ void	NX_TIMER_Stop(U32 Channel)
 		regvalue &= ~(1<<(4*(modulechannel+1)));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 CBOOL	NX_TIMER_IsRun(U32 Channel)
 {
@@ -1013,7 +1013,7 @@ CBOOL	NX_TIMER_IsRun(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
 {
@@ -1042,12 +1042,12 @@ void	NX_TIMER_SetPeriod(U32 Channel, U32 Period)
 
 	if(modulechannel == 4)
 	{
-		WriteIODW(&pRegister->TCNTO4, Period);
+		WriteIO32(&pRegister->TCNTO4, Period);
 	}else
 	{
 		setreg = &pRegister->TCNTB0;
 		setreg += modulechannel;
-		WriteIODW(setreg, Period);
+		WriteIO32(setreg, Period);
 }
 }
 U32		NX_TIMER_GetPeriod(U32 Channel)
@@ -1065,12 +1065,12 @@ U32		NX_TIMER_GetPeriod(U32 Channel)
 
 	if(modulechannel == 4)
 	{
-		return ReadIODW(&pRegister->TCNTO4);
+		return ReadIO32(&pRegister->TCNTO4);
 	}else
 	{
 		setreg = &pRegister->TCNTB0;
 		setreg += modulechannel;
-		return ReadIODW(setreg);
+		return ReadIO32(setreg);
 	}
 }
 
@@ -1092,7 +1092,7 @@ CBOOL	NX_TIMER_SetDuty(U32 Channel, U32 Duty)
 
 	setreg = &pRegister->TCMPB0;
 	setreg += modulechannel;
-	WriteIODW(setreg, Duty);
+	WriteIO32(setreg, Duty);
 
 	return CTRUE;
 }
@@ -1116,7 +1116,7 @@ U32		NX_TIMER_GetDuty(U32 Channel)
 {
 		setreg = &pRegister->TCMPB0;
 		setreg += modulechannel;
-		return ReadIODW(setreg);
+		return ReadIO32(setreg);
 }
 }
 
@@ -1135,12 +1135,12 @@ U32		NX_TIMER_GetCurrentCount(U32 Channel)
 
 	if(modulechannel == 4)
 	{
-		return ReadIODW(&pRegister->TCNTO4);
+		return ReadIO32(&pRegister->TCNTO4);
 	}else
 {
 		setreg = &pRegister->TCNTO0;
 		setreg += modulechannel;
-		return ReadIODW(setreg);
+		return ReadIO32(setreg);
 }
 }
 //@}

@@ -35,7 +35,7 @@ extern "C"
         volatile U32 ICSR;                  ///< 0x04 : I2C Status Register
         volatile U32 IAR;                   ///< 0x08 : I2C Address Register
         volatile U32 IDSR;                  ///< 0x0C : I2C Data Register
-        volatile U32 STOPCON;               ///< 0x10 : I2C Stop Control Register
+        volatile U32 ICLC;   	            ///< 0x10 : I2C Line Control Register
     };
 
     /// @brief Select I2C Mode
@@ -56,6 +56,13 @@ extern "C"
 
     } NX_I2C_SIGNAL ;
 
+	typedef enum
+	{
+		NX_I2C_SDA_DELAY_0CLOCK  = 0,
+		NX_I2C_SDA_DELAY_5CLOCK  = 1,
+		NX_I2C_SDA_DELAY_10CLOCK = 2,
+		NX_I2C_SDA_DELAY_15CLOCK = 3,
+	} NX_I2C_SDA_DELAY;
 //------------------------------------------------------------------------------
 /// @name   Module Interface
 //@{
@@ -129,9 +136,6 @@ CBOOL   NX_I2C_IsBusy( U32 ModuleIndex );
 void    NX_I2C_WriteByte (U32 ModuleIndex, U8 WriteData);
 U8      NX_I2C_ReadByte ( U32 ModuleIndex );
 void    NX_I2C_BusDisable( U32 ModuleIndex );
-void    NX_I2C_NotAckGen( U32 ModuleIndex );
-void    NX_I2C_DataLineRelease( U32 ModuleIndex );
-void    NX_I2C_ClockLineRelease( U32 ModuleIndex );
 //@}
 
 //------------------------------------------------------------------------------

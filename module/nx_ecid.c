@@ -47,7 +47,7 @@ U32     NX_ECID_GetNumberOfModule( void )
 //------------------------------------------------------------------------------
 U32		NX_ECID_GetPhysicalAddress( void )
 {
-	return  (U32)PHY_BASEADDR_ECID_MODULE;	
+	return  (U32)PHY_BASEADDR_ECID_MODULE;
 }
 
 U32		NX_ECID_GetSizeOfRegisterSet( void )
@@ -120,7 +120,7 @@ U32     NX_ECID_GetResetNumber( void )
 //------------------------------------------------------------------------------
 void NX_ECID_GetECID
 (
-    //(&ECID)[4]    
+    //(&ECID)[4]
     U32 ECID[4]
 )
 {
@@ -194,7 +194,7 @@ void    NX_ECID_SetA( U32 Addr )
     ReadValue  &= ~A_MASK;
     ReadValue  |= Addr << A_POS;
 
-    WriteIODW(&pRegister->EC[0], ReadValue);
+    WriteIO32(&pRegister->EC[0], ReadValue);
 }
 
 U32     NX_ECID_GetA( void )
@@ -225,7 +225,7 @@ void    NX_ECID_SetCS( CBOOL Enable )
     ReadValue  &= ~CS_MASK;
     ReadValue  |= Enable << CS_POS;
 
-    WriteIODW(&pRegister->EC[0], ReadValue);
+    WriteIO32(&pRegister->EC[0], ReadValue);
 }
 
 CBOOL   NX_ECID_GetCS( void )
@@ -256,7 +256,7 @@ void    NX_ECID_SetSIGDEV( CBOOL Enable )
     ReadValue  &= ~SIGDEV_MASK;
     ReadValue  |= Enable << SIGDEV_POS;
 
-    WriteIODW(&pRegister->EC[0], ReadValue);
+    WriteIO32(&pRegister->EC[0], ReadValue);
 }
 
 CBOOL   NX_ECID_GetSIGDEV( void )
@@ -287,7 +287,7 @@ void    NX_ECID_SetFSET( CBOOL Enable )
     ReadValue  &= ~FSET_MASK;
     ReadValue  |= Enable << FSET_POS;
 
-    WriteIODW(&pRegister->EC[0], ReadValue);
+    WriteIO32(&pRegister->EC[0], ReadValue);
 }
 
 CBOOL   NX_ECID_GetFSET( void )
@@ -318,7 +318,7 @@ void    NX_ECID_SetPRCHG( CBOOL Enable )
     ReadValue  &= ~PRCHG_MASK;
     ReadValue  |= Enable << PRCHG_POS;
 
-    WriteIODW(&pRegister->EC[0], ReadValue);
+    WriteIO32(&pRegister->EC[0], ReadValue);
 }
 
 CBOOL   NX_ECID_GetPRCHG( void )
@@ -360,7 +360,7 @@ void    NX_ECID_SetPROG( CBOOL Enable )
     ReadValue  &= ~PROG_MASK;
     ReadValue  |= Enable << PROG_POS;
 
-    WriteIODW(&pRegister->EC[1], ReadValue);
+    WriteIO32(&pRegister->EC[1], ReadValue);
 }
 
 CBOOL   NX_ECID_GetPROG( void )
@@ -391,7 +391,7 @@ void    NX_ECID_SetSCK( CBOOL Enable )
     ReadValue  &= ~SCK_MASK;
     ReadValue  |= Enable << SCK_POS;
 
-    WriteIODW(&pRegister->EC[1], ReadValue);
+    WriteIO32(&pRegister->EC[1], ReadValue);
 }
 
 CBOOL   NX_ECID_GetSCK( void )
@@ -422,7 +422,7 @@ void    NX_ECID_SetSDI( CBOOL Enable )
     ReadValue  &= ~SDI_MASK;
     ReadValue  |= Enable << SDI_POS;
 
-    WriteIODW(&pRegister->EC[1], ReadValue);
+    WriteIO32(&pRegister->EC[1], ReadValue);
 }
 
 CBOOL   NX_ECID_GetSDI( void )
@@ -467,7 +467,7 @@ void    NX_ECID_SetHdcpEfuseSel( CBOOL Enable )
     ReadValue  &= ~SHES_MASK;
     ReadValue  |= Enable << SHES_POS;
 
-    WriteIODW(&pRegister->EC[2], ReadValue);
+    WriteIO32(&pRegister->EC[2], ReadValue);
 }
 
 CBOOL   NX_ECID_GetHdcpEfuseSel( void )
@@ -498,7 +498,7 @@ void    NX_ECID_SetSelectFlowingBank( U32 Sel )
     ReadValue  &= ~SELBANK_MASK;
     ReadValue  |= Sel << SELBANK_POS;
 
-    WriteIODW(&pRegister->EC[2], ReadValue);
+    WriteIO32(&pRegister->EC[2], ReadValue);
 }
 
 U32     NX_ECID_GetSelectFlowingBank( void )

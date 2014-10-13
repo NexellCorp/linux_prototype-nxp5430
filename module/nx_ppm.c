@@ -57,7 +57,7 @@ void	NX_PPM_SetPPMEnable
 	}
 
 //	__g_pRegister[ModuleIndex]->PPM_CTRL = (U16)temp;
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_CTRL, (U16)temp);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_CTRL, (U16)temp);
 }
 
 //------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void	NX_PPM_SetInputSignalPolarity
 	}
 
 //	__g_pRegister[ModuleIndex]->PPM_CTRL = (U16)temp;
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_CTRL, (U16)temp);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_CTRL, (U16)temp);
 }
 
 //------------------------------------------------------------------------------
@@ -344,8 +344,8 @@ CBOOL	NX_PPM_OpenModule( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_PPM_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_CTRL, 0x4000);
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_STAT, 0x0007);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_CTRL, 0x4000);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_STAT, 0x0007);
 	return CTRUE;
 }
 
@@ -363,8 +363,8 @@ CBOOL	NX_PPM_CloseModule( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_PPM_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_CTRL, 0x4000);
-	WriteIOW(&__g_pRegister[ModuleIndex]->PPM_STAT, 0x0007);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_CTRL, 0x4000);
+	WriteIO16(&__g_pRegister[ModuleIndex]->PPM_STAT, 0x0007);
 	return CTRUE;
 }
 
@@ -503,7 +503,7 @@ void	NX_PPM_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 	regvalue &=	~( 1UL << IntNum );
 	regvalue |= (U32)Enable << IntNum;
 
-	WriteIODW(&pRegister->PPM_CTRL, regvalue);
+	WriteIO32(&pRegister->PPM_CTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -587,7 +587,7 @@ void	NX_PPM_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( NUMBER_OF_PPM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->PPM_STAT, 1UL << IntNum);
+	WriteIO32(&pRegister->PPM_STAT, 1UL << IntNum);
 }
 
 //------------------------------------------------------------------------------
@@ -623,7 +623,7 @@ void	NX_PPM_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	regvalue &=	~ENB_MASK;
 	regvalue  = Enable ? (regvalue | ENB_MASK) : regvalue ;
 
-	WriteIODW(&pRegister->PPM_CTRL, regvalue);
+	WriteIO32(&pRegister->PPM_CTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -701,7 +701,7 @@ void	NX_PPM_ClearInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PPM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->PPM_STAT, 7);	// just write operation make pending clear
+	WriteIO32(&pRegister->PPM_STAT, 7);	// just write operation make pending clear
 }
 
 //------------------------------------------------------------------------------

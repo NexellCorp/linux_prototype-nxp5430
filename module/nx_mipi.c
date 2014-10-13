@@ -40,9 +40,9 @@ CBOOL  NX_MIPI_SmokeTest ( U32 ModuleIndex )
 	if( 0xB337FFFF != pRegister->DSIM_INTMSK     ){ return CFALSE; }
 
 	// write data
-	WriteIODW(&pRegister->CSIS_DPHYCTRL, 0xDEADC0DE );
-	WriteIODW(&pRegister->CSIS_CTRL2   , 0xFFFFFFFF );
-	WriteIODW(&pRegister->DSIM_MSYNC   , 0xDEADC0DE );
+	WriteIO32(&pRegister->CSIS_DPHYCTRL, 0xDEADC0DE );
+	WriteIO32(&pRegister->CSIS_CTRL2   , 0xFFFFFFFF );
+	WriteIO32(&pRegister->DSIM_MSYNC   , 0xDEADC0DE );
 
 	// read data, check that reserved bits are reserved.
 	if( 0xDE80001E != pRegister->CSIS_DPHYCTRL   ){ return CFALSE; }
@@ -360,7 +360,7 @@ void	NX_MIPI_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 		regvalue  = pRegister->CSIS_INTMSK;
 		regvalue &=	~( 1UL << IntNum );
 		regvalue |= (U32)Enable << IntNum;
-		WriteIODW(&pRegister->CSIS_INTMSK, regvalue);
+		WriteIO32(&pRegister->CSIS_INTMSK, regvalue);
 	}
 	else // DSI
 	{
@@ -368,7 +368,7 @@ void	NX_MIPI_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 		regvalue  = pRegister->DSIM_INTMSK;
 		regvalue &=	~( 1UL << (IntNum-32) );
 		regvalue |= (U32)Enable << (IntNum-32);
-		WriteIODW(&pRegister->DSIM_INTMSK, regvalue);
+		WriteIO32(&pRegister->DSIM_INTMSK, regvalue);
 	}
 }
 
@@ -477,12 +477,12 @@ void	NX_MIPI_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 	if( IntNum < 32 ) // CSI
 	{
 		NX_ASSERT( __NX_MIPI_VALID_CSI_INTMASK__ & ( 1UL << IntNum ) );
-		WriteIODW(&pRegister->CSIS_INTSRC, 1UL << IntNum);
+		WriteIO32(&pRegister->CSIS_INTSRC, 1UL << IntNum);
 	}
 	else // DSI
 	{
 		NX_ASSERT( __NX_MIPI_VALID_DSI_INTMASK__ & ( 1UL << (IntNum-32) ) );
-		WriteIODW(&pRegister->DSIM_INTSRC, 1UL << (IntNum-32));
+		WriteIO32(&pRegister->DSIM_INTSRC, 1UL << (IntNum-32));
 	}
 }
 
@@ -515,13 +515,13 @@ void	NX_MIPI_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 
 	if( Enable )
 	{
-		WriteIODW(&pRegister->CSIS_INTMSK, __NX_MIPI_VALID_CSI_INTMASK__);
-		WriteIODW(&pRegister->DSIM_INTMSK, __NX_MIPI_VALID_DSI_INTMASK__);
+		WriteIO32(&pRegister->CSIS_INTMSK, __NX_MIPI_VALID_CSI_INTMASK__);
+		WriteIO32(&pRegister->DSIM_INTMSK, __NX_MIPI_VALID_DSI_INTMASK__);
 	}
 	else
 	{
-		WriteIODW(&pRegister->CSIS_INTMSK, 0);
-		WriteIODW(&pRegister->DSIM_INTMSK, 0);
+		WriteIO32(&pRegister->CSIS_INTMSK, 0);
+		WriteIO32(&pRegister->DSIM_INTMSK, 0);
 	}
 }
 
@@ -609,8 +609,8 @@ void	NX_MIPI_ClearInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_MIPI_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->CSIS_INTSRC, __NX_MIPI_VALID_CSI_INTMASK__);
-	WriteIODW(&pRegister->DSIM_INTSRC, __NX_MIPI_VALID_DSI_INTMASK__);
+	WriteIO32(&pRegister->CSIS_INTSRC, __NX_MIPI_VALID_CSI_INTMASK__);
+	WriteIO32(&pRegister->DSIM_INTSRC, __NX_MIPI_VALID_DSI_INTMASK__);
 }
 
 //------------------------------------------------------------------------------
@@ -671,7 +671,7 @@ S32		NX_MIPI_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 }
 
 
-#define WRITEREG( regname, mask, value )  regvalue = pRegister->regname; regvalue = (regvalue&(~(mask)))|(value); WriteIODW(&pRegister->regname, regvalue)
+#define WRITEREG( regname, mask, value )  regvalue = pRegister->regname; regvalue = (regvalue&(~(mask)))|(value); WriteIO32(&pRegister->regname, regvalue)
 
 //------------------------------------------------------------------------------
 ///	@name	MIPI-CSI Interface
@@ -687,10 +687,10 @@ void  NX_MIPI_CSI_SetSize  ( U32 ModuleIndex, int Channel, U32 Width, U32 Height
 	NX_ASSERT( 1 <= Height && 0xFFFF >= Height );
 	switch( Channel )
 	{
-	case 0: WriteIODW(&pRegister->CSIS_RESOL_CH0, (Width<<16)|Height); break;
-	case 1: WriteIODW(&pRegister->CSIS_RESOL_CH1, (Width<<16)|Height); break;
-	case 2: WriteIODW(&pRegister->CSIS_RESOL_CH2, (Width<<16)|Height); break;
-	case 3: WriteIODW(&pRegister->CSIS_RESOL_CH3, (Width<<16)|Height); break;
+	case 0: WriteIO32(&pRegister->CSIS_RESOL_CH0, (Width<<16)|Height); break;
+	case 1: WriteIO32(&pRegister->CSIS_RESOL_CH1, (Width<<16)|Height); break;
+	case 2: WriteIO32(&pRegister->CSIS_RESOL_CH2, (Width<<16)|Height); break;
+	case 3: WriteIO32(&pRegister->CSIS_RESOL_CH3, (Width<<16)|Height); break;
 	default: NX_ASSERT( !"Never get here" ); break;
 	}
 }

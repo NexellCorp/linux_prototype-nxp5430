@@ -162,20 +162,20 @@ CBOOL	NX_SSP_CheckBusy( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->SPI_STATUS);
+	regvalue = ReadIO32(&pRegister->SPI_STATUS);
 	RX_FIFO_LVL = (regvalue >> 15) & 0x1FF ;
 	TX_FIFO_LVL = (regvalue >>  6) & 0x1FF ;
 	TX_DONE = (regvalue >> 25) & 0x1 ;
 
-	if	(	(0 == RX_FIFO_LVL) &&
-			(0 == TX_FIFO_LVL) &&
-			(1 == TX_DONE)
-		)
+	//if	(	(0 == RX_FIFO_LVL) && (0 == TX_FIFO_LVL) && (1 == TX_DONE) )
+	if( (1 == TX_DONE) )
 	{
 		return CFALSE;
 	}
 	return CTRUE;
 }
+
+
 
 
 //------------------------------------------------------------------------------
@@ -187,7 +187,15 @@ CBOOL	NX_SSP_CheckBusy( U32 ModuleIndex )
  *	@return		An interrupt number.
  *	@remark		Return value can be used for the interrupt controller module's
  *				functions.
+ *	@see											NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
+
 U32		NX_SSP_GetInterruptNumber( U32 ModuleIndex )
 {
 	const U32 INTNumber[NUMBER_OF_SSP_MODULE] =
@@ -208,12 +216,20 @@ U32		NX_SSP_GetInterruptNumber( U32 ModuleIndex )
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	ModuleIndex		Module Index Number .
  *	@param[in]	IntNum			Interrupt Index Number .
+ *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
+ *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
  *	@param[in]	Enable	\b CTRUE	indicate that Interrupt Enable. \n
  *						\b CFALSE	indicate that Interrupt Disable.
  *	@return		None.
+ *	@see											NX_SSP_GetInterruptEnable,
+ *				NX_SSP_SetInterruptEnable32,		NX_SSP_GetInterruptEnable32,
+ *				NX_SSP_GetInterruptPending,		NX_SSP_GetInterruptPending32,
+ *				NX_SSP_ClearInterruptPending,		NX_SSP_ClearInterruptPending32,
+ *				NX_SSP_SetInterruptEnableAll,		NX_SSP_GetInterruptEnableAll,
+ *				NX_SSP_GetInterruptPendingAll,		NX_SSP_ClearInterruptPendingAll,
+ *				NX_SSP_GetInterruptPendingNumber
+ *	@see also	Interrupt mask set or clear register, SSPIMSC
  */
-
-//------------------------------------------------------------------------------
 void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -226,7 +242,7 @@ void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOO
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->SPI_INT_EN);
+	regvalue = ReadIO32(&pRegister->SPI_INT_EN);
 
 	if( CTRUE == Enable )
 	{
@@ -237,7 +253,7 @@ void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOO
 		regvalue &= ~( 1UL << IntNum );
 	}
 
-	WriteIODW(&pRegister->SPI_INT_EN, regvalue);
+	WriteIO32(&pRegister->SPI_INT_EN, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -245,9 +261,20 @@ void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOO
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		an index of module.
  *	@param[in]	IntNum			Interrupt Index Number .
+ *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
+ *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
  *	@return		CTRUE	indicates an interrupt specified by @a IntNum is enabled.\n
  *				CFALSE	indicates an interrupt specified by @a IntNum is disabled.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *													NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
+ *	@see also	Interrupt mask set or clear register, SSPIMSC
  */
+
 CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -260,13 +287,13 @@ CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->SPI_INT_EN);
+	regvalue = ReadIO32(&pRegister->SPI_INT_EN);
 
 	if( 0 != (( 1UL << IntNum ) & regvalue) )
 	{
-		return CFALSE;
+		return CTRUE;
 	}
-	return CTRUE;
+	return CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -274,11 +301,20 @@ CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
  *	@brief		Indicates whether a specified interrupt is pended or not.
  *	@param[in]	ModuleIndex		an index of module.
  *	@param[in]	ChannelIndex	Interrupt Index Number .
+ *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
+ *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
  *	@return		CTRUE	indicates an interrupt specified by @a IntNum is pended.\n
  *				CFALSE	indicates an interrupt specified by @a IntNum is not pended.
  *	@remark		The interrupt pending status are logged regardless of interrupt
  *				enable status. Therefore the return value can be CTRUE even
  *				though the specified interrupt has been disabled.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
 CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
 {
@@ -291,7 +327,7 @@ CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	irq_status = ReadIODW(&pRegister->SPI_STATUS);
+	irq_status = ReadIO32(&pRegister->SPI_STATUS);
 
 	if( 0 != ( ( 1UL << IntNum ) & irq_status) )
 	{
@@ -305,7 +341,18 @@ CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	ModuleIndex		an index of module.
  *	@param[in]	ChannelIndex	Interrupt Index Number .
+ *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
+ *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
+ *				only [0] and [1] can be pended..
  *	@return		None.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
+ *	@see also	Interrupt clear register, SSPICR
  */
 void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 {
@@ -324,7 +371,7 @@ void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 	if( IntNum == TX_OVERRUN ) irq_pending = 1<<3;
 	if( IntNum == RX_UNDERRUN) irq_pending = 1<<4;
 
-	WriteIODW(&pRegister->PENDING_CLR_REG, irq_pending);
+	WriteIO32(&pRegister->PENDING_CLR_REG, irq_pending);
 }
 
 //------------------------------------------------------------------------------
@@ -334,6 +381,13 @@ void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
  *	@param[in]	bEnb			Set it as CTRUE to enable all interrupts. \n
  *								Set it as CFALSE to disable all interrupts.
  *	@return		None.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
 void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable )
 {
@@ -355,7 +409,7 @@ void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable )
 		new_irq_mask = (0x00);
 	}
 
-	WriteIODW(&pRegister->SPI_INT_EN, new_irq_mask);
+	WriteIO32(&pRegister->SPI_INT_EN, new_irq_mask);
 }
 
 //------------------------------------------------------------------------------
@@ -364,6 +418,13 @@ void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable )
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		CTURE	indicates there's interrupts which are enabled.\n
  *				CFALSE	indicates there's no interrupt which are enabled.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *													NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
 CBOOL	NX_SSP_GetInterruptEnableAll	( U32 ModuleIndex )
 {
@@ -375,7 +436,7 @@ CBOOL	NX_SSP_GetInterruptEnableAll	( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	irq_mask = ReadIODW(&pRegister->SPI_INT_EN);
+	irq_mask = ReadIO32(&pRegister->SPI_INT_EN);
 
 	if( 0 != ((0x7f) & irq_mask) )
 	{
@@ -390,6 +451,13 @@ CBOOL	NX_SSP_GetInterruptEnableAll	( U32 ModuleIndex )
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		CTURE	indicates there's interrupts which are pended.\n
  *				CFALSE	indicates there's no interrupt which are pended.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,
+ *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
 CBOOL	NX_SSP_GetInterruptPendingAll	( U32 ModuleIndex )
 {
@@ -401,7 +469,7 @@ CBOOL	NX_SSP_GetInterruptPendingAll	( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	masked_irq_status = ReadIODW(&pRegister->SPI_STATUS);
+	masked_irq_status = ReadIO32(&pRegister->SPI_STATUS);
 
 	if( 0 != ( 0x3F & masked_irq_status) )
 	{
@@ -415,6 +483,13 @@ CBOOL	NX_SSP_GetInterruptPendingAll	( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		None.
+ *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *													NX_SSP_GetInterruptPendingNumber
  */
 void	NX_SSP_ClearInterruptPendingAll	( U32 ModuleIndex )
 {
@@ -426,7 +501,7 @@ void	NX_SSP_ClearInterruptPendingAll	( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->PENDING_CLR_REG, irq_pending);
+	WriteIO32(&pRegister->PENDING_CLR_REG, irq_pending);
 }
 
 //------------------------------------------------------------------------------
@@ -436,7 +511,15 @@ void	NX_SSP_ClearInterruptPendingAll	( U32 ModuleIndex )
  *	@return		an interrupt number which has the most priority of pended interrupts. \n
  *				This value is one of @ref NX_SSP_INT enum.
  *				If there's no interrupt which is pended and unmasked, it returns -1.
+ *	@see		NX_SSP_GetInterruptNumber,			NX_SSP_SetInterruptEnable,
+ *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
+ *				NX_SSP_GetInterruptEnable32,			NX_SSP_GetInterruptPending,
+ *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
+ *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
+ *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
+ *				NX_SSP_ClearInterruptPendingAll
  */
+
 NX_SSP_INTR_MASK	NX_SSP_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -447,7 +530,7 @@ NX_SSP_INTR_MASK	NX_SSP_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if No
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	irq_status = ReadIODW(&pRegister->SPI_STATUS);
+	irq_status = ReadIO32(&pRegister->SPI_STATUS);
 	if( (irq_status >> 0) & 0x01 ) return TXFIFO_RDY;
 	if( (irq_status >> 1) & 0x01 ) return RXFIFO_RDY;
 	if( (irq_status >> 2) & 0x01 ) return TX_UNDERRUN;
@@ -457,6 +540,7 @@ NX_SSP_INTR_MASK	NX_SSP_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if No
 	if( (irq_status >> 6) & 0x01 ) return TRAILING;
 	return -1; // no interrupt pending now
 }
+
 #if 0
 //------------------------------------------------------------------------------
 /**	@name		NX_SSP_EnablePAD
@@ -490,8 +574,6 @@ void NX_SSP_EnablePAD( U32 ModuleIndex )
 	}
 }
 #endif
-
-
 
 //------------------------------------------------------------------------------
 // DMA Interface
@@ -546,7 +628,7 @@ U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex )
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	DSS = (U32)((ReadIODW(&pRegister->MODE_CFG)>>17) & 0x03);
+	DSS = (U32)((ReadIO32(&pRegister->MODE_CFG)>>17) & 0x03);
 
 	if( DSS == 0 )   	{ return  8; 	}
 	if( DSS == 1 )   	{ return 16; 	}
@@ -582,7 +664,7 @@ void	NX_SSP_SetDMATransferMode( U32 ModuleIndex, CBOOL Enable )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( CTRUE == Enable )
 	{
 		regvalue |= (3UL<<1);
@@ -591,7 +673,7 @@ void	NX_SSP_SetDMATransferMode( U32 ModuleIndex, CBOOL Enable )
 	{
 		regvalue &= (~(3UL<<1));
 	}
-	WriteIODW(&pRegister->MODE_CFG, regvalue);
+	WriteIO32(&pRegister->MODE_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -611,7 +693,7 @@ CBOOL	NX_SSP_GetDMATransferMode( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( 0 != ( (3UL<<1) & regvalue ) )
 	{
 		return CTRUE;
@@ -638,7 +720,7 @@ void	NX_SSP_SetDMATransmitMode( U32 ModuleIndex, CBOOL Enable )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( CTRUE == Enable )
 	{
 		regvalue |= (1UL<<1);
@@ -647,7 +729,7 @@ void	NX_SSP_SetDMATransmitMode( U32 ModuleIndex, CBOOL Enable )
 	{
 		regvalue &= (~(1UL<<1));
 	}
-	WriteIODW(&pRegister->MODE_CFG, regvalue);
+	WriteIO32(&pRegister->MODE_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -667,7 +749,7 @@ CBOOL	NX_SSP_GetDMATransmitMode( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( 0 != ( (1UL<<1) & regvalue ) )
 	{
 		return CTRUE;
@@ -694,7 +776,7 @@ void	NX_SSP_SetDMAReceiveMode( U32 ModuleIndex, CBOOL Enable )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( CTRUE == Enable )
 	{
 		regvalue |= (1UL<<2);
@@ -703,7 +785,7 @@ void	NX_SSP_SetDMAReceiveMode( U32 ModuleIndex, CBOOL Enable )
 	{
 		regvalue &= (~(1UL<<2));
 	}
-	WriteIODW(&pRegister->MODE_CFG, regvalue);
+	WriteIO32(&pRegister->MODE_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -723,7 +805,7 @@ CBOOL	NX_SSP_GetDMAReceiveMode( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->MODE_CFG);
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
 	if( 0 != ( (1UL<<2) & regvalue ) )
 	{
 		return CTRUE;
@@ -755,7 +837,7 @@ void	NX_SSP_SetBitWidth( U32 ModuleIndex, U32 bitWidth )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	old_sspcr0 = ReadIODW(&pRegister->MODE_CFG);
+	old_sspcr0 = ReadIO32(&pRegister->MODE_CFG);
 	// BUS_WIDTH
 	if( bitWidth ==  8 ) new_sspcr0 = ( old_sspcr0 & (~(0x03<<17)) ) | (0<<17) ;
 	if( bitWidth == 16 ) new_sspcr0 = ( old_sspcr0 & (~(0x03<<17)) ) | (1<<17) ;
@@ -766,7 +848,7 @@ void	NX_SSP_SetBitWidth( U32 ModuleIndex, U32 bitWidth )
 	if( bitWidth == 16 ) new_sspcr0 = ( new_sspcr0 & (~(0x03<<29)) ) | (1<<29) ;
 	if( bitWidth == 32 ) new_sspcr0 = ( new_sspcr0 & (~(0x03<<29)) ) | (2<<29) ;
 
-	WriteIODW(&pRegister->MODE_CFG, new_sspcr0);
+	WriteIO32(&pRegister->MODE_CFG, new_sspcr0);
 }
 
 //------------------------------------------------------------------------------
@@ -786,7 +868,7 @@ U32		NX_SSP_GetBitWidth( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	old_sspcr0 = ReadIODW(&pRegister->MODE_CFG);
+	old_sspcr0 = ReadIO32(&pRegister->MODE_CFG);
 
 	if( 0 == ((old_sspcr0 >> 17)&0x03) ) return  8;
 	if( 1 == ((old_sspcr0 >> 17)&0x03) ) return 16;
@@ -801,7 +883,7 @@ U32		NX_SSP_GetBitWidth( U32 ModuleIndex )
  *						\b CFALSE indicate that Master mode enable.
  *	@return		None.
  */
-void	NX_SSP_SetSlaveMode( U32 ModuleIndex, CBOOL bSlave )
+void	NX_SSP_SetSlaveMode( U32 ModuleIndex, NX_SSP_MODE bSlave )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32		regvalue;
@@ -812,7 +894,7 @@ void	NX_SSP_SetSlaveMode( U32 ModuleIndex, CBOOL bSlave )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 	if( CTRUE == bSlave )
 	{
 		regvalue |= (1UL<<4); // SLAVE
@@ -822,7 +904,7 @@ void	NX_SSP_SetSlaveMode( U32 ModuleIndex, CBOOL bSlave )
 		regvalue &= (~(1UL<<4)); // MASTER
 	}
 
-	WriteIODW(&pRegister->CH_CFG, regvalue);
+	WriteIO32(&pRegister->CH_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -842,7 +924,7 @@ CBOOL	NX_SSP_GetSlaveMode( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 	if( 0 != ((1UL<<4) & regvalue) )
 	{
 		return CFALSE;
@@ -871,7 +953,7 @@ void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL bInvert )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	if( CTRUE == bInvert )
 	{
@@ -882,7 +964,7 @@ void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL bInvert )
 		regvalue &= (~(1UL<<3));
 	}
 
-	WriteIODW(&pRegister->CH_CFG, regvalue);
+	WriteIO32(&pRegister->CH_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -904,7 +986,7 @@ CBOOL	NX_SSP_GetClockPolarityInvert( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	if( 0 != ((1UL<<3) &  regvalue) )
 	{
@@ -931,7 +1013,7 @@ void	NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT format)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	switch(format)
 	{
@@ -945,7 +1027,7 @@ void	NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT format)
 		NX_ASSERT( CFALSE ); //"Never Get Here" );
 	}
 
-	WriteIODW(&pRegister->CH_CFG, regvalue);
+	WriteIO32(&pRegister->CH_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -964,7 +1046,7 @@ NX_SSP_FORMAT	NX_SSP_GetSPIFormat( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	return  (NX_SSP_FORMAT)(0x01 &  (regvalue>>2) );
 }
@@ -992,7 +1074,7 @@ void	NX_SSP_SetEnable( U32 ModuleIndex, CBOOL bEnable )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	if( bEnable )
 	{
@@ -1003,7 +1085,7 @@ void	NX_SSP_SetEnable( U32 ModuleIndex, CBOOL bEnable )
 		regvalue &= (~(3UL<<0));
 	}
 
-	WriteIODW(&pRegister->CH_CFG, regvalue);
+	WriteIO32(&pRegister->CH_CFG, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1024,7 +1106,7 @@ CBOOL	NX_SSP_GetEnable( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->CH_CFG);
+	regvalue = ReadIO32(&pRegister->CH_CFG);
 
 	if( 3 == ((3UL<<0) & regvalue) )
 	{
@@ -1032,6 +1114,46 @@ CBOOL	NX_SSP_GetEnable( U32 ModuleIndex )
 	}
 	return CFALSE;
 }
+
+void	NX_SSP_SetTrailingCount( U32 ModuleIndex, U16 TailingCnt )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32		regvalue;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	NX_ASSERT( 0x3FF >= TailingCnt );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->MODE_CFG);
+
+	if( TailingCnt )
+	{
+		regvalue |= (0x3FF<<19);
+	}
+	else
+	{
+		regvalue &= (~(0x3FF<<19));
+	}
+
+	WriteIO32(&pRegister->CH_CFG, regvalue);
+}
+
+U16		NX_SSP_GetTralingCount( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32		regvalue;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+
+	return (U16)((ReadIO32(&pRegister->MODE_CFG) >> 19) & 0x3FF );
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -1049,7 +1171,7 @@ U8		NX_SSP_GetByte(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U8)((ReadIODW(&pRegister->SPI_RX_DATA)) & 0xFF);
+	return (U8)((ReadIO32(&pRegister->SPI_RX_DATA)) & 0xFF);
 }
 
 //------------------------------------------------------------------------------
@@ -1067,8 +1189,27 @@ U16		NX_SSP_GetHalfWord(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U16)((ReadIODW(&pRegister->SPI_RX_DATA)) & 0xffff);
+	return (U16)((ReadIO32(&pRegister->SPI_RX_DATA)) & 0xffff);
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Read Word Data( 4byte ).
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Word Data( 4byte )
+ */
+U32		NX_SSP_GetWord(U32 ModuleIndex)
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U32)((ReadIO32(&pRegister->SPI_RX_DATA)) );
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -1089,7 +1230,7 @@ void	NX_SSP_PutByte(U32 ModuleIndex, U8 ByteData)
 	NX_ASSERT( CNULL != pRegister );
 
 
-	WriteIODW(&pRegister->SPI_TX_DATA, (U8)ByteData);	//put the byte data
+	WriteIO32(&pRegister->SPI_TX_DATA, (U8)ByteData);	//put the byte data
 }
 
 //------------------------------------------------------------------------------
@@ -1109,7 +1250,27 @@ void	NX_SSP_PutHalfWord(U32 ModuleIndex, U16 HalfWordData)
 
 	NX_ASSERT(9 <= NX_SSP_GetBitWidth(ModuleIndex) );
 
-	WriteIODW(&pRegister->SPI_TX_DATA, (U16)HalfWordData);	//put the byte data
+	WriteIO32(&pRegister->SPI_TX_DATA, (U16)HalfWordData);	//put the byte data
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Send Word( 4byte ).
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	WordData	Value of Data ( 0x0 ~ 0xFFFFFFFF )
+ *	@return		None.
+ */
+void	NX_SSP_PutWord(U32 ModuleIndex, U32 WordData)
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	NX_ASSERT(32 <= NX_SSP_GetBitWidth(ModuleIndex) );
+
+	WriteIO32(&pRegister->SPI_TX_DATA, (U32)WordData);	//put the byte data
 }
 
 
@@ -1117,6 +1278,75 @@ void	NX_SSP_PutHalfWord(U32 ModuleIndex, U16 HalfWordData)
 /// @name FIFO State Check Function
 /// @see also	Status Register, SSPSR
 //--------------------------------------------------------------------------
+
+U32		NX_SSP_GetTrailingByte( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U32)((ReadIO32(&pRegister->SPI_STATUS) >> 24) & 0x01);
+}
+
+void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL bEnable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 1 == bEnable || 0 == bEnable );
+
+	regval = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(bEnable<<16));
+
+	regval = regval | ( (bEnable & 0x1) << 16);
+	WriteIO32( &pRegister->PACKET_CNT_REG, regval );
+}
+
+CBOOL	NX_SSP_GetPacketCountEnb( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U32)((ReadIO32(&pRegister->PACKET_CNT_REG) >> 16) & 0x01);
+}
+
+void	NX_SSP_SetPacketCount( U32 ModuleIndex, U16 PacketCount )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0xFFFF >= PacketCount );
+
+	regval = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(PacketCount<<0));
+
+	regval = regval | ( (PacketCount & 0xFFFF) << 0);
+	WriteIO32( &pRegister->PACKET_CNT_REG, regval );
+}
+
+U16		NX_SSP_GetPacketCount( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U16)((ReadIO32(&pRegister->PACKET_CNT_REG) >> 0) & 0xFFFF);
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -1135,7 +1365,7 @@ CBOOL	NX_SSP_IsTxFIFOEmpty(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	TX_FIFO_LVL = (ReadIODW(&pRegister->SPI_STATUS)>>6) & 0xFF;
+	TX_FIFO_LVL = (ReadIO32(&pRegister->SPI_STATUS)>>6) & 0x1FF;
 
 	if( 0 == (TX_FIFO_LVL) )
 	{
@@ -1157,7 +1387,7 @@ U32	NX_SSP_GetTxFIFOLVL(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (ReadIODW(&pRegister->SPI_STATUS)>>6) & 0xFF;
+	return (ReadIO32(&pRegister->SPI_STATUS)>>6) & 0x1FF;
 }
 
 //------------------------------------------------------------------------------
@@ -1177,7 +1407,7 @@ CBOOL	NX_SSP_IsTxFIFOFull(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	TX_FIFO_LVL = (ReadIODW(&pRegister->SPI_STATUS)>>6) & 0xFF;
+	TX_FIFO_LVL = (ReadIO32(&pRegister->SPI_STATUS)>>6) & 0x1FF;
 
 	if( NX_SSP_TX_FIFO_FULL_LVL[ModuleIndex] <= TX_FIFO_LVL )
 	{
@@ -1207,7 +1437,7 @@ CBOOL	NX_SSP_IsRxFIFOEmpty(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	RX_FIFO_LVL = (ReadIODW(&pRegister->SPI_STATUS)>>15) & 0xFF;
+	RX_FIFO_LVL = (ReadIO32(&pRegister->SPI_STATUS)>>15) & 0x1FF;
 
 	if( 0 == RX_FIFO_LVL )
 	{
@@ -1229,7 +1459,7 @@ U32	NX_SSP_GetRxFIFOLVL(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (ReadIODW(&pRegister->SPI_STATUS)>>15) & 0xFF;
+	return (ReadIO32(&pRegister->SPI_STATUS)>>15) & 0x1FF;
 }
 
 
@@ -1251,15 +1481,15 @@ CBOOL	NX_SSP_IsRxFIFOFull(U32 ModuleIndex)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	RX_FIFO_LVL = (ReadIODW(&pRegister->SPI_STATUS)>>15) & 0xFF;
+	RX_FIFO_LVL = (ReadIO32(&pRegister->SPI_STATUS)>>15) & 0x1FF;
 
 	if( NX_SSP_RX_FIFO_FULL_LVL[ModuleIndex] <= RX_FIFO_LVL )
 	{
-		return CFALSE;
+		return CTRUE;
 	}
 	else
 	{
-		return CTRUE;
+		return CFALSE;
 	}
 }
 
@@ -1288,9 +1518,9 @@ void	NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ( ReadIODW(&pRegister->CS_REG) ) & (~(1<<1));
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<1));
 	regval = regval | ((Mode & 0x01)<<1);
-	WriteIODW( &pRegister->CS_REG, regval );
+	WriteIO32( &pRegister->CS_REG, regval );
 }
 
 
@@ -1309,11 +1539,11 @@ void	NX_SSP_ResetFIFO( U32 ModuleIndex )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ( ReadIODW(&pRegister->CH_CFG) ) & (~(1<<5));
+	regval = ( ReadIO32(&pRegister->CH_CFG) ) & (~(1<<5));
 
 	sw_rst_regval = regval | (1<<5);
-	WriteIODW( &pRegister->CH_CFG, sw_rst_regval ); // reset FIFO & state
-	WriteIODW( &pRegister->CH_CFG, regval ); // reset leave
+	WriteIO32( &pRegister->CH_CFG, sw_rst_regval ); // reset FIFO & state
+	WriteIO32( &pRegister->CH_CFG, regval ); // reset leave
 }
 
 
@@ -1327,14 +1557,71 @@ void	NX_SSP_SetDMABurstSize( U32 ModuleIndex , NX_SSP_DMABurstSize Mode )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ( ReadIODW(&pRegister->MODE_CFG) ) & (~(1<<0));
+	regval = ( ReadIO32(&pRegister->MODE_CFG) ) & (~(1<<0));
 
 	regval = regval | ( (Mode&1) <<0);
-	WriteIODW( &pRegister->MODE_CFG, regval );
+	WriteIO32( &pRegister->MODE_CFG, regval );
+}
+
+void	NX_SSP_SetNCSTIMECount( U32 ModuleIndex, U32 TimeCount)
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= TimeCount );
+
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(0x3F<<4));
+
+	regval = regval | ( (TimeCount & 0x3F) <<4);
+	WriteIO32( &pRegister->CS_REG, regval );
+}
+
+U32		NX_SSP_GetNCSTIMECount( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (ReadIO32(&pRegister->CS_REG)>>6) & 0xFF;
 }
 
 
-void	NX_SSP_SetNSSOUT( U32 ModuleIndex, U32 NSSOUT )
+void	NX_SSP_SetCSAutoEnb( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0 == Enable || 1 == Enable );
+
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<1));
+
+	regval = regval | ( (Enable & 1) <<1);
+	WriteIO32( &pRegister->CS_REG, regval );
+}
+
+
+CBOOL	NX_SSP_GetCSAutoEnb( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (ReadIO32(&pRegister->CS_REG)>>1) & 1;
+}
+
+
+void	NX_SSP_SetNSSOUT( U32 ModuleIndex, CBOOL NSSOUT )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
@@ -1343,11 +1630,12 @@ void	NX_SSP_SetNSSOUT( U32 ModuleIndex, U32 NSSOUT )
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0 == NSSOUT || 1 == NSSOUT );
 
-	regval = ( ReadIODW(&pRegister->CS_REG) ) & (~(1<<0));
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<0));
 
 	regval = regval | ( (NSSOUT&1) <<0);
-	WriteIODW( &pRegister->CS_REG, regval );
+	WriteIO32( &pRegister->CS_REG, regval );
 }
 
 U32 NX_SSP_GetClockNumber (U32 ModuleIndex)
@@ -1372,7 +1660,7 @@ U32	NX_SSP_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex)
 //=======================================
 // in slave mode, can use HIGHSPEED mode(half TXD delay)
 //=======================================
-void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, U32 Enb)
+void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enb)
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
@@ -1382,7 +1670,7 @@ void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, U32 Enb)
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ReadIODW(&pRegister->CH_CFG);
+	regval = ReadIO32(&pRegister->CH_CFG);
 	if( Enb == CFALSE )
 	{
 		regval = regval & (~(1<<6))	;
@@ -1391,8 +1679,22 @@ void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, U32 Enb)
 	{
 		regval = regval | (1<<6) ;
 	}
-	WriteIODW( &pRegister->CH_CFG, regval );
+	WriteIO32( &pRegister->CH_CFG, regval );
 }
+
+CBOOL  NX_SSP_GetHIGHSPEEDMode( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->CH_CFG)>>6) & 1;
+}
+
 
 //=======================================
 // TX_RDY_LVL, trigger level in INT mode
@@ -1405,14 +1707,15 @@ void  NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL )
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= RX_RDY_LVL );
 
-	regval = ReadIODW(&pRegister->MODE_CFG);
+	regval = ReadIO32(&pRegister->MODE_CFG);
 	regval = regval & (~(0x3F << 11));
 	regval = regval | (RX_RDY_LVL & 0x3F)<<11;
-	WriteIODW( &pRegister->MODE_CFG, regval );
+	WriteIO32( &pRegister->MODE_CFG, regval );
 }
 
-void  NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL )
+U8  NX_SSP_GetRXRDYLVL( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
@@ -1421,8 +1724,35 @@ void  NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ReadIODW(&pRegister->MODE_CFG);
+	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 11) & 0x3F;
+}
+
+//d
+void  NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= TX_RDY_LVL );
+
+	regval = ReadIO32(&pRegister->MODE_CFG);
 	regval = regval & (~(0x3F << 5));
 	regval = regval | (TX_RDY_LVL & 0x3F)<<5;
-	WriteIODW( &pRegister->MODE_CFG, regval );
+	WriteIO32( &pRegister->MODE_CFG, regval );
 }
+
+U8  NX_SSP_GetTXRDYLVL( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 5) & 0x3F;
+}
+

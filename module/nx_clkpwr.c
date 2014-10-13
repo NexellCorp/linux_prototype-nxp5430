@@ -24,6 +24,7 @@
 #define NX_CLKPWR_INT_NUMBER 3
 
 static	struct NX_CLKPWR_RegisterSet *__g_pRegister = CNULL;
+static	U32 __g_OSC_KHz;
 
 //------------------------------------------------------------------------------
 // Module Interface
@@ -104,6 +105,20 @@ void	NX_CLKPWR_SetBaseAddress( U32 BaseAddress )
 	NX_ASSERT( CNULL != BaseAddress );
 
 	__g_pRegister = (struct NX_CLKPWR_RegisterSet *)BaseAddress;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set a base address of register set.
+ *	@param[in]	BaseAddress Module's base address
+ *	@return		None.
+ *	@see		NX_CLKPWR_GetPLLFreq
+ */
+void	NX_CLKPWR_SetOSCFreq( U32 FreqKHz )
+{
+	NX_ASSERT( CNULL != FreqKHz );
+
+	__g_OSC_KHz = FreqKHz;
 }
 
 //------------------------------------------------------------------------------
@@ -236,21 +251,21 @@ void	NX_CLKPWR_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 
 	if( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > IntNum )
 	{
-		ReadValue = ReadIODW(&__g_pRegister->GPIOINTENB);
+		ReadValue = ReadIO32(&__g_pRegister->GPIOINTENB);
 
 		ReadValue &= ~( 0x01 << IntNum );
 		ReadValue |= (U32)Enable << IntNum;
 
-		WriteIODW(&__g_pRegister->GPIOINTENB, ReadValue);
+		WriteIO32(&__g_pRegister->GPIOINTENB, ReadValue);
 	}
 	else	// RTC, BATF
 	{
-		ReadValue = ReadIODW(&__g_pRegister->INTENABLE);
+		ReadValue = ReadIO32(&__g_pRegister->INTENABLE);
 
 		ReadValue &= ~( 0x01 << (IntNum-NX_CLKPWR_INT_NUMBER) );
 		ReadValue |= (U32)Enable << (IntNum-NX_CLKPWR_INT_NUMBER);
 
-		WriteIODW(&__g_pRegister->INTENABLE, ReadValue);
+		WriteIO32(&__g_pRegister->INTENABLE, ReadValue);
 	}
 }
 
@@ -277,11 +292,11 @@ CBOOL	NX_CLKPWR_GetInterruptEnable( S32 IntNum )
 
 	if( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > IntNum )
 	{
-		return (CBOOL)( (ReadIODW(&__g_pRegister->GPIOINTENB) >> IntNum) & 0x01 );
+		return (CBOOL)( (ReadIO32(&__g_pRegister->GPIOINTENB) >> IntNum) & 0x01 );
 	}
 	else
 	{
-		return (CBOOL)( (ReadIODW(&__g_pRegister->INTENABLE) >> (IntNum-NX_CLKPWR_INT_NUMBER)) & 0x01 );
+		return (CBOOL)( (ReadIO32(&__g_pRegister->INTENABLE) >> (IntNum-NX_CLKPWR_INT_NUMBER)) & 0x01 );
 	}
 }
 
@@ -311,8 +326,8 @@ void	NX_CLKPWR_SetInterruptEnable32( U32 EnableFlag )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->GPIOINTENB, EnableFlag & GPIOENB_MASK);
-	WriteIODW(&__g_pRegister->INTENABLE, (EnableFlag >> 9) & ENB_MASK);
+	WriteIO32(&__g_pRegister->GPIOINTENB, EnableFlag & GPIOENB_MASK);
+	WriteIO32(&__g_pRegister->INTENABLE, (EnableFlag >> 9) & ENB_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -342,7 +357,7 @@ U32		NX_CLKPWR_GetInterruptEnable32( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)((ReadIODW(&__g_pRegister->GPIOINTENB) & GPIOENB_MASK) | ((ReadIODW(&__g_pRegister->INTENABLE) & ENB_MASK)<<9));
+	return (U32)((ReadIO32(&__g_pRegister->GPIOINTENB) & GPIOENB_MASK) | ((ReadIO32(&__g_pRegister->INTENABLE) & ENB_MASK)<<9));
 }
 
 //------------------------------------------------------------------------------
@@ -368,11 +383,11 @@ CBOOL	NX_CLKPWR_GetInterruptPending( S32 IntNum )
 
 	if( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > IntNum )
 	{
-		return ( (ReadIODW(&__g_pRegister->GPIOINTPEND) >> IntNum) & 0x01 );
+		return ( (ReadIO32(&__g_pRegister->GPIOINTPEND) >> IntNum) & 0x01 );
 	}
 	else
 	{
-		return ( (ReadIODW(&__g_pRegister->INTPEND) >> (IntNum-NX_CLKPWR_INT_NUMBER)) & 0x01 );
+		return ( (ReadIO32(&__g_pRegister->INTPEND) >> (IntNum-NX_CLKPWR_INT_NUMBER)) & 0x01 );
 	}
 }
 
@@ -403,7 +418,7 @@ U32		NX_CLKPWR_GetInterruptPending32( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)((ReadIODW(&__g_pRegister->GPIOINTPEND) & GPIOPEND_MASK) | ((ReadIODW(&__g_pRegister->INTPEND) & PEND_MASK)<<9));
+	return (U32)((ReadIO32(&__g_pRegister->GPIOINTPEND) & GPIOPEND_MASK) | ((ReadIO32(&__g_pRegister->INTPEND) & PEND_MASK)<<9));
 }
 
 //------------------------------------------------------------------------------
@@ -428,11 +443,11 @@ void	NX_CLKPWR_ClearInterruptPending( S32 IntNum )
 
 	if( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > IntNum )
 	{
-		WriteIODW(&__g_pRegister->GPIOINTPEND, 1 << IntNum);
+		WriteIO32(&__g_pRegister->GPIOINTPEND, 1 << IntNum);
 	}
 	else
 	{
-		WriteIODW(&__g_pRegister->INTPEND, 1 << (IntNum-NX_CLKPWR_INT_NUMBER));
+		WriteIO32(&__g_pRegister->INTPEND, 1 << (IntNum-NX_CLKPWR_INT_NUMBER));
 	}
 }
 
@@ -462,8 +477,8 @@ void	NX_CLKPWR_ClearInterruptPending32( U32 PendingFlag )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->GPIOINTPEND, (PendingFlag & GPIOPEND_MASK));
-	WriteIODW(&__g_pRegister->INTPEND, (PendingFlag >> 9 ) & PEND_MASK);
+	WriteIO32(&__g_pRegister->GPIOINTPEND, (PendingFlag & GPIOPEND_MASK));
+	WriteIO32(&__g_pRegister->INTPEND, (PendingFlag >> 9 ) & PEND_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -486,13 +501,13 @@ void	NX_CLKPWR_SetInterruptEnableAll( CBOOL Enable )
 
 	if( Enable )
 	{
-		WriteIODW(&__g_pRegister->GPIOINTENB, 0x1FF);
-		WriteIODW(&__g_pRegister->INTENABLE, 0x03);
+		WriteIO32(&__g_pRegister->GPIOINTENB, 0x1FF);
+		WriteIO32(&__g_pRegister->INTENABLE, 0x03);
 	}
 	else
 	{
-		WriteIODW(&__g_pRegister->GPIOINTENB, 0x00);
-		WriteIODW(&__g_pRegister->INTENABLE, 0x00);
+		WriteIO32(&__g_pRegister->GPIOINTENB, 0x00);
+		WriteIO32(&__g_pRegister->INTENABLE, 0x00);
 	}
 }
 
@@ -516,7 +531,7 @@ CBOOL	NX_CLKPWR_GetInterruptEnableAll( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	if( (ReadIODW(&__g_pRegister->GPIOINTENB) & GPIOINTENB_MASK) || (ReadIODW(&__g_pRegister->INTENABLE) & INTENB_MASK) )
+	if( (ReadIO32(&__g_pRegister->GPIOINTENB) & GPIOINTENB_MASK) || (ReadIO32(&__g_pRegister->INTENABLE) & INTENB_MASK) )
 	{
 		return CTRUE;
 	}
@@ -544,8 +559,8 @@ CBOOL	NX_CLKPWR_GetInterruptPendingAll( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	if( (ReadIODW(&__g_pRegister->GPIOINTPEND) & GPIOINTPEND_MASK) ||
-		(ReadIODW(&__g_pRegister->INTPEND) & INTPEND_MASK) )
+	if( (ReadIO32(&__g_pRegister->GPIOINTPEND) & GPIOINTPEND_MASK) ||
+		(ReadIO32(&__g_pRegister->INTPEND) & INTPEND_MASK) )
 	{
 		return CTRUE;
 	}
@@ -572,8 +587,8 @@ void	NX_CLKPWR_ClearInterruptPendingAll( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->GPIOINTPEND, GPIOINTPEND_MASK);
-	WriteIODW(&__g_pRegister->INTPEND, INTPEND_MASK);
+	WriteIO32(&__g_pRegister->GPIOINTPEND, GPIOINTPEND_MASK);
+	WriteIO32(&__g_pRegister->INTPEND, INTPEND_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -595,11 +610,11 @@ S32		NX_CLKPWR_GetInterruptPendingNumber( void )	// -1 if None
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	Pend = (ReadIODW(&__g_pRegister->GPIOINTPEND) &
-			ReadIODW(&__g_pRegister->GPIOINTENB));
+	Pend = (ReadIO32(&__g_pRegister->GPIOINTPEND) &
+			ReadIO32(&__g_pRegister->GPIOINTENB));
 
-	Pend |= ((ReadIODW(&__g_pRegister->INTPEND) &
-			  ReadIODW(&__g_pRegister->INTENABLE))<<9 );
+	Pend |= ((ReadIO32(&__g_pRegister->INTPEND) &
+			  ReadIO32(&__g_pRegister->INTENABLE))<<9 );
 
 	for( dwIntNum = 0; dwIntNum < 11; dwIntNum++ )
 	{
@@ -652,14 +667,14 @@ void	NX_CLKPWR_SetPLLPMS ( U32 pllnumber, U32 PDIV, U32 MDIV, U32 SDIV )
 	NX_ASSERT( 5 >= SDIV && 0 <= SDIV );
 
 //	__g_pRegister->PLLSETREG[pllnumber] = (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS);
-	//WriteIODW(&__g_pRegister->PLLSETREG[pllnumber], (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS));
-	WriteIODW(&__g_pRegister->PLLSETREG[pllnumber],
-		NX_BIT_SetBitRange32(ReadIODW(&__g_pRegister->PLLSETREG[pllnumber]),
+	//WriteIO32(&__g_pRegister->PLLSETREG[pllnumber], (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS));
+	WriteIO32(&__g_pRegister->PLLSETREG[pllnumber],
+		NX_BIT_SetBitRange32(ReadIO32(&__g_pRegister->PLLSETREG[pllnumber]),
 				(PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS),
 				23, 0));
 }
 
-U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber, U32 XTalFreqKHz )
+U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber )
 {
 	const U32 PLL_PDIV_BIT_POS =	18;
 	const U32 PLL_MDIV_BIT_POS =	8;
@@ -670,16 +685,16 @@ U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber, U32 XTalFreqKHz )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( NX_CLKPWR_NUMBER_OF_PLL	> pllnumber );
 
-	RegValue = ReadIODW(&__g_pRegister->PLLSETREG[pllnumber]);
+	RegValue = ReadIO32(&__g_pRegister->PLLSETREG[pllnumber]);
 	nP = (RegValue >> PLL_PDIV_BIT_POS) & 0x3F;
 	nM = (RegValue >> PLL_MDIV_BIT_POS) & 0x3FF;
 	nS = (RegValue >> PLL_SDIV_BIT_POS) & 0xFF;
-	RegValue1 = ReadIODW(&__g_pRegister->PLLSETREG_SSCG[pllnumber]);
+	RegValue1 = ReadIO32(&__g_pRegister->PLLSETREG_SSCG[pllnumber]);
 	nK = (RegValue1 >> PLL_KDIV_BIT_POS) & 0xFFFF;
 	if(pllnumber<2)
-		return (U32)((( nM * XTalFreqKHz)/nP)>>nS)*1000;
+		return (U32)((( nM * __g_OSC_KHz)/nP)>>nS)*1000;
 	else
-		return (U32)((((nM * XTalFreqKHz)/nP)>>nS)+((((nK * XTalFreqKHz)/nP)>>nS)>>16)) *1000;
+		return (U32)((((nM * __g_OSC_KHz)/nP)>>nS)+((((nK * __g_OSC_KHz)/nP)>>nS)>>16)) *1000;
 }
 
 void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  )
@@ -701,17 +716,17 @@ void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF
 	NX_ASSERT( (SEL_PF <= 2) );
 
 //	__g_pRegister->PLLSETREG[pllnumber] = (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS);
-	//WriteIODW(&__g_pRegister->PLLSETREG[pllnumber], (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS));
-	WriteIODW(&__g_pRegister->PLLSETREG_SSCG[pllnumber],
-		NX_BIT_SetBitRange32(ReadIODW(&__g_pRegister->PLLSETREG_SSCG[pllnumber]),
+	//WriteIO32(&__g_pRegister->PLLSETREG[pllnumber], (PDIV<<PLL_PDIV_BIT_POS) | (MDIV<<PLL_MDIV_BIT_POS) | (SDIV<<PLL_SDIV_BIT_POS));
+	WriteIO32(&__g_pRegister->PLLSETREG_SSCG[pllnumber],
+		NX_BIT_SetBitRange32(ReadIO32(&__g_pRegister->PLLSETREG_SSCG[pllnumber]),
 				      ( K32<<PLL_K_BIT_POS  )
 				 	| (MFR<<PLL_MFR_BIT_POS)
 					| (MRR<<PLL_MRR_BIT_POS)
 					| (SEL_PF<<PLL_SEL_PF_BIT_POS)
 					, 31, 0));
 
-	WriteIODW(&__g_pRegister->PLLSETREG[pllnumber],
-		NX_BIT_SetBitRange32(ReadIODW(&__g_pRegister->PLLSETREG[pllnumber]),
+	WriteIO32(&__g_pRegister->PLLSETREG[pllnumber],
+		NX_BIT_SetBitRange32(ReadIO32(&__g_pRegister->PLLSETREG[pllnumber]),
 				((U32)SSCG_EN),
 				PLL_SSCG_EN_BIT_POS, PLL_SSCG_EN_BIT_POS));
 }
@@ -741,7 +756,7 @@ void	NX_CLKPWR_SetPLLPowerOn ( CBOOL On )
 	SetValue = __g_pRegister->CLKMODEREG0;
 	if( On )	SetValue &=	~PLLPWDN1;
 	else		SetValue |=	PLLPWDN1;
-	WriteIODW(&__g_pRegister->CLKMODEREG0, SetValue);
+	WriteIO32(&__g_pRegister->CLKMODEREG0, SetValue);
 }
 #endif
 //------------------------------------------------------------------------------
@@ -767,8 +782,8 @@ void	NX_CLKPWR_DoPLLChange ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	SetValue = ReadIODW(&__g_pRegister->PWRMODE) | CHGPLL;
-	WriteIODW(&__g_pRegister->PWRMODE, SetValue);
+	SetValue = ReadIO32(&__g_pRegister->PWRMODE) | CHGPLL;
+	WriteIO32(&__g_pRegister->PWRMODE, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -784,7 +799,7 @@ CBOOL	NX_CLKPWR_IsPLLStable ( void )
 	const U32 CHGPLL = (1<<15);
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ((ReadIODW(&__g_pRegister->PWRMODE) & CHGPLL ) ? CFALSE : CTRUE );
+	return ((ReadIO32(&__g_pRegister->PWRMODE) & CHGPLL ) ? CFALSE : CTRUE );
 }
 
 //------------------------------------------------------------------------------
@@ -817,7 +832,7 @@ void	NX_CLKPWR_SetClockCPU	( U32 ClkSrc, U32 CoreDivider, U32 BusDivider )
 						| ((U32)ClkSrc << CLKSELCPU0_POS)
 						| ((BusDivider-1)	<< CLKDIV2CPU0_POS) );
 
-	WriteIODW(&__g_pRegister->CLKMODEREG0, temp);
+	WriteIO32(&__g_pRegister->CLKMODEREG0, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -850,7 +865,7 @@ void	NX_CLKPWR_SetClockDivider2	( NX_CLKPWR_CLOCK clock_number, U32 ClkSrc, U32 
 					| ((Divider1-1)	<< CLKDIV1_POS)
 					| ((U32)ClkSrc << CLKSEL_POS)
 				    );
-	WriteIODW(&__g_pRegister->DVOREG[clock_number], temp);
+	WriteIO32(&__g_pRegister->DVOREG[clock_number], temp);
 }
 
 void	NX_CLKPWR_SetClockDivider3	( NX_CLKPWR_CLOCK clock_number, U32 ClkSrc, U32 Divider1, U32 Divider2, U32 Divider3 )
@@ -874,7 +889,7 @@ void	NX_CLKPWR_SetClockDivider3	( NX_CLKPWR_CLOCK clock_number, U32 ClkSrc, U32 
 					| ((Divider1-1)	<< CLKDIV1_POS)
 					| ((U32)ClkSrc << CLKSEL_POS)
 				    );
-	WriteIODW(&__g_pRegister->DVOREG[clock_number], temp);
+	WriteIO32(&__g_pRegister->DVOREG[clock_number], temp);
 }
 
 void	NX_CLKPWR_SetClockDivider4	( NX_CLKPWR_CLOCK clock_number, U32 ClkSrc, U32 Divider1, U32 Divider2, U32 Divider3, U32 Divider4 )
@@ -901,7 +916,7 @@ void	NX_CLKPWR_SetClockDivider4	( NX_CLKPWR_CLOCK clock_number, U32 ClkSrc, U32 
 					| ((Divider1-1)	<< CLKDIV1_POS)
 					| ((U32)ClkSrc  << CLKSEL_POS )
 				   );
-	WriteIODW(&__g_pRegister->DVOREG[clock_number], temp);
+	WriteIO32(&__g_pRegister->DVOREG[clock_number], temp);
 }
 #if 0
 //------------------------------------------------------------------------------
@@ -945,7 +960,7 @@ void	NX_CLKPWR_SetClockMCLK( U32 ClkSrc, U32 MCLKDivider, U32 BCLKDivider, U32 P
 						| ((PCLKDivider-1) << CLKDIVPCLK_BITPOS)
 						);
 
-	WriteIODW(&__g_pRegister->CLKMODEREG1, temp);
+	WriteIO32(&__g_pRegister->CLKMODEREG1, temp);
 }
 
 void NX_CLKPWR_SetCPUBUSSyncMode(CBOOL Enable)
@@ -955,12 +970,12 @@ void NX_CLKPWR_SetCPUBUSSyncMode(CBOOL Enable)
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	SetValue = ReadIODW(&__g_pRegister->PWRMODE);
+	SetValue = ReadIO32(&__g_pRegister->PWRMODE);
 	if(Enable)
 		SetValue |= SYNCMODE;
 	else
 		SetValue &= ~SYNCMODE;
-	WriteIODW(&__g_pRegister->PWRMODE, SetValue);
+	WriteIO32(&__g_pRegister->PWRMODE, SetValue);
 }
 #endif
 //--------------------------------------------------------------------------
@@ -986,12 +1001,12 @@ void	NX_CLKPWR_SetRTCWakeUpEnable ( CBOOL Enable )
 	NX_ASSERT( (0==Enable) || (1==Enable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->PWRCONT);
+	ReadValue = ReadIO32(&__g_pRegister->PWRCONT);
 
 	ReadValue &= ~RTCWKENB_MASK;
 	ReadValue |= (U32)Enable << RTCWKENB_BITPOS;
 
-	WriteIODW(&__g_pRegister->PWRCONT, ReadValue);
+	WriteIO32(&__g_pRegister->PWRCONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1010,7 +1025,7 @@ CBOOL	NX_CLKPWR_GetRTCWakeUpEnable ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->PWRCONT) >> RTCWKENB_BITPOS ) & 0x01);
+	return (CBOOL)((ReadIO32(&__g_pRegister->PWRCONT) >> RTCWKENB_BITPOS ) & 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -1034,12 +1049,12 @@ void	NX_CLKPWR_SetALIVEGPIOWakeupEnable( U32 dwBitNumber, CBOOL bEnable )
 	NX_ASSERT( (0==bEnable) || (1==bEnable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->GPIOWAKEUPENB);
+	ReadValue = ReadIO32(&__g_pRegister->GPIOWAKEUPENB);
 
 	ReadValue &= ~(1 << dwBitNumber);
 	ReadValue |= ((U32)bEnable << dwBitNumber);
 
-	WriteIODW(&__g_pRegister->GPIOWAKEUPENB, ReadValue);
+	WriteIO32(&__g_pRegister->GPIOWAKEUPENB, ReadValue);
 }
 
 void	NX_CLKPWR_SetALIVEGPIOWakeupEnableAll(  CBOOL bEnable )
@@ -1079,7 +1094,7 @@ CBOOL	NX_CLKPWR_GetALIVEGPIOWakeupEnable( U32 dwBitNumber )
 	NX_ASSERT( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > dwBitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->GPIOWAKEUPENB) >> dwBitNumber) & 0x01);
+	return (CBOOL)((ReadIO32(&__g_pRegister->GPIOWAKEUPENB) >> dwBitNumber) & 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -1102,12 +1117,12 @@ void	NX_CLKPWR_SetALIVEGPIOWakeUpRiseEdgeDetectEnable( U32 dwBitNumber, CBOOL bE
 	NX_ASSERT( (0==bEnable) || (1==bEnable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->GPIOWAKEUPRISEENB);
+	ReadValue = ReadIO32(&__g_pRegister->GPIOWAKEUPRISEENB);
 
 	ReadValue &= ~(1 << dwBitNumber);
 	ReadValue |= ((U32)bEnable << dwBitNumber);
 
-	WriteIODW(&__g_pRegister->GPIOWAKEUPRISEENB, ReadValue);
+	WriteIO32(&__g_pRegister->GPIOWAKEUPRISEENB, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1126,7 +1141,7 @@ CBOOL	NX_CLKPWR_GetALIVEGPIOWakeUpRiseEdgeDetectEnable( U32 dwBitNumber )
 	NX_ASSERT( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > dwBitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->GPIOWAKEUPRISEENB) >> dwBitNumber) & 0x01);
+	return (CBOOL)((ReadIO32(&__g_pRegister->GPIOWAKEUPRISEENB) >> dwBitNumber) & 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -1149,12 +1164,12 @@ void	NX_CLKPWR_SetALIVEGPIOWakeUpFallEdgeDetectEnable( U32 dwBitNumber, CBOOL bE
 	NX_ASSERT( (0==bEnable) || (1==bEnable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->GPIOWAKEUPFALLENB);
+	ReadValue = ReadIO32(&__g_pRegister->GPIOWAKEUPFALLENB);
 
 	ReadValue &= ~(1 << dwBitNumber);
 	ReadValue |= ((U32)bEnable << dwBitNumber);
 
-	WriteIODW(&__g_pRegister->GPIOWAKEUPFALLENB, ReadValue);
+	WriteIO32(&__g_pRegister->GPIOWAKEUPFALLENB, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1173,7 +1188,7 @@ CBOOL	NX_CLKPWR_GetALIVEGPIOWakeUpFallEdgeDetectEnable( U32 dwBitNumber )
 	NX_ASSERT( NX_CLKPWR_ALIVEGPIOWAKEUP_NUMBER > dwBitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->GPIOWAKEUPFALLENB) >> dwBitNumber) & 0x01);
+	return (CBOOL)((ReadIO32(&__g_pRegister->GPIOWAKEUPFALLENB) >> dwBitNumber) & 0x01);
 }
 
 //--------------------------------------------------------------------------
@@ -1197,12 +1212,12 @@ void	NX_CLKPWR_SetSoftwareResetEnable( CBOOL bEnable )
 	NX_ASSERT( (0==bEnable) || (1==bEnable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->PWRCONT);
+	ReadValue = ReadIO32(&__g_pRegister->PWRCONT);
 
 	ReadValue &= ~SWRSTENB_MASK;
 	ReadValue |= (U32)bEnable << SWRSTENB_BITPOS;
 
-	WriteIODW(&__g_pRegister->PWRCONT, ReadValue);
+	WriteIO32(&__g_pRegister->PWRCONT, ReadValue);
 }
 
 //--------------------------------------------------------------------------
@@ -1220,7 +1235,7 @@ CBOOL	NX_CLKPWR_GetSoftwareResetEnable( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->PWRCONT) & SWRSTENB_MASK) ? CTRUE : CFALSE ;
+	return (ReadIO32(&__g_pRegister->PWRCONT) & SWRSTENB_MASK) ? CTRUE : CFALSE ;
 }
 
 //--------------------------------------------------------------------------
@@ -1237,7 +1252,7 @@ void	NX_CLKPWR_DoSoftwareReset( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->PWRMODE, SWREST_MASK);
+	WriteIO32(&__g_pRegister->PWRMODE, SWREST_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -1259,12 +1274,12 @@ void	NX_CLKPWR_SetALIVEGPIOResetEnable( U32 dwBitNumber, CBOOL bEnable )
 	NX_ASSERT( (0==bEnable) || (1==bEnable) );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	ReadValue = ReadIODW(&__g_pRegister->GPIORSTENB);
+	ReadValue = ReadIO32(&__g_pRegister->GPIORSTENB);
 
 	ReadValue &= ~(1 << dwBitNumber);
 	ReadValue |= ((U32)bEnable << dwBitNumber);
 
-	WriteIODW(&__g_pRegister->GPIORSTENB, ReadValue);
+	WriteIO32(&__g_pRegister->GPIORSTENB, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1280,7 +1295,7 @@ CBOOL	NX_CLKPWR_GetALIVEGPIOResetEnable( U32 dwBitNumber )
 	NX_ASSERT( 8 > dwBitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->GPIORSTENB) >> dwBitNumber) & 0x01);
+	return (CBOOL)((ReadIO32(&__g_pRegister->GPIORSTENB) >> dwBitNumber) & 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -1309,7 +1324,7 @@ NX_CLKPWR_RESETSTATUS NX_CLKPWR_GetResetStatus( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (NX_CLKPWR_RESETSTATUS)(ReadIODW(&__g_pRegister->RESETSTATUS) & 0x1F);
+	return (NX_CLKPWR_RESETSTATUS)(ReadIO32(&__g_pRegister->RESETSTATUS) & 0x1F);
 }
 
 /*
@@ -1339,7 +1354,7 @@ void	NX_CLKPWR_GoStopMode( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->PWRMODE, STOP_MASK);
+	WriteIO32(&__g_pRegister->PWRMODE, STOP_MASK);
 }
 
 void	NX_CLKPWR_SetImmediateSleepEnable( CBOOL enable  )
@@ -1347,8 +1362,8 @@ void	NX_CLKPWR_SetImmediateSleepEnable( CBOOL enable  )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->PWRCONT,
-		NX_BIT_SetBit32(ReadIODW(&__g_pRegister->PWRCONT), enable, 0 ));
+	WriteIO32(&__g_pRegister->PWRCONT,
+		NX_BIT_SetBit32(ReadIO32(&__g_pRegister->PWRCONT), enable, 0 ));
 }
 
 
@@ -1364,7 +1379,7 @@ void	NX_CLKPWR_GoIdleMode( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->PWRMODE, IDLE_MASK);
+	WriteIO32(&__g_pRegister->PWRMODE, IDLE_MASK);
 }
 
 //--------------------------------------------------------------------------
@@ -1395,7 +1410,7 @@ NX_CLKPWR_POWERMODE	NX_CLKPWR_GetLastPowerMode ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (NX_CLKPWR_POWERMODE)(ReadIODW(&__g_pRegister->PWRMODE) & LASTPWR_MASK );
+	return (NX_CLKPWR_POWERMODE)(ReadIO32(&__g_pRegister->PWRMODE) & LASTPWR_MASK );
 }
 
 //------------------------------------------------------------------------------
@@ -1413,7 +1428,7 @@ void	NX_CLKPWR_SetScratchPad( U32 dwIndex, U32 dwValue )
 	NX_ASSERT( 3 > dwIndex );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIODW(&__g_pRegister->SCRATCH[dwIndex], dwValue);
+	WriteIO32(&__g_pRegister->SCRATCH[dwIndex], dwValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1428,7 +1443,7 @@ U32		NX_CLKPWR_GetScratchPad( U32 dwIndex )
 	NX_ASSERT( 3 > dwIndex );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ReadIODW(&__g_pRegister->SCRATCH[dwIndex]);
+	return ReadIO32(&__g_pRegister->SCRATCH[dwIndex]);
 }
 
 //------------------------------------------------------------------------------
@@ -1439,7 +1454,7 @@ U32		NX_CLKPWR_GetSystemResetConfiguration( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)ReadIODW(&__g_pRegister->SYSRSTCONFIG);
+	return (U32)ReadIO32(&__g_pRegister->SYSRSTCONFIG);
 }
 
 //------------------------------------------------------------------------------
@@ -1485,12 +1500,12 @@ void	NX_CLKPWR_SetGPIOPadStrength( U32 Group, U32 BitNumber, U32 mA )
 
 	SelectReg = BitNumber/16;
 
-	regvalue = ReadIODW(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]);
+	regvalue = ReadIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]);
 
 	regvalue &= ~( 0x03 << shift );
 	regvalue |= SetmA << shift;
 
-	WriteIODW(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg], regvalue);
+	WriteIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg], regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1523,7 +1538,7 @@ U32		NX_CLKPWR_GetGPIOPadStrength( U32 Group, U32 BitNumber )
 
 	SelectReg = BitNumber/16;
 
-	Value = ( ReadIODW(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]) >> shift ) & 0x03;
+	Value = ( ReadIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]) >> shift ) & 0x03;
 
 	switch( Value )
 	{
@@ -1581,12 +1596,12 @@ void	NX_CLKPWR_SetBusPadStrength( NX_CLKPWR_BUSPAD Bus, U32 mA )
 
 	shift = Bus;
 
-	regvalue = ReadIODW(&__g_pRegister->PADSTRENGTHBUS);
+	regvalue = ReadIO32(&__g_pRegister->PADSTRENGTHBUS);
 
 	regvalue &= ~( 0x03 << shift );
 	regvalue |= SetmA << shift;
 
-	WriteIODW(&__g_pRegister->PADSTRENGTHBUS, regvalue);
+	WriteIO32(&__g_pRegister->PADSTRENGTHBUS, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1613,7 +1628,7 @@ U32		NX_CLKPWR_GetBusPadStrength( NX_CLKPWR_BUSPAD Bus )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	Value = ( ReadIODW(&__g_pRegister->PADSTRENGTHBUS) >> Bus ) & 0x03;
+	Value = ( ReadIO32(&__g_pRegister->PADSTRENGTHBUS) >> Bus ) & 0x03;
 
 	switch( Value )
 	{
@@ -1631,8 +1646,8 @@ U32		NX_CLKPWR_GetBusPadStrength( NX_CLKPWR_BUSPAD Bus )
 void	NX_CLKPWR_SetPllOutGMux(U32 pllnumber, NX_CLKPWR_GMUX gmux)
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	WriteIODW(&__g_pRegister->PLLSETREG[pllnumber],
-		NX_BIT_SetBit32(ReadIODW(&__g_pRegister->PLLSETREG[pllnumber]), gmux, 28 ));
+	WriteIO32(&__g_pRegister->PLLSETREG[pllnumber],
+		NX_BIT_SetBit32(ReadIO32(&__g_pRegister->PLLSETREG[pllnumber]), gmux, 28 ));
 }
 
 
@@ -1641,22 +1656,22 @@ void	NX_CLKPWR_UpdatePllSetReg(U32 pllnumber)
 {
 	const U32 UPDATE_PLL		= 0x01;
 	NX_ASSERT( CNULL != __g_pRegister );
-	WriteIODW(&__g_pRegister->CLKMODEREG0,
-		NX_BIT_SetBit32(ReadIODW(&__g_pRegister->CLKMODEREG0), UPDATE_PLL, pllnumber));
+	WriteIO32(&__g_pRegister->CLKMODEREG0,
+		NX_BIT_SetBit32(ReadIO32(&__g_pRegister->CLKMODEREG0), UPDATE_PLL, pllnumber));
 }
 
 CBOOL	NX_CLKPWR_IsPLLStableUpdate(void)
 {
 	const U32 UPDATEPLL = (1<<31);
 	NX_ASSERT( CNULL != __g_pRegister );
-	return ((ReadIODW(&__g_pRegister->CLKMODEREG0) & UPDATEPLL ) ? CFALSE : CTRUE );
+	return ((ReadIO32(&__g_pRegister->CLKMODEREG0) & UPDATEPLL ) ? CFALSE : CTRUE );
 }
 
 
 void NX_CLKPWR_SetPLLPower( U32 pllnumber, NX_CLKPWR_PLL_POWER powermode )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	WriteIODW(&__g_pRegister->PLLSETREG[pllnumber],
-		NX_BIT_SetBit32(ReadIODW(&__g_pRegister->PLLSETREG[pllnumber]), powermode, 29 ));
+	WriteIO32(&__g_pRegister->PLLSETREG[pllnumber],
+		NX_BIT_SetBit32(ReadIO32(&__g_pRegister->PLLSETREG[pllnumber]), powermode, 29 ));
 }
 

@@ -166,7 +166,7 @@ void    NX_MPEGTSI_SetIDMAEnable( U32 ChannelIndex, CBOOL Enable )
     RegVal &= ~IDMA_MASK;
     RegVal |= Enable << ChannelIndex;
 
-    WriteIODW( &pRegister->IDMAEN, RegVal );
+    WriteIO32( &pRegister->IDMAEN, RegVal );
 }
 
 U32     NX_MPEGTSI_GetIDMAEnable( void )
@@ -187,7 +187,7 @@ void    NX_MPEGTSI_RunIDMA( U32 ChannelIndex )
 
     IDMA_MASK = 1UL << ChannelIndex;
 
-    WriteIODW( &pRegister->IDMARUN, IDMA_MASK );
+    WriteIO32( &pRegister->IDMARUN, IDMA_MASK );
 }
 
 void    NX_MPEGTSI_StopIDMA( U32 ChannelIndex )
@@ -202,7 +202,7 @@ void    NX_MPEGTSI_StopIDMA( U32 ChannelIndex )
 
     IDMA_MASK = 1UL << (ChannelIndex+16);
 
-    WriteIODW( &pRegister->IDMARUN, IDMA_MASK );
+    WriteIO32( &pRegister->IDMARUN, IDMA_MASK );
 }
 
 void    NX_MPEGTSI_SetIDMABaseAddr( U32 ChannelIndex, U32 BaseAddr )
@@ -214,7 +214,7 @@ void    NX_MPEGTSI_SetIDMABaseAddr( U32 ChannelIndex, U32 BaseAddr )
 
     pRegister   = __g_ModuleVariables.pRegister;
 
-    WriteIODW( &pRegister->IDMAADDR[ChannelIndex], BaseAddr );
+    WriteIO32( &pRegister->IDMAADDR[ChannelIndex], BaseAddr );
 }
 
 U32     NX_MPEGTSI_GetIDMABaseAddr( U32 ChannelIndex )
@@ -234,7 +234,7 @@ void    NX_MPEGTSI_SetIDMALength( U32 ChannelIndex, U32 Length )
 
     pRegister   = __g_ModuleVariables.pRegister;
 
-    WriteIODW( &pRegister->IDMALEN[ChannelIndex], Length );
+    WriteIO32( &pRegister->IDMALEN[ChannelIndex], Length );
 }
 
 U32     NX_MPEGTSI_GetIDMALength( U32 ChannelIndex )
@@ -262,7 +262,7 @@ void    NX_MPEGTSI_SetIDMAIntEnable( U32 ChannelIndex, CBOOL Enable )
     RegVal &= ~IDMA_MASK;
     RegVal |= Enable << (ChannelIndex+16);
 
-    WriteIODW( &pRegister->IDMAINT, RegVal );
+    WriteIO32( &pRegister->IDMAINT, RegVal );
 }
 
 U32     NX_MPEGTSI_GetIDMAIntEnable( void )
@@ -289,7 +289,7 @@ void    NX_MPEGTSI_SetIDMAIntMask( U32 ChannelIndex, CBOOL Enable )
     RegVal &= ~IDMA_MASK;
     RegVal |= Enable << (ChannelIndex+24);
 
-    WriteIODW( &pRegister->IDMAINT, RegVal );
+    WriteIO32( &pRegister->IDMAINT, RegVal );
 }
 
 U32     NX_MPEGTSI_GetIDMAIntMask( void )
@@ -328,7 +328,7 @@ void    NX_MPEGTSI_ClearIDMAIntPending( U32 ChannelIndex )
     RegVal &= ~IDMA_MASK;
     RegVal |= 1UL << (ChannelIndex);
 
-    WriteIODW( &pRegister->IDMAINT, RegVal );
+    WriteIO32( &pRegister->IDMAINT, RegVal );
 }
 
 //------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ void    NX_MPEGTSI_SetCapEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CAPENB_MASK;
     RegVal |= Enable << CAPENB_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapEnable( U32 CapIdx )
@@ -384,7 +384,7 @@ void    NX_MPEGTSI_SetSerialEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~SERIAL_MASK;
     RegVal |= Enable << SERIAL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetSerialEnable( U32 CapIdx )
@@ -416,7 +416,7 @@ void    NX_MPEGTSI_SetTCLKPolarityEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CLKPOL_MASK;
     RegVal |= Enable << CLKPOL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTCLKPolarityEnable( U32 CapIdx )
@@ -448,7 +448,7 @@ void    NX_MPEGTSI_SetTDPPolarityEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~TDPPOL_MASK;
     RegVal |= Enable << TDPPOL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTDPPolarityEnable( U32 CapIdx )
@@ -480,7 +480,7 @@ void    NX_MPEGTSI_SetTSYNCPolarityEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~SYNPOL_MASK;
     RegVal |= Enable << SYNPOL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTSYNCPolarityEnable( U32 CapIdx )
@@ -512,7 +512,7 @@ void    NX_MPEGTSI_SetTERRPolarityEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~ERRPOL_MASK;
     RegVal |= Enable << ERRPOL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTERRPolarityEnable( U32 CapIdx )
@@ -544,7 +544,7 @@ void    NX_MPEGTSI_SetCapSramSleepEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CAPSLP_MASK;
     RegVal |= (!Enable) << CAPSLP_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapSramSleepEnable( U32 CapIdx )
@@ -576,7 +576,7 @@ void    NX_MPEGTSI_SetCapSramPowerEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CAPPOW_MASK;
     RegVal |= Enable << CAPPOW_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapSramPowerEnable( U32 CapIdx )
@@ -607,7 +607,7 @@ void    NX_MPEGTSI_SetCap1OutputEnable( CBOOL Enable )
     RegVal &= ~OUTENB_MASK;
     RegVal |= Enable << OUTENB_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[1], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[1], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCap1OutputEnable( void )
@@ -637,7 +637,7 @@ void    NX_MPEGTSI_SetCap1OutTCLKPolarityEnable( CBOOL Enable )
     RegVal &= ~OUTPOL_MASK;
     RegVal |= Enable << OUTPOL_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[1], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[1], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCap1OutPolarityEnable( void )
@@ -668,7 +668,7 @@ void    NX_MPEGTSI_SetCapIntLockEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~INTLOCK_MASK;
     RegVal |= Enable << INTLOCK_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapIntLockEnable( U32 CapIdx )
@@ -700,7 +700,7 @@ void    NX_MPEGTSI_SetCapIntEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CAPINT_MASK;
     RegVal |= Enable << CAPINT_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapIntEnable( U32 CapIdx )
@@ -732,7 +732,7 @@ void    NX_MPEGTSI_SetCapIntMaskEnable( U32 CapIdx, CBOOL Enable )
     RegVal &= ~CAPMASK_MASK;
     RegVal |= Enable << CAPMASK_POS;
 
-    WriteIODW( &pRegister->CAP_CTRL[CapIdx], RegVal );
+    WriteIO32( &pRegister->CAP_CTRL[CapIdx], RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetCapIntMaskEnable( U32 CapIdx )
@@ -750,14 +750,14 @@ void    NX_MPEGTSI_SetCPUWrData( U32 WrData )
 {
     NX_ASSERT( CNULL != __g_ModuleVariables.pRegister );
 
-    WriteIODW( &__g_ModuleVariables.pRegister->CPU_WRDATA, WrData );
+    WriteIO32( &__g_ModuleVariables.pRegister->CPU_WRDATA, WrData );
 }
 
 void    NX_MPEGTSI_SetCPUWrAddr( U32 WrAddr )
 {
     NX_ASSERT( CNULL != __g_ModuleVariables.pRegister );
 
-    WriteIODW( &__g_ModuleVariables.pRegister->CPU_WRADDR, WrAddr );
+    WriteIO32( &__g_ModuleVariables.pRegister->CPU_WRADDR, WrAddr );
 }
 
 void    NX_MPEGTSI_SetTsiRun( CBOOL Enable )
@@ -777,7 +777,7 @@ void    NX_MPEGTSI_SetTsiRun( CBOOL Enable )
     RegVal &= ~TSIRUN_MASK;
     RegVal |= Enable << TSIRUN_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiRun( void )
@@ -807,7 +807,7 @@ void    NX_MPEGTSI_SetTsiEncrypt( CBOOL Enable )
     RegVal &= ~TSIENC_MASK;
     RegVal |= Enable << TSIENC_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiEncrypt( void )
@@ -837,7 +837,7 @@ void    NX_MPEGTSI_SetTsiSramSleepEnable( CBOOL Enable )
     RegVal &= ~TSISLP_MASK;
     RegVal |= (!Enable) << TSISLP_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiSramSleepEnable( void )
@@ -867,7 +867,7 @@ void    NX_MPEGTSI_SetTsiSramPowerEnable( CBOOL Enable )
     RegVal &= ~TSIPOW_MASK;
     RegVal |= Enable << TSIPOW_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiSramPowerEnable( void )
@@ -897,7 +897,7 @@ void    NX_MPEGTSI_SetTsiIntEnable( CBOOL Enable )
     RegVal &= ~TSIINT_MASK;
     RegVal |= Enable << TSIINT_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiIntEnable( void )
@@ -927,7 +927,7 @@ void    NX_MPEGTSI_SetTsiIntMaskEnable( CBOOL Enable )
     RegVal &= ~TSIMASK_MASK;
     RegVal |= Enable << TSIMASK_POS;
 
-    WriteIODW( &pRegister->CTRL0, RegVal );
+    WriteIO32( &pRegister->CTRL0, RegVal );
 }
 
 CBOOL   NX_MPEGTSI_GetTsiMaskIntEnable( void )

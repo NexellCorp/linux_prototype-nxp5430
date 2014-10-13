@@ -15,8 +15,6 @@
 //------------------------------------------------------------------------------
 #include "nx_chip.h"
 #include "nx_vip.h"
-/*#include <nx_framework.h>*/
-/*#include <string.h> // for memset*/
 
 static	NX_VIP_RegisterSet *__g_pRegister[NUMBER_OF_VIP_MODULE];
 
@@ -46,7 +44,7 @@ CBOOL	NX_VIP_Initialize( void )
 
 	if( CFALSE == bInit )
 	{
-		/*memset( __g_pRegister, 0, sizeof(__g_pRegister) );*/
+		/* memset( __g_pRegister, 0, sizeof(__g_pRegister) ); */
 		bInit = CTRUE;
 	}
 
@@ -301,19 +299,19 @@ void	NX_VIP_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 		else		{	regvalue &= ~( 1 << (8+IntNum));	}
 
 	//	pRegister->VIP_HVINT = regvalue;
-		WriteIODW(&pRegister->VIP_HVINT, regvalue);
+		WriteIO32(&pRegister->VIP_HVINT, regvalue);
 	}
 	else
 	{
 		if( Enable )
 		{
 		//	pRegister->VIP_ODINT = 1 << ODINTENB_BITPOS;
-			WriteIODW(&pRegister->VIP_ODINT, (1 << ODINTENB_BITPOS));
+			WriteIO32(&pRegister->VIP_ODINT, (1 << ODINTENB_BITPOS));
 		}
 		else
 		{
 		//	pRegister->VIP_ODINT = 0;
-			WriteIODW(&pRegister->VIP_ODINT, 0);
+			WriteIO32(&pRegister->VIP_ODINT, 0);
 		}
 	}
 }
@@ -428,7 +426,7 @@ void	NX_VIP_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 		regvalue |= (0x01 << IntNum);
 
 	//	pRegister->VIP_HVINT = regvalue;
-		WriteIODW(&pRegister->VIP_HVINT, regvalue);
+		WriteIO32(&pRegister->VIP_HVINT, regvalue);
 	}
 	else
 	{
@@ -436,7 +434,7 @@ void	NX_VIP_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 		regvalue |= 1;
 
 	//	pRegister->VIP_ODINT = regvalue;
-		WriteIODW(&pRegister->VIP_ODINT, regvalue);
+		WriteIO32(&pRegister->VIP_ODINT, regvalue);
 	}
 }
 
@@ -470,18 +468,18 @@ void	NX_VIP_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	if( Enable )
 	{
 	//	pRegister->VIP_HVINT	= (U16)(0x03<<8);
-		WriteIODW(&pRegister->VIP_HVINT, (U16)(0x03<<8));
+		WriteIO32(&pRegister->VIP_HVINT, (U16)(0x03<<8));
 
 	//	pRegister->VIP_ODINT	= (U16)(0x01<<8);
-		WriteIODW(&pRegister->VIP_ODINT, (U16)(0x01<<8));
+		WriteIO32(&pRegister->VIP_ODINT, (U16)(0x01<<8));
 	}
 	else
 	{
 	//	pRegister->VIP_HVINT	= (U16)0x00;
-		WriteIODW(&pRegister->VIP_HVINT, (U16)0x00);
+		WriteIO32(&pRegister->VIP_HVINT, (U16)0x00);
 
 	//	pRegister->VIP_ODINT	= (U16)0x00;
-		WriteIODW(&pRegister->VIP_ODINT, (U16)0x00);
+		WriteIO32(&pRegister->VIP_ODINT, (U16)0x00);
 	}
 }
 
@@ -590,13 +588,13 @@ void	NX_VIP_ClearInterruptPendingAll( U32 ModuleIndex )
 	regvalue |= VHSINTPEND_MASK;
 
 //	pRegister->VIP_HVINT = regvalue;
-	WriteIODW(&pRegister->VIP_HVINT, regvalue);
+	WriteIO32(&pRegister->VIP_HVINT, regvalue);
 
 	regvalue  = pRegister->VIP_ODINT;
 	regvalue |= ODINTPEND_MASK;
 
 //	pRegister->VIP_ODINT = regvalue;
-	WriteIODW(&pRegister->VIP_ODINT, regvalue);
+	WriteIO32(&pRegister->VIP_ODINT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -772,14 +770,8 @@ NX_VIP_SetVIPEnable
 	if( bVIPEnb )	temp |= (U16) VIPENB;
 	else			temp &= (U16)~VIPENB;
 
-    /* psw0523 disable this: ISSUE BUG #4 */
-#if 0
-    WriteIODW(&pRegister->VIP_INFIFOCLR, 0xFFFF); // clear input FIFO
-    WriteIODW(&pRegister->VIP_INFIFOCLR, 0     ); // clear input FIFO
-#endif
-
 //	pRegister->VIP_CONFIG = temp;
-	WriteIODW(&pRegister->VIP_CONFIG, temp);
+	WriteIO32(&pRegister->VIP_CONFIG, temp);
 
 	temp = 0;
 	if( bSepEnb )	temp |= (U16)SEPENB;
@@ -787,7 +779,7 @@ NX_VIP_SetVIPEnable
 	if( bDeciEnb )	temp |= (U16)DECIENB;
 
 //	pRegister->VIP_CDENB = temp;
-	WriteIODW(&pRegister->VIP_CDENB, temp);
+	WriteIO32(&pRegister->VIP_CDENB, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -857,7 +849,7 @@ void	NX_VIP_SetInputPort( U32 ModuleIndex, NX_VIP_INPUTPORT InputPort )
 	pRegister = __g_pRegister[ModuleIndex];
 
 //	pRegister->VIP_VIP1 = (U32)InputPort;
-	WriteIODW(&pRegister->VIP_VIP1, (U32)InputPort);
+	WriteIO32(&pRegister->VIP_VIP1, (U32)InputPort);
 }
 
 //------------------------------------------------------------------------------
@@ -916,7 +908,7 @@ NX_VIP_SetDataMode
 	temp |= ((8 == DataWidth) ? DWIDTH_MASK : 0);
 
 //	pRegister->VIP_CONFIG = (U16)temp;
-	WriteIODW(&pRegister->VIP_CONFIG, (U16)temp);
+	WriteIO32(&pRegister->VIP_CONFIG, (U16)temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1000,17 +992,17 @@ NX_VIP_GetDataMode
 void
 NX_VIP_SetSync
 (
-	U32 		   ModuleIndex,
-	CBOOL		   bExtSync,
-	NX_VIP_VD_BITS SourceBits,
-	U32			   AVW,
-	U32			   AVH,
-	U32			   HSW,
-	U32			   HFP,
-	U32			   HBP,
-	U32			   VSW,
-	U32			   VFP,
-	U32			   VBP
+	U32				ModuleIndex,
+	CBOOL			bExtSync,
+	NX_VIP_VD_BITS	SourceBits,
+	U32				AVW,
+	U32				AVH,
+	U32				HSW,
+	U32				HFP,
+	U32				HBP,
+	U32				VSW,
+	U32				VFP,
+	U32				VBP
 )
 {
 	const U32 DRANGE		= 1UL<<9;
@@ -1027,10 +1019,10 @@ NX_VIP_SetSync
 
 	// SyncGen의 신호들이 제멋대로 움직이는 것을 막기 위해
 	// begin/end값들을 일단 최대값으로 채워둔다.
-	WriteIODW(&pRegister->VIP_VBEGIN, 0xFFFFFFFF);
-	WriteIODW(&pRegister->VIP_VEND  , 0xFFFFFFFF);
-	WriteIODW(&pRegister->VIP_HBEGIN, 0xFFFFFFFF);
-	WriteIODW(&pRegister->VIP_HEND  , 0xFFFFFFFF);
+	WriteIO32(&pRegister->VIP_VBEGIN, 0xFFFFFFFF);
+	WriteIO32(&pRegister->VIP_VEND  , 0xFFFFFFFF);
+	WriteIO32(&pRegister->VIP_HBEGIN, 0xFFFFFFFF);
+	WriteIO32(&pRegister->VIP_HEND  , 0xFFFFFFFF);
 
 	temp = (U32)pRegister->VIP_CONFIG;
 	temp &= ~DRANGE;	// Reserved 0.
@@ -1042,7 +1034,7 @@ NX_VIP_SetSync
 	{
 		temp &= ~EXTSYNCENB;
 	}
-	WriteIODW(&pRegister->VIP_CONFIG, (U16)temp);
+	WriteIO32(&pRegister->VIP_CONFIG, (U16)temp);
 
 	NX_ASSERT( 32768 > AVW && 0 == (AVW & 1) );
 	NX_ASSERT( 32768 > AVH );
@@ -1050,12 +1042,12 @@ NX_VIP_SetSync
 	switch( SourceBits )
 	{
 	case NX_VIP_VD_8BIT	:
-		WriteIODW(&pRegister->VIP_IMGWIDTH, (U16)(AVW>>1));
-		WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
+		WriteIO32(&pRegister->VIP_IMGWIDTH, (U16)(AVW>>1));
+		WriteIO32(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
 		break;
 	case NX_VIP_VD_16BIT:
-		WriteIODW(&pRegister->VIP_IMGWIDTH , (U16)AVW);
-		WriteIODW(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
+		WriteIO32(&pRegister->VIP_IMGWIDTH , (U16)AVW);
+		WriteIO32(&pRegister->VIP_IMGHEIGHT, (U16)AVH);
 		break;
 	default:
 		break;
@@ -1071,37 +1063,37 @@ NX_VIP_SetSync
 		{
 			temp = (U32)pRegister->VIP_SYNCCTRL;
 			temp &= ~(3<<11); // { VSYNCGENSOURCE(0:H-Sync 1:Video-clock),ExtVSyncMode (0:Sync 1:Blank)}
-			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VBP - 1));
-			WriteIODW(&pRegister->VIP_VEND, (U16)(VBP + AVH - 1));
+			WriteIO32(&pRegister->VIP_VBEGIN, (U16)(VBP - 1));
+			WriteIO32(&pRegister->VIP_VEND, (U16)(VBP + AVH - 1));
 		}
 		else
 		{
 			temp = (U32)pRegister->VIP_SYNCCTRL;
 			temp |= (3<<11); // { VSYNCGENSOURCE(0:H-Sync 1:Video-clock),ExtVSyncMode (0:Sync 1:Blank)}
-			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIODW(&pRegister->VIP_VBEGIN, (U16)(HFP + HSW + HBP + 1));
-			WriteIODW(&pRegister->VIP_VEND, (U16)((HFP + HSW + HBP)*2 + 1));
+			WriteIO32(&pRegister->VIP_VBEGIN, (U16)(HFP + HSW + HBP + 1));
+			WriteIO32(&pRegister->VIP_VEND, (U16)((HFP + HSW + HBP)*2 + 1));
 		}
 		if( 0!=HBP )
 		{
 			temp = (U32)pRegister->VIP_SYNCCTRL;
 			temp &= ~(1<<10);// ExtHSyncMode (0:Sync 1:Blank)
-			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HBP - 1));
-			WriteIODW(&pRegister->VIP_HEND, (U16)(HBP + AVW - 1));
+			WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HBP - 1));
+			WriteIO32(&pRegister->VIP_HEND, (U16)(HBP + AVW - 1));
 		}
 		else
 		{
 			temp = (U32)pRegister->VIP_SYNCCTRL;
 			temp |= (1<<10);// ExtHSyncMode (0:Sync 1:Blank)
-			WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
-			WriteIODW(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
+			WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
+			WriteIO32(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
 		}
 	}
 	else
@@ -1109,16 +1101,16 @@ NX_VIP_SetSync
 		NX_ASSERT( 65536 > (VFP + VSW) );
 		//NX_ASSERT( 7 <= HFP );
 		//NX_ASSERT( 65536 > (HFP + HSW - 7) );
-		WriteIODW(&pRegister->VIP_VBEGIN, (U16)(VFP + 1));
-		WriteIODW(&pRegister->VIP_VEND, (U16)(VFP + VSW + 1));
-		WriteIODW(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
-		WriteIODW(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
+		WriteIO32(&pRegister->VIP_VBEGIN, (U16)(VFP + 1));
+		WriteIO32(&pRegister->VIP_VEND, (U16)(VFP + VSW + 1));
+		WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
+		WriteIO32(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
 	}
 }
 void
 NX_VIP_SetHVSync
 (
-	U32 		ModuleIndex,
+	U32		ModuleIndex,
 	CBOOL		bExtSync,
 	U32			AVW,
 	U32			AVH,
@@ -1137,10 +1129,10 @@ void	NX_VIP_SetHVSyncForMIPI( U32 ModuleIndex, U32 AVW, U32 AVH,
 								U32 HSW, U32 HFP, U32 HBP,
 								U32 VSW, U32 VFP, U32 VBP )
 {
-	CBOOL bExtSync		   = CTRUE ;
-	CBOOL bExtDValid       = CTRUE ;
-	CBOOL Bypass_ExtDValid = CTRUE ;
-	CBOOL Bypass_ExtSync   = CFALSE;
+	CBOOL bExtSync			= CTRUE ;
+	CBOOL bExtDValid		= CTRUE ;
+	CBOOL Bypass_ExtDValid	= CTRUE ;
+	CBOOL Bypass_ExtSync	= CFALSE;
 
 	NX_VIP_SetSync( ModuleIndex, bExtSync,NX_VIP_VD_16BIT,AVW>>1,AVH,HSW,HFP,0,VSW,VFP,0 );
 	NX_VIP_SetDValidMode( ModuleIndex, bExtDValid, Bypass_ExtDValid, Bypass_ExtSync );
@@ -1264,7 +1256,7 @@ NX_VIP_SetDValidMode
            ( (bSyncPol    & 0x1)<<9 ) );
 
 //	pRegister->VIP_SYNCCTRL = (U16)temp;
-	WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+	WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1350,12 +1342,12 @@ NX_VIP_SetFieldMode
 	temp |= (U32)(FieldSel);
 
 //	pRegister->VIP_SYNCCTRL = (U16)temp;
-	WriteIODW(&pRegister->VIP_SYNCCTRL, (U16)temp);
+	WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
 //	pRegister->VIP_SCANMODE = (U16)(((bInterlace) ? INTERLACEENB : 0)
 //									| ((bInvField ) ? FIELDINV		: 0));
 
-	WriteIODW(&pRegister->VIP_SCANMODE, (U16)(((bInterlace) ? INTERLACEENB : 0) | ((bInvField ) ? FIELDINV : 0)));
+	WriteIO32(&pRegister->VIP_SCANMODE, (U16)(((bInterlace) ? INTERLACEENB : 0) | ((bInvField ) ? FIELDINV : 0)));
 }
 
 //------------------------------------------------------------------------------
@@ -1506,7 +1498,7 @@ NX_VIP_SetFIFOResetMode
 	pRegister = __g_pRegister[ModuleIndex];
 
 //	pRegister->VIP_FIFOCTRL = (U16)(FIFOReset<<RESETFIFOSEL_POS);
-	WriteIODW(&pRegister->VIP_FIFOCTRL, (U16)(FIFOReset<<RESETFIFOSEL_POS));
+	WriteIO32(&pRegister->VIP_FIFOCTRL, (U16)(FIFOReset<<RESETFIFOSEL_POS));
 }
 
 //------------------------------------------------------------------------------
@@ -1573,10 +1565,10 @@ NX_VIP_ResetFIFO( U32 ModuleIndex )
 	temp 	  = pRegister->VIP_FIFOCTRL;
 
 //	pRegister->VIP_FIFOCTRL = (U16)(temp | RESETFIFO);
-	WriteIODW(&pRegister->VIP_FIFOCTRL, (U16)(temp | RESETFIFO));
+	WriteIO32(&pRegister->VIP_FIFOCTRL, (U16)(temp | RESETFIFO));
 
 //	pRegister->VIP_FIFOCTRL = (U16)temp;	// clear it manually.
-	WriteIODW(&pRegister->VIP_FIFOCTRL, (U16)temp);
+	WriteIO32(&pRegister->VIP_FIFOCTRL, (U16)temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1652,16 +1644,16 @@ NX_VIP_SetClipRegion
 	pRegister = __g_pRegister[ModuleIndex];
 
 //	pRegister->CLIP_LEFT	= (U16)Left;
-	WriteIODW(&pRegister->CLIP_LEFT, (U16)Left);
+	WriteIO32(&pRegister->CLIP_LEFT, (U16)Left);
 
 //	pRegister->CLIP_RIGHT	= (U16)Right;
-	WriteIODW(&pRegister->CLIP_RIGHT, (U16)Right);
+	WriteIO32(&pRegister->CLIP_RIGHT, (U16)Right);
 
 //	pRegister->CLIP_TOP		= (U16)Top;
-	WriteIODW(&pRegister->CLIP_TOP, (U16)Top);
+	WriteIO32(&pRegister->CLIP_TOP, (U16)Top);
 
 //	pRegister->CLIP_BOTTOM	= (U16)Bottom;
-	WriteIODW(&pRegister->CLIP_BOTTOM, (U16)Bottom);
+	WriteIO32(&pRegister->CLIP_BOTTOM, (U16)Bottom);
 }
 
 //------------------------------------------------------------------------------
@@ -1748,25 +1740,25 @@ NX_VIP_SetDecimation
 	pRegister = __g_pRegister[ModuleIndex];
 
 //	pRegister->DECI_TARGETW	= (U16)DstWidth;
-	WriteIODW(&pRegister->DECI_TARGETW, (U16)DstWidth);
+	WriteIO32(&pRegister->DECI_TARGETW, (U16)DstWidth);
 
 //	pRegister->DECI_TARGETH	= (U16)DstHeight;
-	WriteIODW(&pRegister->DECI_TARGETH, (U16)DstHeight);
+	WriteIO32(&pRegister->DECI_TARGETH, (U16)DstHeight);
 
 //	pRegister->DECI_DELTAW	= (U16)(SrcWidth - DstWidth);
-	WriteIODW(&pRegister->DECI_DELTAW, (U16)(SrcWidth - DstWidth));
+	WriteIO32(&pRegister->DECI_DELTAW, (U16)(SrcWidth - DstWidth));
 
 //	pRegister->DECI_DELTAH	= (U16)(SrcHeight - DstHeight);
-	WriteIODW(&pRegister->DECI_DELTAH, (U16)(SrcHeight - DstHeight));
+	WriteIO32(&pRegister->DECI_DELTAH, (U16)(SrcHeight - DstHeight));
 
 //	pRegister->DECI_CLEARW	= (S16)((DstWidth<<1) - SrcWidth);
-	WriteIODW((volatile U16 *)&pRegister->DECI_CLEARW, (S16)((DstWidth<<1) - SrcWidth));
+	WriteIO32((volatile U16 *)&pRegister->DECI_CLEARW, (S16)((DstWidth<<1) - SrcWidth));
 
 //	pRegister->DECI_CLEARH	= (S16)((DstHeight<<1) - SrcHeight);
-	WriteIODW((volatile U16 *)&pRegister->DECI_CLEARH, (S16)((DstHeight<<1) - SrcHeight));
+	WriteIO32((volatile U16 *)&pRegister->DECI_CLEARH, (S16)((DstHeight<<1) - SrcHeight));
 
-    DeciSrcWidth[ModuleIndex] = SrcWidth;
-    DeciSrcHeight[ModuleIndex] = SrcHeight;
+	DeciSrcWidth[ModuleIndex] = SrcWidth;
+	DeciSrcHeight[ModuleIndex] = SrcHeight;
 }
 
 //------------------------------------------------------------------------------
@@ -1843,7 +1835,7 @@ NX_VIP_SetClipperFormat
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	WriteIODW(&pRegister->CLIP_FORMAT, (U16)Format);
+	WriteIO32(&pRegister->CLIP_FORMAT, (U16)Format);
 }
 
 //------------------------------------------------------------------------------
@@ -1866,7 +1858,7 @@ NX_VIP_SetClipperFormat
 void
 NX_VIP_GetClipperFormat
 (
-	U32  			 ModuleIndex,
+	U32				 ModuleIndex,
 	NX_VIP_FORMAT	*pFormat
 )
 {
@@ -1897,7 +1889,7 @@ NX_VIP_GetClipperFormat
 void
 NX_VIP_SetDecimatorFormat
 (
-	U32  			ModuleIndex,
+	U32				ModuleIndex,
 	NX_VIP_FORMAT	Format
 )
 {
@@ -1910,7 +1902,7 @@ NX_VIP_SetDecimatorFormat
 	pRegister = __g_pRegister[ModuleIndex];
 
 //	pRegister->DECI_FORMAT	= (U16)Format;
-	WriteIODW(&pRegister->DECI_FORMAT, (U16)Format);
+	WriteIO32(&pRegister->DECI_FORMAT, (U16)Format);
 }
 
 //------------------------------------------------------------------------------
@@ -1931,7 +1923,7 @@ NX_VIP_SetDecimatorFormat
 void
 NX_VIP_GetDecimatorFormat
 (
-	U32  			 ModuleIndex,
+	U32				 ModuleIndex,
 	NX_VIP_FORMAT	*pFormat
 )
 {
@@ -1976,15 +1968,15 @@ NX_VIP_GetDecimatorFormat
 void
 NX_VIP_SetClipperAddr
 (
-	U32  			ModuleIndex,
+	U32				ModuleIndex,
 	NX_VIP_FORMAT	Format,
 	U32				Width,
 	U32				Height,
 	U32				LuAddr,
 	U32				CbAddr,
 	U32				CrAddr,
-	U32             StrideY,
-	U32             StrideCbCr
+	U32				StrideY,
+	U32				StrideCbCr
 )
 {
 	register NX_VIP_RegisterSet	*pRegister;
@@ -2001,12 +1993,12 @@ NX_VIP_SetClipperAddr
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	WriteIODW(&pRegister->CLIP_LUADDR  , LuAddr     );
-	WriteIODW(&pRegister->CLIP_LUSTRIDE, StrideY    );
-	WriteIODW(&pRegister->CLIP_CRADDR  , CrAddr     );
-	WriteIODW(&pRegister->CLIP_CRSTRIDE, StrideCbCr );
-	WriteIODW(&pRegister->CLIP_CBADDR  , CbAddr     );
-	WriteIODW(&pRegister->CLIP_CBSTRIDE, StrideCbCr );
+	WriteIO32(&pRegister->CLIP_LUADDR  , LuAddr     );
+	WriteIO32(&pRegister->CLIP_LUSTRIDE, StrideY    );
+	WriteIO32(&pRegister->CLIP_CRADDR  , CrAddr     );
+	WriteIO32(&pRegister->CLIP_CRSTRIDE, StrideCbCr );
+	WriteIO32(&pRegister->CLIP_CBADDR  , CbAddr     );
+	WriteIO32(&pRegister->CLIP_CBSTRIDE, StrideCbCr );
 
 }
 
@@ -2045,8 +2037,8 @@ NX_VIP_SetDecimatorAddr
 	U32				LuAddr,
 	U32				CbAddr,
 	U32				CrAddr,
-    U32             YStride,
-    U32             CBCRStride
+	U32				YStride,
+	U32				CBCRStride
 )
 {
 	register NX_VIP_RegisterSet	*pRegister;
@@ -2063,9 +2055,9 @@ NX_VIP_SetDecimatorAddr
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	WriteIODW(&pRegister->DECI_LUADDR  , LuAddr     );
-	/*WriteIODW(&pRegister->DECI_LUSTRIDE, Width      );*/
-	WriteIODW(&pRegister->DECI_LUSTRIDE, YStride      );
+	WriteIO32(&pRegister->DECI_LUADDR  , LuAddr     );
+//	WriteIO32(&pRegister->DECI_LUSTRIDE, Width      );
+	WriteIO32(&pRegister->DECI_LUSTRIDE, YStride      );
 
 	if( NX_VIP_FORMAT_420 == NX_VIP_FORMAT )
 	{
@@ -2080,12 +2072,12 @@ NX_VIP_SetDecimatorAddr
 		Width	>>= 1;
 	}
 
-	WriteIODW(&pRegister->DECI_CRADDR  , CrAddr     );
-	/*WriteIODW(&pRegister->DECI_CRSTRIDE, Width      );*/
-	WriteIODW(&pRegister->DECI_CRSTRIDE, CBCRStride      );
-	WriteIODW(&pRegister->DECI_CBADDR  , CbAddr     );
-	/*WriteIODW(&pRegister->DECI_CBSTRIDE, Width      );*/
-	WriteIODW(&pRegister->DECI_CBSTRIDE, CBCRStride      );
+	WriteIO32(&pRegister->DECI_CRADDR  , CrAddr     );
+	/*WriteIO32(&pRegister->DECI_CRSTRIDE, Width      );*/
+	WriteIO32(&pRegister->DECI_CRSTRIDE, CBCRStride      );
+	WriteIO32(&pRegister->DECI_CBADDR  , CbAddr     );
+	/*WriteIO32(&pRegister->DECI_CBSTRIDE, Width      );*/
+	WriteIO32(&pRegister->DECI_CBSTRIDE, CBCRStride      );
 }
 
 
@@ -2101,7 +2093,7 @@ CBOOL  NX_VIP_SmokeTest ( U32 ModuleIndex )
 	if( 0x00000003 != pRegister->VIP_SYNCMON  ){ return CFALSE; }
 
 	// write data
-	WriteIODW(&pRegister->VIP_IMGWIDTH, 0xC0DEBEEF );
+	WriteIO32(&pRegister->VIP_IMGWIDTH, 0xC0DEBEEF );
 
 	// read data, check that reserved bits are reserved.
 	if( 0x00003EEF != pRegister->VIP_IMGWIDTH ){ return CFALSE; }
@@ -2112,9 +2104,9 @@ CBOOL  NX_VIP_SmokeTest ( U32 ModuleIndex )
 /* psw0523 add */
 void NX_VIP_GetDeciSource(U32 ModuleIndex, U32 *pSrcWidth, U32 *pSrcHeight)
 {
-    if (pSrcWidth)
-        *pSrcWidth = DeciSrcWidth[ModuleIndex];
-    if (pSrcHeight)
-        *pSrcHeight = DeciSrcHeight[ModuleIndex];
+	if (pSrcWidth)
+		*pSrcWidth = DeciSrcWidth[ModuleIndex];
+	if (pSrcHeight)
+		*pSrcHeight = DeciSrcHeight[ModuleIndex];
 }
 

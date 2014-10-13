@@ -270,9 +270,10 @@ S32		NX_CLKPWR_GetInterruptPendingNumber( void );	// -1 if None
 //------------------------------------------------------------------------------
 /// @name	Clock Management
 //@{
-void	NX_CLKPWR_SetPLLPMS    ( U32 pllnumber, U32 PDIV, U32 MDIV, U32 SDIV );
-U32		NX_CLKPWR_GetPLLFreq	(U32 pllnumber, U32 XTalFreqKHz);
-void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  );
+void	NX_CLKPWR_SetOSCFreq    ( U32 FreqKHz );
+void	NX_CLKPWR_SetPLLPMS     ( U32 pllnumber, U32 PDIV, U32 MDIV, U32 SDIV );
+U32		NX_CLKPWR_GetPLLFreq    ( U32 pllnumber );
+void	NX_CLKPWR_SetPLLDither  ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  );
 void	NX_CLKPWR_SetPLLPowerOn ( CBOOL On );
 void	NX_CLKPWR_DoPLLChange( void );
 CBOOL	NX_CLKPWR_IsPLLStable( void );

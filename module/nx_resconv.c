@@ -320,7 +320,7 @@ void	NX_RESCONV_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 	regvalue &=	~( 1UL << IntNum );
 	regvalue |= (U32)Enable << IntNum;
 
-	WriteIODW(&pRegister->ADDR_RC_REG02, regvalue);
+	WriteIO32(&pRegister->ADDR_RC_REG02, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -405,7 +405,7 @@ void	NX_RESCONV_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->ADDR_RC_REG02, 1UL << IntNum);
+	WriteIO32(&pRegister->ADDR_RC_REG02, 1UL << IntNum);
 }
 
 //------------------------------------------------------------------------------
@@ -438,7 +438,7 @@ void	NX_RESCONV_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	pRegister = __g_pRegister[ModuleIndex];
 	regvalue  = Enable ? 0x000F0000 : 0 ;
 
-	WriteIODW(&pRegister->ADDR_RC_REG02, regvalue);
+	WriteIO32(&pRegister->ADDR_RC_REG02, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -516,7 +516,7 @@ void	NX_RESCONV_ClearInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->ADDR_RC_REG02, 0x0000000F);	// just write operation make pending clear
+	WriteIO32(&pRegister->ADDR_RC_REG02, 0x0000000F);	// just write operation make pending clear
 }
 
 //------------------------------------------------------------------------------
@@ -611,7 +611,7 @@ void	NX_RESCONV_DOWN_INIT ( U32 ModuleIndex )
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];
 
-        WriteIODW(&pRegister->ADDR_RC_REG01, (	(0			<< 21) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG01, (	(0			<< 21) 	|
 												(0			<< 16) 	|
 												(0			<< 14) 	|
 												(0			<<  8) 	|
@@ -619,39 +619,39 @@ void	NX_RESCONV_DOWN_INIT ( U32 ModuleIndex )
 												(0			<<  2) 	|
 												(3			<<  0))	);   // Interrupt Register
 
-        WriteIODW(&pRegister->ADDR_RC_REG02, (	(0			<< 20) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG02, (	(0			<< 20) 	|
 												(2			<< 16) 	|
 												(0			<<  0))	);          //2
 
-        WriteIODW(&pRegister->ADDR_RC_REG03, DELTA_X );	// Delta X
+        WriteIO32(&pRegister->ADDR_RC_REG03, DELTA_X );	// Delta X
 
-        WriteIODW(&pRegister->ADDR_RC_REG04, DELTA_Y );	// Delta Y
+        WriteIO32(&pRegister->ADDR_RC_REG04, DELTA_Y );	// Delta Y
 
-        WriteIODW(&pRegister->ADDR_RC_REG05, (  (SoftV		<< 16) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG05, (  (SoftV		<< 16) 	|
 												(SoftH		<<  0))	);//5
 
-        WriteIODW(&pRegister->ADDR_RC_REG06, (	(SRC_VSIZE 	<< 16) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG06, (	(SRC_VSIZE 	<< 16) 	|
 												(SRC_HSIZE  <<  0))	);	// Source Size
 
-        WriteIODW(&pRegister->ADDR_RC_REG07, (	(DST_VSIZE 	<< 16) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG07, (	(DST_VSIZE 	<< 16) 	|
 												(DST_HSIZE  <<  0))	);	// Destination Size
 
-        WriteIODW(&pRegister->ADDR_RC_REG09, (	((SG_HFP)	<< 24) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG09, (	((SG_HFP)	<< 24) 	|
 												((SG_HBP)	<< 16) 	|
 												((SG_HS )	<<  0))	);   // HSync Timing
 
-        WriteIODW(&pRegister->ADDR_RC_REG10, (	((SG_VFP)	<< 24) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG10, (	((SG_VFP)	<< 24) 	|
 												((SG_VBP)	<< 16) 	|
 												((SG_VS )	<<  0))	);    // VSync Timing
 
-        WriteIODW(&pRegister->ADDR_RC_REG11, (	(SG_S2IN_VS << 24) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG11, (	(SG_S2IN_VS << 24) 	|
 												(SG_HOFFSET <<  8) 	|
 												(SG_HDELAY  <<  0))	);    // Sync Gen Delay
 
-        WriteIODW(&pRegister->ADDR_RC_REG00, (	(1	        <<  8) 	|
+        WriteIO32(&pRegister->ADDR_RC_REG00, (	(1	        <<  8) 	|
 												(1	        <<  0))	);   // Scaler Continuous Frame, Scaler Run
 
-        WriteIODW(&pRegister->ADDR_RC_REG08, (	 1			<<  0)	);            // SyncGen Run
+        WriteIO32(&pRegister->ADDR_RC_REG08, (	 1			<<  0)	);            // SyncGen Run
 
 }
 
@@ -687,7 +687,7 @@ void	NX_RESCONV_INIT (	U32 ModuleIndex,
     NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
     pRegister = __g_pRegister[ModuleIndex];
 
-        WriteIODW(&pRegister->ADDR_RC_REG01, (  (0          << 21)  |
+        WriteIO32(&pRegister->ADDR_RC_REG01, (  (0          << 21)  |
                                                 (0          << 16)  |
                                                 (0          << 14)  |
                                                 (0          <<  8)  |
@@ -695,36 +695,36 @@ void	NX_RESCONV_INIT (	U32 ModuleIndex,
                                                 (0          <<  2)  |
                                                 (3          <<  0)) );   // Interrupt Register
 
-        WriteIODW(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
+        WriteIO32(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
                                                 (2          << 16)  |
                                                 (0          <<  0)) );          //2
 
-        WriteIODW(&pRegister->ADDR_RC_REG03, DELTA_X ); // Delta X
+        WriteIO32(&pRegister->ADDR_RC_REG03, DELTA_X ); // Delta X
 
-        WriteIODW(&pRegister->ADDR_RC_REG04, DELTA_Y ); // Delta Y
+        WriteIO32(&pRegister->ADDR_RC_REG04, DELTA_Y ); // Delta Y
 
-        WriteIODW(&pRegister->ADDR_RC_REG05, (  (SoftV      << 16)  |
+        WriteIO32(&pRegister->ADDR_RC_REG05, (  (SoftV      << 16)  |
                                                 (SoftH      <<  0)) );//5
 
-        WriteIODW(&pRegister->ADDR_RC_REG06, (  (SRC_VSIZE  << 16)  |
+        WriteIO32(&pRegister->ADDR_RC_REG06, (  (SRC_VSIZE  << 16)  |
                                                 (SRC_HSIZE  <<  0)) );  // Source Size
 
-        WriteIODW(&pRegister->ADDR_RC_REG07, (  (DST_VSIZE  << 16)  |
+        WriteIO32(&pRegister->ADDR_RC_REG07, (  (DST_VSIZE  << 16)  |
                                                 (DST_HSIZE  <<  0)) );  // Destination Size
 
-        WriteIODW(&pRegister->ADDR_RC_REG09, (  ((SG_HFP)   << 24)  |
+        WriteIO32(&pRegister->ADDR_RC_REG09, (  ((SG_HFP)   << 24)  |
                                                 ((SG_HBP)   << 16)  |
                                                 ((SG_HS )   <<  0)) );   // HSync Timing
 
-        WriteIODW(&pRegister->ADDR_RC_REG10, (  ((SG_VFP)   << 24)  |
+        WriteIO32(&pRegister->ADDR_RC_REG10, (  ((SG_VFP)   << 24)  |
                                                 ((SG_VBP)   << 16)  |
                                                 ((SG_VS )   <<  0)) );    // VSync Timing
 
-        WriteIODW(&pRegister->ADDR_RC_REG11, (  (SG_S2IN_VS << 24)  |
+        WriteIO32(&pRegister->ADDR_RC_REG11, (  (SG_S2IN_VS << 24)  |
                                                 (SG_HOFFSET <<  8)  |
                                                 (SG_HDELAY  <<  0)) );    // Sync Gen Delay
 
-        WriteIODW(&pRegister->ADDR_RC_REG12, (  (SRC_CROP_B << 24)  |
+        WriteIO32(&pRegister->ADDR_RC_REG12, (  (SRC_CROP_B << 24)  |
                                                 (SRC_CROP_T << 16)  |
                                                 (SRC_CROP_R <<  8)  |
                                                 (SRC_CROP_L <<  0)) );    // Source Image Crop
@@ -931,10 +931,10 @@ void    NX_RESCONV_FINIT ( U32 ModuleIndex )
     pRegister = __g_pRegister[ModuleIndex];
 
 		for (i=0;i<24;i++) {
-        	WriteIODW(&pRegister->ADDR_RC_YVFILTER[i], YVFinit[i]);
+        	WriteIO32(&pRegister->ADDR_RC_YVFILTER[i], YVFinit[i]);
 		}
 		for (j=0;j<160;j++) {
-        	WriteIODW(&pRegister->ADDR_RC_YHFILTER[j], YHFinit[j]);
+        	WriteIO32(&pRegister->ADDR_RC_YHFILTER[j], YHFinit[j]);
 		}
 }
 
@@ -993,10 +993,10 @@ void    NX_RESCONV_RUN ( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
     pRegister = __g_pRegister[ModuleIndex];
 
-        WriteIODW(&pRegister->ADDR_RC_REG00, (  (1          <<  8)  |
+        WriteIO32(&pRegister->ADDR_RC_REG00, (  (1          <<  8)  |
                                                 (1          <<  0)) );   // Scaler Continuous Frame, Scaler Run
 
-        WriteIODW(&pRegister->ADDR_RC_REG08, (   1          <<  0)  );            // SyncGen Run
+        WriteIO32(&pRegister->ADDR_RC_REG08, (   1          <<  0)  );            // SyncGen Run
 
 }
 
@@ -1008,9 +1008,9 @@ void    NX_RESCONV_STOP ( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
     pRegister = __g_pRegister[ModuleIndex];
 
-        WriteIODW(&pRegister->ADDR_RC_REG08, (   0          <<  0)  );            // SyncGen Run
+        WriteIO32(&pRegister->ADDR_RC_REG08, (   0          <<  0)  );            // SyncGen Run
 
-        WriteIODW(&pRegister->ADDR_RC_REG00, (  (0          <<  8)  |
+        WriteIO32(&pRegister->ADDR_RC_REG00, (  (0          <<  8)  |
                                                 (0          <<  0)) );   // Scaler Continuous Frame, Scaler Run
 
 }
@@ -1024,7 +1024,7 @@ void    NX_RESCONV_INTCLEAR ( U32 ModuleIndex )
     pRegister = __g_pRegister[ModuleIndex];
 
         // Interrupt Clear
-        WriteIODW(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
+        WriteIO32(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
                                                 (2          << 16)  |
                                                 (1          << 11)  |
                                                 (1          << 10)  |
@@ -1032,7 +1032,7 @@ void    NX_RESCONV_INTCLEAR ( U32 ModuleIndex )
                                                 (1          <<  8)  |
                                                 (0          <<  0)) );
 
-        //WriteIODW(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
+        //WriteIO32(&pRegister->ADDR_RC_REG02, (  (0          << 20)  |
         //                                        (2          << 16)  |
         //                                        (0          << 11)  |
         //                                        (0          << 10)  |

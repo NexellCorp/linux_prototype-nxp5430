@@ -207,7 +207,7 @@ void	NX_DISPLAYTOP_SetRESCONVMUX( CBOOL bEnb, U32 SEL )
 	pRegister = __g_ModuleVariables.pRegister;
 
 	regvalue = (bEnb<<31) | (SEL<<0);
-	WriteIODW(&pRegister->RESCONV_MUX_CTRL, (U32)regvalue);
+	WriteIO32(&pRegister->RESCONV_MUX_CTRL, (U32)regvalue);
 }
 
 void	NX_DISPLAYTOP_SetHDMIMUX( CBOOL bEnb, U32 SEL )
@@ -222,7 +222,7 @@ void	NX_DISPLAYTOP_SetHDMIMUX( CBOOL bEnb, U32 SEL )
 	pRegister = __g_ModuleVariables.pRegister;
 
 	regvalue = (bEnb<<31) | (SEL<<0);
-	WriteIODW(&pRegister->INTERCONV_MUX_CTRL, (U32)regvalue);
+	WriteIO32(&pRegister->INTERCONV_MUX_CTRL, (U32)regvalue);
 }
 
 void	NX_DISPLAYTOP_SetMIPIMUX( CBOOL bEnb, U32 SEL )
@@ -237,7 +237,7 @@ void	NX_DISPLAYTOP_SetMIPIMUX( CBOOL bEnb, U32 SEL )
 	pRegister = __g_ModuleVariables.pRegister;
 
 	regvalue = (bEnb<<31) | (SEL<<0);
-	WriteIODW(&pRegister->MIPI_MUX_CTRL, (U32)regvalue);
+	WriteIO32(&pRegister->MIPI_MUX_CTRL, (U32)regvalue);
 }
 
 void	NX_DISPLAYTOP_SetLVDSMUX( CBOOL bEnb, U32 SEL )
@@ -252,7 +252,7 @@ void	NX_DISPLAYTOP_SetLVDSMUX( CBOOL bEnb, U32 SEL )
 	pRegister = __g_ModuleVariables.pRegister;
 
 	regvalue = (bEnb<<31) | (SEL<<0);
-	WriteIODW(&pRegister->LVDS_MUX_CTRL, (U32)regvalue);
+	WriteIO32(&pRegister->LVDS_MUX_CTRL, (U32)regvalue);
 }
 
 //---------- RSTCON À» À§ÇÑ prototype
@@ -276,7 +276,7 @@ void	NX_DISPLAYTOP_SetPrimaryMUX( U32 SEL )
 //	U32 regvalue;
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
-	WriteIODW(&pRegister->TFTMPU_MUX, (U32)SEL);
+	WriteIO32(&pRegister->TFTMPU_MUX, (U32)SEL);
 }
 
 
@@ -296,7 +296,7 @@ void	NX_DISPLAYTOP_HDMI_SetVSyncStart( U32 SEL ) // from posedge VSync
 //	U32 regvalue;
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
-	WriteIODW(&pRegister->HDMISYNCCTRL0, (U32)SEL);
+	WriteIO32(&pRegister->HDMISYNCCTRL0, (U32)SEL);
 }
 
 void	NX_DISPLAYTOP_HDMI_SetVSyncHSStartEnd( U32 Start, U32 End ) // from posedge HSync
@@ -305,7 +305,7 @@ void	NX_DISPLAYTOP_HDMI_SetVSyncHSStartEnd( U32 Start, U32 End ) // from posedge
 //	U32 regvalue;
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
-	WriteIODW(&pRegister->HDMISYNCCTRL3, (U32)(End<<16) | (Start<<0) );
+	WriteIO32(&pRegister->HDMISYNCCTRL3, (U32)(End<<16) | (Start<<0) );
 }
 
 
@@ -315,7 +315,7 @@ void	NX_DISPLAYTOP_HDMI_SetHActiveStart( U32 SEL ) // from posedge HSync
 //	U32 regvalue;
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
-	WriteIODW(&pRegister->HDMISYNCCTRL1, (U32)SEL);
+	WriteIO32(&pRegister->HDMISYNCCTRL1, (U32)SEL);
 }
 
 void	NX_DISPLAYTOP_HDMI_SetHActiveEnd( U32 SEL ) // from posedge HSync
@@ -324,11 +324,91 @@ void	NX_DISPLAYTOP_HDMI_SetHActiveEnd( U32 SEL ) // from posedge HSync
 //	U32 regvalue;
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
-	WriteIODW(&pRegister->HDMISYNCCTRL2, (U32)SEL);
+	WriteIO32(&pRegister->HDMISYNCCTRL2, (U32)SEL);
 }
 
 
 
 
+void	NX_DISPLAYTOP_SetHDMIField( U32 Enable,			// Enable
+									U32 InitVal,		// Init Value
+									U32 VSyncToggle,	// VSync Toggle
+									U32 HSyncToggle,		// HSync Toggle
+									U32 VSyncClr,
+									U32 HSyncClr,
+									U32 FieldUse,
+									U32 MUXSEL )
+{
+	register struct NX_DISPLAYTOP_RegisterSet *pRegister;
+	U32 regvalue;
 
+	NX_ASSERT( CNULL != pRegister );
+	pRegister = __g_ModuleVariables.pRegister;
+	regvalue =	((Enable & 0x01)<<0)
+			|	((InitVal& 0x01)<<1)
+			|	((VSyncToggle&0x3fff)<<2)
+			|	((HSyncToggle&0x3fff)<<17);
+	WriteIO32(&pRegister->HDMIFIELDCTRL, regvalue);
 
+	regvalue = 	( (FieldUse&0x01)<<31 )
+			|	( (MUXSEL&0x01)<<30	)
+			|	( (HSyncClr)<<15 )
+			|	( (VSyncClr)<<0 );
+	WriteIO32(&pRegister->GREG0, regvalue);
+}
+
+//enum PrimPAD_MUX_Index{ // Primary TFT MUX
+//	PADMUX_PrimaryMLC = 0,
+//	PADMUX_PrimaryMPU = 1,
+//	PADMUX_SecondaryMLC = 2,
+//	PADMUX_ResolutionConv = 3,
+//};
+//enum PADCLK_Config {
+//	PADCLK_CLK = 0,
+//	PADCLK_InvCLK = 1,
+//	PADCLK_ReservedCLK = 2,
+//	PADCLK_ReservedInvCLK = 3,
+//	PADCLK_CLK_div2_0   = 4,
+//	PADCLK_CLK_div2_90  = 5,
+//	PADCLK_CLK_div2_180 = 6,
+//	PADCLK_CLK_div2_270 = 7,
+//};
+
+void	NX_DISPLAYTOP_SetPADClock( U32	MUX_Index,
+								   U32	PADCLK_Cfg )
+{
+	register struct NX_DISPLAYTOP_RegisterSet *pRegister;
+	U32 regvalue;
+
+	NX_ASSERT( CNULL != pRegister );
+	pRegister = __g_ModuleVariables.pRegister;
+
+	regvalue = ReadIO32(&pRegister->GREG1);
+
+	if( PADMUX_SecondaryMLC == MUX_Index ) { // Second
+		regvalue = regvalue & (~(0x7 << 3));
+		regvalue = regvalue | (PADCLK_Cfg<<3);
+	} else if ( PADMUX_ResolutionConv == MUX_Index ) { // Resolution
+		regvalue = regvalue & (~(0x7 << 6));
+		regvalue = regvalue | (PADCLK_Cfg<<6);
+	} else { // Primary
+		regvalue = regvalue & (~(0x7 << 0));
+		regvalue = regvalue | (PADCLK_Cfg<<0);
+	}
+	WriteIO32(&pRegister->GREG1, regvalue);
+}
+
+void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb )
+{
+	register struct NX_DISPLAYTOP_RegisterSet *pRegister;
+	U32 regvalue;
+
+	NX_ASSERT( CNULL != pRegister );
+	pRegister = __g_ModuleVariables.pRegister;
+
+	regvalue = ReadIO32(&pRegister->GREG1);
+	regvalue = regvalue & (~(0x1 << 9));
+	regvalue = regvalue | ((Enb&0x1)<<9);
+
+	WriteIO32(&pRegister->GREG1, regvalue);
+}

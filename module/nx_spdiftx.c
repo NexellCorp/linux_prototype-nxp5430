@@ -153,21 +153,21 @@ CBOOL	NX_SPDIFTX_OpenModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// check reset value
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CLKCON) == 0x2 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CON) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_BSTAS) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CSTAS) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_DAT) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CNT) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_BSTAS_SHD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->SPDIF_CNT_SHD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT1) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT2) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT3) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT1_SHD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT2_SHD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->USERBIT3_SHD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->VERSION_INFO) == 0xD );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CLKCON) == 0x2 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CON) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_BSTAS) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CSTAS) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_DAT) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CNT) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_BSTAS_SHD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->SPDIF_CNT_SHD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT1) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT2) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT3) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT1_SHD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT2_SHD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->USERBIT3_SHD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->VERSION_INFO) == 0xD );
 
 	return CTRUE;
 }
@@ -193,21 +193,21 @@ CBOOL	NX_SPDIFTX_CloseModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// set up reset value
-	WriteIODW(&pRegister->SPDIF_CLKCON, 0x2);
-	WriteIODW(&pRegister->SPDIF_CON, 0x0);
-	WriteIODW(&pRegister->SPDIF_BSTAS, 0x0);
-	WriteIODW(&pRegister->SPDIF_CSTAS, 0x0);
-	WriteIODW(&pRegister->SPDIF_DAT, 0x0);
-	WriteIODW(&pRegister->SPDIF_CNT, 0x0);
-	WriteIODW(&pRegister->SPDIF_BSTAS_SHD, 0x0);
-	WriteIODW(&pRegister->SPDIF_CNT_SHD, 0x0);
-	WriteIODW(&pRegister->USERBIT1, 0x0);
-	WriteIODW(&pRegister->USERBIT2, 0x0);
-	WriteIODW(&pRegister->USERBIT3, 0x0);
-	WriteIODW(&pRegister->USERBIT1_SHD, 0x0);
-	WriteIODW(&pRegister->USERBIT2_SHD, 0x0);
-	WriteIODW(&pRegister->USERBIT3_SHD, 0x0);
-	WriteIODW(&pRegister->VERSION_INFO, 0xD);
+	WriteIO32(&pRegister->SPDIF_CLKCON, 0x2);
+	WriteIO32(&pRegister->SPDIF_CON, 0x0);
+	WriteIO32(&pRegister->SPDIF_BSTAS, 0x0);
+	WriteIO32(&pRegister->SPDIF_CSTAS, 0x0);
+	WriteIO32(&pRegister->SPDIF_DAT, 0x0);
+	WriteIO32(&pRegister->SPDIF_CNT, 0x0);
+	WriteIO32(&pRegister->SPDIF_BSTAS_SHD, 0x0);
+	WriteIO32(&pRegister->SPDIF_CNT_SHD, 0x0);
+	WriteIO32(&pRegister->USERBIT1, 0x0);
+	WriteIO32(&pRegister->USERBIT2, 0x0);
+	WriteIO32(&pRegister->USERBIT3, 0x0);
+	WriteIO32(&pRegister->USERBIT1_SHD, 0x0);
+	WriteIO32(&pRegister->USERBIT2_SHD, 0x0);
+	WriteIO32(&pRegister->USERBIT3_SHD, 0x0);
+	WriteIO32(&pRegister->VERSION_INFO, 0xD);
 
 	return CTRUE;
 }
@@ -358,12 +358,12 @@ void	NX_SPDIFTX_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	ReadValue	=	ReadIODW(&pRegister->SPDIF_CON) & ~PEND_MASK;
+	ReadValue	=	ReadIO32(&pRegister->SPDIF_CON) & ~PEND_MASK;
 
 	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
 	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
-	WriteIODW(&pRegister->SPDIF_CON, ReadValue);
+	WriteIO32(&pRegister->SPDIF_CON, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -387,7 +387,7 @@ CBOOL	NX_SPDIFTX_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 	//NX_ASSERT( 7 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ CBOOL	NX_SPDIFTX_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 	//NX_ASSERT( 7 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ void	NX_SPDIFTX_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->SPDIF_CON, ((1 << IntNum) & PEND_MASK) << PEND_POS );
+	WriteIO32(&pRegister->SPDIF_CON, ((1 << IntNum) & PEND_MASK) << PEND_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -473,7 +473,7 @@ void	NX_SPDIFTX_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 		SetValue	|=	INT_MASK << PEND_POS;
 	}
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON, SetValue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -496,7 +496,7 @@ CBOOL	NX_SPDIFTX_GetInterruptEnableAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) & (INT_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) & (INT_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -524,7 +524,7 @@ CBOOL	NX_SPDIFTX_GetInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -555,7 +555,7 @@ void	NX_SPDIFTX_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->SPDIF_CON, (PEND_MASK<<PEND_POS));
+	WriteIO32(&pRegister->SPDIF_CON, (PEND_MASK<<PEND_POS));
 }
 
 //------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ U32		NX_SPDIFTX_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	Pend	=	(ReadIODW(&pRegister->SPDIF_CON)>>PEND_POS) & PEND_MASK;
+	Pend	=	(ReadIO32(&pRegister->SPDIF_CON)>>PEND_POS) & PEND_MASK;
 
 	for( PendingIndex=0 ; PendingIndex<=20 ; PendingIndex++)
 		if(Pend & ((U32)0x1)<<PendingIndex)
@@ -623,14 +623,14 @@ void	NX_SPDIFTX_SetSPDCLKCON( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CLKCON, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CLKCON, value);
 }
 U32		NX_SPDIFTX_GetSPDCLKCON( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CLKCON));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CLKCON));
 }
 
 void	NX_SPDIFTX_SetSPDCON( U32 ModuleIndex, U32 value )
@@ -638,14 +638,14 @@ void	NX_SPDIFTX_SetSPDCON( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON, value);
 }
 U32		NX_SPDIFTX_GetSPDCON( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CON));
 }
 
 void	NX_SPDIFTX_SetSPDBSTAS( U32 ModuleIndex, U32 value )
@@ -653,14 +653,14 @@ void	NX_SPDIFTX_SetSPDBSTAS( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS, value);
 }
 U32		NX_SPDIFTX_GetSPDBSTAS( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS));
 }
 
 void	NX_SPDIFTX_SetSPDCSTAS( U32 ModuleIndex, U32 value )
@@ -668,14 +668,14 @@ void	NX_SPDIFTX_SetSPDCSTAS( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CSTAS, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CSTAS, value);
 }
 U32		NX_SPDIFTX_GetSPDCSTAS( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CSTAS));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CSTAS));
 }
 
 void	NX_SPDIFTX_SetSPDDAT( U32 ModuleIndex, U32 value )
@@ -683,7 +683,7 @@ void	NX_SPDIFTX_SetSPDDAT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_DAT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_DAT, value);
 }
 
 void	NX_SPDIFTX_SetSPDCNT( U32 ModuleIndex, U32 value )
@@ -691,7 +691,7 @@ void	NX_SPDIFTX_SetSPDCNT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CNT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CNT, value);
 }
 
 U32		NX_SPDIFTX_GetSPDBSTAS_SHD( U32 ModuleIndex )
@@ -699,7 +699,7 @@ U32		NX_SPDIFTX_GetSPDBSTAS_SHD( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS_SHD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_BSTAS_SHD));
 }
 
 U32		NX_SPDIFTX_GetSPDCNT_SHD( U32 ModuleIndex )
@@ -707,7 +707,7 @@ U32		NX_SPDIFTX_GetSPDCNT_SHD( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CNT_SHD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SPDIF_CNT_SHD));
 }
 
 void	NX_SPDIFTX_SetUSERBIT1( U32 ModuleIndex, U32 value )
@@ -715,14 +715,14 @@ void	NX_SPDIFTX_SetUSERBIT1( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1, value);
 }
 U32		NX_SPDIFTX_GetUSERBIT1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1));
 }
 
 void	NX_SPDIFTX_SetUSERBIT2( U32 ModuleIndex, U32 value )
@@ -730,14 +730,14 @@ void	NX_SPDIFTX_SetUSERBIT2( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2, value);
 }
 U32		NX_SPDIFTX_GetUSERBIT2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2));
 }
 
 void	NX_SPDIFTX_SetUSERBIT3( U32 ModuleIndex, U32 value )
@@ -745,14 +745,14 @@ void	NX_SPDIFTX_SetUSERBIT3( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3, value);
 }
 U32		NX_SPDIFTX_GetUSERBIT3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3));
 }
 
 U32		NX_SPDIFTX_GetUSERBIT1_SHD( U32 ModuleIndex )
@@ -760,7 +760,7 @@ U32		NX_SPDIFTX_GetUSERBIT1_SHD( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1_SHD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT1_SHD));
 }
 
 U32		NX_SPDIFTX_GetUSERBIT2_SHD( U32 ModuleIndex )
@@ -768,7 +768,7 @@ U32		NX_SPDIFTX_GetUSERBIT2_SHD( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2_SHD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT2_SHD));
 }
 
 U32		NX_SPDIFTX_GetUSERBIT3_SHD( U32 ModuleIndex )
@@ -776,7 +776,7 @@ U32		NX_SPDIFTX_GetUSERBIT3_SHD( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3_SHD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->USERBIT3_SHD));
 }
 
 U32		NX_SPDIFTX_GetVERSION_INFO( U32 ModuleIndex )
@@ -784,7 +784,7 @@ U32		NX_SPDIFTX_GetVERSION_INFO( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->VERSION_INFO));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->VERSION_INFO));
 }
 
 

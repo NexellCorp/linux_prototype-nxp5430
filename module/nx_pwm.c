@@ -163,24 +163,24 @@ CBOOL	NX_PWM_OpenModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// check reset value
-	NX_ASSERT( ReadIODW(&pRegister->TCFG0) 		== 0x00000101 );
-	NX_ASSERT( ReadIODW(&pRegister->TCFG1) 		== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCON) 		== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTB0) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCMPB0) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTO0) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTB1) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCMPB1) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTO1) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTB2) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCMPB2) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTO2) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTB3) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCMPB3) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTO3) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTB4) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TCNTO4) 	== 0x00000000 );
-	NX_ASSERT( ReadIODW(&pRegister->TINT_CSTAT)	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCFG0) 		== 0x00000101 );
+	NX_ASSERT( ReadIO32(&pRegister->TCFG1) 		== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCON) 		== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTB0) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCMPB0) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTO0) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTB1) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCMPB1) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTO1) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTB2) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCMPB2) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTO2) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTB3) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCMPB3) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTO3) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTB4) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TCNTO4) 	== 0x00000000 );
+	NX_ASSERT( ReadIO32(&pRegister->TINT_CSTAT)	== 0x00000000 );
 
 	return CTRUE;
 }
@@ -206,24 +206,24 @@ CBOOL	NX_PWM_CloseModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// set up reset value
-	WriteIODW(&pRegister->TCFG0, 	0x00000101 );
-	WriteIODW(&pRegister->TCFG1, 	0x00000000 );
-	WriteIODW(&pRegister->TCON,	 	0x00000000 );
-	WriteIODW(&pRegister->TCNTB0,	0x00000000 );
-	WriteIODW(&pRegister->TCMPB0,	0x00000000 );
-	WriteIODW(&pRegister->TCNTO0,	0x00000000 );
-	WriteIODW(&pRegister->TCNTB1,	0x00000000 );
-	WriteIODW(&pRegister->TCMPB1,	0x00000000 );
-	WriteIODW(&pRegister->TCNTO1,	0x00000000 );
-	WriteIODW(&pRegister->TCNTB2,	0x00000000 );
-	WriteIODW(&pRegister->TCMPB2,	0x00000000 );
-	WriteIODW(&pRegister->TCNTO2,	0x00000000 );
-	WriteIODW(&pRegister->TCNTB3,	0x00000000 );
-	WriteIODW(&pRegister->TCMPB3,	0x00000000 );
-	WriteIODW(&pRegister->TCNTO3,	0x00000000 );
-	WriteIODW(&pRegister->TCNTB4,	0x00000000 );
-	WriteIODW(&pRegister->TCNTO4,	0x00000000 );
-	WriteIODW(&pRegister->TINT_CSTAT, 0x00000000 );
+	WriteIO32(&pRegister->TCFG0, 	0x00000101 );
+	WriteIO32(&pRegister->TCFG1, 	0x00000000 );
+	WriteIO32(&pRegister->TCON,	 	0x00000000 );
+	WriteIO32(&pRegister->TCNTB0,	0x00000000 );
+	WriteIO32(&pRegister->TCMPB0,	0x00000000 );
+	WriteIO32(&pRegister->TCNTO0,	0x00000000 );
+	WriteIO32(&pRegister->TCNTB1,	0x00000000 );
+	WriteIO32(&pRegister->TCMPB1,	0x00000000 );
+	WriteIO32(&pRegister->TCNTO1,	0x00000000 );
+	WriteIO32(&pRegister->TCNTB2,	0x00000000 );
+	WriteIO32(&pRegister->TCMPB2,	0x00000000 );
+	WriteIO32(&pRegister->TCNTO2,	0x00000000 );
+	WriteIO32(&pRegister->TCNTB3,	0x00000000 );
+	WriteIO32(&pRegister->TCMPB3,	0x00000000 );
+	WriteIO32(&pRegister->TCNTO3,	0x00000000 );
+	WriteIO32(&pRegister->TCNTB4,	0x00000000 );
+	WriteIO32(&pRegister->TCNTO4,	0x00000000 );
+	WriteIO32(&pRegister->TINT_CSTAT, 0x00000000 );
 
 	return CTRUE;
 }
@@ -293,10 +293,11 @@ U32 NX_PWM_GetClockNumber ( U32 ModuleIndex, U32 SubModuleIndex )
 {
 	const U32 ClockNumber[] =
 	{
-		CLOCKINDEX_LIST( PWM ),
+		NUMBER_OF_PWM_MODULE,
+		NUMBER_OF_PWM_MODULE,
 		CLOCKINDEX_OF_Inst_PWM01_MODULE,
-		CLOCKINDEX_OF_Inst_PWM02_MODULE,
-		CLOCKINDEX_OF_Inst_PWM03_MODULE
+		CLOCKINDEX_OF_Inst_PWM01_MODULE,
+		CLOCKINDEX_OF_Inst_PWM01_MODULE
 	};
 	//NX_CASSERT( NUMBER_OF_PWM_MODULE == (sizeof(ClockNumber)/sizeof(ClockNumber[0])) );
     NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
@@ -383,12 +384,12 @@ void	NX_PWM_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	ReadValue	=	ReadIODW(&pRegister->TINT_CSTAT) & ~PEND_MASK;
+	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & ~PEND_MASK;
 
 	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
 	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
-	WriteIODW(&pRegister->TINT_CSTAT, ReadValue);
+	WriteIO32(&pRegister->TINT_CSTAT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -412,7 +413,7 @@ CBOOL	NX_PWM_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 5 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -436,7 +437,7 @@ CBOOL	NX_PWM_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 5 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -465,9 +466,9 @@ void	NX_PWM_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
 
-	WriteIODW(&pRegister->TINT_CSTAT, (((1 << IntNum) & PEND_MASK) << PEND_POS ) | PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, (((1 << IntNum) & PEND_MASK) << PEND_POS ) | PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -501,7 +502,7 @@ void	NX_PWM_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 		SetValue	|=	INT_MASK << PEND_POS;
 	}
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, SetValue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -524,7 +525,7 @@ CBOOL	NX_PWM_GetInterruptEnableAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (INT_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (INT_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -552,7 +553,7 @@ CBOOL	NX_PWM_GetInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -584,9 +585,9 @@ void	NX_PWM_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
 
-	WriteIODW(&pRegister->TINT_CSTAT, ((PEND_MASK<<PEND_POS) | PendEnb) );
+	WriteIO32(&pRegister->TINT_CSTAT, ((PEND_MASK<<PEND_POS) | PendEnb) );
 }
 
 //------------------------------------------------------------------------------
@@ -614,7 +615,7 @@ U32		NX_PWM_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	Pend	=	(ReadIODW(&pRegister->TINT_CSTAT)>>PEND_POS) & PEND_MASK;
+	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT)>>PEND_POS) & PEND_MASK;
 
 	for( PendingIndex=0 ; PendingIndex<=20 ; PendingIndex++)
 		if(Pend & ((U32)0x1)<<PendingIndex)
@@ -636,14 +637,14 @@ void	NX_PWM_SetTCFG0( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0, value);
 }
 U32		NX_PWM_GetTCFG0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0));
 }
 
 void	NX_PWM_SetTCFG1( U32 ModuleIndex, U32 value )
@@ -651,14 +652,14 @@ void	NX_PWM_SetTCFG1( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1, value);
 }
 U32		NX_PWM_GetTCFG1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1));
 }
 
 //void	NX_PWM_SetTCON( U32 ModuleIndex, U32 value )
@@ -666,7 +667,7 @@ U32		NX_PWM_GetTCFG1( U32 ModuleIndex )
 //	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 //	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 //
-//	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, value);
+//	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, value);
 //}
 void	NX_PWM_SetTCON( U32 ModuleIndex, U32 SubModuleIndex, U32 value )
 {
@@ -676,7 +677,7 @@ void	NX_PWM_SetTCON( U32 ModuleIndex, U32 SubModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_PWMTIMER_SUBMODULE > SubModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	regvalue = ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCON);
+	regvalue = ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON);
 	if(SubModuleIndex==0){
 		NX_ASSERT( (0x1<<5) > value );
 		regvalue = regvalue & ~(0x1f<<PWM_TCON_TIMER0);
@@ -698,7 +699,7 @@ void	NX_PWM_SetTCON( U32 ModuleIndex, U32 SubModuleIndex, U32 value )
 		regvalue = regvalue	| (value << PWM_TCON_TIMER3);
 	}
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, regvalue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, regvalue);
 }
 
 U32		NX_PWM_GetTCON( U32 ModuleIndex )
@@ -706,7 +707,7 @@ U32		NX_PWM_GetTCON( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCON));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -715,14 +716,14 @@ void	NX_PWM_SetTCNTB0( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0, value);
 }
 U32		NX_PWM_GetTCNTB0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0));
 }
 
 void	NX_PWM_SetTCMPB0( U32 ModuleIndex, U32 value )
@@ -730,14 +731,14 @@ void	NX_PWM_SetTCMPB0( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0, value);
 }
 U32		NX_PWM_GetTCMPB0( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0));
 }
 
 U32		NX_PWM_GetTCNTO0( U32 ModuleIndex )
@@ -745,7 +746,7 @@ U32		NX_PWM_GetTCNTO0( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO0));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO0));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -754,14 +755,14 @@ void	NX_PWM_SetTCNTB1( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1, value);
 }
 U32		NX_PWM_GetTCNTB1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1));
 }
 
 void	NX_PWM_SetTCMPB1( U32 ModuleIndex, U32 value )
@@ -769,14 +770,14 @@ void	NX_PWM_SetTCMPB1( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1, value);
 }
 U32		NX_PWM_GetTCMPB1( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1));
 }
 
 U32		NX_PWM_GetTCNTO1( U32 ModuleIndex )
@@ -784,7 +785,7 @@ U32		NX_PWM_GetTCNTO1( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO1));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO1));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -793,14 +794,14 @@ void	NX_PWM_SetTCNTB2( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2, value);
 }
 U32		NX_PWM_GetTCNTB2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2));
 }
 
 void	NX_PWM_SetTCMPB2( U32 ModuleIndex, U32 value )
@@ -808,14 +809,14 @@ void	NX_PWM_SetTCMPB2( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2, value);
 }
 U32		NX_PWM_GetTCMPB2( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2));
 }
 
 U32		NX_PWM_GetTCNTO2( U32 ModuleIndex )
@@ -823,7 +824,7 @@ U32		NX_PWM_GetTCNTO2( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO2));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO2));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -832,14 +833,14 @@ void	NX_PWM_SetTCNTB3( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3, value);
 }
 U32		NX_PWM_GetTCNTB3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3));
 }
 
 void	NX_PWM_SetTCMPB3( U32 ModuleIndex, U32 value )
@@ -847,14 +848,14 @@ void	NX_PWM_SetTCMPB3( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3, value);
 }
 U32		NX_PWM_GetTCMPB3( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3));
 }
 
 U32		NX_PWM_GetTCNTO3( U32 ModuleIndex )
@@ -862,7 +863,7 @@ U32		NX_PWM_GetTCNTO3( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO3));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO3));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -871,14 +872,14 @@ void	NX_PWM_SetTCNTB4( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4, value);
 }
 U32		NX_PWM_GetTCNTB4( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4));
 }
 
 U32		NX_PWM_GetTCNTO4( U32 ModuleIndex )
@@ -886,7 +887,7 @@ U32		NX_PWM_GetTCNTO4( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO4));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO4));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -895,13 +896,13 @@ void	NX_PWM_SetTINT_CSTAT( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, value);
 }
 U32		NX_PWM_GetTINT_CSTAT( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT));
 }
 //@}

@@ -276,7 +276,7 @@ void    NX_I2C_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
     ReadValue   |=  (U32)Enable << IRQ_ENB_POS;
 
     //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -341,7 +341,7 @@ void    NX_I2C_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag )
     ReadValue   |=  (U32)(EnableFlag & 0x01) << IRQ_ENB_POS;
 
     //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -461,7 +461,7 @@ void    NX_I2C_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
     ReadValue   |=  INTC_MASK;
 
     //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -498,7 +498,7 @@ void    NX_I2C_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
     ReadValue   |=  INTC_MASK;
 
     //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -536,7 +536,7 @@ void    NX_I2C_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
     ReadValue   |=  (U32)Enable << IRQ_ENB_POS;
 
     //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -621,7 +621,7 @@ void    NX_I2C_ClearInterruptPendingAll( U32 ModuleIndex )
     ReadValue   |=  INTC_MASK;
 
     //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -703,7 +703,7 @@ void            NX_I2C_SetClockPClkMode( U32 ModuleIndex, NX_PCLKMODE mode )
     regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
 
     //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
+    WriteIO32(&pRegister->CLKENB, regvalue);
 }
 */
 
@@ -819,7 +819,7 @@ void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescale
     ReadValue   |=  ((SetPclkDivider << CLKSRC_POS) | (Prescaler-1));
 
     //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -877,7 +877,19 @@ void    NX_I2C_SetSlaveAddress( U32 ModuleIndex, U8 Address )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->IAR  =   (U32)Address;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IAR, (U32)Address);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IAR, (U32)Address);
+}
+
+U32    NX_I2C_GetSlaveAddress( U32 ModuleIndex )
+{
+    register U32 ReadValue;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    ReadValue   =   (__g_ModuleVariables[ModuleIndex].pRegister->IAR) & 0xFF;
+
+    return ReadValue;
 }
 
 //------------------------------------------------------------------------------
@@ -902,7 +914,7 @@ void    NX_I2C_SetDataDelay( U32 ModuleIndex, U32 delay )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX = delay-1;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX, delay-1);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX, delay-1);
 }
 */
 
@@ -965,7 +977,7 @@ void        NX_I2C_SetAckGenerationEnable( U32 ModuleIndex, CBOOL bAckGen )
     ReadValue   |=  (U32)bAckGen << ACK_GEN_POS;
 
     //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1014,7 +1026,7 @@ void        NX_I2C_ClearOperationHold  ( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->PEND = (U16)OP_HOLD_MASK;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PEND, (U16)OP_HOLD_MASK);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PEND, (U16)OP_HOLD_MASK);
 }
 */
 
@@ -1054,8 +1066,8 @@ void        NX_I2C_ControlMode ( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode, NX_I
 
     // State enable ÀÌ ¹»±î??
     //pRegister->ICSR =   ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK | ST_ENB_MASK );
-    //WriteIODW(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK | ST_ENB_MASK ));
-    WriteIODW(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK ));
+    //WriteIO32(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK | ST_ENB_MASK ));
+    WriteIO32(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK ));
 }
 
 //------------------------------------------------------------------------------
@@ -1097,8 +1109,7 @@ void        NX_I2C_WriteByte ( U32 ModuleIndex, U8 WriteData )
     NX_ASSERT( 0x100 > WriteData );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->IDSR = (U32)( WriteData );
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDSR, (U32)( WriteData ));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IDSR, (U8)( WriteData ));
 }
 
 //------------------------------------------------------------------------------
@@ -1151,88 +1162,7 @@ void        NX_I2C_BusDisable( U32 ModuleIndex )
     ReadValue   &=  ~TXRX_ENB_MASK;
 
     //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's do not generate ack for the last transfer data
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_DataLineRelease,            NX_I2C_ClockLineRelease
- */
-void    NX_I2C_NotAckGen( U32 ModuleIndex )
-{
-    const U32 NOT_ACK_MASK  = ( 0x01 << 2 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, NOT_ACK_MASK);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's data bus release
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_NotAckGen                   NX_I2C_ClockLineRelease
- */
-void    NX_I2C_DataLineRelease( U32 ModuleIndex )
-{
-    const U32 DAT_REL_MASK  = ( 0x01 << 1 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-    
-	NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, DAT_REL_MASK);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's Bus clock bus release
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_NotAckGen                    NX_I2C_ClockLineRelease
- */
-void    NX_I2C_ClockLineRelease( U32 ModuleIndex )
-{
-    const U32 CLK_REL_MASK  = ( 0x01 << 0 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, CLK_REL_MASK);
+    WriteIO32(&pRegister->ICSR, ReadValue);
 }
 
 
@@ -1292,7 +1222,7 @@ void        NX_I2C_ClearSlaveAddressMatch( U32 ModuleIndex )
     ReadValue   &= ~( ST_ENB_MASK | SLAVE_MATCH_OCCUR_MASK );
 
     //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
+    WriteIO32(&pRegister->ICSR, ReadValue);
 }
 */
 
@@ -1353,7 +1283,7 @@ void        NX_I2C_ClearGeneralCall( U32 ModuleIndex )
     ReadValue   &= ~( ST_ENB_MASK | GENERAL_CALL_OCCUR_MASK );
 
     //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
+    WriteIO32(&pRegister->ICSR, ReadValue);
 }
 */
 
@@ -1413,7 +1343,7 @@ void        NX_I2C_ClearSlaveRxStop( U32 ModuleIndex )
     ReadValue   &= ~( ST_ENB_MASK | SLV_RX_STOP_MASK );
 
 //  pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
+    WriteIO32(&pRegister->ICSR, ReadValue);
 }
 */
 
@@ -1463,12 +1393,12 @@ CBOOL       NX_I2C_IsACKReceived( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //return  (CBOOL)(((__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ACK_STATUS_MASK) >> ACK_STATUS_POS ));  // 0 : CTRUE, 1 : CFALSE
-    return  (CBOOL)(((__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ACK_STATUS_MASK) >> ACK_STATUS_POS ) ^ 1);  // 0 : CTRUE, 1 : CFALSE
+    return  (CBOOL)(!((__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ACK_STATUS_MASK) >> ACK_STATUS_POS ));  // 0 : CTRUE, 1 : CFALSE
 }
 
 
 //------------------------------------------------------------------------------
-/**
+/** 
  * @brief      Check I2C's Mode ( Rx or Tx )
  * @return     \b CTRUE Indicate that I2C's mode is Tx \n
  *             \b CFALSE Indicate that I2C's mode is Rx.
@@ -1485,5 +1415,72 @@ CBOOL       NX_I2C_IsTxMode( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     return ( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & TX_RX_MASK) ? CTRUE : CFALSE );
+}
+
+
+void		NX_I2C_SetFilterEnable( U32 ModuleIndex, CBOOL bEnable )
+{	
+    const U32 FILTER_ENB_POS   = 2;
+    const U32 FILTER_ENB_MASK  = 1UL << FILTER_ENB_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+    NX_ASSERT( (0==bEnable) ||(1==bEnable) );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
+
+    ReadValue   =   pRegister->ICLC;
+
+    ReadValue   &=  ~FILTER_ENB_MASK;
+    ReadValue   |=  (U32)bEnable << FILTER_ENB_POS;
+
+    WriteIO32(&pRegister->ICLC, ReadValue);
+}
+
+CBOOL       NX_I2C_GetFilterEnable( U32 ModuleIndex )
+{
+    const U32 FILTER_ENB_POS   = 2;
+    const U32 FILTER_ENB_MASK  = 1UL << FILTER_ENB_POS;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    return (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICLC & FILTER_ENB_MASK) ? CTRUE : CFALSE );
+}
+
+void		NX_I2C_SetSDAOutputDelay( U32 ModuleIndex, NX_I2C_SDA_DELAY Delay )
+{	
+    const U32 SDA_DELAY_POS   = 0;
+    const U32 SDA_DELAY_MASK  = 1UL << SDA_DELAY_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+    NX_ASSERT( ( 0 <= Delay) ||( 3 >= Delay) );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
+
+    ReadValue   =   pRegister->ICLC;
+
+    ReadValue   &=  ~SDA_DELAY_MASK;
+    ReadValue   |=  (U32)Delay << SDA_DELAY_POS;
+
+    WriteIO32(&pRegister->ICLC, ReadValue);
+}
+
+CBOOL       NX_I2C_GetSDAOutputDelay( U32 ModuleIndex )
+{
+    const U32 SDA_DELAY_POS   = 0;
+    const U32 SDA_DELAY_MASK  = 1UL << SDA_DELAY_POS;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    return (NX_I2C_SDA_DELAY)( (__g_ModuleVariables[ModuleIndex].pRegister->ICLC & SDA_DELAY_MASK) ? CTRUE : CFALSE );
 }
 
