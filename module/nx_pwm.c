@@ -9,39 +9,33 @@
 //	FOR A PARTICULAR PURPOSE.
 //
 //	Module		: PWM
-//	File		: nx_pwm.c
+//	File			: nx_pwm.c
 //	Description	:
 //	Author		: Jonghyuk Park(charles@nexell.co.kr)
-//	History		: 20120830 first implementation
+//	History		: 2012.08.30 first implementation
+//				  2014.10.15 deoks modift to functionality
 //------------------------------------------------------------------------------
 #include "nx_pwm.h"
 
-static	struct
-{
-	struct NX_PWM_RegisterSet *pRegister;
+static struct NX_PWM_RegisterSet *__g_pRegister[5];
 
-} __g_ModuleVariables[NUMBER_OF_PWM_MODULE] = { {CNULL, }, };
 
 //------------------------------------------------------------------------------
 // Module Interface
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicates that Initialize is successed.\r\n
- *			\b CFALSE indicates that Initialize is failed.\r\n
+ *	@return CTRUE	indicates that Initialize is successed.
+ *			CFALSE indicates that Initialize is failed.
  *	@see	NX_PWM_GetNumberOfModule
  */
 CBOOL	NX_PWM_Initialize( void )
 {
 	static CBOOL bInit = CFALSE;
-	U32 i;
 
 	if( CFALSE == bInit )
 	{
-		for( i=0; i < NUMBER_OF_PWM_MODULE; i++ )
-		{
-			__g_ModuleVariables[i].pRegister = CNULL;
-		}
+		__g_pRegister[0] = (struct NX_PWM_RegisterSet *)CNULL;
 
 		bInit = CTRUE;
 	}
@@ -53,7 +47,6 @@ CBOOL	NX_PWM_Initialize( void )
 /**
  *	@brief		Get number of modules in the chip.
  *	@return		Module's number.
- *	@see		NX_PWM_Initialize
  */
 U32		NX_PWM_GetNumberOfModule( void )
 {
@@ -62,13 +55,13 @@ U32		NX_PWM_GetNumberOfModule( void )
 
 //------------------------------------------------------------------------------
 /**
- *	@brief		Get number of submodules in the pwmtimer.
+ *	@brief		Get number of submodules in the timertimer.
  *	@return		SubModule's number.
  *	@see		NX_PWM_Initialize
  */
-U32		NX_PWM_GetNumberOfSubModule( void )
+U32		NX_PWM_GetNumberOfChannel( void )
 {
-	return NUMBER_PWMTIMER_SUBMODULE;
+	return NX_PWM_CHANNEL;
 }
 
 //------------------------------------------------------------------------------
@@ -78,10 +71,6 @@ U32		NX_PWM_GetNumberOfSubModule( void )
  *	@brief		Get module's physical address.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's physical address
- *	@see		NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
  */
 U32		NX_PWM_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -96,10 +85,6 @@ U32		NX_PWM_GetPhysicalAddress( U32 ModuleIndex )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_PWM_GetPhysicalAddress,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
  */
 U32		NX_PWM_GetSizeOfRegisterSet( void )
 {
@@ -112,17 +97,13 @@ U32		NX_PWM_GetSizeOfRegisterSet( void )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
  */
 void	NX_PWM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
 {
-	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != BaseAddress );
 
-	__g_ModuleVariables[ModuleIndex].pRegister = (struct NX_PWM_RegisterSet *)BaseAddress;
+	__g_pRegister[ModuleIndex] = (struct NX_PWM_RegisterSet *)BaseAddress;
 }
 
 //------------------------------------------------------------------------------
@@ -130,57 +111,24 @@ void	NX_PWM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
  */
 U32		NX_PWM_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Initialize is successed. \r\n
- *				\b CFALSE	indicates that Initialize is failed.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
+ *	@return		CTRUE			indicates that Initialize is successed. \r\n
+ *				CFALSE			indicates that Initialize is failed.
  */
 CBOOL	NX_PWM_OpenModule( U32 ModuleIndex )
 {
-	register struct NX_PWM_RegisterSet	*pRegister;
-
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
-
-	// check reset value
-	NX_ASSERT( ReadIO32(&pRegister->TCFG0) 		== 0x00000101 );
-	NX_ASSERT( ReadIO32(&pRegister->TCFG1) 		== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCON) 		== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTB0) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCMPB0) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTO0) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTB1) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCMPB1) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTO1) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTB2) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCMPB2) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTO2) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTB3) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCMPB3) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTO3) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTB4) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TCNTO4) 	== 0x00000000 );
-	NX_ASSERT( ReadIO32(&pRegister->TINT_CSTAT)	== 0x00000000 );
 
 	return CTRUE;
 }
@@ -189,41 +137,12 @@ CBOOL	NX_PWM_OpenModule( U32 ModuleIndex )
 /**
  *	@brief		Deinitialize selected module to the proper stage.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Deinitialize is successed. \r\n
- *				\b CFALSE	indicates that Deinitialize is failed.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,
- *				NX_PWM_CheckBusy,			NX_PWM_CanPowerDown
+ *	@return		CTRUE			indicates that Deinitialize is successed. 
+ *				CFALSE			indicates that Deinitialize is failed.
  */
 CBOOL	NX_PWM_CloseModule( U32 ModuleIndex )
 {
-	register struct NX_PWM_RegisterSet	*pRegister;
-
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
-
-	// set up reset value
-	WriteIO32(&pRegister->TCFG0, 	0x00000101 );
-	WriteIO32(&pRegister->TCFG1, 	0x00000000 );
-	WriteIO32(&pRegister->TCON,	 	0x00000000 );
-	WriteIO32(&pRegister->TCNTB0,	0x00000000 );
-	WriteIO32(&pRegister->TCMPB0,	0x00000000 );
-	WriteIO32(&pRegister->TCNTO0,	0x00000000 );
-	WriteIO32(&pRegister->TCNTB1,	0x00000000 );
-	WriteIO32(&pRegister->TCMPB1,	0x00000000 );
-	WriteIO32(&pRegister->TCNTO1,	0x00000000 );
-	WriteIO32(&pRegister->TCNTB2,	0x00000000 );
-	WriteIO32(&pRegister->TCMPB2,	0x00000000 );
-	WriteIO32(&pRegister->TCNTO2,	0x00000000 );
-	WriteIO32(&pRegister->TCNTB3,	0x00000000 );
-	WriteIO32(&pRegister->TCMPB3,	0x00000000 );
-	WriteIO32(&pRegister->TCNTO3,	0x00000000 );
-	WriteIO32(&pRegister->TCNTB4,	0x00000000 );
-	WriteIO32(&pRegister->TCNTO4,	0x00000000 );
-	WriteIO32(&pRegister->TINT_CSTAT, 0x00000000 );
 
 	return CTRUE;
 }
@@ -232,12 +151,8 @@ CBOOL	NX_PWM_CloseModule( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Module is Busy. \r\n
- *				\b CFALSE	indicates that Module is NOT Busy.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CanPowerDown
+ *	@return		CTRUE			indicates that Module is Busy.
+ *				CFALSE			indicates that Module is NOT Busy.
  */
 CBOOL	NX_PWM_CheckBusy( U32 ModuleIndex )
 {
@@ -250,12 +165,8 @@ CBOOL	NX_PWM_CheckBusy( U32 ModuleIndex )
 /**
  *	@brief		Indicaes whether the selected modules is ready to enter power-down stage
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Ready to enter power-down stage. \r\n
- *				\b CFALSE	indicates that This module can't enter to power-down stage.
- *	@see		NX_PWM_GetPhysicalAddress,	NX_PWM_GetSizeOfRegisterSet,
- *				NX_PWM_SetBaseAddress,		NX_PWM_GetBaseAddress,
- *				NX_PWM_OpenModule,			NX_PWM_CloseModule,
- *				NX_PWM_CheckBusy
+ *	@return		CTRUE			indicates that Ready to enter power-down stage. 
+ *				CFALSE			indicates that This module can't enter to power-down stage.
  */
 CBOOL	NX_PWM_CanPowerDown( U32 ModuleIndex )
 {
@@ -272,38 +183,23 @@ CBOOL	NX_PWM_CanPowerDown( U32 ModuleIndex )
  *	@brief		Get module's clock index.
  *	@return		Module's clock index.\n
  *				It is equal to CLOCKINDEX_OF_PWM?_MODULE in <nx_chip.h>.
- *	@see		NX_CLKGEN_SetClockDivisorEnable,
- *				NX_CLKGEN_GetClockDivisorEnable,
- *				NX_CLKGEN_SetClockSource,
- *				NX_CLKGEN_GetClockSource,
- *				NX_CLKGEN_SetClockDivisor,
- *				NX_CLKGEN_GetClockDivisor
  */
-//U32 NX_PWM_GetClockNumber ( U32 ModuleIndex )
-//{
-//	const U32 ClockNumber[] =
-//	{
-//		CLOCKINDEX_LIST( PWM )
-//	};
-//	NX_CASSERT( NUMBER_OF_PWM_MODULE == (sizeof(ClockNumber)/sizeof(ClockNumber[0])) );
-//    NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-//	return	ClockNumber[ModuleIndex];
-//}
-U32 NX_PWM_GetClockNumber ( U32 ModuleIndex, U32 SubModuleIndex )
+U32 NX_PWM_GetClockNumber ( U32 ModuleIndex, U32 Channel )
 {
 	const U32 ClockNumber[] =
 	{
-		NUMBER_OF_PWM_MODULE,
-		NUMBER_OF_PWM_MODULE,
+//		CLOCKINDEX_LIST( PWM ),
+		CLOCKINDEX_OF_PWM_MODULE,
+		CLOCKINDEX_OF_PWM_MODULE,
 		CLOCKINDEX_OF_Inst_PWM01_MODULE,
 		CLOCKINDEX_OF_Inst_PWM01_MODULE,
 		CLOCKINDEX_OF_Inst_PWM01_MODULE
 	};
-	//NX_CASSERT( NUMBER_OF_PWM_MODULE == (sizeof(ClockNumber)/sizeof(ClockNumber[0])) );
+	
     NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-    NX_ASSERT( NUMBER_PWMTIMER_SUBMODULE > SubModuleIndex );
+    NX_ASSERT( NX_PWM_CHANNEL > Channel );
 
-	return	ClockNumber[SubModuleIndex];
+	return	ClockNumber[Channel];
 }
 
 //------------------------------------------------------------------------------
@@ -311,9 +207,6 @@ U32 NX_PWM_GetClockNumber ( U32 ModuleIndex, U32 SubModuleIndex )
  *	@brief		Get module's reset index.
  *	@return		Module's reset index.\n
  *				It is equal to RESETINDEX_OF_PWM?_MODULE_i_nRST in <nx_chip.h>.
- *	@see		NX_RSTCON_Enter,
- *				NX_RSTCON_Leave,
- *				NX_RSTCON_GetStatus
  */
 U32 NX_PWM_GetResetNumber ( U32 ModuleIndex )
 {
@@ -323,6 +216,7 @@ U32 NX_PWM_GetResetNumber ( U32 ModuleIndex )
 	};
 	NX_CASSERT( NUMBER_OF_PWM_MODULE == (sizeof(ResetNumber)/sizeof(ResetNumber[0])) );
     NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
+
 	return	ResetNumber[ModuleIndex];
 }
 
@@ -333,13 +227,8 @@ U32 NX_PWM_GetResetNumber ( U32 ModuleIndex )
  *	@brief		Get a interrupt number for interrupt controller.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Interrupt number
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
-U32		NX_PWM_GetInterruptNumber( U32 ModuleIndex, U32 SubModuleIndex )
+U32		NX_PWM_GetInterruptNumber( U32 ModuleIndex, U32 Channel )
 {
 	const U32	PWMInterruptNumber[][4] =
 				{
@@ -350,44 +239,37 @@ U32		NX_PWM_GetInterruptNumber( U32 ModuleIndex, U32 SubModuleIndex )
 				};
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( NUMBER_PWMTIMER_SUBMODULE > SubModuleIndex );
+	NX_ASSERT( NX_PWM_CHANNEL > Channel );
 
-	return	PWMInterruptNumber[ModuleIndex][SubModuleIndex];
+	return	PWMInterruptNumber[ModuleIndex][Channel];
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@param[in]	Enable	\b CTRUE	indicates that Interrupt Enable. \r\n
- *						\b CFALSE	indicates that Interrupt Disable.
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@param[in]	Enable	CTRUE	indicates that Interrupt Enable.
+ *						CFALSE	indicates that Interrupt Disable.
  *	@return		None.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
 void	NX_PWM_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 {
-	const U32	PEND_POS	=	0;
-	const U32	PEND_MASK	=	0x1f << PEND_POS;
-
 	register struct NX_PWM_RegisterSet*	pRegister;
 	register U32	ReadValue;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( 5 > IntNum );
+	NX_ASSERT( NX_PWM_CHANNEL > IntNum );
 	NX_ASSERT( (0==Enable) || (1==Enable) );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+	pRegister	=	__g_pRegister[ModuleIndex];
 
-	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & ~PEND_MASK;
+	NX_ASSERT( CNULL != pRegister );
 
-	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
-	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
+	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
+
+	ReadValue	&=	(U32)(~(1UL << IntNum));
+	ReadValue	|=	(U32)Enable << IntNum ;
 
 	WriteIO32(&pRegister->TINT_CSTAT, ReadValue);
 }
@@ -396,136 +278,124 @@ void	NX_PWM_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Interrupt is enabled. \r\n
- *				\b CFALSE	indicates that Interrupt is disabled.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@return		CTRUE			indicates that Interrupt is enabled. 
+ *				CFALSE			indicates that Interrupt is disabled.
  */
 CBOOL	NX_PWM_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 {
-	const U32	PEND_POS	=	0;
+	register struct NX_PWM_RegisterSet*	pRegister;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( 5 > IntNum );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NX_PWM_CHANNEL > IntNum );
 
-	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Pending is seted. \r\n
- *				\b CFALSE	indicates that Pending is Not Seted.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@return		CTRUE			indicates that Pending is seted.
+ *				CFALSE			indicates that Pending is Not Seted.
  */
 CBOOL	NX_PWM_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
+	register struct NX_PWM_RegisterSet*	pRegister;
 	const U32	PEND_POS	=	5;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( 5 > IntNum );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NX_PWM_CHANNEL > IntNum );
 
-	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ 5 ).
- *	@param[in]	IntNum	Interrupt number.
+ *	@param[in]	IntNum			Interrupt number.
  *	@return		None.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
 void	NX_PWM_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
+	register struct NX_PWM_RegisterSet*	pRegister;
 	const U32	PEND_POS	=	5;
 	const U32	PEND_MASK	=	0x1f;
 	register U32 PendEnb;
 
-	register struct NX_PWM_RegisterSet*	pRegister;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( 5 > IntNum );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NX_PWM_CHANNEL > IntNum );
 
-	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
 
 	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
+	PendEnb |=	1UL<<(IntNum+PEND_POS);
 
-	WriteIO32(&pRegister->TINT_CSTAT, (((1 << IntNum) & PEND_MASK) << PEND_POS ) | PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set all interrupts to be enables or disables.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	Enable	\b CTRUE	indicates that Set to all interrupt enable. \r\n
- *						\b CFALSE	indicates that Set to all interrupt disable.
+ *	@param[in]	Enable	CTRUE	indicates that Set to all interrupt enable.
+ *						CFALSE	indicates that Set to all interrupt disable.
  *	@return		None.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
 void	NX_PWM_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
-	const U32	PEND_POS	=	0;
-	const U32	INT_MASK	=	0x1f;
-
+	register struct NX_PWM_RegisterSet*	pRegister;
 	register U32	SetValue;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( (0==Enable) || (1==Enable) );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( (CFALSE==Enable) || (CTRUE==Enable) );
 
-	SetValue	=	0;
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
+
 
 	if( Enable )
-	{
-		SetValue	|=	INT_MASK << PEND_POS;
-	}
+		SetValue	=	0x1F;
+	else
+		SetValue	=	0;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, SetValue);
+	WriteIO32(&pRegister->TINT_CSTAT, SetValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) interrupt is enabled. \r\n
- *				\b CFALSE	indicates that All interrupt is disabled.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
+ *	@return		CTRUE			indicates that At least one( or more ) interrupt is enabled.
+ *				CFALSE			indicates that All interrupt is disabled.
  */
 CBOOL	NX_PWM_GetInterruptEnableAll( U32 ModuleIndex )
 {
-	const U32	PEND_POS	=	0;
+	register struct NX_PWM_RegisterSet*	pRegister;
+	const U32	ENABLE_POS	=	0;
 	const U32	INT_MASK	=	0x1f;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (INT_MASK << PEND_POS) )
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
 	{
 		return CTRUE;
 	}
@@ -537,23 +407,22 @@ CBOOL	NX_PWM_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) pending is seted. \r\n
- *				\b CFALSE	indicates that All pending is NOT seted.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
+ *	@return		CTRUE	indicates that At least one( or more ) pending is seted.
+ *				CFALSE	indicates that All pending is NOT seted.
  */
 CBOOL	NX_PWM_GetInterruptPendingAll( U32 ModuleIndex )
 {
+	register struct NX_PWM_RegisterSet*	pRegister;
 	const U32	PEND_POS	=	5;
 	const U32	PEND_MASK	=	0x1f;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
+	pRegister	=	__g_pRegister[ModuleIndex];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -566,28 +435,25 @@ CBOOL	NX_PWM_GetInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		None.
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
 void	NX_PWM_ClearInterruptPendingAll( U32 ModuleIndex )
 {
+	register struct NX_PWM_RegisterSet*	pRegister;
 	const U32	PEND_POS	=	5;
 	const U32	PEND_MASK	=	0x1f;
 
-	register struct NX_PWM_RegisterSet*	pRegister;
 	register U32 PendEnb;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+	pRegister	=	__g_pRegister[ModuleIndex];
 
-	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
+	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&pRegister->TINT_CSTAT, ((PEND_MASK<<PEND_POS) | PendEnb) );
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
+	PendEnb |=	PEND_MASK<<PEND_POS;
+
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -595,314 +461,738 @@ void	NX_PWM_ClearInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Get a interrupt number which has the most prority of pended interrupts
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Pending Number( If all pending is not set then return -1 ).
- *	@see		NX_PWM_GetInterruptNumber,
- *				NX_PWM_GetInterruptEnable,			NX_PWM_GetInterruptPending,
- *				NX_PWM_ClearInterruptPending,		NX_PWM_SetInterruptEnableAll,
- *				NX_PWM_GetInterruptEnableAll,		NX_PWM_GetInterruptPendingAll,
- *				NX_PWM_ClearInterruptPendingAll,	NX_PWM_GetInterruptPendingNumber
  */
 U32		NX_PWM_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 {
+	register struct NX_PWM_RegisterSet	*pRegister;
 	const U32	PEND_POS	=	5;
 	const U32	PEND_MASK	=	0x1f << PEND_POS;
-	register U32 PendingIndex = 0;
-
-	register struct NX_PWM_RegisterSet	*pRegister;
-	register U32 Pend;
+	register U32 PendingIndex, Pend;
 
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	pRegister	=	__g_pRegister[ModuleIndex];
 
-	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT)>>PEND_POS) & PEND_MASK;
+	NX_ASSERT( CNULL != pRegister );
 
-	for( PendingIndex=0 ; PendingIndex<=20 ; PendingIndex++)
-		if(Pend & ((U32)0x1)<<PendingIndex)
+	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
+
+	for( PendingIndex = 0; PendingIndex<NX_PWM_INT; PendingIndex++)
+		if(Pend & (1UL<<PendingIndex))
 			break;
 
-	if(PendingIndex > 20)
+	if(PendingIndex > NX_PWM_INT)
 		return -1;
 	else
 		return PendingIndex;
 }
 
-
 //--------------------------------------------------------------------------
 // @name	Configuration operations
 //--------------------------------------------------------------------------
 //@{
-void	NX_PWM_SetTCFG0( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set prescaler ( register value 0 is bypass, 1 is divide by 2)
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	value		divide value (1 ~ 0x100).
+ *	@return		none.
+ */
+void	NX_PWM_SetPrescaler(U32 Channel, U32 value)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 regvalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0, value);
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	NX_ASSERT( (0x100 >= value) && (0 < value) );
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCFG0);
+
+	if(Channel & 0x6)
+		regvalue |= ((value-1) & 0xFF)<<8;		// timer channel 2, 3, 4
+	else
+		regvalue |= ((value-1) & 0xFF)<<0;		// timer channel 0, 1
+
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
-U32		NX_PWM_GetTCFG0( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG0));
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get prescaler ( register value 0 is bypass, 1 is divide by 2)
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		divide value (1 ~ 0x100).
+ */
+U32		NX_PWM_GetPrescaler(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 regvalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCFG0);
+	
+	if(Channel & 0x6)
+		return ((regvalue>>8) & 0xFF)+1;		// timer channel 2, 3, 4
+	else
+		return ((regvalue>>0) & 0xFF)+1;		// timer channel 0, 1
 }
 
-void	NX_PWM_SetTCFG1( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Dead Zone width
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Length		clock unit width.
+ *	@return		none.
+ */
+void	NX_PWM_SetDeadZoneLength(U32 Channel, U32 Length)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 regvalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1, value);
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCFG0);
+	regvalue &= ~(0xFF<<16);
+	regvalue |= (Length & 0xFF)<<16;
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
-U32		NX_PWM_GetTCFG1( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCFG1));
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set divider path
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	divider		.
+ *	@return		CTRUE: this channel can select which selecting.
+ *				CFALSE: channel cannot select selecting path divider channel.
+ */
+CBOOL	NX_PWM_SetDividerPath(U32 Channel, NX_PWM_DIVIDSELECT divider)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue, updatevalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+	NX_ASSERT( NX_PWM_DIVIDSELECT_TCLK >= divider );
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+
+	if(modulechannel == 4 && NX_PWM_DIVIDSELECT_TCLK == divider)
+		return CFALSE;
+
+	updatevalue = divider<<(4*modulechannel);
+
+	regvalue = ReadIO32(&pRegister->TCFG1);
+	regvalue &= ~(0xF<<modulechannel);
+	regvalue |= updatevalue;
+	WriteIO32(&pRegister->TCFG1, regvalue);
+
+	return CTRUE;
+}
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get divider path
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		current Divider path number
+ */
+NX_PWM_DIVIDSELECT NX_PWM_GetDividerPath(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	regvalue = ReadIO32(&pRegister->TCFG1);
+	regvalue >>= (4*modulechannel);
+	regvalue &= 0xF;
+
+	return (NX_PWM_DIVIDSELECT)regvalue;
 }
 
-//void	NX_PWM_SetTCON( U32 ModuleIndex, U32 value )
-//{
-//	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-//	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-//
-//	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, value);
-//}
-void	NX_PWM_SetTCON( U32 ModuleIndex, U32 SubModuleIndex, U32 value )
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Dead Zone width
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		width value (0 ~ 0xFF).
+ */
+U32		NX_PWM_GetDeadZoneLength(U32 Channel)
 {
-	register U32 regvalue = 0;
+	register struct NX_PWM_RegisterSet	*pRegister;
 
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( NUMBER_PWMTIMER_SUBMODULE > SubModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
 
-	regvalue = ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON);
-	if(SubModuleIndex==0){
-		NX_ASSERT( (0x1<<5) > value );
-		regvalue = regvalue & ~(0x1f<<PWM_TCON_TIMER0);
-		regvalue = regvalue	| (value << PWM_TCON_TIMER0);
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U32)(ReadIO32(&pRegister->TCFG0)>>16)&0xFF;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Dead Zone run
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Enable		CTRUE: enable, CFALSE: disable.
+ *	@return		none.
+ */
+CBOOL	NX_PWM_SetDeadZoneEnable(U32 Channel, CBOOL Enable)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 regvalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	NX_ASSERT( (CFALSE==Enable) || (CTRUE == Enable) );
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(Channel != 0)
+		return CFALSE;
+
+	regvalue = ReadIO32(&pRegister->TCON);
+	if(Enable)
+		regvalue |= (1UL<<4);
+	else
+		regvalue &= ~(1UL<<4);
+
+	WriteIO32(&pRegister->TCON, regvalue);
+
+	return CTRUE;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Dead Zone run status
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		CTRUE 		Dead zone is working
+ 				CFALSE 		Not working.
+ */
+CBOOL	NX_PWM_GetDeadZoneEnable(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(Channel != 0)
+		return CFALSE;
+
+	if(ReadIO32(&pRegister->TCON) & (1UL<<4))
+		return CTRUE;
+
+	return CFALSE;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Output Invert
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Enable		CTRUE: enable, CFALSE: disable.
+ *	@return		CTRUE		this channel can invert output signal.
+ *				CFALSE: 	channel has no output port, so cannot invert signal.
+ */
+CBOOL	NX_PWM_SetOutInvert(U32 Channel, CBOOL Enable)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue, updatevalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	NX_ASSERT( (CFALSE==Enable) || (CTRUE == Enable) );
+
+	modulechannel = Channel%NX_PWM_CHANNEL;
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 4)
+		return CFALSE;
+
+	if(modulechannel == 0)
+		updatevalue = 1UL<<(4*(modulechannel+0)+2);
+	else
+		updatevalue = 1UL<<(4*(modulechannel+1)+2);
+
+	regvalue = ReadIO32(&pRegister->TCON);
+	if(Enable)
+		regvalue |= updatevalue;
+	else
+		regvalue &= ~updatevalue;
+
+	WriteIO32(&pRegister->TCON, regvalue);
+
+	return CTRUE;
+}
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Output Invert status
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		CTRUE: this channel is inverted output signal.
+ *				CFALSE: channel has no output port or not inverted.
+ */
+CBOOL	NX_PWM_GetOutInvert(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, comparevalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+
+	modulechannel = Channel%NX_PWM_CHANNEL;
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 4)
+		return CFALSE;
+
+	if(modulechannel == 0)
+		comparevalue = 1UL<<(4*(modulechannel+0)+2);
+	else
+		comparevalue = 1UL<<(4*(modulechannel+1)+2);
+
+	if(comparevalue & ReadIO32(&pRegister->TCON))
+		return CTRUE;
+
+	return CFALSE;
+}
+
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set LoadMode is AutoReload or Manual
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	ShotMode	LoadMode (0:Manual, 1:Auto Updata)
+ *	@return		None.
+ */
+void	NX_PWM_SetShotMode(U32 Channel, NX_PWM_LOADMODE ShotMode)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	
+	modulechannel = Channel%NX_PWM_CHANNEL;
+	NX_ASSERT( (NX_PWM_LOADMODE_ONESHOT == ShotMode) || (NX_PWM_LOADMODE_AUTORELOAD == ShotMode));
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCON);
+
+	if(modulechannel == 0)
+	{
+		regvalue &= ~(1UL<<3);
+		regvalue |= ShotMode<<3;
 	}
-	else if(SubModuleIndex==1){
-		NX_ASSERT( (0x1<<4) > value );
-		regvalue = regvalue & ~(0xf<<PWM_TCON_TIMER1);
-		regvalue = regvalue	| (value << PWM_TCON_TIMER1);
-	}
-	else if(SubModuleIndex==2){
-		NX_ASSERT( (0x1<<4) > value );
-		regvalue = regvalue & ~(0xf<<PWM_TCON_TIMER2);
-		regvalue = regvalue	| (value << PWM_TCON_TIMER2);
-	}
-	else if(SubModuleIndex==3){
-		NX_ASSERT( (0x1<<4) > value );
-		regvalue = regvalue & ~(0xf<<PWM_TCON_TIMER3);
-		regvalue = regvalue	| (value << PWM_TCON_TIMER3);
+	else
+	{
+		regvalue &= ~(1UL<<(4*(modulechannel+1)+3));
+		regvalue |= ShotMode<<(4*(modulechannel+1)+3);
 	}
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 
-U32		NX_PWM_GetTCON( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set LoadMode is AutoReload or Manual
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return 	ShotMode	LoadMode (0:Manual, 1:Auto Updata)
+ */
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCON));
+NX_PWM_LOADMODE	NX_PWM_GetShotMode(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCON);
+
+	if(modulechannel == 0)
+	{
+		regvalue >>= 3;
+	}
+	
+	if(modulechannel == 4)
+	{
+		regvalue >>= 22;
+	}else
+	{
+		regvalue >>= (4*(modulechannel+1)+3);
+	}
+	regvalue &= 0x1;
+
+	return (NX_PWM_LOADMODE)regvalue;
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTCNTB0( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TCNTx, TCMPx Manual Update
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
+void	NX_PWM_UpdateCounter(U32 Channel)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue, updatedonevalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0, value);
-}
-U32		NX_PWM_GetTCNTB0( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB0));
-}
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
 
-void	NX_PWM_SetTCMPB0( U32 ModuleIndex, U32 value )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0, value);
-}
-U32		NX_PWM_GetTCMPB0( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	regvalue = ReadIO32(&pRegister->TCON);
+	updatedonevalue = regvalue;
+	if(modulechannel == 0)
+	{
+		regvalue |= 1UL<<1;
+		updatedonevalue &= ~(1UL<<1);
+	}
+	else
+	{
+		regvalue |= 1<<(4*(modulechannel+1)+1);
+		updatedonevalue &= ~(1<<(4*(modulechannel+1)+1));
+	}
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB0));
-}
-
-U32		NX_PWM_GetTCNTO0( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO0));
+	WriteIO32(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, updatedonevalue);
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTCNTB1( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set PWM Start(Run)
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
+void	NX_PWM_Run(U32 Channel)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1, value);
-}
-U32		NX_PWM_GetTCNTB1( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel % NX_PWM_CHANNEL;
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB1));
-}
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
 
-void	NX_PWM_SetTCMPB1( U32 ModuleIndex, U32 value )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1, value);
-}
-U32		NX_PWM_GetTCMPB1( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	regvalue = ReadIO32(&pRegister->TCON);
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB1));
-}
+	if(modulechannel == 0)
+	{
+		regvalue |= 1UL<<0;
+	}
+	else
+	{
+		regvalue |= 1<<(4*(modulechannel+1));
+	}
 
-U32		NX_PWM_GetTCNTO1( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO1));
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTCNTB2( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set PWM Stop
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
+void	NX_PWM_Stop(U32 Channel)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2, value);
-}
-U32		NX_PWM_GetTCNTB2( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB2));
-}
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
 
-void	NX_PWM_SetTCMPB2( U32 ModuleIndex, U32 value )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2, value);
-}
-U32		NX_PWM_GetTCMPB2( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	regvalue = ReadIO32(&pRegister->TCON);
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB2));
-}
+	if(modulechannel == 0)
+	{
+		regvalue &= ~(1UL<<0);
+	}
+	else
+	{
+		regvalue &= ~(1<<(4*(modulechannel+1)));
+	}
 
-U32		NX_PWM_GetTCNTO2( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO2));
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTCNTB3( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get PWM Running state.
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
+CBOOL	NX_PWM_IsRun(U32 Channel)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3, value);
-}
-U32		NX_PWM_GetTCNTB3( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB3));
-}
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
 
-void	NX_PWM_SetTCMPB3( U32 ModuleIndex, U32 value )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3, value);
-}
-U32		NX_PWM_GetTCMPB3( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	regvalue = ReadIO32(&pRegister->TCON);
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCMPB3));
-}
+	if(modulechannel == 0)
+	{
+		regvalue >>= 0;
+	}
+	else
+	{
+		regvalue >>= (4*(modulechannel+1));
+	}
+	regvalue &= 0x1;
 
-U32		NX_PWM_GetTCNTO3( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO3));
+	return (CBOOL)regvalue;
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTCNTB4( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set PWM Period (Count).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Period		PWM Period ( range : 0 ~ 65535 )
+ *	@return		None.
+ */
+void	NX_PWM_SetPeriod(U32 Channel, U32 Period)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4, value);
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel % NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 0)
+	{
+		WriteIO32(&pRegister->TCNTB0, Period);
+	}
+	else if(modulechannel == 1)
+	{
+		WriteIO32(&pRegister->TCNTB1, Period);
+	}
+	else if(modulechannel == 2)
+	{
+		WriteIO32(&pRegister->TCNTB2, Period);
+	}
+	else if(modulechannel == 3)
+	{
+		WriteIO32(&pRegister->TCNTB3, Period);
+	}	
+	else if(modulechannel == 4)
+	{
+		WriteIO32(&pRegister->TCNTB4, Period);
+	}
+
 }
-U32		NX_PWM_GetTCNTB4( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTB4));
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set PWM Period (Count).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Period		PWM Period ( range : 0 ~ 65535 )
+ */
+U32		NX_PWM_GetPeriod(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 0)
+	{
+		return ReadIO32(&pRegister->TCNTB0);
+	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCNTB1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCNTB2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCNTB3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return ReadIO32(&pRegister->TCNTB4);
+	}
+
+	return CTRUE;
 }
 
-U32		NX_PWM_GetTCNTO4( U32 ModuleIndex )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set PWM Duty (Compare).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Duty		PWM Duty ( range : 0 ~ 65535 )
+ *	@return		None.
+ */
+CBOOL	NX_PWM_SetDuty(U32 Channel, U32 Duty)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel;
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCNTO4));
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+
+	if(modulechannel == 0)
+	{
+		WriteIO32(&pRegister->TCMPB0, Duty);;
+	}
+	else if(modulechannel == 1)
+	{
+		WriteIO32(&pRegister->TCMPB1, Duty);
+	}
+	else if(modulechannel == 2)
+	{
+		WriteIO32(&pRegister->TCMPB2, Duty);
+	}
+	else if(modulechannel == 3)
+	{
+		WriteIO32(&pRegister->TCMPB3, Duty);
+	}	
+	else if(modulechannel == 4)
+	{
+		return CFALSE;
+	}
+
+	return CTRUE;
 }
 
-////////////////////////////////////////////////////////////////
-void	NX_PWM_SetTINT_CSTAT( U32 ModuleIndex, U32 value )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get PWM Duty (Compare).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Dury		PWM Duty. ( range : 0 ~ 65535 )
+ */
+U32		NX_PWM_GetDuty(U32 Channel)
 {
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel;
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT, value);
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 0)
+	{
+		return ReadIO32(&pRegister->TCMPB0);
+	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCMPB1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCMPB2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCMPB3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return CFALSE;
+	}
+
+	return CTRUE;
 }
-U32		NX_PWM_GetTINT_CSTAT( U32 ModuleIndex )
-{
-	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
-	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TINT_CSTAT));
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get PWM Current Count.
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Count		PWM Count. ( range : 0 ~ x )
+ */
+U32		NX_PWM_GetCurrentCount(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel % NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 0)
+	{
+		return ReadIO32(&pRegister->TCNTO0);
+	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCNTO1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCNTO2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCNTO3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return ReadIO32(&pRegister->TCNTO4);
+	}
+
+	return CTRUE;
 }
 //@}

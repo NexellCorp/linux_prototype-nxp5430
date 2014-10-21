@@ -26,16 +26,46 @@ struct	NX_SSP_RegisterSet
 	volatile U32	FB_CLK_SEL;			///< 0x2C :
 };
 
-	// PAD의 prototype 기술.
-	//typedef enum{
-	//
-	//}
+typedef enum {
+	TXFIFO_RDY  = 0,
+	RXFIFO_RDY  = 1,
+	TX_UNDERRUN = 2,
+	TX_OVERRUN  = 3,
+	RX_UNDERRUN = 4,
+	RX_OVERRUN  = 5,
+	TRAILING    = 6, // RX FIFO is not empty, but did not read for a while
+} NX_SSP_INTR_MASK;
+
+typedef enum {
+	SINGLE = 0UL,
+	BURST_4 = 1UL,
+} NX_SSP_DMA_BURSTSIZE;
+
+typedef enum
+{
+	NX_SSP_MODE_MASTER	= 0,        // Master Mode
+	NX_SSP_MODE_SLAVE   = 1         // Slave  Mode
+} NX_SSP_MODE;
+
+typedef enum
+{
+	NX_SSP_FORMAT_A	= 0UL,	///< Format A, SPH = 0
+	NX_SSP_FORMAT_B	= 1UL		///< Format B, SPH = 1
+}NX_SSP_FORMAT;
+
+typedef enum
+{
+	NX_SSP_CS_MODE_AUTO   = 1UL,
+	NX_SSP_CS_MODE_MANUAL = 0UL,
+} NX_SSP_CS_MODE ;
+
+#define  NX_SSP_INTR_MAXNUMBER   7
 
 //------------------------------------------------------------------------------
 /// @name	Module Interface
 //@{
-CBOOL	NX_SSP_Initialize				( void );
-U32		NX_SSP_GetNumberOfModule		( void );
+CBOOL	NX_SSP_Initialize ( void );
+U32		NX_SSP_GetNumberOfModule( void );
 //@}
 
 //------------------------------------------------------------------------------
@@ -53,27 +83,10 @@ CBOOL	NX_SSP_CheckBusy				( U32 ModuleIndex );
 //------------------------------------------------------------------------------
 ///	@name	Interrupt Interface
 //@{
-
-// Interrupt Channel ENUM
-#ifndef __DEF__NX_SSP_INTR_MASK
-#define __DEF__NX_SSP_INTR_MASK
-typedef enum {
-	TXFIFO_RDY  = 0,
-	RXFIFO_RDY  = 1,
-	TX_UNDERRUN = 2,
-	TX_OVERRUN  = 3,
-	RX_UNDERRUN = 4,
-	RX_OVERRUN  = 5,
-	TRAILING    = 6, // RX FIFO is not empty, but did not read for a while
-} NX_SSP_INTR_MASK;
-#endif
-
-#define  NX_SSP_INTR_MAXNUMBER   7
-
-U32		NX_SSP_GetInterruptNumber		( U32 ModuleIndex );
+U32		NX_SSP_GetInterruptNumber	( U32 ModuleIndex );
 void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOOL Enable );
 CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum );
-CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum );
+CBOOL	NX_SSP_GetInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum );
 void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum );
 
 void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable );
@@ -91,23 +104,26 @@ U32		NX_SSP_GetDMAIndex_Rx( U32 ModuleIndex );
 U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex );
 //@}
 
+U32 NX_SSP_GetClockNumber (U32 ModuleIndex);
+U32	NX_SSP_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex);
+
+
+//------------------------------------------------------------------------------
+///	@name	Register Backup & Store Function
+void 	NX_SSP_EnablePAD				( U32 ModuleIndex ); // 해당 모듈에서 사용하는 모든 PAD를 enable 시킨다..
+//------------------------------------------------------------------------------
+
 //------------------------------------------------------------------------------
 ///	@name	Clock Control Interface
 //@{
-// NK3 SPI has only 2x clock divider.
-// SCLK_SPI must be divided in System Controller for operation .
+//	 	NK3 SPI has only 2x clock divider.
+// 		SCLK_SPI must be divided in System Controller for operation .
 //@}
 
 //--------------------------------------------------------------------------
 /// @name Configuration Function
 //--------------------------------------------------------------------------
 //@{
-// Transmit/ Receive 둘다 Enable.
-typedef enum
-{
-	NX_SSP_MODE_MASTER	= 0,        // Master Mode
-	NX_SSP_MODE_SLAVE   = 1         // Slave  Mode
-} NX_SSP_MODE;
 void	NX_SSP_SetDMATransferMode( U32 ModuleIndex, CBOOL bDMA );
 CBOOL	NX_SSP_GetDMATransferMode( U32 ModuleIndex );
 
@@ -115,6 +131,11 @@ void	NX_SSP_SetDMATransmitMode( U32 ModuleIndex, CBOOL bDMA );
 CBOOL	NX_SSP_GetDMATransmitMode( U32 ModuleIndex );
 void	NX_SSP_SetDMAReceiveMode( U32 ModuleIndex, CBOOL bDMA );
 CBOOL	NX_SSP_GetDMAReceiveMode( U32 ModuleIndex );
+
+void	NX_SSP_SetDMABurstSize( U32 ModuleIndex , NX_SSP_DMA_BURSTSIZE Mode );
+NX_SSP_DMA_BURSTSIZE	NX_SSP_GetDMABurstSize( U32 ModuleIndex );
+
+//--------------------------------------------------------------------------
 void	NX_SSP_SetBitWidth( U32 ModuleIndex, U32 bitWidth );
 U32		NX_SSP_GetBitWidth( U32 ModuleIndex );
 void	NX_SSP_SetSlaveMode( U32 ModuleIndex, NX_SSP_MODE bSlave );
@@ -123,28 +144,18 @@ CBOOL	NX_SSP_GetSlaveMode( U32 ModuleIndex );
 void	NX_SSP_SetSlaveOutputEnable( U32 ModuleIndex, CBOOL Enable );
 CBOOL	NX_SSP_GetSlaveOutputEnable( U32 ModuleIndex );
 
-void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL bInvert );
+void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL Invert );
 CBOOL	NX_SSP_GetClockPolarityInvert( U32 ModuleIndex );
-
-typedef enum
-{
-	NX_SSP_FORMAT_A	= 0UL,	///< Format A, SPH = 0
-	NX_SSP_FORMAT_B	= 1UL		///< Format B, SPH = 1
-}NX_SSP_FORMAT;
-
-void			NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT format);
+void			NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT Format);
 NX_SSP_FORMAT	NX_SSP_GetSPIFormat( U32 ModuleIndex );
 
 
-void	NX_SSP_SetByteSwap( U32 ModuleIndex, CBOOL bSwap );
-CBOOL	NX_SSP_GetByteSwap( U32 ModuleIndex );
+void	NX_SSP_SetNSSOUT( U32 ModuleIndex, CBOOL NSSOUT );
+void	NX_SSP_SetNCSTIMECount( U32 ModuleIndex, U32 TimeCount);
+U32		NX_SSP_GetNCSTIMECount( U32 ModuleIndex );
+void			NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode );
+NX_SSP_CS_MODE	NX_SSP_GetCSMode( U32 ModuleIndex );
 
-typedef enum
-{
-	NX_SSP_CS_MODE_AUTO = 1UL,
-	NX_SSP_CS_MODE_MANUAL = 0UL,
-} NX_SSP_CS_MODE ;
-void	NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode );
 //@}
 
 //--------------------------------------------------------------------------
@@ -153,16 +164,12 @@ void	NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode );
 //@{
 void	NX_SSP_ResetFIFO( U32 ModuleIndex );
 
-typedef enum {
-	SINGLE = 0UL,
-	BURST_4 = 1UL,
-} NX_SSP_DMABurstSize;
-
-void	NX_SSP_SetDMABurstSize( U32 ModuleIndex , NX_SSP_DMABurstSize Mode );
-
 void	NX_SSP_SetEnable( U32 ModuleIndex, CBOOL bEnable );
 CBOOL	NX_SSP_GetEnable( U32 ModuleIndex );
 
+void	NX_SSP_SetTrailingCount( U32 ModuleIndex, U16 TrailingCnt );
+U16		NX_SSP_GetTralingCount( U32 ModuleIndex );
+U32		NX_SSP_GetTrailingByte( U32 ModuleIndex );
 
 
 U8		NX_SSP_GetByte(U32 ModuleIndex);
@@ -174,23 +181,17 @@ void	NX_SSP_PutHalfWord(U32 ModuleIndex, U16 HalfWordData);
 void	NX_SSP_PutWord(U32 ModuleIndex, U32 HalfWordData);
 
 
-//@}
-
-
-U32		NX_SSP_GetTrailingByte( U32 ModuleIndex );
-void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL bEnable );
+void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL Enable );
 CBOOL	NX_SSP_GetPacketCountEnb( U32 ModuleIndex );
 void	NX_SSP_SetPacketCount( U32 ModuleIndex, U16 PacketCount );
 U16		NX_SSP_GetPacketCount( U32 ModuleIndex );
 
+//@}
 
 //--------------------------------------------------------------------------
 /// @name FIFO State Check Function
 //--------------------------------------------------------------------------
 //@{
-
-static const U32 NX_SSP_TX_FIFO_FULL_LVL[10] = { 256,256,256 };
-static const U32 NX_SSP_RX_FIFO_FULL_LVL[10] = { 256,256,256 };
 
 CBOOL	NX_SSP_IsTxFIFOEmpty(U32 ModuleIndex);
 CBOOL	NX_SSP_IsTxFIFOFull(U32 ModuleIndex);
@@ -202,49 +203,48 @@ CBOOL	NX_SSP_IsTxRxEnd( U32 ModuleIndex ); // CheckBusy로 대체.
 U32		NX_SSP_GetTxFIFOLVL(U32 ModuleIndex);
 U32		NX_SSP_GetRxFIFOLVL(U32 ModuleIndex);
 
-// use for slave selection signal Active or Inactive
+void  	NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL );
+void  	NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL );
 
-void	NX_SSP_SetNSSOUT( U32 ModuleIndex, CBOOL NSSOUT );
-// Addtional
-void	NX_SSP_SetNCSTIMECount( U32 ModuleIndex, U32 TimeCount);
-U32		NX_SSP_GetNCSTIMECount( U32 ModuleIndex );
-void	NX_SSP_SetCSAutoEnb( U32 ModuleIndex, CBOOL Enable );
-CBOOL	NX_SSP_GetCSAutoEnb( U32 ModuleIndex );
+U32		NX_SSP_GetTxFIFOLVL(U32 ModuleIndex);
+U32		NX_SSP_GetRxFIFOLVL(U32 ModuleIndex);
 
-
-//================================
-// NXP5430 function
-//================================
-U32 NX_SSP_GetClockNumber (U32 ModuleIndex);
-U32	NX_SSP_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex);
-enum {
-	NX_SSP_PRESETn = 0,
-};
-
-
-
-
-
-//------------------------------------------------------------------------------
-///	@name	Register Backup & Store Function
-void 	NX_SSP_EnablePAD				( U32 ModuleIndex ); // 해당 모듈에서 사용하는 모든 PAD를 enable 시킨다..
-//------------------------------------------------------------------------------
-
-
-//=======================================
-// in slave mode, can use HIGHSPEED mode(half TXD delay)
-//=======================================
-void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enb);
-CBOOL  NX_SSP_GetHIGHSPEEDMode( U32 ModuleIndex );
-
-
-//=======================================
-// TX_RDY_LVL, trigger level in INT mode
-//=======================================
-void  NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL );
-void  NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL );
+void	NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL );
+U8		NX_SSP_GetRXRDYLVL( U32 ModuleIndex );
+void  	NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL );
+U8  	NX_SSP_GetTXRDYLVL( U32 ModuleIndex );
 
 //@}
+
+//--------------------------------------------------------------------------
+/// @name Only Slave Mode Function
+//--------------------------------------------------------------------------
+//@{
+void  	NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enable);
+CBOOL 	NX_SSP_GetHIGHSPEEDMode( U32 ModuleIndex );
+//@}
+
+//--------------------------------------------------------------------------
+/// @name Transmiter & Receive Data Swap Function
+//--------------------------------------------------------------------------
+//@{
+void	NX_SSP_SetTxHalfWordSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetTxHalfWordSwap( U32 ModuleIndex );
+void	NX_SSP_SetRxHalfWordSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetRxHalfWordSwap( U32 ModuleIndex );
+
+void	NX_SSP_SetTxByteSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetTxByteSwap( U32 ModuleIndex );
+void	NX_SSP_SetRxByteSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetRxByteSwap( U32 ModuleIndex );
+
+void	NX_SSP_SetTxBitSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetTxBitSwap( U32 ModuleIndex );
+void	NX_SSP_SetRxBitSwap( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_SSP_GetRxBitSwap( U32 ModuleIndex );
+//@}
+
+
 
 #ifdef	__cplusplus
 }

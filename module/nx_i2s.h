@@ -47,10 +47,9 @@ extern "C"
 
     typedef enum
     {
-        NX_I2S_IMS_DIVIDE   	  = 0,   // internal master mode
-        NX_I2S_IMS_BYPASS   	  = 1,   // external master mode
-        NX_I2S_IMS_PCLK_SLAVE     = 2,   // slave mode (PCLK)
-        NX_I2S_IMS_CODECLKI_SLAVE = 3,	 // slave mode (CODCLKI)
+        NX_I2S_IMS_MASTER 	= 0,   // master mode
+        NX_I2S_IMS_SLAVE   	= 1,   // slave mode
+
     }   NX_I2S_IMS;
 
     typedef enum
@@ -144,132 +143,62 @@ U32		NX_I2S_GetClockNumber( U32 ModuleIndex );
 U32     NX_I2S_GetResetNumber( U32 ModuleIndex );
 //@}
 
-//------------------------------------------------------------------------------
-/// @name   I2C Interface
-//@{
-CBOOL   NX_I2S_GetChannelClockIndication( U32 ModuleIndex );
-CBOOL   NX_I2S_GetTxFifoEmpty( U32 ModuleIndex );
-CBOOL   NX_I2S_GetRxFifoEmpty( U32 ModuleIndex );
-CBOOL   NX_I2S_GetTxFifoFull( U32 ModuleIndex );
-CBOOL   NX_I2S_GetRxFifoFull( U32 ModuleIndex );
 void    NX_I2S_TxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_RxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_TxChPauseEnable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_RxChPauseEnable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_TxDmaEnable( U32 ModuleIndex, CBOOL Enable );
 void    NX_I2S_RxDmaEnable( U32 ModuleIndex, CBOOL Enable );
-void    NX_I2S_I2SEnable( U32 ModuleIndex, CBOOL Enable );
-void    NX_I2S_SetBitLengthControl( U32 ModuleIndex, NX_I2S_BLC BitLength );
-void    NX_I2S_CodecClockDisable( U32 ModuleIndex, CBOOL Enable );
-void    NX_I2S_SetMasterSlaveMode( U32 ModuleIndex, NX_I2S_IMS Mode );
-void    NX_I2S_SetTxRxMode( U32 ModuleIndex, NX_I2S_TXR Mode );
-void    NX_I2S_SetLRClockPolarity( U32 ModuleIndex, NX_I2S_LRP Polarity );
-void    NX_I2S_SetSerialDataFormat( U32 ModuleIndex, NX_I2S_SDF DataFormat );
-void    NX_I2S_SetRootClockFrequency( U32 ModuleIndex, NX_I2S_ROOTCLOCK RootClock );
-void    NX_I2S_SetBitClockFrequency( U32 ModuleIndex, NX_I2S_BITCLOCK BitClock );
-void    NX_I2S_TxFifoFlushEnable( U32 ModuleIndex, CBOOL Enable );
-U32     NX_I2S_GetTxFifoDataCount( U32 ModuleIndex );
-void    NX_I2S_RxFifoFlushEnable( U32 ModuleIndex, CBOOL Enable );
-U32     NX_I2S_GetRxFifoDataCount( U32 ModuleIndex );
-void    NX_I2S_PrescalerEnable( U32 ModuleIndex, CBOOL Enable );
-void    NX_I2S_SetPrescalerValue( U32 ModuleIndex, U32 PsVal );
+
+
+//------------------------------------------------------------------------------
+/// @name   I2C Interface
+//@{
+
+// The DMA-Related functions. 
+void    NX_I2S_TxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable );
+void    NX_I2S_RxDmaPauseEnable( U32 ModuleIndex, CBOOL Enable );
+void    NX_I2S_TxChPauseEnable( U32 ModuleIndex, CBOOL Enable );
+void    NX_I2S_RxChPauseEnable( U32 ModuleIndex, CBOOL Enable );
+void    NX_I2S_TxDmaEnable( U32 ModuleIndex, CBOOL Enable );
+void    NX_I2S_RxDmaEnable( U32 ModuleIndex, CBOOL Enable );
+
+// The FIFO-Related functions. 
+CBOOL   NX_I2S_GetChannelClockIndication( U32 ModuleIndex );
+CBOOL   NX_I2S_GetTxFifoEmpty( U32 ModuleIndex );
+CBOOL   NX_I2S_GetRxFifoEmpty( U32 ModuleIndex );
+CBOOL   NX_I2S_GetTxFifoFull( U32 ModuleIndex );
+CBOOL   NX_I2S_GetRxFifoFull( U32 ModuleIndex );
+void    NX_I2S_TxFIFOFlushEnable( U32 ModuleIndex, CBOOL Enable );
+U32     NX_I2S_GetTxFIFODataCount( U32 ModuleIndex );
+void    NX_I2S_RxFIFOFlushEnable( U32 ModuleIndex, CBOOL Enable );
+U32     NX_I2S_GetRxFIFODataCount( U32 ModuleIndex );
+
+// The Mode-Related functions. 
+void    NX_I2S_SetI2SEnable( U32 ModuleIndex, CBOOL Enable );
+CBOOL   NX_I2S_GetI2SEnable( U32 ModuleIndex );
+void    NX_I2S_SetCodecClockDisable( U32 ModuleIndex, CBOOL Disable );
+CBOOL   NX_I2S_GetCodecClockDisable( U32 ModuleIndex );
+
+void    	NX_I2S_SetMasterSlaveMode( U32 ModuleIndex, NX_I2S_IMS Mode );
+NX_I2S_IMS  NX_I2S_GetMasterSlaveMode( U32 ModuleIndex );
+void    	NX_I2S_SetTxRxMode( U32 ModuleIndex, NX_I2S_TXR Mode );
+NX_I2S_TXR	NX_I2S_GetTxRxMode( U32 ModuleIndex );
+void    	NX_I2S_SetLRClockPolarity( U32 ModuleIndex, NX_I2S_LRP Polarity );
+NX_I2S_LRP  NX_I2S_GetLRClockPolarity( U32 ModuleIndex );
+void    	NX_I2S_SetBitLengthControl( U32 ModuleIndex, NX_I2S_BLC BitLength );
+NX_I2S_BLC 	NX_I2S_GetBitLengthControl( U32 ModuleIndex );
+void    	NX_I2S_SetSerialDataFormat( U32 ModuleIndex, NX_I2S_SDF DataFormat );
+NX_I2S_SDF  NX_I2S_GetSerialDataFormat( U32 ModuleIndex );
+
+// The Sampling Clock-Related functions. 
+void    			NX_I2S_SetRootClockFrequency( U32 ModuleIndex, NX_I2S_ROOTCLOCK RootClock );
+NX_I2S_ROOTCLOCK   	NX_I2S_GetRootClockFrequency( U32 ModuleIndex );
+void    		NX_I2S_SetBitClockFrequency( U32 ModuleIndex, NX_I2S_BITCLOCK BitClock );
+NX_I2S_BITCLOCK	NX_I2S_GetBitClockFrequency( U32 ModuleIndex );
+
+// The Tramit/Receive-Related functions. 
 void    NX_I2S_SetTxData( U32 ModuleIndex, NX_I2S_CH ChannelIndex, NX_I2S_BITLENGTH BitLength, U32 TxData );
 U32     NX_I2S_GetRxData( U32 ModuleIndex, NX_I2S_CH ChannelIndex, NX_I2S_BITLENGTH BitLength );
 //@}
-
-
-
-#if 0
-//------------------------------------------------------------------------------
-///	@name	Interrupt Interface
-//@{
-S32		NX_I2S_GetInterruptNumber( void );
-
-void	NX_I2S_SetInterruptEnable( S32 IntNum, CBOOL Enable );
-CBOOL	NX_I2S_GetInterruptEnable( S32 IntNum );
-CBOOL	NX_I2S_GetInterruptPending( S32 IntNum );
-void	NX_I2S_ClearInterruptPending( S32 IntNum );
-
-void	NX_I2S_SetInterruptEnableAll( CBOOL Enable );
-CBOOL	NX_I2S_GetInterruptEnableAll( void );
-CBOOL	NX_I2S_GetInterruptPendingAll( void );
-void	NX_I2S_ClearInterruptPendingAll( void );
-
-void	NX_I2S_SetInterruptEnable32( U32 EnableFlag );
-U32		NX_I2S_GetInterruptEnable32( void );
-U32		NX_I2S_GetInterruptPending32( void );
-void	NX_I2S_ClearInterruptPending32( U32 PendingFlag );
-
-S32		NX_I2S_GetInterruptPendingNumber( void );	// -1 if None
-//@}
-
-//------------------------------------------------------------------------------
-///	@name	DMA Interface
-//@{
-U32		NX_I2S_GetDMAIndex_PCMIn( void );
-U32		NX_I2S_GetDMAIndex_PCMOut( void );
-U32		NX_I2S_GetDMABusWidth( void );
-//@}
-
-//------------------------------------------------------------------------------
-///	@name	Clock Control Interface
-//@{
-void		NX_I2S_SetClockPClkMode( NX_PCLKMODE mode );
-NX_PCLKMODE	NX_I2S_GetClockPClkMode( void );
-void		NX_I2S_SetClockSource( U32 Index, U32 ClkSrc );
-U32			NX_I2S_GetClockSource( U32 Index );
-void		NX_I2S_SetClockDivisor( U32 Index, U32 Divisor );
-U32			NX_I2S_GetClockDivisor( U32 Index );
-void		NX_I2S_SetClockOutInv( U32 Index, CBOOL OutClkInv );
-CBOOL		NX_I2S_GetClockOutInv( U32 Index );
-void		NX_I2S_SetClockOutEnb( U32 Index, CBOOL OutClkEnb );
-CBOOL		NX_I2S_GetClockOutEnb( U32 Index );
-void		NX_I2S_SetClockDivisorEnable( CBOOL Enable );
-CBOOL		NX_I2S_GetClockDivisorEnable( void );
-//@}
-
-//------------------------------------------------------------------------------
-/// @name I2S Configuration Function
-//------------------------------------------------------------------------------
-//@{
-void		NX_I2S_SetMasterMode( CBOOL Enable );
-CBOOL		NX_I2S_GetMasterMode( void );
-void		NX_I2S_SetInterfaceMode( NX_I2S_IF mode );
-NX_I2S_IF	NX_I2S_GetInterfaceMode( void );
-void		NX_I2S_SetSyncPeriod( U32 period );
-U32			NX_I2S_GetSyncPeriod( void );
-//@}
-
-//------------------------------------------------------------------------------
-/// @name I2S Control Function
-//------------------------------------------------------------------------------
-//@{
-void	NX_I2S_SetLinkOn( void );
-CBOOL	NX_I2S_GetLinkOn( void );
-void	NX_I2S_SetControllerReset( CBOOL Enable );
-CBOOL	NX_I2S_GetControllerReset( void );
-void	NX_I2S_SetOutputEnable( CBOOL Enable );
-CBOOL	NX_I2S_GetOutputEnable( void );
-void	NX_I2S_SetInputEnable( CBOOL Enable );
-CBOOL	NX_I2S_GetInputEnable( void );
-void	NX_I2S_SetLoopBackEnable( CBOOL Enable );
-CBOOL	NX_I2S_GetLoopBackEnable( void );
-//@}
-
-//--------------------------------------------------------------------------
-/// @name I2S Buffer Function
-//--------------------------------------------------------------------------
-//@{
-CBOOL	NX_I2S_IsPCMInBufferReady( void );
-CBOOL	NX_I2S_IsPCMOutBufferReady( void );
-//@}
 #endif
-//@}
-
-#ifdef	__cplusplus
-}
-#endif
-
-
-#endif // __NX_I2S_H__
-

@@ -78,7 +78,6 @@ enum { NX_GPIO_MAX_BIT = 32 };
  *	@param[in]	Enable	\b CTRUE( Set ).\n
  *						\b CFALSE( Clear )
  *	@return		None.
- *	@see		NX_GPIO_GetBit
  */
 
 
@@ -107,9 +106,8 @@ __inline void NX_GPIO_SetBit
  *	@brief		Get bit value
  *	@param[in]	Value	Check this value of 1bit state
  *	@param[in]	Bit		Bit number
- *	@return		\b CTRUE	indicate that bit is Seted.\n
- *				\b CFALSE	indicate that bit is cleared.
- *	@see		NX_GPIO_SetBit
+ *	@return		CTRUE	indicate that bit is Seted.
+ *				CFALSE	indicate that bit is cleared.
  */
 __inline CBOOL NX_GPIO_GetBit
 (
@@ -129,7 +127,6 @@ __inline CBOOL NX_GPIO_GetBit
  *	@param[in]	Bit			Bit number
  *	@param[in]	BitValue	Set value of bit
  *	@return		None.
- *	@see		NX_GPIO_GetBit2
  */
 __inline void NX_GPIO_SetBit2
 (
@@ -154,7 +151,6 @@ __inline void NX_GPIO_SetBit2
  *	@param[in]	Value	Check this value of 2bit state
  *	@param[in]	Bit		Bit number
  *	@return		2bit value
- *	@see		NX_GPIO_SetBit2
  */
 
 __inline U32 NX_GPIO_GetBit2
@@ -173,8 +169,8 @@ __inline U32 NX_GPIO_GetBit2
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.\n
+ *	@return CTRUE	indicate that Initialize is successed.
+ *			CFALSE	indicate that Initialize is failed.
  */
 CBOOL	NX_GPIO_Initialize( void )
 {
@@ -264,8 +260,8 @@ U32		NX_GPIO_GetBaseAddress( U32 ModuleIndex )
 /**
  *	@brief		Initialize selected modules with default value.
  *	@param[in]	ModuleIndex		A index of module.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
+ *	@return		CTRUE	indicate that Initialize is successed.
+ *				CFALSE	indicate that Initialize is failed.
  */
 CBOOL	NX_GPIO_OpenModule( U32 ModuleIndex )
 {
@@ -290,8 +286,8 @@ CBOOL	NX_GPIO_OpenModule( U32 ModuleIndex )
 /**
  *	@brief		Deinitialize selected module to the proper stage.
  *	@param[in]	ModuleIndex		A index of module.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
+ *	@return		CTRUE	indicate that Deinitialize is successed.
+ *				CFALSE	indicate that Deinitialize is failed.
  */
 CBOOL	NX_GPIO_CloseModule( U32 ModuleIndex )
 {
@@ -304,8 +300,8 @@ CBOOL	NX_GPIO_CloseModule( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
  *	@param[in]	ModuleIndex		A index of module.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
+ *	@return		CTRUE	indicate that Module is Busy. 
+ *				CFALSE	indicate that Module is NOT Busy.
  */
 CBOOL	NX_GPIO_CheckBusy( U32 ModuleIndex )
 {
@@ -340,8 +336,8 @@ CBOOL	NX_GPIO_CheckBusy( U32 ModuleIndex )
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	IntNum	Interrupt Number. ( 0 ~ 31 ), if ModuleIndex is GPIOC then IntNum is only 0 ~ 20.
- *	@param[in]	Enable	\b CTRUE	indicate that Interrupt Enable. \n
- *						\b CFALSE	indicate that Interrupt Disable.
+ *	@param[in]	Enable	CTRUE	indicate that Interrupt Enable. 
+ *						CFALSE	indicate that Interrupt Disable.
  *	@return		None.
  */
 void	NX_GPIO_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
@@ -371,8 +367,8 @@ void	NX_GPIO_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicate that Interrupt is enabled. \n
- *				\b CFALSE	indicate that Interrupt is disabled.
+ *	@return		CTRUE	indicate that Interrupt is enabled.
+ *				CFALSE	indicate that Interrupt is disabled.
  */
 CBOOL	NX_GPIO_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 {
@@ -447,8 +443,8 @@ U32		NX_GPIO_GetInterruptEnable32( U32 ModuleIndex )
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicate that Pending is seted. \n
- *				\b CFALSE	indicate that Pending is Not Seted.
+ *	@return		CTRUE	indicate that Pending is seted.
+ *				CFALSE	indicate that Pending is Not Seted.
  */
 CBOOL	NX_GPIO_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
@@ -473,12 +469,12 @@ CBOOL	NX_GPIO_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 /**
  *	@brief		Indicates current setting value of interrupt pending bit.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		Current setting value of pending bit. \n
+ *	@return		Current setting value of pending bit. 
  *				"1" means pend bit is occured. \n
- *				"0" means pend bit is NOT occured. \n
- *				- Return Value[0] : GPIO0 pending state. \n
+ *				"0" means pend bit is NOT occured. 
+ *				- Return Value[0] : GPIO0 pending state. 
  *				...
- *				- Return Value[31] : GPIO31 pending state. \n
+ *				- Return Value[31] : GPIO31 pending state. 
  */
 U32		NX_GPIO_GetInterruptPending32( U32 ModuleIndex )
 {
@@ -518,10 +514,10 @@ void	NX_GPIO_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 /**
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@param[in]	PendingFlag		Specify pend bit to clear. Each bit's meaning is like below	\n \n
- *								- PendingFlag[0] : GPIO0 pending bit. \n
+ *	@param[in]	PendingFlag		Specify pend bit to clear. Each bit's meaning is like below
+ *								- PendingFlag[0] : GPIO0 pending bit. 
  *									...
- *								- PendingFlag[31] : GPIO31 pending bit. \n
+ *								- PendingFlag[31] : GPIO31 pending bit.
  *	@return		None.
  */
 void	NX_GPIO_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
@@ -541,8 +537,8 @@ void	NX_GPIO_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
 /**
  *	@brief		Set all interrupts to be enables or disables.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@param[in]	Enable	\b CTRUE	indicate that Set to all interrupt enable. \n
- *						\b CFALSE	indicate that Set to all interrupt disable.
+ *	@param[in]	Enable	CTRUE	indicate that Set to all interrupt enable.
+ *						CFALSE	indicate that Set to all interrupt disable.
  *	@return		None.
  */
 void	NX_GPIO_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
@@ -571,8 +567,8 @@ void	NX_GPIO_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		\b CTRUE	indicate that At least one( or more ) interrupt is enabled. \n
- *				\b CFALSE	indicate that All interrupt is disabled.
+ *	@return		CTRUE	indicate that At least one( or more ) interrupt is enabled.
+ *				CFALSE	indicate that All interrupt is disabled.
  */
 CBOOL	NX_GPIO_GetInterruptEnableAll( U32 ModuleIndex )
 {
@@ -595,8 +591,8 @@ CBOOL	NX_GPIO_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
- *	@return		\b CTRUE	indicate that At least one( or more ) pending is seted. \n
- *				\b CFALSE	indicate that All pending is NOT seted.
+ *	@return		CTRUE	indicate that At least one( or more ) pending is seted.
+ *				CFALSE	indicate that All pending is NOT seted.
  */
 CBOOL	NX_GPIO_GetInterruptPendingAll( U32 ModuleIndex )
 {
@@ -723,8 +719,8 @@ NX_GPIO_INTMODE	NX_GPIO_GetInterruptMode( U32 ModuleIndex, U32 BitNumber )
  *	@brief		Get gpio output enable
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	OutputEnb	\b CTRUE	indicate that Output Mode. \n
- *							\b CFALSE	indicate that Input Mode.
+ *	@param[in]	OutputEnb	CTRUE	indicate that Output Mode. 
+ *							CFALSE	indicate that Input Mode.
  *	@return		None.
  */
 void	NX_GPIO_SetOutputEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL OutputEnb )
@@ -747,8 +743,8 @@ void	NX_GPIO_SetOutputEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL OutputEnb )
  *	@brief		Get gpio Event Detect
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	OutputEnb	\b CTRUE	indicate that Event Detect Enabled. \n
- *							\b CFALSE	indicate that Event Detect Disabled.
+ *	@param[in]	OutputEnb	CTRUE	indicate that Event Detect Enabled. 
+ *							CFALSE	indicate that Event Detect Disabled.
  *	@return		None.
  */
 CBOOL			NX_GPIO_GetDetectEnable ( U32 ModuleIndex, U32 BitNumber )
@@ -765,6 +761,13 @@ CBOOL			NX_GPIO_GetDetectEnable ( U32 ModuleIndex, U32 BitNumber )
 	return NX_GPIO_GetBit( ReadIO32(&pRegister->GPIOxDETENB), BitNumber );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get gpio Event Detect
+ *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
+ *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
+ *	@return		Outptut Enable 32Bit.
+ */
 U32			NX_GPIO_GetDetectEnable32 ( U32 ModuleIndex )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
@@ -783,7 +786,7 @@ U32			NX_GPIO_GetDetectEnable32 ( U32 ModuleIndex )
  *	@brief		Set Event Detect Enable
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		GPIO interrupt detect mode
+ *	@return		GPIO interrupt detect Enable.
  */
 void			NX_GPIO_SetDetectEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL DetectEnb )
 {
@@ -800,6 +803,13 @@ void			NX_GPIO_SetDetectEnable ( U32 ModuleIndex, U32 BitNumber, CBOOL DetectEnb
 	NX_GPIO_SetBit( &pRegister->GPIOxDETENB, BitNumber, DetectEnb );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Event Detect Enable
+ *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
+ *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
+ *	@return		GPIO interrupt detect Enable 32Bit.
+ */
 void			NX_GPIO_SetDetectEnable32 ( U32 ModuleIndex, U32 EnableFlag )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;
@@ -818,8 +828,8 @@ void			NX_GPIO_SetDetectEnable32 ( U32 ModuleIndex, U32 EnableFlag )
  *	@brief		Get gpio output enable
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		\b CTRUE	indicate that GPIO's current Setting is Output Mode.\n
- *				\b CFALSE	indicate that GPIO's current Setting is Input Mode.
+ *	@return		CTRUE	indicate that GPIO's current Setting is Output Mode.
+ *				CFALSE	indicate that GPIO's current Setting is Input Mode.
  */
 CBOOL	NX_GPIO_GetOutputEnable ( U32 ModuleIndex, U32 BitNumber )
 {
@@ -840,8 +850,8 @@ CBOOL	NX_GPIO_GetOutputEnable ( U32 ModuleIndex, U32 BitNumber )
  *	@brief		Get gpio output enable
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	OutputEnb	\b CTRUE	indicate that Output Mode. \n
- *							\b CFALSE	indicate that Input Mode.
+ *	@param[in]	OutputEnb	CTRUE	indicate that Output Mode. 
+ *							CFALSE	indicate that Input Mode.
  *	@return		None.
  */
 void	NX_GPIO_SetOutputEnable32 ( U32 ModuleIndex, CBOOL OutputEnb )
@@ -867,8 +877,8 @@ void	NX_GPIO_SetOutputEnable32 ( U32 ModuleIndex, CBOOL OutputEnb )
  *	@brief		Get gpio output enable
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		\b CTRUE	indicate that GPIO's current Setting is Output Mode.\n
- *				\b CFALSE	indicate that GPIO's current Setting is Input Mode.
+ *	@return		CTRUE	indicate that GPIO's current Setting is Output Mode.
+ *				CFALSE	indicate that GPIO's current Setting is Input Mode.
  */
 U32		NX_GPIO_GetOutputEnable32 ( U32 ModuleIndex )
 {
@@ -888,8 +898,8 @@ U32		NX_GPIO_GetOutputEnable32 ( U32 ModuleIndex )
  *	@brief		Set gpio output value
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	Value		\b CTRUE	indicate that High Level. \n
- *							\b CFALSE	indicate that Low Level.
+ *	@param[in]	Value		CTRUE	indicate that High Level. 
+ *							CFALSE	indicate that Low Level.
  *	@return		None.
  */
 void	NX_GPIO_SetOutputValue	( U32 ModuleIndex, U32 BitNumber, CBOOL Value )
@@ -912,8 +922,8 @@ void	NX_GPIO_SetOutputValue	( U32 ModuleIndex, U32 BitNumber, CBOOL Value )
  *	@brief		Get gpio output value
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		\b CTRUE	indicate that GPIO's output value is High Level.\n
- *				\b CFALSE	indicate that GPIO's output value is Low Level.
+ *	@return		CTRUE	indicate that GPIO's output value is High Level.
+ *				CFALSE	indicate that GPIO's output value is Low Level.
  */
 CBOOL	NX_GPIO_GetOutputValue	( U32 ModuleIndex, U32 BitNumber )
 {
@@ -934,8 +944,8 @@ CBOOL	NX_GPIO_GetOutputValue	( U32 ModuleIndex, U32 BitNumber )
  *	@brief		Set gpio output value
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@param[in]	Value		\b CTRUE	indicate that High Level. \n
- *							\b CFALSE	indicate that Low Level.
+ *	@param[in]	Value		CTRUE	indicate that High Level. 
+ *							CFALSE	indicate that Low Level.
  *	@return		None.
  */
 void	NX_GPIO_SetOutputValue32	( U32 ModuleIndex, U32 Value )
@@ -956,8 +966,8 @@ void	NX_GPIO_SetOutputValue32	( U32 ModuleIndex, U32 Value )
  *	@brief		Get gpio output value
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		\b CTRUE	indicate that GPIO's output value is High Level.\n
- *				\b CFALSE	indicate that GPIO's output value is Low Level.
+ *	@return		CTRUE	indicate that GPIO's output value is High Level.
+ *				CFALSE	indicate that GPIO's output value is Low Level.
  */
 U32		NX_GPIO_GetOutputValue32	( U32 ModuleIndex )
 {
@@ -977,8 +987,8 @@ U32		NX_GPIO_GetOutputValue32	( U32 ModuleIndex )
  *	@brief		Get gpio input value
  *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
- *	@return		\b CTRUE	indicate that GPIO's input value is High Level.\n
- *				\b CFALSE	indicate that GPIO's input value is Low Level.
+ *	@return		CTRUE	indicate that GPIO's input value is High Level.
+ *				CFALSE	indicate that GPIO's input value is Low Level.
  */
 CBOOL	NX_GPIO_GetInputValue		( U32 ModuleIndex, U32 BitNumber )
 {
@@ -1003,7 +1013,7 @@ CBOOL	NX_GPIO_GetInputValue		( U32 ModuleIndex, U32 BitNumber )
  *	@param[in]	BitNumber	Bit number ( 0 ~ 31 )
  *	@param[in]	padfunc		Pad Function
  *	@return		None
- *	@remarks		Each gpio pins can use to GPIO Pin or Alternate Function 0 or Alternate Function 1 or \n
+ *	@remarks	Each gpio pins can use to GPIO Pin or Alternate Function 0 or Alternate Function 1 or 
  *				Alternate Function 2. So This function Sets gpio pin's function.
  */
 void	NX_GPIO_SetPadFunction( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PADFUNC padfunc )
@@ -1021,6 +1031,14 @@ void	NX_GPIO_SetPadFunction( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PADFUNC pad
 	NX_GPIO_SetBit2( &pRegister->GPIOxALTFN[BitNumber/16], BitNumber%16, (U32)padfunc );
 }
 
+//--------------------------------------------------------------------------
+/**
+ *	@brief		Set 32Bit PAD Fuction
+ *	@param[in]	ModuleIndex		A index of module. (0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD, 4:GPIOE )
+ *	@param[in]	MSBValue	16Bit number ( 0 ~ 15 )
+ *	@param[in]	LSBValue	16Bit number ( 16 ~ 31 )
+ *	@return		None
+ */
 void	NX_GPIO_SetPadFunction32( U32 ModuleIndex, U32 MSBValue, U32 LSBValue )
 {
 	register struct NX_GPIO_RegisterSet	*pRegister;

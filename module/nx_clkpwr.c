@@ -1458,191 +1458,84 @@ U32		NX_CLKPWR_GetSystemResetConfiguration( void )
 }
 
 //------------------------------------------------------------------------------
-// PAD Strength Management
+// CPU Power Management
 //------------------------------------------------------------------------------
-/**
- *	@brief		Set GPIO Pad's output drive strength(current)
- *	@param[in]	Group		Set gpio group ( 0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD )
- *	@param[in]	BitNumber	Set bit number ( GPIOA/B/C (0~31), GPIOD(0~24) )
- *	@param[in]	mA			Set gpio pad's output drive strength(current) ( 2mA, 4mA, 6mA, 8mA )
- *	@return		None.
- *	@remark		GPIOD group only can set bit 0 ~ 24.
- *	@see		NX_CLKPWR_GetGpioPadStrength,
- *				NX_CLKPWR_SetBusPadStrength, NX_CLKPWR_GetBusPadStrength
- *	@todo		check pad number
- */
-void	NX_CLKPWR_SetGPIOPadStrength( U32 Group, U32 BitNumber, U32 mA )
+void	NX_CLKPWR_SetCPUPowerDown( U32 nCPU )
 {
 	register U32 regvalue;
-	U32 SetmA=0;
-	U32 shift;
-	U32 SelectReg;
 
-	NX_ASSERT( 4 >= Group );
-	NX_ASSERT( (0!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (1!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (2!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (3!=Group) || ( BitNumber <= 24 ) );
-	NX_ASSERT( (2==mA) || (4==mA) || (6==mA) || (8==mA) );
+	NX_ASSERT( nCPU	< 8 );
+
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	switch( mA )
-	{
-	case 2: SetmA = 0; break;
-	case 4: SetmA = 1; break;
-	case 6: SetmA = 2; break;
-	case 8: SetmA = 3; break;
-	default: NX_ASSERT( CFALSE );
-	}
+	regvalue = 1 << nCPU;
 
-	if( BitNumber >= 16 )	{	shift	=	(BitNumber-16)	* 2; }
-	else					{	shift	=	BitNumber		* 2; }
-
-	SelectReg = BitNumber/16;
-
-	regvalue = ReadIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]);
-
-	regvalue &= ~( 0x03 << shift );
-	regvalue |= SetmA << shift;
-
-	WriteIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg], regvalue);
+	WriteIO32(&__g_pRegister->CPUPOWERDOWNREQ, regvalue);
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get GPIO Pad's output drive strength(current)
- *	@param[in]	Group		Set gpio group ( 0:GPIOA, 1:GPIOB, 2:GPIOC, 3:GPIOD )
- *	@param[in]	BitNumber	Set bit number ( GPIOA/B/C (0~31), GPIOD(0~24) )
- *	@return		GPIO Pad's output drive strength(current) ( 2mA, 4mA, 6mA, 8mA )
- *	@remark		GPIOD group only can set bit 0 ~ 24.
- *	@see		NX_CLKPWR_SetGPIOPadStrength,
- *				NX_CLKPWR_SetBusPadStrength, NX_CLKPWR_GetBusPadStrength
- */
-
-U32		NX_CLKPWR_GetGPIOPadStrength( U32 Group, U32 BitNumber )
-{
-	U32 shift;
-	U32 SelectReg;
-	U32 Value;
-	U32 RetValue=0;
-
-	NX_ASSERT( 4 >= Group );
-	NX_ASSERT( (0!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (1!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (2!=Group) || ( BitNumber <= 31 ) );
-	NX_ASSERT( (3!=Group) || ( BitNumber <= 24 ) );
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	if( BitNumber >= 16 )	{	shift	=	(BitNumber-16)	* 2; }
-	else					{	shift	=	BitNumber		* 2; }
-
-	SelectReg = BitNumber/16;
-
-	Value = ( ReadIO32(&__g_pRegister->PADSTRENGTHGPIO[Group][SelectReg]) >> shift ) & 0x03;
-
-	switch( Value )
-	{
-	case 0:	RetValue =	2; break;
-	case 1:	RetValue =	4; break;
-	case 2:	RetValue =	6; break;
-	case 3:	RetValue =	8; break;
-	default:	NX_ASSERT( CFALSE );
-	}
-
-	return RetValue;
-}
-
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set BUS Pad's output drive strength(current)
- *	@param[in]	Bus		Select bus to setting.
- *	@param[in]	mA		Set output drive strenght(current). \n
- *
- *				- Select Bus : NX_CLKPWR_BUSPAD_DDR_CNTL, NX_CLKPWR_BUSPAD_DDR_ADDR, NX_CLKPWR_BUSPAD_DDR_DATA
- *					- Set to 2mA, 4mA, 6mA, 8mA
- *
- *				- Select Bus : NX_CLKPWR_BUSPAD_VSYNC, NX_CLKPWR_BUSPAD_HSYNC, NX_CLKPWR_BUSPAD_DE
- *					- Set to 2mA, 4mA, 6mA, 8mA
- *
- *	@return		None.
- *	@see		NX_CLKPWR_SetGPIOPadStrength, NX_CLKPWR_GetGPIOPadStrength,
- *				NX_CLKPWR_GetBusPadStrength
- */
-void	NX_CLKPWR_SetBusPadStrength( NX_CLKPWR_BUSPAD Bus, U32 mA )
+void	NX_CLKPWR_SetCPUPowerOn( U32 nCPU )
 {
 	register U32 regvalue;
-	U32 SetmA=0;
-	U32 shift;
 
-	NX_ASSERT(
-				(Bus == NX_CLKPWR_BUSPAD_STATIC_CNTL	) ||
-				(Bus == NX_CLKPWR_BUSPAD_STATIC_ADDR	) ||
-				(Bus == NX_CLKPWR_BUSPAD_STATIC_DATA	) ||
-				(Bus == NX_CLKPWR_BUSPAD_VSYNC		) ||
-				(Bus == NX_CLKPWR_BUSPAD_HSYNC		) ||
-				(Bus == NX_CLKPWR_BUSPAD_DE			)
-				);
+	NX_ASSERT( nCPU	< 8 );
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	switch( mA )
-	{
-	case 2:	SetmA = 0; break;
-	case 4:	SetmA = 1; break;
-	case 6: SetmA = 2; break;
-	case 8: SetmA = 3; break;
-	default:	NX_ASSERT( CFALSE );
-	}
+	regvalue = 1 << nCPU;
 
-	shift = Bus;
+	WriteIO32(&__g_pRegister->CPUPOWERONREQ, regvalue);
+}
 
-	regvalue = ReadIO32(&__g_pRegister->PADSTRENGTHBUS);
+void	NX_CLKPWR_SetCPUResetMode( NX_CLKPWR_CPU_RESETMODE mode )
+{
+	NX_ASSERT(	(NX_CLKPWR_CPU_RESETMODE_SAFE == mode) ||
+				(NX_CLKPWR_CPU_RESETMODE_DIRECT == mode) );
 
-	regvalue &= ~( 0x03 << shift );
-	regvalue |= SetmA << shift;
+	NX_ASSERT( CNULL != __g_pRegister );
 
-	WriteIO32(&__g_pRegister->PADSTRENGTHBUS, regvalue);
+	WriteIO32(&__g_pRegister->CPUWARMRESETREQ, mode);
+}
+
+void	NX_CLKPWR_SetCPUWarmReset( U32 nCPU )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( nCPU	< 8 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = 1 << nCPU;
+
+	WriteIO32(&__g_pRegister->CPUWARMRESETREQ, regvalue);
+}
+
+CBOOL	NX_CLKPWR_GetCPUPowerStatus( U32 nCPU )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( nCPU	< 8 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS) >> 8;
+
+	return ((regvalue & (1 << nCPU)) ? CFALSE : CTRUE );
+}
+
+CBOOL	NX_CLKPWR_GetCPUClockStatus( U32 nCPU )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( nCPU	< 8 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
+
+	return ((regvalue & (1 << nCPU)) ? CTRUE : CFALSE );
 }
 
 //------------------------------------------------------------------------------
-/**
- *	@brief		Get BUS Pad's output drive strength(current)
- *	@param[in]	Bus Select bus
- *	@return		BUS Pad's output drive strength(current) ( 2mA ~ 8mA )
- *	@see		NX_CLKPWR_SetGPIOPadStrength,	NX_CLKPWR_GetGPIOPadStrength,
- *				NX_CLKPWR_SetBusPadStrength
- */
-U32		NX_CLKPWR_GetBusPadStrength( NX_CLKPWR_BUSPAD Bus )
-{
-	U32 Value;
-	U32 RetValue=0;
-
-	NX_ASSERT(
-			(Bus == NX_CLKPWR_BUSPAD_STATIC_CNTL	) ||
-			(Bus == NX_CLKPWR_BUSPAD_STATIC_ADDR	) ||
-			(Bus == NX_CLKPWR_BUSPAD_STATIC_DATA	) ||
-			(Bus == NX_CLKPWR_BUSPAD_VSYNC			) ||
-			(Bus == NX_CLKPWR_BUSPAD_HSYNC			) ||
-			(Bus == NX_CLKPWR_BUSPAD_DE				)
-				);
-
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	Value = ( ReadIO32(&__g_pRegister->PADSTRENGTHBUS) >> Bus ) & 0x03;
-
-	switch( Value )
-	{
-		case 0:	RetValue =	2; break;
-		case 1:	RetValue =	4; break;
-		case 2:	RetValue =	6; break;
-		case 3:	RetValue =	8; break;
-		default:	NX_ASSERT( CFALSE );
-	}
-
-	return RetValue;
-}
-
-
 void	NX_CLKPWR_SetPllOutGMux(U32 pllnumber, NX_CLKPWR_GMUX gmux)
 {
 	NX_ASSERT( CNULL != __g_pRegister );

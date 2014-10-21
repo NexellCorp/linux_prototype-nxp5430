@@ -8,12 +8,12 @@
 //	BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 //	FOR A PARTICULAR PURPOSE.
 //
-//	Module		: NK3 SPI module
-//	File		: nx_ssp.c
-//	Description	:
-//	Author		:
-//	History		:
-// @choyk 2013/08/14 : NK3 SPI prototype
+//	Module		: SSP/SPI 
+//	File			: nx_ssp.c
+//	Description	: 
+//	Author		: Deoks
+//	History		: 2014.09.xx 	First implementation
+//				  2014.10.15	Last implementation
 //------------------------------------------------------------------------------
 
 
@@ -25,6 +25,8 @@ static	struct
 	struct NX_SSP_RegisterSet *pRegister;
 } __g_ModuleVariables[NUMBER_OF_SSP_MODULE] = { {CNULL,}, };
 
+static const U32 NX_SSP_TX_FIFO_FULL_LVL[10] = { 256,256,256 };
+static const U32 NX_SSP_RX_FIFO_FULL_LVL[10] = { 256,256,256 };
 
 //------------------------------------------------------------------------------
 //	Module Interface
@@ -32,8 +34,8 @@ static	struct
 
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.
+ *	@return CTRUE		Indicate that Initialize is successed.
+ *			CFALSE		Indicate that Initialize is failed.
  */
 CBOOL	NX_SSP_Initialize( void )
 {
@@ -68,11 +70,12 @@ U32		NX_SSP_GetNumberOfModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's physical address.
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's physical address
  */
 U32		NX_SSP_GetPhysicalAddress( U32 ModuleIndex )
 {
-	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST( SSP ) }; // PHY_BASEADDR_SSPx_MODULE
+	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST( SSP ) };
 
 	NX_CASSERT( NUMBER_OF_SSP_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -93,7 +96,8 @@ U32		NX_SSP_GetSizeOfRegisterSet( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set a base address of register set.
- *	@param[in]	BaseAddress Module's base address
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ). 
+ *	@param[in]	BaseAddress 	Module's base address
  *	@return		None.
  */
 void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
@@ -121,8 +125,9 @@ U32		NX_SSP_GetBaseAddress( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ). 
+ *	@return		CTRUE			Indicate that Initialize is successed.
+ *				CFALSE			Indicate that Initialize is failed.
  */
 CBOOL	NX_SSP_OpenModule( U32 ModuleIndex )
 {
@@ -133,8 +138,9 @@ CBOOL	NX_SSP_OpenModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
+ *	@return		CTRUE			Indicate that Deinitialize is successed.
+ *				CFALSE			Indicate that Deinitialize is failed.
  */
 CBOOL	NX_SSP_CloseModule( U32 ModuleIndex )
 {
@@ -144,16 +150,48 @@ CBOOL	NX_SSP_CloseModule( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *	@name		NX_SSP_CheckBusy
+ *	@brief		Get module's Reset number.
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ). 
+ *	@return		Module's Reset number
+ */
+U32		NX_SSP_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex)
+{
+    const U32 ResetPinNumber[2][NUMBER_OF_SSP_MODULE] =
+    {
+        { RESETINDEX_LIST( SSP, PRESETn )},
+        { RESETINDEX_LIST( SSP, nSSPRST )},
+    };
+
+    return (U32)ResetPinNumber[ChannelIndex][ModuleIndex];
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get module's clock index.
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ). 
+ *	@return		Module's Clock number
+ */
+U32 	NX_SSP_GetClockNumber (U32 ModuleIndex)
+{
+    static const U32 CLKGEN_SSPLIST[] = { CLOCKINDEX_LIST( SSP ) };
+    NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+    return (U32)CLKGEN_SSPLIST[ModuleIndex];
+}
+
+
+//------------------------------------------------------------------------------
+/**
  *	@brief		Indicates whether the selected modules is busy or not.
- *  this function only can use after transaction .
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
+ *   				this function only can use after transaction .
+ *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).  
+ *	@return		CTRUE			Indicate that Module is Busy.
+ *				CFALSE			Indicate that Module is NOT Busy.
  */
 CBOOL	NX_SSP_CheckBusy( U32 ModuleIndex )
 {
-	U32 regvalue;
-	U32 TX_FIFO_LVL, RX_FIFO_LVL, TX_DONE;
+	register U32 regvalue;
+	U32 TX_DONE;
 
 	register struct NX_SSP_RegisterSet* pRegister;
 
@@ -163,11 +201,8 @@ CBOOL	NX_SSP_CheckBusy( U32 ModuleIndex )
 	NX_ASSERT( CNULL != pRegister );
 
 	regvalue = ReadIO32(&pRegister->SPI_STATUS);
-	RX_FIFO_LVL = (regvalue >> 15) & 0x1FF ;
-	TX_FIFO_LVL = (regvalue >>  6) & 0x1FF ;
 	TX_DONE = (regvalue >> 25) & 0x1 ;
 
-	//if	(	(0 == RX_FIFO_LVL) && (0 == TX_FIFO_LVL) && (1 == TX_DONE) )
 	if( (1 == TX_DONE) )
 	{
 		return CFALSE;
@@ -176,26 +211,16 @@ CBOOL	NX_SSP_CheckBusy( U32 ModuleIndex )
 }
 
 
-
-
 //------------------------------------------------------------------------------
 // Interrupt Interface
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get an interrupt number for the interrupt controller.
- *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
  *	@return		An interrupt number.
- *	@remark		Return value can be used for the interrupt controller module's
+ *	@remark	Return value can be used for the interrupt controller module's
  *				functions.
- *	@see											NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
-
 U32		NX_SSP_GetInterruptNumber( U32 ModuleIndex )
 {
 	const U32 INTNumber[NUMBER_OF_SSP_MODULE] =
@@ -205,29 +230,20 @@ U32		NX_SSP_GetInterruptNumber( U32 ModuleIndex )
 
 	NX_CASSERT( NUMBER_OF_SSP_MODULE == (sizeof(INTNumber)/sizeof(INTNumber[0])) );
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	NX_ASSERT( INTNumber[ModuleIndex] >= 0 );
 
 	return INTNumber[ModuleIndex];
 }
 
-
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set a specified interrupt to be enable or disable.
- *	@param[in]	ModuleIndex		Module Index Number .
- *	@param[in]	IntNum			Interrupt Index Number .
+ *	@param[in]	ModuleIndex		an index of module..
+ *	@param[in]	IntNum			interrupt index number .
  *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
  *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
- *	@param[in]	Enable	\b CTRUE	indicate that Interrupt Enable. \n
- *						\b CFALSE	indicate that Interrupt Disable.
+ *	@param[in]	Enable	CTRUE	Indicate that Interrupt Enable.
+ *						CFALSE	Indicate that Interrupt Disable.
  *	@return		None.
- *	@see											NX_SSP_GetInterruptEnable,
- *				NX_SSP_SetInterruptEnable32,		NX_SSP_GetInterruptEnable32,
- *				NX_SSP_GetInterruptPending,		NX_SSP_GetInterruptPending32,
- *				NX_SSP_ClearInterruptPending,		NX_SSP_ClearInterruptPending32,
- *				NX_SSP_SetInterruptEnableAll,		NX_SSP_GetInterruptEnableAll,
- *				NX_SSP_GetInterruptPendingAll,		NX_SSP_ClearInterruptPendingAll,
- *				NX_SSP_GetInterruptPendingNumber
  *	@see also	Interrupt mask set or clear register, SSPIMSC
  */
 void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOOL Enable )
@@ -259,27 +275,20 @@ void	NX_SSP_SetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum, CBOO
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
- *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	IntNum			Interrupt Index Number .
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
+ *	@param[in]	IntNum			interrupt index number .
  *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
  *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
- *	@return		CTRUE	indicates an interrupt specified by @a IntNum is enabled.\n
- *				CFALSE	indicates an interrupt specified by @a IntNum is disabled.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *													NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
+ *
+ *	@return		CTRUE			Indicates an interrupt specified by @a IntNum is enabled.\n
+ *				CFALSE			Indicates an interrupt specified by @a IntNum is disabled.
  *	@see also	Interrupt mask set or clear register, SSPIMSC
  */
 
-CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
+CBOOL	NX_SSP_GetInterruptEnable	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32			regvalue;
-
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 	NX_ASSERT( NX_SSP_INTR_MAXNUMBER > IntNum );
@@ -303,20 +312,14 @@ CBOOL	NX_SSP_GetInterruptEnable		( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
  *	@param[in]	ChannelIndex	Interrupt Index Number .
  *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
  *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
- *	@return		CTRUE	indicates an interrupt specified by @a IntNum is pended.\n
- *				CFALSE	indicates an interrupt specified by @a IntNum is not pended.
- *	@remark		The interrupt pending status are logged regardless of interrupt
+ *
+ *	@return		CTRUE			Indicates an interrupt specified by @a IntNum is pended.\n
+ *				CFALSE			Indicates an interrupt specified by @a IntNum is not pended.
+ *	@remark	The interrupt pending status are logged regardless of interrupt
  *				enable status. Therefore the return value can be CTRUE even
  *				though the specified interrupt has been disabled.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
-CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
+CBOOL	NX_SSP_GetInterruptPending( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32			irq_status;
@@ -328,7 +331,7 @@ CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
 	NX_ASSERT( CNULL != pRegister );
 
 	irq_status = ReadIO32(&pRegister->SPI_STATUS);
-
+ 
 	if( 0 != ( ( 1UL << IntNum ) & irq_status) )
 	{
 		return CTRUE;
@@ -339,20 +342,12 @@ CBOOL	NX_SSP_GetInterruptPending		( U32 ModuleIndex , NX_SSP_INTR_MASK IntNum )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Clear a pending state of specified interrupt.
- *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	ChannelIndex	Interrupt Index Number .
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
+ *	@param[in]	InterruptNum	Interrupt Index Number .
  *				[0] : TXFIFORDY,  [1] : RXFIFORDY,  [2] : TX_UNDERRUN,  [3] : TX_OVERRUN
  *				[4] : RX_UNDERRUN,  [5] : RX_OVERRUN,  [6] : TRAILING
  *				only [0] and [1] can be pended..
  *	@return		None.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
- *	@see also	Interrupt clear register, SSPICR
  */
 void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 {
@@ -378,18 +373,11 @@ void	NX_SSP_ClearInterruptPending	( U32 ModuleIndex, NX_SSP_INTR_MASK IntNum )
 /**
  *	@brief		Set all interrupts to be enabled or disabled.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	bEnb			Set it as CTRUE to enable all interrupts. \n
+ *	@param[in]	Enable			Set it as CTRUE to enable all interrupts.
  *								Set it as CFALSE to disable all interrupts.
  *	@return		None.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
  */
-void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable )
+void	NX_SSP_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32			new_irq_mask;
@@ -416,15 +404,8 @@ void	NX_SSP_SetInterruptEnableAll	( U32 ModuleIndex, CBOOL Enable )
 /**
  *	@brief		Indicates whether some of interrupts are enabled or not.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		CTURE	indicates there's interrupts which are enabled.\n
- *				CFALSE	indicates there's no interrupt which are enabled.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *													NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
+ *	@return		CTURE			Indicates there's interrupts which are enabled.\n
+ *				CFALSE			Indicates there's no interrupt which are enabled.
  */
 CBOOL	NX_SSP_GetInterruptEnableAll	( U32 ModuleIndex )
 {
@@ -449,15 +430,8 @@ CBOOL	NX_SSP_GetInterruptEnableAll	( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		CTURE	indicates there's interrupts which are pended.\n
- *				CFALSE	indicates there's no interrupt which are pended.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,
- *				NX_SSP_ClearInterruptPendingAll,		NX_SSP_GetInterruptPendingNumber
+ *	@return		CTURE			Indicates there's interrupts which are pended.\n
+ *				CFALSE			Indicates there's no interrupt which are pended.
  */
 CBOOL	NX_SSP_GetInterruptPendingAll	( U32 ModuleIndex )
 {
@@ -483,13 +457,6 @@ CBOOL	NX_SSP_GetInterruptPendingAll	( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		None.
- *	@see		NX_SSP_GetInterruptNumber,		NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,		NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *													NX_SSP_GetInterruptPendingNumber
  */
 void	NX_SSP_ClearInterruptPendingAll	( U32 ModuleIndex )
 {
@@ -508,16 +475,9 @@ void	NX_SSP_ClearInterruptPendingAll	( U32 ModuleIndex )
 /**
  *	@brief		Get an interrupt number which has the most prority of pended interrupts.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		an interrupt number which has the most priority of pended interrupts. \n
+ *	@return		an interrupt number which has the most priority of pended interrupts.
  *				This value is one of @ref NX_SSP_INT enum.
  *				If there's no interrupt which is pended and unmasked, it returns -1.
- *	@see		NX_SSP_GetInterruptNumber,			NX_SSP_SetInterruptEnable,
- *				NX_SSP_GetInterruptEnable,			NX_SSP_SetInterruptEnable32,
- *				NX_SSP_GetInterruptEnable32,			NX_SSP_GetInterruptPending,
- *				NX_SSP_GetInterruptPending32,		NX_SSP_ClearInterruptPending,
- *				NX_SSP_ClearInterruptPending32,		NX_SSP_SetInterruptEnableAll,
- *				NX_SSP_GetInterruptEnableAll,		NX_SSP_GetInterruptPendingAll,
- *				NX_SSP_ClearInterruptPendingAll
  */
 
 NX_SSP_INTR_MASK	NX_SSP_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
@@ -580,7 +540,7 @@ void NX_SSP_EnablePAD( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get DMA peripheral index for SSP/SPI Tx.
- *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
  *	@return		DMA peripheral index for SSP/SPI Tx.
  */
 U32		NX_SSP_GetDMAIndex_Tx( U32 ModuleIndex )
@@ -596,7 +556,7 @@ U32		NX_SSP_GetDMAIndex_Tx( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get DMA peripheral index for SSP/SPI Rx.
- *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
  *	@return		DMA peripheral index for SSP/SPI Rx.
  */
 U32		NX_SSP_GetDMAIndex_Rx( U32 ModuleIndex )
@@ -612,11 +572,11 @@ U32		NX_SSP_GetDMAIndex_Rx( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get DMA bus width of SSP/SPI.
- *	@param[in]	ModuleIndex		an index of module.
- *	@return		DMA bus width of SSP/SPI.\n.
- *				It returns 8 in case of the data bit width is between 1 and 8,\n
- *				16 in case of the data bit width is between 9 and 16.\n.
- *	@remark		You have to call NX_SSP_SetBitWidth() to set the data bit
+ *	@param[in]	ModuleIndex		an index of module. ( 0 ~ x ). 
+ *	@return		DMA bus width of SSP/SPI.
+ *				It returns 8 in case of the data bit width is between 1 and 8,
+ *				16 in case of the data bit width is between 9 and 16.
+ *	@remark	You have to call NX_SSP_SetBitWidth() to set the data bit
  *				width properly before using	this function.
  */
 U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex )
@@ -628,17 +588,19 @@ U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex )
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT(DSS != 3);
+
 	DSS = (U32)((ReadIO32(&pRegister->MODE_CFG)>>17) & 0x03);
 
 	if( DSS == 0 )   	{ return  8; 	}
 	if( DSS == 1 )   	{ return 16; 	}
 	if( DSS == 2 )   	{ return 32; 	}
 
-	NX_ASSERT(DSS != 3);
+	return CFALSE;
 }
 
 //------------------------------------------------------------------------------
-///	@name	Clock Control Interface
+// @name	Clock Control Interface
 // NK3 SPI has only 2x clock divider.
 // SCLK_SPI must be divided in System Controller for operation .
 //------------------------------------------------------------------------------
@@ -646,16 +608,16 @@ U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex )
 //--------------------------------------------------------------------------
 /// @name Configuration Function
 //------------------------------------------------------------------------------
-/**	@name		NX_SSP_SetAllDMAMode
+/**	
  *	@brief		Set Transmit DMA Mode
- *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	Enable	\b CTRUE indicate that Transmit/Receive DMA Enable. \n
- *						\b CFALSE indicate that Transmit/Receive DMA Disable. \n.
+ *	@param[in]	ModuleIndex		An index of module. ( 0 ~ x ). 
+ *	@param[in]	Enable	CTRUE  	Indicate that Transmit/Receive DMA Enable. 
+ *						CFALSE 	Indicate that Transmit/Receive DMA Disable. 
  *	@return		None.
 **/
 void	NX_SSP_SetDMATransferMode( U32 ModuleIndex, CBOOL Enable )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -677,15 +639,15 @@ void	NX_SSP_SetDMATransferMode( U32 ModuleIndex, CBOOL Enable )
 }
 
 //------------------------------------------------------------------------------
-/**	@name		NX_SSP_GetDMATransferMode
+/**	
  *	@brief		Get All DMA Mode
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		CTURE  indicate that All DMA Enabled
- 				CFALSE indicate that All DMA Disabled
+ *	@return		CTURE 			Indicate that All DMA Enabled
+ 				CFALSE			Indicate that All DMA Disabled
 **/
 CBOOL	NX_SSP_GetDMATransferMode( U32 ModuleIndex )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -701,17 +663,17 @@ CBOOL	NX_SSP_GetDMATransferMode( U32 ModuleIndex )
 	return CFALSE;
 }
 
-
-/**	@name		NX_SSP_SetTransmitDMAMode
+//------------------------------------------------------------------------------
+/**	
  *	@brief		Set Transmit DMA Mode
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	Enable	\b CTRUE indicate that Transmit DMA Enable. \n
- *						\b CFALSE indicate that Transmit DMA Disable. \n.
+ *	@param[in]	Enable	CTRUE 	Indicate that Transmit DMA Enable.
+ *						CFALSE 	Indicate that Transmit DMA Disable. 
  *	@return		None.
 **/
 void	NX_SSP_SetDMATransmitMode( U32 ModuleIndex, CBOOL Enable )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -733,15 +695,15 @@ void	NX_SSP_SetDMATransmitMode( U32 ModuleIndex, CBOOL Enable )
 }
 
 //------------------------------------------------------------------------------
-/**	@name		NX_SSP_GetTransmitDMAMode
+/**
  *	@brief		Get Transmit DMA Mode
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		CTURE  indicate that Transmit DMA Enabled
- 				CFALSE indicate that Transmit DMA Disabled
+ *	@return		CTURE 		 	Indicate that Transmit DMA Enabled
+ 				CFALSE 			Indicate that Transmit DMA Disabled
 **/
 CBOOL	NX_SSP_GetDMATransmitMode( U32 ModuleIndex )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -757,17 +719,18 @@ CBOOL	NX_SSP_GetDMATransmitMode( U32 ModuleIndex )
 	return CFALSE;
 }
 
+
 //------------------------------------------------------------------------------
-/**	@name		NX_SSP_SetReceiveDMAMode
+/**	
  *	@brief		Set Receive DMA Mode
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	Enable	\b CTRUE  indicate that Receive DMA Enable. \n
- *						\b CFALSE indicate that Receive DMA Disable. \n.
+ *	@param[in]	Enable	CTRUE   Indicate that Receive DMA Enable.
+ *						CFALSE  Indicate that Receive DMA Disable.
  *	@return		None.
 **/
 void	NX_SSP_SetDMAReceiveMode( U32 ModuleIndex, CBOOL Enable )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -789,15 +752,15 @@ void	NX_SSP_SetDMAReceiveMode( U32 ModuleIndex, CBOOL Enable )
 }
 
 //------------------------------------------------------------------------------
-/**	@name		NX_SSP_GetReceiveDMAMode
+/**	
  *	@brief		Get Receive DMA Mode
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		CTURE  indicate that Receive DMA Enabled
- 				CFALSE indicate that Receive DMA Disabled
+ *	@return		CTURE  			Indicate that Receive DMA Enabled
+ 				CFALSE 			Indicate that Receive DMA Disabled
 **/
 CBOOL	NX_SSP_GetDMAReceiveMode( U32 ModuleIndex )
 {
-	U32 regvalue;
+	register U32 regvalue;
 	register struct NX_SSP_RegisterSet *pRegister;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
@@ -812,6 +775,48 @@ CBOOL	NX_SSP_GetDMAReceiveMode( U32 ModuleIndex )
 	}
 	return CFALSE;
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set DMA Burst Size
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Mode			DMA Burstsize ( 0: Single, 1: Burst4 )
+ *	@return		None.
+ */
+void	NX_SSP_SetDMABurstSize( U32 ModuleIndex , NX_SSP_DMA_BURSTSIZE Mode )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ( ReadIO32(&pRegister->MODE_CFG) ) & (~(1<<0));
+
+	regval = regval | ( (Mode&1) <<0);
+	WriteIO32( &pRegister->MODE_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get DMA Burst Size
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		DMA Burstsize ( 0: Single, 1: Burst4 )
+ */
+NX_SSP_DMA_BURSTSIZE	NX_SSP_GetDMABurstSize( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (NX_SSP_DMA_BURSTSIZE)(ReadIO32(&pRegister->MODE_CFG) ) & (~(1<<0));
+
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -873,14 +878,16 @@ U32		NX_SSP_GetBitWidth( U32 ModuleIndex )
 	if( 0 == ((old_sspcr0 >> 17)&0x03) ) return  8;
 	if( 1 == ((old_sspcr0 >> 17)&0x03) ) return 16;
 	if( 2 == ((old_sspcr0 >> 17)&0x03) ) return 32;
+
+	return CFALSE;
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set Operation Mode ( Master or Slave )
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	bSlave	\b CTRIE indicate that Slave mode enable. \n
- *						\b CFALSE indicate that Master mode enable.
+ *	@param[in]	bSlave			CTRIE Indicate that Slave mode enable.
+ *								CFALSE Indicate that Master mode enable.
  *	@return		None.
  */
 void	NX_SSP_SetSlaveMode( U32 ModuleIndex, NX_SSP_MODE bSlave )
@@ -897,7 +904,7 @@ void	NX_SSP_SetSlaveMode( U32 ModuleIndex, NX_SSP_MODE bSlave )
 	regvalue = ReadIO32(&pRegister->CH_CFG);
 	if( CTRUE == bSlave )
 	{
-		regvalue |= (1UL<<4); // SLAVE
+		regvalue |= (1UL<<4); 	  // SLAVE
 	}
 	else
 	{
@@ -911,8 +918,8 @@ void	NX_SSP_SetSlaveMode( U32 ModuleIndex, NX_SSP_MODE bSlave )
 /**
  *	@brief		Get Operation Mode ( Master or Slave )
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRIE indicate that Slave mode enable. \n
- *				\b CFALSE indicate that Master mode enable.
+ *	@return		CTRIE 			Indicate that Slave mode enable.
+ *				CFALSE 			Indicate that Master mode enable.
  */
 CBOOL	NX_SSP_GetSlaveMode( U32 ModuleIndex )
 {
@@ -936,26 +943,26 @@ CBOOL	NX_SSP_GetSlaveMode( U32 ModuleIndex )
 /**
  *	@brief		Set Polarity of SSPCLK
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	bInvert	\b CTRUE indicate that SSPCLK Invert enable. \n
- *						\b CFALSE indicate that SSPCLK Invert disable. \n
+ *	@param[in]	Invert	CTRUE	Indicate that SSPCLK Invert enable.
+ *						CFALSE	Indicate that SSPCLK Invert disable.
  *	@return		None.
  *				This Function can work Motorola SPI frame format only. otherwise,
  *				ASSERT ERROR will be called
  */
-void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL bInvert )
+void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL Invert )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32		regvalue;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	NX_ASSERT( 1 == bInvert || 0 == bInvert);
+	NX_ASSERT( 1 == Invert || 0 == Invert);
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
 	regvalue = ReadIO32(&pRegister->CH_CFG);
 
-	if( CTRUE == bInvert )
+	if( CTRUE == Invert )
 	{
 		regvalue |= (1UL<<3);
 	}
@@ -971,9 +978,9 @@ void	NX_SSP_SetClockPolarityInvert( U32 ModuleIndex, CBOOL bInvert )
 /**
  *	@brief		Get status of SSPCLK's polarity is invert or normal.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	indicate that SSPCLK's polarity is invert. \n
- *				\b CFALSE	indicate that SSPCLK's polarity is normal.
- *				This Function can work Motorola SPI frame format only. otherwise,
+ *	@return		CTRUE			Indicate that SSPCLK's polarity is invert.
+ *				CFALSE			Indicate that SSPCLK's polarity is normal.
+ *	@remark	This Function can work Motorola SPI frame format only. otherwise,
  *				ASSERT ERROR will be called
  */
 CBOOL	NX_SSP_GetClockPolarityInvert( U32 ModuleIndex )
@@ -999,32 +1006,32 @@ CBOOL	NX_SSP_GetClockPolarityInvert( U32 ModuleIndex )
 /**
  *	@brief		Set SPI format
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	format		SPI format ( NX_SSP_FORMAT_A[0] or NX_SSP_FORMAT_B[1] )
+ *	@param[in]	Format			SPI format ( Fomrt A [0] or Format B[1]  )
  *	@return		None.
  */
-void	NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT format)
+void	NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT Format)
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32		regvalue;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	NX_ASSERT( (NX_SSP_FORMAT_A == format) || (NX_SSP_FORMAT_B == format) );
+	NX_ASSERT( (NX_SSP_FORMAT_A == Format) || (NX_SSP_FORMAT_B == Format) );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
 	regvalue = ReadIO32(&pRegister->CH_CFG);
 
-	switch(format)
+	switch(Format)
 	{
-	case NX_SSP_FORMAT_B:
-		regvalue |= (1UL<<2);
-		break;
-	case NX_SSP_FORMAT_A:
-		regvalue &= (~(1UL<<2));
-		break;
-	default:
-		NX_ASSERT( CFALSE ); //"Never Get Here" );
+		case NX_SSP_FORMAT_B:
+			regvalue |= (1UL<<2);
+			break;
+		case NX_SSP_FORMAT_A:
+			regvalue &= (~(1UL<<2));
+			break;
+		default:
+			NX_ASSERT( CFALSE ); //"Never Get Here" );
 	}
 
 	WriteIO32(&pRegister->CH_CFG, regvalue);
@@ -1034,7 +1041,7 @@ void	NX_SSP_SetSPIFormat( U32 ModuleIndex, NX_SSP_FORMAT format)
 /**
  *	@brief		Get SPI format
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		SPI format ( NX_SSP_FORMAT_A or NX_SSP_FORMAT_B )
+ *	@return		SPI format ( Fomrt A [0] or Format B[1]  )
  */
 NX_SSP_FORMAT	NX_SSP_GetSPIFormat( U32 ModuleIndex )
 {
@@ -1051,16 +1058,124 @@ NX_SSP_FORMAT	NX_SSP_GetSPIFormat( U32 ModuleIndex )
 	return  (NX_SSP_FORMAT)(0x01 &  (regvalue>>2) );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set NCS Time Count
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	TimeCount		NCS Time ( range : 0 ~ 0x3F )
+ *	@return		None
+ *	@remarks	Controls the spacing between the frames.
+ */
+void	NX_SSP_SetNCSTIMECount( U32 ModuleIndex, U32 TimeCount)
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= TimeCount );
+
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(0x3F<<4));
+	regval = regval | ( (TimeCount & 0x3F) <<4);
+	
+	WriteIO32( &pRegister->CS_REG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get NCS Time Count
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		TimeCount		NCS Time ( range : 0 ~ 0x3F )
+ *	@remarks	Controls the spacing between the frames.
+ */
+U32		NX_SSP_GetNCSTIMECount( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (ReadIO32(&pRegister->CS_REG)>>6) & 0xFF;
+}
+
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Chip Select Low or High
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	NSSOUT			CS ( 0 : Active(Low) 1: InActive(High) )
+ *	@return		None
+ *	@remarks	Is used at the time of control, manually, the CS.
+ */
+void	NX_SSP_SetNSSOUT( U32 ModuleIndex, CBOOL NSSOUT )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0 == NSSOUT || 1 == NSSOUT );
+
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<0));
+
+	regval = regval | ( (NSSOUT&1) <<0);
+	WriteIO32( &pRegister->CS_REG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Chip Select Mode
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Mode			CS Mode ( 0: Auto, 1: Manual )
+ *	@return		None
+ */
+void	NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<1));
+	regval = regval | ((Mode & 0x01)<<1);
+	WriteIO32( &pRegister->CS_REG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Chip Select Mode
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		None
+ */
+NX_SSP_CS_MODE	NX_SSP_GetCSMode( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (NX_SSP_CS_MODE)(ReadIO32(&pRegister->CS_REG)>>1) & 1;
+}
+
+
 //--------------------------------------------------------------------------
 /// @name Operation Function
 //--------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 /**
- *	@brief		Set SSP/SPI enable or disable.
- *  RX & TX Channel On
+ *	@brief		Set SSP/SPI enable or disable. (RX & TX Channel On)
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	bEnable		\b CTRUE indicate that SSP/SPI Enable. \n
- *							\b CFALSE indicate that SSP/SPI Disable.
+ *	@param[in]	bEnable			CTRUE Indicate that SSP/SPI Enable.
+ *								CFALSE Indicate that SSP/SPI Disable.
  *	@return		None.
  */
 void	NX_SSP_SetEnable( U32 ModuleIndex, CBOOL bEnable )
@@ -1091,10 +1206,9 @@ void	NX_SSP_SetEnable( U32 ModuleIndex, CBOOL bEnable )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get status of SSP/SPI is enabled or disabled.
- *  RX & TX Channel On
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	indicate that SSP/SPI is enabled. \n
- *				\b CFALSE	indicate that SSP/SPI is disabled.
+ *	@return		CTRUE			Indicate that SSP/SPI is enabled.
+ *				CFALSE			Indicate that SSP/SPI is disabled.
  */
 CBOOL	NX_SSP_GetEnable( U32 ModuleIndex )
 {
@@ -1115,20 +1229,26 @@ CBOOL	NX_SSP_GetEnable( U32 ModuleIndex )
 	return CFALSE;
 }
 
-void	NX_SSP_SetTrailingCount( U32 ModuleIndex, U16 TailingCnt )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set SSP/SPI is Trailing Count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	TrailingCnt		trailing count value
+ */
+void	NX_SSP_SetTrailingCount( U32 ModuleIndex, U16 TrailingCnt )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32		regvalue;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	NX_ASSERT( 0x3FF >= TailingCnt );
+	NX_ASSERT( 0x3FF >= TrailingCnt );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
 	regvalue = ReadIO32(&pRegister->MODE_CFG);
 
-	if( TailingCnt )
+	if( TrailingCnt )
 	{
 		regvalue |= (0x3FF<<19);
 	}
@@ -1140,20 +1260,42 @@ void	NX_SSP_SetTrailingCount( U32 ModuleIndex, U16 TailingCnt )
 	WriteIO32(&pRegister->CH_CFG, regvalue);
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get SSP/SPI is Trailing Count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Trailing Count	trailing count value
+ */
 U16		NX_SSP_GetTralingCount( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
-	U32		regvalue;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-
 	return (U16)((ReadIO32(&pRegister->MODE_CFG) >> 19) & 0x3FF );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get state of SSP/SPI is Trailing Byte.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Trailing Byte		trailing byte value
+ *	@remark	Indicates the trailing bytes in the pipe now.
+ */
+U32		NX_SSP_GetTrailingByte( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U32)((ReadIO32(&pRegister->SPI_STATUS) >> 24) & 0x01);
+}
 
 //------------------------------------------------------------------------------
 /**
@@ -1250,14 +1392,14 @@ void	NX_SSP_PutHalfWord(U32 ModuleIndex, U16 HalfWordData)
 
 	NX_ASSERT(9 <= NX_SSP_GetBitWidth(ModuleIndex) );
 
-	WriteIO32(&pRegister->SPI_TX_DATA, (U16)HalfWordData);	//put the byte data
+	WriteIO32(&pRegister->SPI_TX_DATA, (U16)HalfWordData);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Send Word( 4byte ).
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	WordData	Value of Data ( 0x0 ~ 0xFFFFFFFF )
+ *	@param[in]	WordData		Value of Data ( 0x0 ~ 0xFFFFFFFF )
  *	@return		None.
  */
 void	NX_SSP_PutWord(U32 ModuleIndex, U32 WordData)
@@ -1270,7 +1412,7 @@ void	NX_SSP_PutWord(U32 ModuleIndex, U32 WordData)
 
 	NX_ASSERT(32 <= NX_SSP_GetBitWidth(ModuleIndex) );
 
-	WriteIO32(&pRegister->SPI_TX_DATA, (U32)WordData);	//put the byte data
+	WriteIO32(&pRegister->SPI_TX_DATA, (U32)WordData);	
 }
 
 
@@ -1279,19 +1421,15 @@ void	NX_SSP_PutWord(U32 ModuleIndex, U32 WordData)
 /// @see also	Status Register, SSPSR
 //--------------------------------------------------------------------------
 
-U32		NX_SSP_GetTrailingByte( U32 ModuleIndex )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	return (U32)((ReadIO32(&pRegister->SPI_STATUS) >> 24) & 0x01);
-}
-
-void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL bEnable )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set SSP/SPI enable or disable the packet count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	bEnable			CTRUE  Indicate that Packet Count Enable.
+ *								CFALSE Indicate that Packet Count Disable.	
+ *	@return		None.
+ */
+void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
@@ -1299,14 +1437,21 @@ void	NX_SSP_SetPacketCountEnb( U32 ModuleIndex, CBOOL bEnable )
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 1 == bEnable || 0 == bEnable );
+	NX_ASSERT( 1 == Enable || 0 == Enable );
 
-	regval = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(bEnable<<16));
+	regval = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(Enable<<16));
 
-	regval = regval | ( (bEnable & 0x1) << 16);
+	regval = regval | ( (Enable & 0x1) << 16);
 	WriteIO32( &pRegister->PACKET_CNT_REG, regval );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set SSP/SPI enable or disable the packet count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		bEnable			CTRUE  Indicate that Packet Count Enable.
+ *								CFALSE Indicate that Packet Count Disable.	
+ */
 CBOOL	NX_SSP_GetPacketCountEnb( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -1319,22 +1464,36 @@ CBOOL	NX_SSP_GetPacketCountEnb( U32 ModuleIndex )
 	return (U32)((ReadIO32(&pRegister->PACKET_CNT_REG) >> 16) & 0x01);
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set SSP/SPI enable or disable the packet count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	PacketCount		packet count ( range : 0 ~ 0xFFFF )
+ *	@return		None
+ */
 void	NX_SSP_SetPacketCount( U32 ModuleIndex, U16 PacketCount )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
+	register U32 regvalue;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0xFFFF >= PacketCount );
+	NX_ASSERT( 0xFFFF > PacketCount );
 
-	regval = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(PacketCount<<0));
+	regvalue = ( ReadIO32(&pRegister->PACKET_CNT_REG) ) & (~(PacketCount<<0));
 
-	regval = regval | ( (PacketCount & 0xFFFF) << 0);
-	WriteIO32( &pRegister->PACKET_CNT_REG, regval );
+	regvalue = regvalue | ( (PacketCount & 0xFFFF) << 0);
+	WriteIO32( &pRegister->PACKET_CNT_REG, regvalue );
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set SSP/SPI enable or disable the packet count.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		PacketCount		packet count ( range : 0 ~ 0xFFFF )
+ */
 U16		NX_SSP_GetPacketCount( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -1352,8 +1511,8 @@ U16		NX_SSP_GetPacketCount( U32 ModuleIndex )
 /**
  *	@brief		Check Tx FIFO is Empty or Not
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE Indicate that FIFO Empty.\n
- *				\b CFALSE Indicate that FIFO NOT Empty
+ *	@return		CTRUE 			Indicate that FIFO Empty.
+ *				CFALSE 			Indicate that FIFO NOT Empty
  */
 CBOOL	NX_SSP_IsTxFIFOEmpty(U32 ModuleIndex)
 {
@@ -1377,25 +1536,12 @@ CBOOL	NX_SSP_IsTxFIFOEmpty(U32 ModuleIndex)
 	}
 }
 
-U32	NX_SSP_GetTxFIFOLVL(U32 ModuleIndex)
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	TX_FIFO_LVL;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	return (ReadIO32(&pRegister->SPI_STATUS)>>6) & 0x1FF;
-}
-
 //------------------------------------------------------------------------------
 /**
  *	@brief		Check Tx FIFO is Full or Not
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	Indicate that FIFO Full.\n
- *				\b CFALSE	Indicate that FIFO NOT Full.
+ *	@return		CTRUE			Indicate that FIFO Full.
+ *				CFALSE			Indicate that FIFO NOT Full.
  */
 CBOOL	NX_SSP_IsTxFIFOFull(U32 ModuleIndex)
 {
@@ -1424,8 +1570,8 @@ CBOOL	NX_SSP_IsTxFIFOFull(U32 ModuleIndex)
 /**
  *	@brief		Check Rx FIFO is Empty or Not
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	Indicate that FIFO Empty.\n
- *				\b CFALSE	Indicate that FIFO NOT Empty.
+ *	@return		CTRUE			Indicate that FIFO Empty.
+ *				CFALSE			Indicate that FIFO NOT Empty.
  */
 CBOOL	NX_SSP_IsRxFIFOEmpty(U32 ModuleIndex)
 {
@@ -1449,27 +1595,12 @@ CBOOL	NX_SSP_IsRxFIFOEmpty(U32 ModuleIndex)
 	}
 }
 
-U32	NX_SSP_GetRxFIFOLVL(U32 ModuleIndex)
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	RX_FIFO_LVL;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	return (ReadIO32(&pRegister->SPI_STATUS)>>15) & 0x1FF;
-}
-
-
-
 //------------------------------------------------------------------------------
 /**
  *	@brief		Check Rx FIFO is Full or Not
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	Indicate that FIFO Full.\n
- *				\b CFALSE	Indicate that FIFO NOT Full.
+ *	@return		CTRUE	Indicate that FIFO Full.
+ *				CFALSE	Indicate that FIFO NOT Full.
  */
 CBOOL	NX_SSP_IsRxFIFOFull(U32 ModuleIndex)
 {
@@ -1495,40 +1626,144 @@ CBOOL	NX_SSP_IsRxFIFOFull(U32 ModuleIndex)
 
 //------------------------------------------------------------------------------
 /**
- *	@brief		Check Tx/Rx is End or Not
+ *	@brief		Check Tx FIFO is Level
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	Indicate that Tx/Rx is End.\n
- *				\b CFALSE	Indicate that Tx/Rx is NOT End.
- *	@remarks	This function is same to NX_SSP_GetInterruptPending(2)
+ *	@return		Tx FIFO Level	currnet FIFO level
  */
-CBOOL	NX_SSP_IsTxRxEnd( U32 ModuleIndex )
-{
-	return NX_SSP_CheckBusy(ModuleIndex);
-}
-//------------------------------------------------------------------------------
-
-
-void	NX_SSP_SetCSMode( U32 ModuleIndex, NX_SSP_CS_MODE Mode )
+U32		NX_SSP_GetTxFIFOLVL(U32 ModuleIndex)
 {
 	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<1));
-	regval = regval | ((Mode & 0x01)<<1);
-	WriteIO32( &pRegister->CS_REG, regval );
+	return (ReadIO32(&pRegister->SPI_STATUS)>>6) & 0x1FF;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Check Rx FIFO is Level
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Rx FIFO Level	Currnet FIFO level
+ */
+U32		NX_SSP_GetRxFIFOLVL(U32 ModuleIndex)
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (ReadIO32(&pRegister->SPI_STATUS)>>15) & 0x1FF;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Rx FIFO Trigger Level
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	RX_RDY_LVEL	Set Trigger Level x4  
+ *	@return		None
+ *	@remark	
+ */
+void	NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= RX_RDY_LVL );
+
+	regval = ReadIO32(&pRegister->MODE_CFG);
+	regval = regval & (~(0x3F << 11));
+	regval = regval | (RX_RDY_LVL & 0x3F)<<11;
+	WriteIO32( &pRegister->MODE_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Rx FIFO Trigger Level
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Get Rx Trgger Level
+ */
+U8		NX_SSP_GetRXRDYLVL( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 11) & 0x3F;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx FIFO Trigger Level
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	TX_RDY_LVL		Set Trigger Level x4  
+ *	@return		None
+ *	@remark	
+ */
+void  	NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 0x3F >= TX_RDY_LVL );
+
+	regval = ReadIO32(&pRegister->MODE_CFG);
+	regval = regval & (~(0x3F << 5));
+	regval = regval | (TX_RDY_LVL & 0x3F)<<5;
+	WriteIO32( &pRegister->MODE_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Tx FIFO Trigger Level
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Get Tx Trgger Level
+ */
+U8  	NX_SSP_GetTXRDYLVL( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 5) & 0x3F;
 }
 
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Check Tx/Rx is End or Not
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE			Indicate that Tx/Rx is End.
+ *				CFALSE			Indicate that Tx/Rx is NOT End.
+ *	@remarks	This function is same to NX_SSP_GetInterruptPending(2)
+ */
+CBOOL	NX_SSP_IsTxRxEnd( U32 ModuleIndex )
+{
+	return NX_SSP_CheckBusy(ModuleIndex);
+}
 
-//==========================================
-// additional function for NK3 SSP
-//==========================================
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Reset Tx/Rx FIFO
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		None
+ *	@remarks	Transmiter / Receiver FIFO Reset.
+ */
 void	NX_SSP_ResetFIFO( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
@@ -1546,121 +1781,16 @@ void	NX_SSP_ResetFIFO( U32 ModuleIndex )
 	WriteIO32( &pRegister->CH_CFG, regval ); // reset leave
 }
 
-
-void	NX_SSP_SetDMABurstSize( U32 ModuleIndex , NX_SSP_DMABurstSize Mode )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
-	U32 sw_rst_regval;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	regval = ( ReadIO32(&pRegister->MODE_CFG) ) & (~(1<<0));
-
-	regval = regval | ( (Mode&1) <<0);
-	WriteIO32( &pRegister->MODE_CFG, regval );
-}
-
-void	NX_SSP_SetNCSTIMECount( U32 ModuleIndex, U32 TimeCount)
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0x3F >= TimeCount );
-
-	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(0x3F<<4));
-
-	regval = regval | ( (TimeCount & 0x3F) <<4);
-	WriteIO32( &pRegister->CS_REG, regval );
-}
-
-U32		NX_SSP_GetNCSTIMECount( U32 ModuleIndex )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	return (ReadIO32(&pRegister->CS_REG)>>6) & 0xFF;
-}
-
-
-void	NX_SSP_SetCSAutoEnb( U32 ModuleIndex, CBOOL Enable )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0 == Enable || 1 == Enable );
-
-	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<1));
-
-	regval = regval | ( (Enable & 1) <<1);
-	WriteIO32( &pRegister->CS_REG, regval );
-}
-
-
-CBOOL	NX_SSP_GetCSAutoEnb( U32 ModuleIndex )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-
-	return (ReadIO32(&pRegister->CS_REG)>>1) & 1;
-}
-
-
-void	NX_SSP_SetNSSOUT( U32 ModuleIndex, CBOOL NSSOUT )
-{
-	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
-	U32 sw_rst_regval;
-
-	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0 == NSSOUT || 1 == NSSOUT );
-
-	regval = ( ReadIO32(&pRegister->CS_REG) ) & (~(1<<0));
-
-	regval = regval | ( (NSSOUT&1) <<0);
-	WriteIO32( &pRegister->CS_REG, regval );
-}
-
-U32 NX_SSP_GetClockNumber (U32 ModuleIndex)
-{
-    static const U32 CLKGEN_SSPLIST[] = { CLOCKINDEX_LIST( SSP ) };
-    NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
-
-    return (U32)CLKGEN_SSPLIST[ModuleIndex];
-}
-
-U32	NX_SSP_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex)
-{
-    const U32 ResetPinNumber[2][NUMBER_OF_SSP_MODULE] =
-    {
-        { RESETINDEX_LIST( SSP, PRESETn )},
-        { RESETINDEX_LIST( SSP, nSSPRST )},
-    };
-
-    return (U32)ResetPinNumber[ChannelIndex][ModuleIndex];
-}
-
-//=======================================
-// in slave mode, can use HIGHSPEED mode(half TXD delay)
-//=======================================
-void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enb)
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set High Speed is enable or disable.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that High Speed Enable.
+ *								CFALSE Indicate that High Speed Disable.	
+ *	@return		None
+ *	@remarks	When the slave mode, and adjusts the timing of the data capture.
+ */
+void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enable)
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
@@ -1671,7 +1801,7 @@ void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enb)
 	NX_ASSERT( CNULL != pRegister );
 
 	regval = ReadIO32(&pRegister->CH_CFG);
-	if( Enb == CFALSE )
+	if( Enable == CFALSE )
 	{
 		regval = regval & (~(1<<6))	;
 	}
@@ -1682,10 +1812,18 @@ void  NX_SSP_SetHIGHSPEEDMode( U32 ModuleIndex, CBOOL Enb)
 	WriteIO32( &pRegister->CH_CFG, regval );
 }
 
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get High Speed is enable or disable.
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that High Speed Enable.
+ *				CFALSE Indicate that High Speed Disable.
+ *	@remarks	When the slave mode, and adjusts the timing of the data capture.
+ */
 CBOOL  NX_SSP_GetHIGHSPEEDMode( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 
@@ -1695,64 +1833,407 @@ CBOOL  NX_SSP_GetHIGHSPEEDMode( U32 ModuleIndex )
 	return (CBOOL)(ReadIO32(&pRegister->CH_CFG)>>6) & 1;
 }
 
-
-//=======================================
-// TX_RDY_LVL, trigger level in INT mode
-//=======================================
-void  NX_SSP_SetRXRDYLVL( U32 ModuleIndex, U32 RX_RDY_LVL )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Receive  Swap Enable.
+ *								CFALSE Indicate that Receive Swap Disable.	
+ *	@return		None
+ *	@remarks	
+ */
+void  NX_SSP_SetTxSwapEnable( U32 ModuleIndex, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0x3F >= RX_RDY_LVL );
 
-	regval = ReadIO32(&pRegister->MODE_CFG);
-	regval = regval & (~(0x3F << 11));
-	regval = regval | (RX_RDY_LVL & 0x3F)<<11;
-	WriteIO32( &pRegister->MODE_CFG, regval );
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<0))	;
+	}
+	else
+	{
+		regval = regval | (1<<0) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
 }
 
-U8  NX_SSP_GetRXRDYLVL( U32 ModuleIndex )
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Enable			CTRUE  Indicate that Receive Swap Enable.
+ *								CFALSE Indicate that Receive Swap Disable.	
+ *	@remarks	
+ */
+CBOOL  NX_SSP_GetTxSwapEnable( U32 ModuleIndex )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
-	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 11) & 0x3F;
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>0) & 1;
 }
 
-//d
-void  NX_SSP_SetTXRDYLVL( U32 ModuleIndex, U32 TX_RDY_LVL )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Rx Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Receive Swap Enable.
+ *								CFALSE Indicate that Receive Swap Disable.	
+ *	@return		None
+ *	@remarks	
+ */
+void  NX_SSP_SetRxSwapEnable( U32 ModuleIndex, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0x3F >= TX_RDY_LVL );
 
-	regval = ReadIO32(&pRegister->MODE_CFG);
-	regval = regval & (~(0x3F << 5));
-	regval = regval | (TX_RDY_LVL & 0x3F)<<5;
-	WriteIO32( &pRegister->MODE_CFG, regval );
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<4))	;
+	}
+	else
+	{
+		regval = regval | (1<<4) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
 }
 
-U8  NX_SSP_GetTXRDYLVL( U32 ModuleIndex )
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		Enable			CTRUE  Indicate Receive that Swap Enable.
+ *								CFALSE Indicate  Receive that Swap Disable.	
+ *	@remarks	
+ */
+CBOOL  NX_SSP_GetRxSwapEnable( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>4) & 1;
+}
+
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx HalfWord Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap HalfWord Enable.
+ *								CFALSE Indicate that Swap HalfWord Disable.	
+ *	@return		None
+ *	@remarks	The role swap halfword of data to transfer.
+ */
+void  NX_SSP_SetTxHalfWordSwap( U32 ModuleIndex, CBOOL Enable )
 {
 	register struct NX_SSP_RegisterSet *pRegister;
 	U32	regval;
 
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U8)(ReadIO32(&pRegister->MODE_CFG) >> 5) & 0x3F;
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<3))	;
+	}
+	else
+	{
+		regval = regval | (1<<3) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Tx HalfWord Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that HalfWord Swap Enable.
+ *				CFALSE Indicate that HalfWord Swap Disable.
+ */
+CBOOL  NX_SSP_GetTxHalfWordSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>3) & 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Rx HalfWord Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap HalfWord Enable.
+ *								CFALSE Indicate that Swap HalfWord Disable.	
+ *	@return		None
+ *	@remarks	The role swap halfword of data to receive.
+ */
+void  NX_SSP_SetRxHalfWordSwap( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<7))	;
+	}
+	else
+	{
+		regval = regval | (1<<7) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Rx HalfWord Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that HalfWord Swap Enable.
+ *				CFALSE Indicate that HalfWord Swap Disable..
+ */
+CBOOL  NX_SSP_GetRxHalfWordSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>7) & 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx Byte Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap Byte Enable.
+ *								CFALSE Indicate that Swap Byte Disable.	
+ *	@return		None
+ *	@remarks	The role swap bytes of data to transfer.
+ */
+void  NX_SSP_SetTxByteSwap( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<2))	;
+	}
+	else
+	{
+		regval = regval | (1<<2) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Tx Byte Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that Byte Swap Enable.
+ *				CFALSE Indicate that Byte Swap Disable.
+ */
+CBOOL  NX_SSP_GetTxByteSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>2) & 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Rx Byte Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap Byte Enable.
+ *								CFALSE Indicate that Swap Byte Disable.	
+ *	@return		None
+ *	@remarks	The role swap bytes of data to receive.
+ */
+void  NX_SSP_SetRxByteSwap( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<6))	;
+	}
+	else
+	{
+		regval = regval | (1<<6) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Rx Byte Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that Byte Swap Enable.
+ *				CFALSE Indicate that Byte Swap Disable.
+ */
+CBOOL  NX_SSP_GetRxByteSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>6) & 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Tx Bit Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap Bit Enable.
+ *								CFALSE Indicate that Swap Bit Disable.	
+ *	@return		None
+ *	@remarks	The role swap bits of data to transfer.
+ */
+void  NX_SSP_SetTxBitSwap( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<1))	;
+	}
+	else
+	{
+		regval = regval | (1<<1) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Tx Bit Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that Bit Swap Enable.
+ *				CFALSE Indicate that Bit Swap Disable.
+ */
+CBOOL  NX_SSP_GetTxBitSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>1) & 1;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set Rx Bit Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@param[in]	Enable			CTRUE  Indicate that Swap Bit Enable.
+ *								CFALSE Indicate that Swap Bit Disable.	
+ *	@return		None
+ *	@remarks	The role swap bits of data to receive.
+ */
+void  NX_SSP_SetRxBitSwap( U32 ModuleIndex, CBOOL Enable )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+	U32	regval;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	regval = ReadIO32(&pRegister->SWAP_CFG);
+	if( Enable == CFALSE )
+	{
+		regval = regval & (~(1<<5))	;
+	}
+	else
+	{
+		regval = regval | (1<<5) ;
+	}
+	WriteIO32( &pRegister->CH_CFG, regval );
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get Rx Bit Swap is enable or disable
+ *	@param[in]	ModuleIndex		an index of module.
+ *	@return		CTRUE  Indicate that Bit Swap Enable.
+ *				CFALSE Indicate that Bit Swap Disable.
+ */
+CBOOL  NX_SSP_GetRxBitSwap( U32 ModuleIndex )
+{
+	register struct NX_SSP_RegisterSet *pRegister;
+
+	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+	return (CBOOL)(ReadIO32(&pRegister->SWAP_CFG)>>5) & 1;
 }
 

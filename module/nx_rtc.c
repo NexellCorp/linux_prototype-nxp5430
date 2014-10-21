@@ -9,10 +9,10 @@
 //	FOR A PARTICULAR PURPOSE.
 //
 //	Module		: RTC
-//	File		: nx_rtc.h
+//	File			: nx_rtc.h
 //	Description	:
 //	Author		:
-//	History		:
+//	History		: 2014.10.15 Revision Comments. (Deoks)
 //------------------------------------------------------------------------------
 
 
@@ -29,8 +29,8 @@ static	struct NX_RTC_RegisterSet *__g_pRegister = CNULL;
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.\n
+ *	@return CTRUE	Indicate that Initialize is successed.
+ *			CFALSE	Indicate that Initialize is failed.
  *	@see	NX_RTC_GetNumberOfModule
  */
 CBOOL	NX_RTC_Initialize( void )
@@ -62,10 +62,6 @@ U32		NX_RTC_GetNumberOfModule( void )
 /**
  *	@brief		Get module's physical address.
  *	@return		Module's physical address
- *	@see										NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
  */
 U32		NX_RTC_GetPhysicalAddress( void )
 {
@@ -76,10 +72,6 @@ U32		NX_RTC_GetPhysicalAddress( void )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_RTC_GetPhysicalAddress,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
  */
 U32		NX_RTC_GetSizeOfRegisterSet( void )
 {
@@ -91,10 +83,6 @@ U32		NX_RTC_GetSizeOfRegisterSet( void )
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *												NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
  */
 void	NX_RTC_SetBaseAddress( U32 BaseAddress )
 {
@@ -106,10 +94,6 @@ void	NX_RTC_SetBaseAddress( U32 BaseAddress )
 /**
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
  */
 U32		NX_RTC_GetBaseAddress( void )
 {
@@ -119,12 +103,8 @@ U32		NX_RTC_GetBaseAddress( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *												NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
+ *	@return		CTRUE		Indicate that Initialize is successed.
+ *				CFALSE		Indicate that Initialize is failed.
  */
 CBOOL	NX_RTC_OpenModule( void )
 {
@@ -134,12 +114,8 @@ CBOOL	NX_RTC_OpenModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,
- *				NX_RTC_CheckBusy,				NX_RTC_CanPowerDown
+ *	@return		CTRUE		Indicate that Deinitialize is successed. 
+ *				CFALSE		Indicate that Deinitialize is failed.
  */
 CBOOL	NX_RTC_CloseModule( void )
 {
@@ -149,12 +125,8 @@ CBOOL	NX_RTC_CloseModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *												NX_RTC_CanPowerDown
+ *	@return		CTRUE		Indicate that Module is Busy. 
+ *				CFALSE		Indicate that Module is NOT Busy.
  */
 CBOOL	NX_RTC_CheckBusy( void )
 {
@@ -164,12 +136,8 @@ CBOOL	NX_RTC_CheckBusy( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicaes whether the selected modules is ready to enter power-down stage
- *	@return		\b CTRUE	indicate that Ready to enter power-down stage. \n
- *				\b CFALSE	indicate that This module can't enter to power-down stage.
- *	@see		NX_RTC_GetPhysicalAddress,		NX_RTC_GetSizeOfRegisterSet,
- *				NX_RTC_SetBaseAddress,			NX_RTC_GetBaseAddress,
- *				NX_RTC_OpenModule,				NX_RTC_CloseModule,
- *				NX_RTC_CheckBusy
+ *	@return		CTRUE		Indicate that Ready to enter power-down stage.
+ *				CFALSE		Indicate that This module can't enter to power-down stage.
  */
 CBOOL	NX_RTC_CanPowerDown( void )
 {
@@ -188,13 +156,6 @@ CBOOL	NX_RTC_CanPowerDown( void )
 /**
  *	@brief		Get a interrupt number for interrupt controller.
  *	@return		Interrupt number
- *	@see											NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
  */
 S32		NX_RTC_GetInterruptNumber( void )
 {
@@ -205,18 +166,11 @@ S32		NX_RTC_GetInterruptNumber( void )
 /**
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	IntNum	Interrupt Number ( 0 (RTC Counter), 1 (RTC Alarm) ) .
- *	@param[in]	Enable	\b CTRUE	indicate that Interrupt Enable. \n
- *						\b CFALSE	indicate that Interrupt Disable.
+ *	@param[in]	Enable	CTRUE		Indicate that Interrupt Enable. 
+ *						CFALSE		Indicate that Interrupt Disable.
  *	@return		None.
  *	@remarks	RTC module have two interrupt source that is RTC counter interrupt and RTC alarm interrupt.
- *				So. \e IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
- *	@see		NX_RTC_GetInterruptNumber,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *				So. IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
  */
 void	NX_RTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 {
@@ -229,12 +183,11 @@ void	NX_RTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 
 	pRegister	= __g_pRegister;
 
-	regvalue = pRegister->RTCINTENB;
+	regvalue = ReadIO32(&pRegister->RTCINTENB);
 
 	regvalue &= ~( 1UL		<< IntNum);
 	regvalue |= (U32)Enable << IntNum;
 
-//	pRegister->RTCINTENB = regvalue;
 	WriteIO32(&pRegister->RTCINTENB, regvalue);
 }
 
@@ -242,24 +195,17 @@ void	NX_RTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	IntNum	Interrupt Number ( 0 (RTC Counter), 1 (RTC Alarm) ).
- *	@return		\b CTRUE	indicate that Interrupt is enabled. \n
- *				\b CFALSE	indicate that Interrupt is disabled.
+ *	@return		CTRUE	Indicate that Interrupt is enabled. 
+ *				CFALSE	Indicate that Interrupt is disabled.
  *	@remarks	RTC module have two interrupt source that is RTC counter interrupt and RTC alarm interrupt.
- *				So. \e IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *													NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *				So. IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
  */
 CBOOL	NX_RTC_GetInterruptEnable( S32 IntNum )
 {
 	NX_ASSERT( 2 > IntNum );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL) (( __g_pRegister->RTCINTENB >> IntNum ) & 0x01);
+	return (CBOOL) (( ReadIO32(&__g_pRegister->RTCINTENB) >> IntNum ) & 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -269,13 +215,6 @@ CBOOL	NX_RTC_GetInterruptEnable( S32 IntNum )
  *							- EnableFlag[0] : Set RTC Counter interrupt enable or disable. \n
  *							- EnableFlag[1] : Set RTC Alarm interrupt enable or disable. \n
  *	@return		None.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
  */
 void	NX_RTC_SetInterruptEnable32( U32 EnableFlag )
 {
@@ -287,25 +226,17 @@ void	NX_RTC_SetInterruptEnable32( U32 EnableFlag )
 
 	pRegister	= __g_pRegister;
 
-//	pRegister->RTCINTENB = EnableFlag & ENB_MASK;
 	WriteIO32(&pRegister->RTCINTENB, EnableFlag & ENB_MASK);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates current setting value of interrupt enable bit.
- *	@return		Current setting value of interrupt. \n
- *				"1" means interrupt is enabled. \n
- *				"0" means interrupt is disabled. \n
- *				- Return Value[0] : RTC Counter interrupt's setting value. \n
- *				- Return Value[1] : RTC Alarm interrupt's setting value. \n
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *													NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *	@return		Current setting value of interrupt. 
+ *				"1" means interrupt is enabled. 
+ *				"0" means interrupt is disabled. 
+ *				- Return Value[0] : RTC Counter interrupt's setting value. 
+ *				- Return Value[1] : RTC Alarm interrupt's setting value. 
  */
 U32		NX_RTC_GetInterruptEnable32( void )
 {
@@ -313,7 +244,7 @@ U32		NX_RTC_GetInterruptEnable32( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)(__g_pRegister->RTCINTENB & ENB_MASK);
+	return (U32)(ReadIO32(&__g_pRegister->RTCINTENB) & ENB_MASK);
 }
 
 
@@ -321,41 +252,27 @@ U32		NX_RTC_GetInterruptEnable32( void )
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	IntNum	Interrupt Number ( 0 (RTC Counter), 1 (RTC Alarm) ).
- *	@return		\b CTRUE	indicate that Pending is seted. \n
- *				\b CFALSE	indicate that Pending is Not Seted.
+ *	@return		CTRUE	Indicate that Pending is seted. \n
+ *				CFALSE	Indicate that Pending is Not Seted.
  *	@remarks	RTC module have two interrupt source that is RTC counter interrupt and RTC alarm interrupt.
- *				So. \e IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *				So.  IntNum must have 0(Counter interrupt) or 1(Alarm interrupt).
  */
 CBOOL	NX_RTC_GetInterruptPending( S32 IntNum )
 {
 	NX_ASSERT( 2 > IntNum );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL) (( __g_pRegister->RTCINTPND >> IntNum ) & 0x01);
+	return (CBOOL) (( ReadIO32(&__g_pRegister->RTCINTPND) >> IntNum ) & 0x01);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates current setting value of interrupt pending bit.
- *	@return		Current setting value of pending bit. \n
- *				"1" means pend bit is occured. \n
- *				"0" means pend bit is NOT occured. \n
- *				- Return Value[0] : RTC Counter pending state. \n
- *				- Return Value[1] : RTC Alarm pending state. \n
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *													NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *	@return		Current setting value of pending bit. 
+ *				"1" means pend bit is occured. 
+ *				"0" means pend bit is NOT occured. 
+ *				- Return Value[0] : RTC Counter pending state. 
+ *				- Return Value[1] : RTC Alarm pending state. 
  */
 U32		NX_RTC_GetInterruptPending32( void )
 {
@@ -363,7 +280,7 @@ U32		NX_RTC_GetInterruptPending32( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)(__g_pRegister->RTCINTPND & PEND_MASK);
+	return (U32)( ReadIO32(&__g_pRegister->RTCINTPND) & PEND_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -371,13 +288,6 @@ U32		NX_RTC_GetInterruptPending32( void )
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	IntNum	Interrupt Number ( 0 (RTC Counter), 1 (RTC Alarm) ).
  *	@return		None.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
  */
 void	NX_RTC_ClearInterruptPending( S32 IntNum )
 {
@@ -388,24 +298,16 @@ void	NX_RTC_ClearInterruptPending( S32 IntNum )
 
 	pRegister	= __g_pRegister;
 
-//	pRegister->RTCINTPND = (U32)(1 << IntNum);
 	WriteIO32(&pRegister->RTCINTPND, (U32)(1 << IntNum));
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Clear a pending state of specified interrupt.
- *	@param[in]	PendingFlag		Specify pend bit to clear. Each bit's meaning is like below	\n \n
- *								- PendingFlag[0] : RTC Counter pending bit. \n
- *								- PendingFlag[1] : RTC Alarm pending bit. \n
+ *	@param[in]	PendingFlag		Specify pend bit to clear. Each bit's meaning is like below
+ *								- PendingFlag[0] : RTC Counter pending bit. 
+ *								- PendingFlag[1] : RTC Alarm pending bit. 
  *	@return		None.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *													NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
  */
 void	NX_RTC_ClearInterruptPending32( U32 PendingFlag )
 {
@@ -417,23 +319,15 @@ void	NX_RTC_ClearInterruptPending32( U32 PendingFlag )
 
 	pRegister	= __g_pRegister;
 
-//	pRegister->RTCINTPND = (U32)(PendingFlag & PEND_MASK);
 	WriteIO32(&pRegister->RTCINTPND, (U32)(PendingFlag & PEND_MASK));
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set all interrupts to be enables or disables.
- *	@param[in]	Enable	\b CTRUE	indicate that Set to all interrupt enable. \n
- *						\b CFALSE	indicate that Set to all interrupt disable.
+ *	@param[in]	Enable	CTRUE	Indicate that Set to all interrupt enable. 
+ *						CFALSE	Indicate that Set to all interrupt disable.
  *	@return		None.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
  */
 void	NX_RTC_SetInterruptEnableAll( CBOOL Enable )
 {
@@ -444,12 +338,10 @@ void	NX_RTC_SetInterruptEnableAll( CBOOL Enable )
 
 	if( Enable )
 	{
-	//	__g_pRegister->RTCINTENB = 0x03;
 		WriteIO32(&__g_pRegister->RTCINTENB, 0x03);
 	}
 	else
 	{
-	//	__g_pRegister->RTCINTENB = 0x00;
 		WriteIO32(&__g_pRegister->RTCINTENB, 0x00);
 	}
 }
@@ -457,21 +349,14 @@ void	NX_RTC_SetInterruptEnableAll( CBOOL Enable )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
- *	@return		\b CTRUE	indicate that At least one( or more ) interrupt is enabled. \n
- *				\b CFALSE	indicate that All interrupt is disabled.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *													NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *	@return		CTRUE		Indicate that At least one( or more ) interrupt is enabled. 
+ *				CFALSE		Indicate that All interrupt is disabled.
  */
 CBOOL	NX_RTC_GetInterruptEnableAll( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	if( __g_pRegister->RTCINTENB )
+	if( ReadIO32(&__g_pRegister->RTCINTENB) )
 	{
 		return CTRUE;
 	}
@@ -482,21 +367,14 @@ CBOOL	NX_RTC_GetInterruptEnableAll( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
- *	@return		\b CTRUE	indicate that At least one( or more ) pending is seted. \n
- *				\b CFALSE	indicate that All pending is NOT seted.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,
- *				NX_RTC_ClearInterruptPendingAll,	NX_RTC_GetInterruptPendingNumber
+ *	@return		CTRUE		Indicate that At least one( or more ) pending is seted. \n
+ *				CFALSE		Indicate that All pending is NOT seted.er
  */
 CBOOL	NX_RTC_GetInterruptPendingAll( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	if( __g_pRegister->RTCINTPND )
+	if( ReadIO32(&__g_pRegister->RTCINTPND) )
 	{
 		return CTRUE;
 	}
@@ -508,13 +386,6 @@ CBOOL	NX_RTC_GetInterruptPendingAll( void )
 /**
  *	@brief		Clear pending state of all interrupts.
  *	@return		None.
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *													NX_RTC_GetInterruptPendingNumber
  */
 void	NX_RTC_ClearInterruptPendingAll( void )
 {
@@ -524,7 +395,6 @@ void	NX_RTC_ClearInterruptPendingAll( void )
 
 	pRegister = __g_pRegister;
 
-//	pRegister->RTCINTPND = 0x03;
 	WriteIO32(&pRegister->RTCINTPND, 0x03);
 }
 
@@ -532,13 +402,6 @@ void	NX_RTC_ClearInterruptPendingAll( void )
 /**
  *	@brief		Get a interrupt number which has the most prority of pended interrupts
  *	@return		Pending Number( If all pending is not set then return -1 ).
- *	@see		NX_RTC_GetInterruptNumber,			NX_RTC_SetInterruptEnable,
- *				NX_RTC_GetInterruptEnable,			NX_RTC_SetInterruptEnable32,
- *				NX_RTC_GetInterruptEnable32,		NX_RTC_GetInterruptPending,
- *				NX_RTC_GetInterruptPending32,		NX_RTC_ClearInterruptPending,
- *				NX_RTC_ClearInterruptPending32,		NX_RTC_SetInterruptEnableAll,
- *				NX_RTC_GetInterruptEnableAll,		NX_RTC_GetInterruptPendingAll,
- *				NX_RTC_ClearInterruptPendingAll
  */
 S32		NX_RTC_GetInterruptPendingNumber( void )	// -1 if None
 {
@@ -547,7 +410,7 @@ S32		NX_RTC_GetInterruptPendingNumber( void )	// -1 if None
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	intpend = __g_pRegister->RTCINTPND & 0x03;
+	intpend = ReadIO32(&__g_pRegister->RTCINTPND) & 0x03;
 
 	return IntNum[ intpend ];
 }
@@ -559,26 +422,16 @@ S32		NX_RTC_GetInterruptPendingNumber( void )	// -1 if None
  *	@brief		Set new alarm value.
  *	@param[in]	AlarmCounter	new alarm value.
  *	@return		None.
- *	@remark		Before you call this function, you have to check a return value of
+ *	@remark	Before you call this function, you have to check a return value of
  *				NX_RTC_IsBusyAlarmCounter function to ensure the alarm counter is ready
- *				to write a new value.\n
+ *				to write a new value.
  *				Therefore the sequence for changing a alarm value is as follows.
- *	@code
- *		while( NX_RTC_IsBusyAlarmCounter() );	// wait until a last writing operation is completed.
- *		NX_RTC_SetAlarmCounter( newvalue );	// update a alarm value.
- *	@endcode
- *	@see											NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
  */
 void		NX_RTC_SetAlarmCounter( U32 AlarmCounter )
 {
 	NX_ASSERT( CFALSE == NX_RTC_IsBusyAlarmCounter() );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-//	__g_pRegister->RTCALARM = AlarmCounter;
 	WriteIO32(&__g_pRegister->RTCALARM, AlarmCounter);
 }
 
@@ -586,35 +439,25 @@ void		NX_RTC_SetAlarmCounter( U32 AlarmCounter )
 /**
  *	@brief		Get a alarm value.
  *	@return		current alarm value.
- *	@see		NX_RTC_SetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
  */
 U32		NX_RTC_GetAlarmCounter( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	return __g_pRegister->RTCALARM;
+	return ReadIO32(&__g_pRegister->RTCALARM);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Informs whether a last writing operation on alarm register is completed or not.
- *	@return		\b CTRUE	indicates a writing operation on alarm counter is not completed.\n
- *				\b CFALSE	indicates a writing operation on alarm counter is completed.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *													NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
+ *	@return		CTRUE		Indicates a writing operation on alarm counter is not completed.
+ *				CFALSE		Indicates a writing operation on alarm counter is completed.
  */
 CBOOL	NX_RTC_IsBusyAlarmCounter( void )
 {
 	const U32 ALARMCNTWAIT	= (1UL<<3);
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (__g_pRegister->RTCCTRL & ALARMCNTWAIT) ? CTRUE : CFALSE;
+	return ( ReadIO32(&__g_pRegister->RTCCTRL) & ALARMCNTWAIT) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -625,26 +468,14 @@ CBOOL	NX_RTC_IsBusyAlarmCounter( void )
  *	@remark		Before you call this function, you have to ensure CPU can access a
  *				RTC counter block. After you call this function, you have to wait
  *				until a writing operation is completed before you isolate a RTC
- *				counter block.\n
+ *				counter block.
  *				Therefore the sequence for changing a alarm value is as follows.
- *	@code
- *		NX_RTC_SetRTCCounterWriteEnable( CTRUE );	// Deisolate a RTC counter block.
- *		NX_RTC_SetRTCCounter( newvalue );			// update a RTC counter value.
- *		while( NX_RTC_IsBusyRTCCounter() );			// wait until a writing operation is completed.
- *		NX_RTC_SetRTCCounterWriteEnable( CFALSE );	// Isolate a RTC counter block.
- *	@endcode
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
  */
 void	NX_RTC_SetRTCCounter( U32 RTCCounter )
 {
 	NX_ASSERT( CFALSE == NX_RTC_IsBusyRTCCounter() );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-//	__g_pRegister->RTCCNTWRITE = RTCCounter;
 	WriteIO32(&__g_pRegister->RTCCNTWRITE, RTCCounter);
 }
 
@@ -652,43 +483,25 @@ void	NX_RTC_SetRTCCounter( U32 RTCCounter )
 /**
  *	@brief		Get current RTC counter value.
  *	@return		current RTC counter value.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *													NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
  */
 U32		NX_RTC_GetRTCCounter( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	return __g_pRegister->RTCCNTREAD;
+	return ReadIO32(&__g_pRegister->RTCCNTREAD);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Informs whether a last writing operation on RTC counter register is completed or not.
- *	@return		\b CTRUE	indicates a writing operation on RTC counter is not completed.\n
- *				\b CFALSE	indicates a writing operation on RTC counter is completed.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
+ *	@return		CTRUE		Indicates a writing operation on RTC counter is not completed.
+ *				CFALSE		Indicates a writing operation on RTC counter is completed.
  */
 CBOOL	NX_RTC_IsBusyRTCCounter( void )
 {
 	const U32 RTCCNTWAIT	= (1UL<<4);
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (__g_pRegister->RTCCTRL & RTCCNTWAIT) ? CTRUE : CFALSE;
-}
-
-void NX_RTC_SetOscSel(NX_RTC_OSCSEL mode)
-{
-	const U32 RTCOSCSEL_BIT	= 1;
-	NX_ASSERT( CNULL != __g_pRegister );
-	__g_pRegister->RTCCTRL = NX_BIT_SetBit32( __g_pRegister->RTCCTRL, (U32)mode, RTCOSCSEL_BIT);
-
+	return (ReadIO32(&__g_pRegister->RTCCTRL) & RTCCNTWAIT) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -696,7 +509,7 @@ void NX_RTC_SetOscSel(NX_RTC_OSCSEL mode)
  *	@brief		Enable/Disable to write data on RTC registers.
  *	@param[in]	enable	Set it to CTRUE to enable a writing on RTC counter register.
  *	@return		None.
- *	@remark		RTC counter module is always powered on regardless the system power
+ *	@remark	RTC counter module is always powered on regardless the system power
  *				modes. RTC has a isolation function to prevent unpredictable writing
  *				on RTC counter register	by a power-off sequence of other modules.
  *				A calling this function with CFALSE isolates RTC counter block and
@@ -705,11 +518,6 @@ void NX_RTC_SetOscSel(NX_RTC_OSCSEL mode)
  *				counter by CPU. Therefore you have to call this function with CFALSE
  *				before entering	a power-down sequence. A reading on RTC counter has
  *				no affect by this function.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *													NX_RTC_SetRestDelay,
- *				NX_RTC_GetRestDelay
  */
 void	NX_RTC_SetRTCCounterWriteEnable( CBOOL enable )
 {
@@ -722,12 +530,11 @@ void	NX_RTC_SetRTCCounterWriteEnable( CBOOL enable )
 	NX_ASSERT( (0==enable) || (1==enable) );
 
 	pRegister = __g_pRegister;
-	regvalue = pRegister->RTCCTRL;
+	regvalue = ReadIO32(&pRegister->RTCCTRL);
 
 	regvalue &= ~(WRITEENB);
 	regvalue |= (enable) << WRITEENB_POS;
 
-//	pRegister->RTCCTRL = regvalue;
 	WriteIO32(&pRegister->RTCCTRL, regvalue);
 }
 
@@ -736,18 +543,12 @@ void	NX_RTC_SetRTCCounterWriteEnable( CBOOL enable )
  *	@brief		Set reset delay time
  *	@param[in]	delay	holding time for Power Manager reset.
  *	@return		None.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,
- *				NX_RTC_GetRestDelay
  */
 void				NX_RTC_SetRestDelay( NX_RTC_RESETDELAY delay )
 {
 	NX_ASSERT( NX_RTC_RESETDELAY_186MS >= delay );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-//	__g_pRegister->RTCCORERSTIMESEL = (U32)delay;
 	WriteIO32(&__g_pRegister->RTCCORERSTIMESEL, (U32)delay);
 }
 
@@ -755,28 +556,32 @@ void				NX_RTC_SetRestDelay( NX_RTC_RESETDELAY delay )
 /**
  *	@brief		Get setting value of delay time.
  *	@return		delay time for Power Manager reset.
- *	@see		NX_RTC_SetAlarmCounter,				NX_RTC_GetAlarmCounter,
- *				NX_RTC_IsBusyAlarmCounter,			NX_RTC_SetRTCCounter,
- *				NX_RTC_GetRTCCounter,				NX_RTC_IsBusyRTCCounter,
- *				NX_RTC_SetRTCCounterWriteEnable,	NX_RTC_SetRestDelay
  */
 NX_RTC_RESETDELAY	NX_RTC_GetRestDelay( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (NX_RTC_RESETDELAY)(__g_pRegister->RTCCORERSTIMESEL);
+	return (NX_RTC_RESETDELAY)(ReadIO32(&__g_pRegister->RTCCORERSTIMESEL));
 }
 
+//------------------------------------------------------------------------------
+// Test Function
+void NX_RTC_SetOscSel(NX_RTC_OSCSEL mode)
+{
+	const U32 RTCOSCSEL_BIT	= 1;
+	NX_ASSERT( CNULL != __g_pRegister );
+	__g_pRegister->RTCCTRL = NX_BIT_SetBit32( __g_pRegister->RTCCTRL, (U32)mode, RTCOSCSEL_BIT);
 
+}
 void  NX_RTC_SetScratch( U32 Scratch )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	__g_pRegister->RTCSCRATCH = Scratch;
+	WriteIO32(&__g_pRegister->RTCSCRATCH, Scratch);
 }
 U32   NX_RTC_GetScratch( void )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return __g_pRegister->RTCSCRATCH;
+	return ReadIO32(&__g_pRegister->RTCSCRATCH);
 }

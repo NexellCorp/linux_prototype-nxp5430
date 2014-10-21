@@ -7,11 +7,11 @@
 //  The entire notice above must be reproduced on all authorized copies and copies
 //  may only be made to the extent permitted by a licensing agreement from Nexell Co.
 //
-//  Module      : I2C
-//  File        : nx_i2c.h
-//  Description :
-//  Author      : Firmware Team
-//  History     :
+//  Module     	: I2C
+//  File		  	: nx_i2c.c
+//  Description	:
+//  Author     	: Firmware Team
+//  History    	: 2014.10.01	Revision Comment & Function Define. (Deoks)
 //------------------------------------------------------------------------------
 #ifndef __NX_I2C_H__
 #define __NX_I2C_H__
@@ -120,8 +120,6 @@ U32     NX_I2C_GetResetNumber( U32 ModuleIndex );
 void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescaler );
 void    NX_I2C_GetClockPrescaler( U32 ModuleIndex, U32* pPclkDivider, U32* pPrescaler );
 void    NX_I2C_SetSlaveAddress( U32 ModuleIndex, U8 Address);
-//void    NX_I2C_SetDataDelay( U32 ModuleIndex, U32 delay );
-//U32     NX_I2C_GetDataDelay (U32 ModuleIndex);
 //@}
 
 //------------------------------------------------------------------------------
@@ -130,8 +128,15 @@ void    NX_I2C_SetSlaveAddress( U32 ModuleIndex, U8 Address);
 //@{
 void    NX_I2C_SetAckGenerationEnable( U32 ModuleIndex, CBOOL bAckGen );
 CBOOL   NX_I2C_GetAckGenerationEnable( U32 ModuleIndex );
-//void  NX_I2C_ClearOperationHold   ( U32 ModuleIndex );
+
 void    NX_I2C_ControlMode ( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode, NX_I2C_SIGNAL Signal );
+
+void		NX_I2C_SetFilterEnable( U32 ModuleIndex, CBOOL bEnable );
+CBOOL       NX_I2C_GetFilterEnable( U32 ModuleIndex );
+void				NX_I2C_SetSDAOutputDelay( U32 ModuleIndex, NX_I2C_SDA_DELAY Delay );
+NX_I2C_SDA_DELAY	NX_I2C_GetSDAOutputDelay( U32 ModuleIndex );
+
+
 CBOOL   NX_I2C_IsBusy( U32 ModuleIndex );
 void    NX_I2C_WriteByte (U32 ModuleIndex, U8 WriteData);
 U8      NX_I2C_ReadByte ( U32 ModuleIndex );
@@ -143,11 +148,7 @@ void    NX_I2C_BusDisable( U32 ModuleIndex );
 //------------------------------------------------------------------------------
 //@{
 CBOOL   NX_I2C_IsSlaveAddressMatch( U32 ModuleIndex );
-//void  NX_I2C_ClearSlaveAddressMatch( U32 ModuleIndex );
-//CBOOL NX_I2C_IsGeneralCall( U32 ModuleIndex );
-//void  NX_I2C_ClearGeneralCall( U32 ModuleIndex );
-//CBOOL NX_I2C_IsSlaveRxStop( U32 ModuleIndex );
-//void  NX_I2C_ClearSlaveRxStop( U32 ModuleIndex );
+
 CBOOL   NX_I2C_IsBusArbitFail( U32 ModuleIndex );
 CBOOL   NX_I2C_IsACKReceived( U32 ModuleIndex );
 CBOOL   NX_I2C_IsTxMode( U32 ModuleIndex );

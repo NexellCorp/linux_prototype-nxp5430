@@ -11,7 +11,6 @@ extern "C"
 {
 #endif
 
-
 //------------------------------------------------------------------------------
 /// @brief  UART register set structure
 //------------------------------------------------------------------------------
@@ -100,7 +99,19 @@ typedef enum
 	NX_UART_FIFOLEVEL_48BYTE = 5,
 	NX_UART_FIFOLEVEL_56BYTE = 6,
 	NX_UART_FIFOLEVEL_64BYTE = 7,
-} NX_UART_FIFOLEVEL;
+} NX_UART_RX_FIFOLEVEL;
+
+typedef enum
+{
+	NX_UART_FIFOLEVEL_0BYTE  = 0,
+	NX_UART_FIFOLEVEL_9BYTE  = 1,
+	NX_UART_FIFOLEVEL_17BYTE = 2,
+	NX_UART_FIFOLEVEL_25BYTE = 3,
+	NX_UART_FIFOLEVEL_33BYTE = 4,
+	NX_UART_FIFOLEVEL_41BYTE = 5,
+	NX_UART_FIFOLEVEL_49BYTE = 6,
+	NX_UART_FIFOLEVEL_57BYTE = 7,
+} NX_UART_TX_FIFOLEVEL;;
 
 //---------------- MCON enum ----------------//
 typedef enum
@@ -147,6 +158,8 @@ typedef enum
 
 //---------------- FSTATUS enum ----------------//
 
+//-------------------DEFINE--------------------//
+#define NUMBER_OF_UART_CHANNEL	6
 
 //------------------------------------------------------------------------------
 /// @name	Module Interface
@@ -186,6 +199,29 @@ U32		NX_UART_GetInterruptNumber( U32 ModuleIndex );
 //@}
 
 //------------------------------------------------------------------------------
+///	@name	Interrupt Interface
+//------------------------------------------------------------------------------
+//@{
+// Interrupt Polling Register & Interrupt Source Register & Interrupt Mask Register
+//-------------------------------------------------------------
+void	NX_UART_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable );
+CBOOL	NX_UART_GetInterruptEnable( U32 ModuleIndex, U32 IntNum );
+CBOOL	NX_UART_GetInterruptPending( U32 ModuleIndex, U32 IntNum );
+void	NX_UART_ClearInterruptPending( U32 ModuleIndex, U32 IntNum );
+
+void	NX_UART_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable );
+CBOOL	NX_UART_GetInterruptEnableAll( U32 ModuleIndex );
+CBOOL	NX_UART_GetInterruptPendingAll( U32 ModuleIndex );
+void	NX_UART_ClearInterruptPendingAll( U32 ModuleIndex );
+
+void	NX_UART_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag );
+U32		NX_UART_GetInterruptEnable32( U32 ModuleIndex );
+U32		NX_UART_GetInterruptPending32( U32 ModuleIndex );
+void	NX_UART_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag );
+//-------------------------------------------------------------
+//@}
+
+//------------------------------------------------------------------------------
 ///	@name	DMA Interface
 //@{
 U32		NX_UART_GetDMAIndex_Tx( U32 ModuleIndex );
@@ -196,13 +232,8 @@ U32		NX_UART_GetDMABusWidth( U32 ModuleIndex );
 //------------------------------------------------------------------------------
 ///	@name	UART Pad Enable Function
 //@{
-//void NX_UART_EnablePAD( U32 ModuleIndex, U32 ModeIndex );
+void 	NX_UART_EnablePAD( U32 ModuleIndex, U32 ModeIndex );
 //@}
-
-//--------------------------------------------------------------------------
-/// @name	Configuration operations
-//--------------------------------------------------------------------------
-//@{
 
 //--------------------------------------------------------------------------
 /// @name	Configuration operations
@@ -211,14 +242,14 @@ U32		NX_UART_GetDMABusWidth( U32 ModuleIndex );
 
 // Line Control Register
 //-------------------------------------------------------------
-void	NX_UART_SetInfraredMode( U32 ModuleIndex, NX_UART_SIGNAL_MODE IMode );
+void				NX_UART_SetInfraredMode( U32 ModuleIndex, NX_UART_SIGNAL_MODE IMode );
 NX_UART_SIGNAL_MODE	NX_UART_GetInfraredMode( U32 ModuleIndex );
 
-void	NX_UART_SetParityMode( U32 ModuleIndex, NX_UART_PARITY ParityMode );
+void				NX_UART_SetParityMode( U32 ModuleIndex, NX_UART_PARITY ParityMode );
 NX_UART_PARITY		NX_UART_GetParityMode( U32 ModuleIndex );
-void	NX_UART_SetStopBit( U32 ModuleIndex, NX_UART_STOP_BIT StopBit );
-NX_UART_STOP_BIT		NX_UART_GetStopBit( U32 ModuleIndex );
-void	NX_UART_SetDataWidth( U32 ModuleIndex, NX_UART_DATA_BIT DataWidth );
+void				NX_UART_SetStopBit( U32 ModuleIndex, NX_UART_STOP_BIT StopBit );
+NX_UART_STOP_BIT	NX_UART_GetStopBit( U32 ModuleIndex );
+void				NX_UART_SetDataWidth( U32 ModuleIndex, NX_UART_DATA_BIT DataWidth );
 NX_UART_DATA_BIT	NX_UART_GetDataWidth( U32 ModuleIndex );
   
 void	NX_UART_SetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY Parity,	U32 DataWidth,	U32 StopBit );
@@ -227,25 +258,32 @@ void	NX_UART_GetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY* pParity, U3
 
 //Control Register
 //-------------------------------------------------------------
-void	NX_UART_SetTxDMABurstSize( U32 ModuleIndex, NX_UART_DMA_BURST_SIZE BrustSize );
-NX_UART_DMA_BURST_SIZE		NX_UART_GetTxDMABurstSize( U32 ModuleIndex );
-void	NX_UART_SetRxDMABurstSize( U32 ModuleIndex, NX_UART_DMA_BURST_SIZE BrustSize );
-NX_UART_DMA_BURST_SIZE		NX_UART_GetRxDMABurstSize( U32 ModuleIndex );
+void					NX_UART_SetTxDMABurstSize( U32 ModuleIndex, NX_UART_DMA_BURST_SIZE BrustSize );
+NX_UART_DMA_BURST_SIZE	NX_UART_GetTxDMABurstSize( U32 ModuleIndex );
+void					NX_UART_SetRxDMABurstSize( U32 ModuleIndex, NX_UART_DMA_BURST_SIZE BrustSize );
+NX_UART_DMA_BURST_SIZE	NX_UART_GetRxDMABurstSize( U32 ModuleIndex );
+
+void	NX_UART_SetRxDMASuspendEnable( U32 ModuleIndex, U32 Enable );
+CBOOL	NX_UART_GetRxDMASuspendEnable( U32 ModuleIndex );
+
+//----------------------------------------------------------------------------------------
+void	NX_UART_SetRxTimeOutEnable( U32 ModuleIndex, CBOOL Enable ); 
+CBOOL	NX_UART_GetRxTimeOutEnable( U32 ModuleIndex );
 
 void	NX_UART_SetRxTimeOutInterval( U32 ModuleIndex, U32 TimeOutInterval ); // Interval-4bit
 U8		NX_UART_GetRxTimeOutInterval( U32 ModuleIndex );
 void	NX_UART_SetRxFIFOEmptyTimeOutEnable( U32 ModuleIndex, U32 Enable );
 CBOOL	NX_UART_GetRxFIFOEmptyTimeOutEnable( U32 ModuleIndex );
+//----------------------------------------------------------------------------------------
 
 void	NX_UART_SetTxInterruptType( U32 ModuleIndex, CBOOL Type ); 
 CBOOL	NX_UART_GetTxInterruptType( U32 ModuleIndex );
 void	NX_UART_SetRxInterruptType( U32 ModuleIndex, CBOOL Type ); 
 CBOOL	NX_UART_GetRxInterruptType( U32 ModuleIndex );
 
-void	NX_UART_SetRxTimeOutEnable( U32 ModuleIndex, CBOOL Enable ); 
-CBOOL	NX_UART_GetRxTimeOutEnable( U32 ModuleIndex );
 void	NX_UART_SetRxErrorStatusInterruptEnable( U32 ModuleIndex, CBOOL Enable ); 
 CBOOL	NX_UART_GetRxErrorStatusInterruptEnable( U32 ModuleIndex );
+//----------------------------------------------------------------------------------------
 
 void	NX_UART_SetLoopBackMode( U32 ModuleIndex, CBOOL Enable ); 
 CBOOL	NX_UART_GetLoopBackMode( U32 ModuleIndex );
@@ -261,17 +299,20 @@ U8		NX_UART_GetRecieveMode( U32 ModuleIndex );
 
 // FIFO Control Register
 //-------------------------------------------------------------
-void	NX_UART_SetTxFIFOTriggerLevel( U32 ModuleIndex, NX_UART_FIFOLEVEL Level ); 
-NX_UART_FIFOLEVEL	NX_UART_GetTxFIFOTriggerLevel( U32 ModuleIndex );
-void	NX_UART_SetRxFIFOTriggerLevel( U32 ModuleIndex, NX_UART_FIFOLEVEL Level ); 
-NX_UART_FIFOLEVEL	NX_UART_GetRxFIFOTriggerLevel( U32 ModuleIndex );
+void					NX_UART_SetTxFIFOTriggerLevel( U32 ModuleIndex, NX_UART_TX_FIFOLEVEL Level ); 
+NX_UART_TX_FIFOLEVEL	NX_UART_GetTxFIFOTriggerLevel( U32 ModuleIndex );
+void					NX_UART_SetRxFIFOTriggerLevel( U32 ModuleIndex, NX_UART_RX_FIFOLEVEL Level ); 
+NX_UART_RX_FIFOLEVEL	NX_UART_GetRxFIFOTriggerLevel( U32 ModuleIndex );
 
-void	NX_UART_SetTxFIFOReset( U32 ModuleIndex, U8 Enable );
+void	NX_UART_SetTxFIFOReset( U32 ModuleIndex, CBOOL Enable );
 CBOOL	NX_UART_GetTxFIFOReset( U32 ModuleIndex );
-void	NX_UART_SetRxFIFOReset( U32 ModuleIndex, U8 Enable );
+void	NX_UART_SetRxFIFOReset( U32 ModuleIndex, CBOOL Enable );
 CBOOL	NX_UART_GetRxFIFOReset( U32 ModuleIndex );
-void	NX_UART_SetFIFOEnb( U32 ModuleIndex, U8 Enable );
+void	NX_UART_SetFIFOEnb( U32 ModuleIndex, CBOOL Enable );
 CBOOL	NX_UART_GetFIFOEnb( U32 ModuleIndex );
+
+void	NX_UART_SetFIFOConfig( U32 ModuleIndex, CBOOL fifoEnb, U32 txLevel, U32 rxLevel );
+void	NX_UART_GetFIFOConfig( U32 ModuleIndex, CBOOL* fifoEnb, U32* txLevel, U32* rxLevel );
 //-------------------------------------------------------------
 
 
@@ -290,15 +331,21 @@ void	NX_UART_SetRTSLevel( U32 ModuleIndex, CBOOL Active );
 CBOOL	NX_UART_GetRTSLevel( U32 ModuleIndex );
 //-------------------------------------------------------------
 
+// Modem Status Register
+//-------------------------------------------------------------
+CBOOL	NX_UART_GetCTSStatus( U32 ModuleIndex );		// 0 : Not Change, 1:Change
+CBOOL	NX_UART_GetCTSLevel( U32 ModuleIndex );		// 0 : high, 1: low
+//-------------------------------------------------------------
+
 
 // TX/RX Status Register
 //-------------------------------------------------------------
-U8		NX_UART_GetTImeOutStatus( U32 ModuleIndex );
+U8		NX_UART_GetTimeOutStatus( U32 ModuleIndex );
 NX_UART_DMA_FSM		NX_UART_GetTxDMAFSMState( U32 ModuleIndex );
 NX_UART_DMA_FSM		NX_UART_GetRxDMAFSMState( U32 ModuleIndex );
 
 
-CBOOL	NX_UART_SetRxTimeOutState( U32 ModuleIndex, CBOOL Status );	//Rx-TImeOut Clear
+void	NX_UART_SetRxTimeOutState( U32 ModuleIndex, CBOOL Status );	//Rx-TImeOut Clear
 CBOOL	NX_UART_GetRxTimeOutState( U32 ModuleIndex );
 //------------------------------------------------------------------
 CBOOL	NX_UART_GetTransmitterEmpty( U32 ModuleIndex );
@@ -310,10 +357,6 @@ CBOOL	NX_UART_GetRxBufferEmpty( U32 ModuleInde );
 
 // Rx Error Status Register
 //-------------------------------------------------------------
-CBOOL	NX_UART_GetBreakDetect( U32 ModuleIndex );
-CBOOL	NX_UART_GetFrameError( U32 ModuleIndex );
-CBOOL	NX_UART_GetParityError( U32 ModuleIndex );
-CBOOL	NX_UART_GetOverrunError( U32 ModuleIndex );
 U32		NX_UART_GetErrorStatus( U32 ModuleIndex );
 //-------------------------------------------------------------
 
@@ -329,19 +372,11 @@ CBOOL	NX_UART_GetRxFIFOFull( U32 ModuleIndex );
 U8		NX_UART_GetRxFIFOCount( U32 ModuleIndex );
 //-------------------------------------------------------------
 
-// Modem Status Register
-//-------------------------------------------------------------
-CBOOL	NX_UART_GetCTSStatus( U32 ModuleIndex );		// 0 : Not Change, 1:Change
-CBOOL	NX_UART_GetCTSLevel( U32 ModuleIndex );		// 0 : high, 1: low
-//-------------------------------------------------------------
-
 
 // Transmit Buffer Register & Receive Buffer Register
 //-------------------------------------------------------------
 void	NX_UART_SendByte( U32 ModuleIndex, U8 Data );
 U8		NX_UART_GetByte( U32 ModuleIndex );
-U16		NX_UART_MakeBRD( U32 BaudRate, U32 CLKinHz );
-U8		NX_UART_MakeFBRD( U32 BaudRate, U32 CLKinHz );
 //-------------------------------------------------------------
 
 // Baud Rate Divisor Register
@@ -356,23 +391,10 @@ void	NX_UART_SetFBRD( U32 ModuleIndex, U8 FBRD );
 U8		NX_UART_GetFBRD( U32 ModuleIndex );
 //-------------------------------------------------------------
 
-
-// Interrupt Polling Register & Interrupt Source Register & Interrupt Mask Register
+//Baud Rate (Interger & Fractional) Making Function.
 //-------------------------------------------------------------
-void	NX_UART_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable );
-CBOOL	NX_UART_GetInterruptEnable( U32 ModuleIndex, U32 IntNum );
-CBOOL	NX_UART_GetInterruptPending( U32 ModuleIndex, U32 IntNum );
-void	NX_UART_ClearInterruptPending( U32 ModuleIndex, U32 IntNum );
-
-void	NX_UART_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable );
-CBOOL	NX_UART_GetInterruptEnableAll( U32 ModuleIndex );
-CBOOL	NX_UART_GetInterruptPendingAll( U32 ModuleIndex );
-void	NX_UART_ClearInterruptPendingAll( U32 ModuleIndex );
-
-void	NX_UART_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag );
-U32		NX_UART_GetInterruptEnable32( U32 ModuleIndex );
-U32		NX_UART_GetInterruptPending32( U32 ModuleIndex );
-void	NX_UART_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag );
+U16		NX_UART_MakeBRD( U32 BaudRate, U32 CLKinHz );
+U8		NX_UART_MakeFBRD( U32 BaudRate, U32 CLKinHz );
 //-------------------------------------------------------------
 
 
