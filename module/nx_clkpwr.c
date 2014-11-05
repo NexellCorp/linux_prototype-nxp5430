@@ -681,6 +681,7 @@ U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber )
 	const U32 PLL_SDIV_BIT_POS =	0;
 	const U32 PLL_KDIV_BIT_POS =	16;
 	register U32 RegValue, RegValue1, nP, nM, nS, nK;
+	U32 temp = 0;
 
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( NX_CLKPWR_NUMBER_OF_PLL	> pllnumber );
@@ -691,10 +692,13 @@ U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber )
 	nS = (RegValue >> PLL_SDIV_BIT_POS) & 0xFF;
 	RegValue1 = ReadIO32(&__g_pRegister->PLLSETREG_SSCG[pllnumber]);
 	nK = (RegValue1 >> PLL_KDIV_BIT_POS) & 0xFFFF;
-	if(pllnumber<2)
-		return (U32)((( nM * __g_OSC_KHz)/nP)>>nS)*1000;
-	else
-		return (U32)((((nM * __g_OSC_KHz)/nP)>>nS)+((((nK * __g_OSC_KHz)/nP)>>nS)>>16)) *1000;
+
+    if ((pllnumber > 1) && nK) {
+        temp = (U32)(((((nK * 1000) / 65536) * __g_OSC_KHz) / nP) >> nS);
+    }
+
+    temp = (U32)((((( nM * __g_OSC_KHz)/nP)>>nS)*1000) + temp);
+    return temp;
 }
 
 void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  )

@@ -93,8 +93,8 @@ extern "C"
 		volatile U32 DVOREG[9];					///< 0x020 ~ 0x040 : Divider Setting Register
 		volatile U32 __Reserved2;				///< 0x044
 		volatile U32 PLLSETREG_SSCG[6];			///< 0x048 ~ 0x05C
-		volatile U32 __reserved3[8];			///< 0x060 ~ 0x07C
-		volatile U8 __Reserved4[0x200-0x80];	// padding (0x80 ~ 0x1FF)
+		volatile U8  __Reserved3[0x80-0x60];	///< 0x060 ~ 0x07C
+		volatile U8  __Reserved4[0x200-0x80];	// padding (0x80 ~ 0x1FF)
 		volatile U32 GPIOWAKEUPRISEENB;			///< 0x200 : GPIO Rising Edge Detect Enable Register
 		volatile U32 GPIOWAKEUPFALLENB;			///< 0x204 : GPIO Falling Edge Detect Enable Register
 		volatile U32 GPIORSTENB;				///< 0x208 : GPIO Reset Enable Register
