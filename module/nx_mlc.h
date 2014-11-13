@@ -161,11 +161,12 @@ typedef enum
 /// @brief	Video layer pixel format.
 typedef enum
 {
-	NX_MLC_YUVFMT_420		= 0UL<<16,			///< Block Separated YUV420.
-	NX_MLC_YUVFMT_422		= 1UL<<16,			///< Block Separated YUV422.
-	NX_MLC_YUVFMT_444		= 3UL<<16,			///< Block Separated YUV444.
-	NX_MLC_YUVFMT_YUYV		= 2UL<<16,			///< Linear YUV422(YUYV).
-	NX_MLC_YUVFMT_Y4UV		= 4UL<<16			///< Block Separated Y Linear UV
+	NX_MLC_YUVFMT_420		= 0UL<<16,			///< Separated 3PLANE YUV420.
+	NX_MLC_YUVFMT_422		= 1UL<<16,			///< Separated 3PLANE YUV422.
+	NX_MLC_YUVFMT_444		= 3UL<<16,			///< Separated 3PLAEN YUV444.
+	NX_MLC_YUVFMT_YUYV		= 2UL<<16,			///< PACKED YUV422(YUYV).
+	NX_MLC_YUVFMT_422_CBCR	= 4UL<<16,			///< Separated 2PLANE 422 Y/UV
+	NX_MLC_YUVFMT_420_CBCR	= 5UL<<16,			///< Separated 2PLANE 420 Y/UV
 }	NX_MLC_YUVFMT;
 
 #ifdef __arm	// for RVDS
@@ -297,6 +298,9 @@ CBOOL	NX_MLC_GetVideoLayerLineBufferSleepMode( U32 ModuleIndex );
 
 void	NX_MLC_SetVideoLayerGammaEnable( U32 ModuleIndex, CBOOL bEnable );
 CBOOL	NX_MLC_GetVideoLayerGammaEnable( U32 ModuleIndex );
+
+// @added charles 20140530
+void	NX_MLC_SetGammaTable_Poweroff( U32 ModuleIndex, CBOOL Enb );
 //@}
 
 //@}
@@ -340,14 +344,6 @@ typedef enum
     RGBFMT_B8G8_R8G8    = 26,
 	RGBFMT_PATALETB     = 27
 }RGBFMT;
-
-typedef enum
-{
-	YUVFMT_420   = 0,	///< YUV Format YCbCr420
-	YUVFMT_422   = 1,	///< YUV Format YCbCr422
-	YUVFMT_422NS = 2,	///< YUV Format YCbCr422 no-seperated
-	YUVFMT_444   = 3	///< YUV Format YCbCr444
-}YUVFMT;
 
 /// @brief  Hue Quadrant
 typedef enum
@@ -462,7 +458,7 @@ NX_MLC_SetVideoLayerControlParameter
     U32 InverseColor,       ///< [in] Inverse color
     CBOOL BlendEnable,      ///< [in] Alpha blending enable
     U8 AlphaValue,			///< [in] Use Alpha value in no Alpha value format case
-    YUVFMT	YUVFormat
+    NX_MLC_YUVFMT	YUVFormat
 );
 
 void NX_MLC_SetSRAMMODE(U32 ModuleIndex, LATYERNAME LayerName, SRAMMODE SramMode);
@@ -486,6 +482,14 @@ NX_MLC_SetVideoLayerCoordinate
     S16 Bottom              ///< [in] Layer bottom coordinate
 );
 
+void
+NX_MLC_SetVideoLayerFilterScale
+(
+    U32 ModuleIndex,
+    U32 HScale,   ///< [in] Video Layer HScale
+    U32 VScale    ///< [in] Video Layer VScale
+);
+
 void NX_MLCSetGammaSRAMMode
 (
 	U32 ModuleIndex,
@@ -507,7 +511,7 @@ void NX_MLC_SetGammaControlParameter
 //----------------------------
 void NX_MLC_SetLayerAlpha256(U32 ModuleIndex, U32 Layer, U32 Alpha);
 
-
+CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex );
 
 
 

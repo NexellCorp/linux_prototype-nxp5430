@@ -129,17 +129,21 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
 {
     NX_ASSERT( CNULL != __g_pRegister );
 
+    /*
+    //----------------------------------------------
+    //  is this need?
+    //----------------------------------------------
     //  __g_pRegister->MODE         = 0;
     //  __g_pRegister->INTENB       = 0;
     //  __g_pRegister->INTPEND      = 0x0F;
-
+    
     //  __g_pRegister->SRAMPORSLEEP = 0;
     //  __g_pRegister->TSPARA       = (( 18<<16) |  10);
     //  __g_pRegister->TMPARA       = (( 16<<16) |  8);
     //  __g_pRegister->TIPARA       = ((306<<16) |  50);
     //  __g_pRegister->TPARA        = ((466<<16) | 434);
     //  __g_pRegister->BLENDPARA    = 3;
-
+    
     //  __g_pRegister->SRCSIZE_Y    = 0;
     //  __g_pRegister->SRCADDRP_Y   = 0;
     //  __g_pRegister->SRCADDRC_Y   = 0;
@@ -149,7 +153,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     //  __g_pRegister->DESTADDRD_Y  = 0;
     //  __g_pRegister->DESTADDRF_Y  = 0;
     //  __g_pRegister->DESTSTRD_Y   = 0;
-
+    
     //  __g_pRegister->SRCSIZE_CB   = 0;
     //  __g_pRegister->SRCADDRC_CB  = 0;
     //  __g_pRegister->SRCSTRD_CB   = 0;
@@ -157,7 +161,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     //  __g_pRegister->DESTADDRD_CB = 0;
     //  __g_pRegister->DESTADDRF_CB = 0;
     //  __g_pRegister->DESTSTRD_CB  = 0;
-
+    
     //  __g_pRegister->SRCSIZE_CR   = 0;
     //  __g_pRegister->SRCADDRC_CR  = 0;
     //  __g_pRegister->SRCSTRD_CR   = 0;
@@ -206,6 +210,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     WriteIODW(&__g_pRegister->DESTADDRD_CR, 0);
     WriteIODW(&__g_pRegister->DESTADDRF_CR, 0);
     WriteIODW(&__g_pRegister->DESTSTRD_CR, 0);
+    */
 
     return CTRUE;
 }
@@ -223,84 +228,6 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
 CBOOL   NX_DEINTERLACE_CloseModule( void )
 {
     NX_ASSERT( CNULL != __g_pRegister );
-
-    //  __g_pRegister->MODE         = 0;
-    //  __g_pRegister->INTENB       = 0;
-    //  __g_pRegister->INTPEND      = 0x0F;
-
-    //  __g_pRegister->SRAMPORSLEEP = 0;
-    //  __g_pRegister->TSPARA       = (( 18<<16) |  10);
-    //  __g_pRegister->TMPARA       = (( 16<<16) |  8);
-    //  __g_pRegister->TIPARA       = ((306<<16) |  50);
-    //  __g_pRegister->TPARA        = ((466<<16) | 434);
-    //  __g_pRegister->BLENDPARA    = 3;
-
-    //  __g_pRegister->SRCSIZE_Y    = 0;
-    //  __g_pRegister->SRCADDRP_Y   = 0;
-    //  __g_pRegister->SRCADDRC_Y   = 0;
-    //  __g_pRegister->SRCADDRN_Y   = 0;
-    //  __g_pRegister->SRCSTRD_Y    = 0;
-    //  __g_pRegister->SRCCONT_Y    = 0x00040000;
-    //  __g_pRegister->DESTADDRD_Y  = 0;
-    //  __g_pRegister->DESTADDRF_Y  = 0;
-    //  __g_pRegister->DESTSTRD_Y   = 0;
-
-    //  __g_pRegister->SRCSIZE_CB   = 0;
-    //  __g_pRegister->SRCADDRC_CB  = 0;
-    //  __g_pRegister->SRCSTRD_CB   = 0;
-    //  __g_pRegister->SRCCONT_CB   = 0x00040000;
-    //  __g_pRegister->DESTADDRD_CB = 0;
-    //  __g_pRegister->DESTADDRF_CB = 0;
-    //  __g_pRegister->DESTSTRD_CB  = 0;
-
-    //  __g_pRegister->SRCSIZE_CR   = 0;
-    //  __g_pRegister->SRCADDRC_CR  = 0;
-    //  __g_pRegister->SRCSTRD_CR   = 0;
-    //  __g_pRegister->SRCCONT_CR   = 0x00040000;
-    //  __g_pRegister->DESTADDRD_CR = 0;
-    //  __g_pRegister->DESTADDRF_CR = 0;
-    //  __g_pRegister->DESTSTRD_CR  = 0;
-
-    WriteIODW(&__g_pRegister->MODE, 0);
-    WriteIODW(&__g_pRegister->INTENB, 0);
-    WriteIODW(&__g_pRegister->INTPEND, 0x0F);
-
-    WriteIODW(&__g_pRegister->SRAMPORSLEEP, 0);
-    WriteIODW(&__g_pRegister->TSPARA, (( 18<<16) |  10));
-    WriteIODW(&__g_pRegister->TMPARA, (( 16<<16) |  8));
-    WriteIODW(&__g_pRegister->TIPARA, ((306<<16) |  50));
-    WriteIODW(&__g_pRegister->TPARA, ((466<<16) | 434));
-    WriteIODW(&__g_pRegister->BLENDPARA, 3);
-    WriteIODW(&__g_pRegister->LRMASK, 0);
-
-    WriteIODW(&__g_pRegister->CMDSTATE, 0);
-    WriteIODW(&__g_pRegister->CMDBUFADDR, 0);
-
-    WriteIODW(&__g_pRegister->SRCSIZE_Y, 0);
-    WriteIODW(&__g_pRegister->SRCADDRP_Y, 0);
-    WriteIODW(&__g_pRegister->SRCADDRC_Y, 0);
-    WriteIODW(&__g_pRegister->SRCADDRN_Y, 0);
-    WriteIODW(&__g_pRegister->SRCSTRD_Y, 0);
-    WriteIODW(&__g_pRegister->SRCCONT_Y, 0x00040000);
-    WriteIODW(&__g_pRegister->DESTADDRD_Y, 0);
-    WriteIODW(&__g_pRegister->DESTADDRF_Y, 0);
-    WriteIODW(&__g_pRegister->DESTSTRD_Y, 0);
-
-    WriteIODW(&__g_pRegister->SRCSIZE_CB, 0);
-    WriteIODW(&__g_pRegister->SRCADDRC_CB, 0);
-    WriteIODW(&__g_pRegister->SRCSTRD_CB, 0);
-    WriteIODW(&__g_pRegister->SRCCONT_CB, 0x00040000);
-    WriteIODW(&__g_pRegister->DESTADDRD_CB, 0);
-    WriteIODW(&__g_pRegister->DESTADDRF_CB, 0);
-    WriteIODW(&__g_pRegister->DESTSTRD_CB, 0);
-
-    WriteIODW(&__g_pRegister->SRCSIZE_CR, 0);
-    WriteIODW(&__g_pRegister->SRCADDRC_CR, 0);
-    WriteIODW(&__g_pRegister->SRCSTRD_CR, 0);
-    WriteIODW(&__g_pRegister->SRCCONT_CR, 0x00040000);
-    WriteIODW(&__g_pRegister->DESTADDRD_CR, 0);
-    WriteIODW(&__g_pRegister->DESTADDRF_CR, 0);
-    WriteIODW(&__g_pRegister->DESTSTRD_CR, 0);
 
     return CTRUE;
 }
@@ -381,7 +308,7 @@ void    NX_DEINTERLACE_SetInterruptEnable( S32 IntNum, CBOOL Enable )
     struct NX_DEINTERLACE_RegisterSet *pRegister;
     register U32    ReadValue;
 
-    NX_ASSERT( (5 > IntNum) && (0 <= IntNum) );
+    NX_ASSERT( (4 > IntNum) && (0 <= IntNum) );
     NX_ASSERT( (0==Enable) || (1==Enable) );
     NX_ASSERT( CNULL != __g_pRegister );
 
@@ -392,7 +319,6 @@ void    NX_DEINTERLACE_SetInterruptEnable( S32 IntNum, CBOOL Enable )
     ReadValue &= ~(1<<IntNum);
     ReadValue |= ((U32)Enable << IntNum );
 
-    //pRegister->INTENB = ReadValue;
     WriteIODW(&pRegister->INTENB, ReadValue);
 }
 
@@ -412,7 +338,7 @@ void    NX_DEINTERLACE_SetInterruptEnable( S32 IntNum, CBOOL Enable )
  */
 CBOOL   NX_DEINTERLACE_GetInterruptEnable( S32 IntNum )
 {
-    NX_ASSERT( (5 > IntNum) && (0 <= IntNum) );
+    NX_ASSERT( (4 > IntNum) && (0 <= IntNum) );
     NX_ASSERT( CNULL != __g_pRegister );
 
     return (CBOOL)((__g_pRegister->INTENB >> IntNum) & 0x01 );
@@ -437,11 +363,10 @@ CBOOL   NX_DEINTERLACE_GetInterruptEnable( S32 IntNum )
  */
 void    NX_DEINTERLACE_SetInterruptEnable32( U32 EnableFlag )
 {
-    const U32   ENB_MASK = 0x1F ;
+    const U32   ENB_MASK = 0xF ;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->INTENB = EnableFlag & ENB_MASK;
     WriteIODW(&__g_pRegister->INTENB, EnableFlag & ENB_MASK);
 }
 
@@ -465,7 +390,7 @@ void    NX_DEINTERLACE_SetInterruptEnable32( U32 EnableFlag )
  */
 U32     NX_DEINTERLACE_GetInterruptEnable32( void )
 {
-    const U32   ENB_MASK = 0x1F ;
+    const U32   ENB_MASK = 0xF ;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
@@ -488,7 +413,7 @@ U32     NX_DEINTERLACE_GetInterruptEnable32( void )
  */
 CBOOL   NX_DEINTERLACE_GetInterruptPending( S32 IntNum )
 {
-    NX_ASSERT( (5 > IntNum) && (0 <= IntNum) );
+    NX_ASSERT( (4 > IntNum) && (0 <= IntNum) );
     NX_ASSERT( CNULL != __g_pRegister );
 
     return (CBOOL)((__g_pRegister->INTPEND >> IntNum) & 0x01 );
@@ -514,7 +439,7 @@ CBOOL   NX_DEINTERLACE_GetInterruptPending( S32 IntNum )
  */
 U32     NX_DEINTERLACE_GetInterruptPending32( void )
 {
-    const U32 PEND_MASK = 0x1F;
+    const U32 PEND_MASK = 0xF;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
@@ -536,10 +461,9 @@ U32     NX_DEINTERLACE_GetInterruptPending32( void )
  */
 void    NX_DEINTERLACE_ClearInterruptPending( S32 IntNum )
 {
-    NX_ASSERT( (5 > IntNum) && (0 <= IntNum) );
+    NX_ASSERT( (4 > IntNum) && (0 <= IntNum) );
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->INTPEND = (0x01 << IntNum);
     WriteIODW(&__g_pRegister->INTPEND, (0x01 << IntNum));
 }
 
@@ -562,7 +486,7 @@ void    NX_DEINTERLACE_ClearInterruptPending( S32 IntNum )
  */
 void    NX_DEINTERLACE_ClearInterruptPending32( U32 PendingFlag )
 {
-    const U32 PEND_MASK = 0x1F;
+    const U32 PEND_MASK = 0xF;
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->INTPEND = (PendingFlag & PEND_MASK);
@@ -585,19 +509,17 @@ void    NX_DEINTERLACE_ClearInterruptPending32( U32 PendingFlag )
  */
 void    NX_DEINTERLACE_SetInterruptEnableAll( CBOOL Enable )
 {
-    const U32 INTENB_MASK = 0x1F;
+    const U32 INTENB_MASK = 0xF;
 
     NX_ASSERT( (0==Enable) || (1==Enable) );
     NX_ASSERT( CNULL != __g_pRegister );
 
     if( CTRUE == Enable )
     {
-        //__g_pRegister->INTENB = INTENB_MASK;
         WriteIODW(&__g_pRegister->INTENB, INTENB_MASK);
     }
     else
     {
-        //__g_pRegister->INTENB = 0x00;
         WriteIODW(&__g_pRegister->INTENB, 0x00);
     }
 }
@@ -617,7 +539,7 @@ void    NX_DEINTERLACE_SetInterruptEnableAll( CBOOL Enable )
  */
 CBOOL   NX_DEINTERLACE_GetInterruptEnableAll( void )
 {
-    const U32 INTENB_MASK = 0x1F;
+    const U32 INTENB_MASK = 0xF;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
@@ -644,7 +566,7 @@ CBOOL   NX_DEINTERLACE_GetInterruptEnableAll( void )
  */
 CBOOL   NX_DEINTERLACE_GetInterruptPendingAll( void )
 {
-    const U32 INTPEND_MASK = 0x1F;
+    const U32 INTPEND_MASK = 0xF;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
@@ -670,11 +592,10 @@ CBOOL   NX_DEINTERLACE_GetInterruptPendingAll( void )
  */
 void    NX_DEINTERLACE_ClearInterruptPendingAll( void )
 {
-    const U32 INTPEND_MASK = 0x1F;
+    const U32 INTPEND_MASK = 0xF;
 
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->INTPEND = INTPEND_MASK;
     WriteIODW(&__g_pRegister->INTPEND, INTPEND_MASK);
 }
 
@@ -703,7 +624,7 @@ S32     NX_DEINTERLACE_GetInterruptPendingNumber( void )    // -1 if None
 
     dwPend = ( pRegister->INTENB & pRegister->INTPEND);
 
-    for( dwIntNum=0; dwIntNum < 5; dwIntNum++ )
+    for( dwIntNum=0; dwIntNum < 4; dwIntNum++ )
     {
         if( dwPend & (1<<dwIntNum) )
         {
@@ -714,134 +635,6 @@ S32     NX_DEINTERLACE_GetInterruptPendingNumber( void )    // -1 if None
     return -1;
 }
 
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set a PCLK mode
- *  @param[in]  mode    PCLK mode
- *  @return     None.
- *  @remark     Deinterlace doesn't support NX_PCLKMODE_DYNAMIC. If you call this
- *              function with NX_PCLKMODE_DYNAMIC, it makes that PCLK doesn't
- *              provide to the Deinterlace module and Deinterlace module doesn't operate
- *                  correctly. You have to set a PCLK mode as NX_PCLKMODE_ALWAYS
- *                  to operate and control the Deinterlace module. But you can set a PCLK
- *              mode as NX_PCLKMODE_DYNAMIC to slightly reduce a power
- *              cunsumption if you don't want to use the Deinterlace module.
- *  @see                                                NX_DEINTERLACE_GetClockPClkMode,
- *              NX_DEINTERLACE_SetClockBClkMode,        NX_DEINTERLACE_GetClockBClkMode,
- */
-void    NX_DEINTERLACE_SetClockPClkMode( NX_PCLKMODE mode )
-{
-    const U32 PCLKMODE_POS  =   3;
-
-    register U32 regvalue;
-    register struct NX_DEINTERLACE_RegisterSet* pRegister;
-
-    U32 clkmode=0;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    pRegister = __g_pRegister;
-
-    switch(mode)
-    {
-        case NX_PCLKMODE_DYNAMIC:   clkmode = 0;        break;
-        case NX_PCLKMODE_ALWAYS:    clkmode = 1;        break;
-        default: NX_ASSERT( CFALSE );
-    }
-
-    regvalue = pRegister->CLKENB;
-
-    regvalue &= ~(1UL<<PCLKMODE_POS);
-    regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
-
-    //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Get current PCLK mode
- *  @return     Current PCLK mode
- *  @see        NX_DEINTERLACE_SetClockPClkMode,
- *              NX_DEINTERLACE_SetClockBClkMode,        NX_DEINTERLACE_GetClockBClkMode,
- */
-NX_PCLKMODE NX_DEINTERLACE_GetClockPClkMode( void )
-{
-    const U32 PCLKMODE_POS  = 3;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    if( __g_pRegister->CLKENB & ( 1UL << PCLKMODE_POS ) )
-    {
-        return NX_PCLKMODE_ALWAYS;
-    }
-
-    return  NX_PCLKMODE_DYNAMIC;
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set System Bus Clock's operation Mode
- *  @param[in]  mode        BCLK Mode
- *  @return     None.
- *  @remark     Deinterlace doesn't support NX_BCLKMODE_DYNAMIC. If you call this
- *              function with NX_BCLKMODE_DYNAMIC, it makes that BCLK doesn't
- *              provide to the Deinterlace module and Deinterlace module doesn't operate
- *                  correctly. You have to set a PCLK mode as NX_BCLKMODE_ALWAYS
- *                  to operate and control the Deinterlace module. But you can set a BCLK
- *              mode as NX_BCLKMODE_DYNAMIC to slightly reduce a power
- *              cunsumption if you don't want to use the Deinterlace module.
- *  @see        NX_DEINTERLACE_SetClockPClkMode,        NX_DEINTERLACE_GetClockPClkMode,
- *                                                      NX_DEINTERLACE_GetClockBClkModenable
- */
-void NX_DEINTERLACE_SetClockBClkMode( NX_BCLKMODE mode )
-{
-    register U32 regvalue;
-    register struct NX_DEINTERLACE_RegisterSet* pRegister;
-    U32 clkmode=0;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    pRegister = __g_pRegister;
-
-    switch(mode)
-    {
-        case NX_BCLKMODE_DISABLE:   clkmode = 0;        break;
-        case NX_BCLKMODE_DYNAMIC:   clkmode = 2;        break;
-        case NX_BCLKMODE_ALWAYS:    clkmode = 3;        break;
-        default: NX_ASSERT( CFALSE );
-    }
-
-    regvalue = pRegister->CLKENB;
-    regvalue &= ~(0x03);
-    regvalue |= clkmode & 0x03;
-    //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Get System Bus Clock's operation Mode
- *  @return     BCLK Mode
- *  @see        NX_DEINTERLACE_SetClockPClkMode,        NX_DEINTERLACE_GetClockPClkMode,
- *              NX_DEINTERLACE_SetClockBClkMode
- */
-NX_BCLKMODE NX_DEINTERLACE_GetClockBClkMode( void )
-{
-    const U32 BCLKMODE  = 3UL<<0;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    switch( __g_pRegister->CLKENB & BCLKMODE )
-    {
-        case 0 :    return NX_BCLKMODE_DISABLE;
-        case 2 :    return NX_BCLKMODE_DYNAMIC;
-        case 3 :    return NX_BCLKMODE_ALWAYS;
-    }
-
-    NX_ASSERT( CFALSE );
-    return NX_BCLKMODE_DISABLE;
-}
 
 //------------------------------------------------------------------------------
 /**
@@ -861,7 +654,7 @@ U32         NX_DEINTERLACE_GetClockNumber( void )
 
 U32         NX_DEINTERLACE_GetResetNumber( void )
 {
-    const U32 ResetPortNumber[NUMBER_OF_DEINTERLACE_MODULE] =
+    const U32 ResetPortNumber[NUMBER_OF_DEINTERLACE_MODULE] = 
     {
         RESETINDEX_LIST( DEINTERLACE, i_nRST )
     };
@@ -891,7 +684,6 @@ void    NX_DEINTERLACE_SetASParameter( U32 dwTS1, U32 dwTS2 )
     NX_ASSERT((1<<8) > dwTS2);
     NX_ASSERT( CNULL != __g_pRegister )
 
-    //__g_pRegister->TSPARA = ((dwTS2<<TS2_BITPOS) | dwTS1);
     WriteIODW(&__g_pRegister->TSPARA, ((dwTS2<<TS2_BITPOS) | dwTS1));
 }
 
@@ -943,7 +735,6 @@ void    NX_DEINTERLACE_SetMDSADParameter( U32 dwTM1, U32 dwTM2 )
     NX_ASSERT((1<<8) > dwTM2);
     NX_ASSERT( CNULL != __g_pRegister )
 
-    //__g_pRegister->TMPARA = ((dwTM2<<TM2_BITPOS) | dwTM1);
     WriteIODW(&__g_pRegister->TMPARA, ((dwTM2<<TM2_BITPOS) | dwTM1));
 }
 
@@ -995,7 +786,6 @@ void    NX_DEINTERLACE_SetMIParameter( U32 dwTI1, U32 dwTI2 )
     NX_ASSERT((1<<16) > dwTI2);
     NX_ASSERT( CNULL != __g_pRegister )
 
-    //__g_pRegister->TIPARA = ((dwTI2<<TI2_BITPOS) | dwTI1);
     WriteIODW(&__g_pRegister->TIPARA, ((dwTI2<<TI2_BITPOS) | dwTI1));
 }
 
@@ -1047,7 +837,6 @@ void    NX_DEINTERLACE_SetYSParameter( U32 dwT1, U32 dwT2 )
     NX_ASSERT((1<<9) > dwT2);
     NX_ASSERT( CNULL != __g_pRegister )
 
-    //__g_pRegister->TPARA = ((dwT2<<T2_BITPOS) | dwT1);
     WriteIODW(&__g_pRegister->TPARA, ((dwT2<<T2_BITPOS) | dwT1));
 }
 
@@ -1095,7 +884,6 @@ void    NX_DEINTERLACE_SetBLENDParameter( U32 dwShift )
     NX_ASSERT((1<<4) > dwShift);
     NX_ASSERT( CNULL != __g_pRegister )
 
-    //__g_pRegister->BLENDPARA = dwShift;
     WriteIODW(&__g_pRegister->BLENDPARA, dwShift);
 }
 
@@ -1122,64 +910,6 @@ void    NX_DEINTERLACE_GetBLENDParameter( U32 *pdwShift )
 
     if( CNULL != pdwShift ){ *pdwShift = ReadValue & SHIFTVALUE_MASK;   }
 }
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set Burst Control
- *  @param[in]  burst       Value of Burst Control Mode ( BURST_4 or BURST_8 )
- *  @return     None.
- *  @remarks    If Set Burst_4 mode then deitnerlace write data to memory 4 count.\n
- *              If Set Burst_8 mode then deitnerlace write data to memory 8 count.
- *  @see        NX_DEINTERLACE_GetBurstControl
- */
-/*
-void    NX_DEINTERLACE_SetBurstControl
-(
-    NX_DEINTERLACE_BURST burst
-)
-{
-    const U32   START_MASK      = ( 1 << 0 );
-    const U32   IDLE_MASK       = ( 1 << 1 );
-    const U32   BURST_BITPOS    = 2 ;
-    const U32   BURST_MASK      = ( 1 << BURST_BITPOS );
-
-    register U32    temp;
-
-    NX_ASSERT( NX_DEINTERLACE_BURST_4 >= burst );
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    temp = __g_pRegister->MODE ;
-
-    temp &= ~( START_MASK | IDLE_MASK | BURST_MASK );
-    temp |= (U32)burst << BURST_BITPOS;
-
-    //__g_pRegister->MODE = temp;
-    WriteIODW(&__g_pRegister->MODE, temp);
-}
-*/
-
-//------------------------------------------------------------------------------
-/*
- *  @brief      Get Burst Control
- *  @return     Value of Burst Control Mode ( BURST_4 or BURST_8 )
- *  @see        NX_DEINTERLACE_SetBurstControl
- */
-/*
-NX_DEINTERLACE_BURST    NX_DEINTERLACE_GetBurstControl( void )
-{
-    const U32   BURST_BITPOS    = 2;
-    const U32   BURST_MASK      = ( 0x01 << BURST_BITPOS );
-    register U32    temp;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    temp = __g_pRegister->MODE ;
-
-    temp = ( temp & BURST_MASK ) >> BURST_BITPOS ;
-
-    return ( NX_DEINTERLACE_BURST )temp;
-}
-*/
 
 //--------------------------------------------------------------------------
 /**
@@ -1211,7 +941,6 @@ void    NX_DEINTERLACE_SetCRFieldInfo
     temp &= ~( CR_MASK | START_MASK | IDLE_MASK );
     temp |= (U32)field << CR_BITPOS;
 
-    //pRegister->MODE = temp;
     WriteIODW(&pRegister->MODE, temp);
 }
 
@@ -1372,111 +1101,6 @@ void    NX_DEINTERLACE_SetYCBCRField
 
     //pRegister->MODE =   temp;
     WriteIODW(&pRegister->MODE, temp);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set left right masking enable
- *  @param[in]  LMaskEnb    Left Masking Enable
- *  @param[in]  RMaskEnb    Right Masking Enable
- */
-void    NX_DEINTERLACE_SetLRMask( U32 LMaskEnb, U32 RMaskEnb )
-{
-    const   U32 RIGHT_BITPOS    = 0;
-    const   U32 LEFT_BITPOS     = 1;
-
-    register U32 temp;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    temp = ( ((U32)LMaskEnb << LEFT_BITPOS) | ((U32)RMaskEnb << RIGHT_BITPOS ));
-    //__g_pRegister->LRMASK = temp;
-    WriteIODW(&__g_pRegister->LRMASK, temp);
-}
-
-//--------------------------------------------------------------------------
-// Deinterlace Operation Function
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set Deinterlace buffer power
- *  @param[in]  enable  \b CTRUE    Deinterlace buffer is power on.\n
- *                      \b CFALSE   Deinterlace buffer is power off.
- *  @return     None.
- *  @remarks    Deinterlace buffer should on before deinterlace to enable.
- *  @see                                                NX_DEINTERLACE_GetBufferPowerOn
- *              NX_DEINTERLACE_SetBufferPowerSleep,     NX_DEINTERLACE_GetBufferPowerSleep
- */
-void    NX_DEINTERLACE_SetBufferPowerOn( CBOOL enable )
-{
-    return;
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Get deinterlace's buffer status
- *  @return     \b CTRUE    Indicate that deinterlace buffer is power on. \n
- *              \b CFALSE   Indicate that deinterlace buffer is power off.
- *  @see        NX_DEINTERLACE_SetBufferPowerOn,
- *              NX_DEINTERLACE_SetBufferPowerSleep,     NX_DEINTERLACE_GetBufferPowerSleep
- */
-CBOOL   NX_DEINTERLACE_GetBufferPowerOn( void )
-{
-    return CTRUE;
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set deinterlace's buffer sleep mode
- *  @param[in]  enable  CTRUE   Sleep mode enable. \n
- *                      CFALSE  Sleep mode disable. \n
- *  @return     None.
- *  @remarks    Sleep mode only avaliable when buffer is power on.
- *  @see        NX_DEINTERLACE_SetBufferPowerOn,        NX_DEINTERLACE_GetBufferPowerOn
- *                                                      NX_DEINTERLACE_GetBufferPowerSleep
- */
-void    NX_DEINTERLACE_SetBufferPowerSleep( CBOOL enable )
-{
-    const U32 POWER_MASK = (0x1F<<16);
-    const U32 SLEEP_MASK = (0x1F<<0);
-    struct NX_DEINTERLACE_RegisterSet *pRegister;
-
-    NX_ASSERT( (0==enable) || (1==enable) );
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    pRegister = __g_pRegister;
-
-    if( enable )
-    {
-        //pRegister->SRAMPORSLEEP = 0;
-        WriteIODW(&pRegister->SRAMPORSLEEP, 0);
-    }
-    else
-    {
-        //pRegister->SRAMPORSLEEP = SLEEP_MASK;
-        WriteIODW(&pRegister->SRAMPORSLEEP, POWER_MASK|SLEEP_MASK);
-    }
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Get deinterlace's buffer sleep mode status
- *  @return     \b CTRUE    Indicate that deinterlace buffer is sleep mode on. \n
- *              \b CFALSE   Indicate that deinterlace buffer is sleep mode off.
- *  @see        NX_DEINTERLACE_SetBufferPowerOn,        NX_DEINTERLACE_GetBufferPowerOn
- *              NX_DEINTERLACE_SetBufferPowerSleep
- */
-CBOOL   NX_DEINTERLACE_GetBufferPowerSleep( void )
-{
-    const U32 SLEEP_MASK = 0x1F;
-
-    NX_ASSERT( CNULL != __g_pRegister )
-
-    if( SLEEP_MASK & __g_pRegister->SRAMPORSLEEP )
-    {
-        return CFALSE;
-    }
-
-    return CTRUE;
 }
 
 //------------------------------------------------------------------------------
@@ -1749,11 +1373,11 @@ CBOOL   NX_DEINTERLACE_IsYBusy( void )
  */
 CBOOL   NX_DEINTERLACE_IsDeinterlaceBusy( void )
 {
-    const   U32 BUSY_MASK = ( 0x01 << 1 );
+    const   U32 BUSY_MASK = ( 0x01 << 0 );
 
     NX_ASSERT( CNULL != __g_pRegister );
 
-    return ( __g_pRegister->MODE & BUSY_MASK ) ? CFALSE : CTRUE ;
+    return ( __g_pRegister->START & BUSY_MASK ) ? CFALSE : CTRUE ;
 }
 
 //------------------------------------------------------------------------------
@@ -1772,7 +1396,7 @@ void    NX_DEINTERLACE_IsDeinterlaceSwReset( void )
 
     pRegister = __g_pRegister;
 
-    WriteIODW(&pRegister->MODE, RESET_MASK);
+    WriteIODW(&pRegister->START, RESET_MASK);
 }
 
 //------------------------------------------------------------------------------
@@ -1797,7 +1421,7 @@ void    NX_DEINTERLACE_DeinterlaceStart( void )
     temp =  ( temp & ~IDLE_MASK ) | START_MASK;
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIODW(&pRegister->START, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1807,7 +1431,7 @@ void    NX_DEINTERLACE_DeinterlaceStart( void )
  *  @remarks    Deinterlace is stopped mandatorily by this function
  *  @see        NX_DEINTERLACE_DeinterlaceStart
  */
-
+/*
 void    NX_DEINTERLACE_DeinterlaceStop( void )
 {
     const   U32 STOP_MASK = ( 0x01 << 1 );
@@ -1825,6 +1449,7 @@ void    NX_DEINTERLACE_DeinterlaceStop( void )
     //pRegister->MODE = temp;
     WriteIODW(&pRegister->MODE, temp);
 }
+*/
 
 //------------------------------------------------------------------------------
 // Y Field Configuration Function
@@ -1923,60 +1548,11 @@ void    NX_DEINTERLACE_SetYSrcAddrNext
  *              Stride range ( 0 ~ 0xFFFF ).
  *  @see        NX_DEINTERLACE_GetYSrcStride
  */
-void    NX_DEINTERLACE_SetYSrcStride
-(
-    U32 YSrcVStride,
-    U32 YSrcHStride
-)
+void    NX_DEINTERLACE_SetYSrcStride( U32 YSrcStride )
 {
-    const   U32 VSTRIDE_BITPOS = 16 ;
-    const   U32 HSTRIDE_BITPOS  = 0 ;
-    register U32    temp;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-    NX_ASSERT( 0x10000 > YSrcVStride );
-    NX_ASSERT( 0x10000 > YSrcHStride );
-
-    temp = ( YSrcVStride << VSTRIDE_BITPOS  ) | ( YSrcHStride << HSTRIDE_BITPOS );
-
-    //__g_pRegister->SRCSTRD_Y    = temp;
-    WriteIODW(&__g_pRegister->SRCSTRD_Y, temp);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set Y Read Control
- *  @param[in]  DirEnb      Direction of read data from cache
- *  @param[in]  ByteSize    Read Data Byte Size
- *  @param[in]  VOffset     Vertical Position Offset
- *  @param[in]  HOffset     Horizontal Position Offset
- *  @return     None
- *  @remarks    Each Horizontal and Vertical stride can set maxium 16bit value.\n
- *              Stride range ( 0 ~ 0xFFFF ).
- *  @see        NX_DEINTERLACE_GetYSrcStride
- */
-void    NX_DEINTERLACE_SetYSrcControl
-(
-    NX_DEINTERLACE_DIR      DirEnb,
-    NX_DEINTERLACE_BITWIDTH ByteSize,
-    U8                      VOffset,
-    U8                      HOffset
-)
-{
-    const   U32 DIRECT_ENB_BITPOS   = 18;
-    const   U32 BYTE_SIZE_BITPOS    = 16;
-    const   U32 VOFFSET_BITPOS      =  8;
-    const   U32 HOFFSET_BITPOS      =  0;
-    register U32 temp;
-
     NX_ASSERT( CNULL != __g_pRegister );
 
-    temp = ( DirEnb     << DIRECT_ENB_BITPOS ) | ( ByteSize   << BYTE_SIZE_BITPOS  )
-         | ( VOffset    << VOFFSET_BITPOS    ) | ( HOffset    << HOFFSET_BITPOS    );
-
-    //__g_pRegister->SRCSTRD_Y    = temp;
-    WriteIODW(&__g_pRegister->SRCCONT_Y, temp);
-
+    WriteIODW(&__g_pRegister->SRCSTRD_Y, YSrcStride);
 }
 
 //------------------------------------------------------------------------------
@@ -1988,14 +1564,10 @@ void    NX_DEINTERLACE_SetYSrcControl
  *  @see        NX_DEINTERLACE_GetYDestAddrDIT
  */
 
-void    NX_DEINTERLACE_SetYDestAddrDIT
-(
-    U32 YDestAddrDIT
-)
+void    NX_DEINTERLACE_SetYDestAddrDIT  ( U32 YDestAddrDIT )
 {
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->DESTADDRD_Y  =   YDestAddrDIT;
     WriteIODW(&__g_pRegister->DESTADDRD_Y,  YDestAddrDIT);
 }
 
@@ -2008,14 +1580,10 @@ void    NX_DEINTERLACE_SetYDestAddrDIT
  *  @see        NX_DEINTERLACE_GetYDestAddrFil
  */
 
-void    NX_DEINTERLACE_SetYDestAddrFil
-(
-    U32 YDestAddrFil
-)
+void    NX_DEINTERLACE_SetYDestAddrFil  ( U32 YDestAddrFil )
 {
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->DESTADDRF_Y  =   YDestAddrFil;
     WriteIODW(&__g_pRegister->DESTADDRF_Y,  YDestAddrFil);
 }
 
@@ -2028,15 +1596,10 @@ void    NX_DEINTERLACE_SetYDestAddrFil
  *              Stride range ( 0 ~ 0xFFFF ).
  *  @see        NX_DEINTERLACE_GetYDestStride
  */
-void    NX_DEINTERLACE_SetYDestStride
-(
-    U32 YDestStride
-)
+void    NX_DEINTERLACE_SetYDestStride   ( U32 YDestStride )
 {
-    NX_ASSERT( 0x10000 > YDestStride );
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->DESTSTRD_Y = YDestStride;
     WriteIODW(&__g_pRegister->DESTSTRD_Y,   YDestStride);
 }
 
@@ -2202,7 +1765,6 @@ void    NX_DEINTERLACE_SetCBSrcAddrCurr
 {
     NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->SRCADDRC_CB  = CBSrcAddrCurr;
     WriteIODW(&__g_pRegister->SRCADDRC_CB, CBSrcAddrCurr);
 }
 
@@ -2217,59 +1779,11 @@ void    NX_DEINTERLACE_SetCBSrcAddrCurr
  *              Stride range ( 0 ~ 0xFFFF ).
  *  @see        NX_DEINTERLACE_GetCBSrcStride
  */
-void    NX_DEINTERLACE_SetCBSrcStride
-(
-    U32 CBSrcVStride,
-    U32 CBSrcHStride
-)
+void    NX_DEINTERLACE_SetCBSrcStride( U32 CBSrcStride )
 {
-    const   U32 VSTRIDE_BITPOS  = 16 ;
-    const   U32 HSTRIDE_BITPOS  = 0 ;
-    register U32    temp;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-    NX_ASSERT( 0x10000 > CBSrcVStride );
-    NX_ASSERT( 0x10000 > CBSrcHStride );
-
-    temp = ( CBSrcVStride << VSTRIDE_BITPOS ) | ( CBSrcHStride << HSTRIDE_BITPOS );
-
-    //__g_pRegister->SRCSTRD_CB   = temp;
-    WriteIODW(&__g_pRegister->SRCSTRD_CB, temp);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set CB Read Control
- *  @param[in]  DirEnb      Direction of read data from cache
- *  @param[in]  ByteSize    Read Data Byte Size
- *  @param[in]  VOffset     Vertical Position Offset
- *  @param[in]  HOffset     Horizontal Position Offset
- *  @return     None
- *  @remarks
- *  @see
- */
-void    NX_DEINTERLACE_SetCBSrcControl
-(
-    NX_DEINTERLACE_DIR      DirEnb,
-    NX_DEINTERLACE_BITWIDTH ByteSize,
-    U8                      VOffset,
-    U8                      HOffset
-)
-{
-    const   U32 DIRECT_ENB_BITPOS   = 18;
-    const   U32 BYTE_SIZE_BITPOS    = 16;
-    const   U32 VOFFSET_BITPOS      =  8;
-    const   U32 HOFFSET_BITPOS      =  0;
-    register U32 temp;
-
     NX_ASSERT( CNULL != __g_pRegister );
 
-    temp = ( DirEnb     << DIRECT_ENB_BITPOS ) | ( ByteSize   << BYTE_SIZE_BITPOS  )
-         | ( VOffset    << VOFFSET_BITPOS    ) | ( HOffset    << HOFFSET_BITPOS    );
-
-    //__g_pRegister->SRCSTRD_Y    = temp;
-    WriteIODW(&__g_pRegister->SRCCONT_CB, temp);
-
+    WriteIODW(&__g_pRegister->SRCSTRD_CB, CBSrcStride);
 }
 
 //------------------------------------------------------------------------------
@@ -2482,59 +1996,11 @@ void    NX_DEINTERLACE_SetCRSrcAddrCurr
  *              Stride range ( 0 ~ 0xFFFF ).
  *  @see        NX_DEINTERLACE_GetCRSrcStride
  */
-void    NX_DEINTERLACE_SetCRSrcStride
-(
-    U32 CRSrcVStride,
-    U32 CRSrcHStride
-)
+void    NX_DEINTERLACE_SetCRSrcStride( U32 CRSrcStride )
 {
-    const   U32 VSTRIDE_BITPOS = 16 ;
-    const   U32 HSTRIDE_BITPOS  = 0 ;
-    register U32    temp;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-    NX_ASSERT( 0x10000 > CRSrcVStride );
-    NX_ASSERT( 0x10000 > CRSrcHStride );
-
-    temp = ( CRSrcVStride << VSTRIDE_BITPOS ) | ( CRSrcHStride << HSTRIDE_BITPOS );
-
-    //__g_pRegister->SRCSTRD_CR   = temp;
-    WriteIODW(&__g_pRegister->SRCSTRD_CR, temp);
-}
-
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set CR Read Control
- *  @param[in]  DirEnb      Direction of read data from cache
- *  @param[in]  ByteSize    Read Data Byte Size
- *  @param[in]  VOffset     Vertical Position Offset
- *  @param[in]  HOffset     Horizontal Position Offset
- *  @return     None
- *  @remarks
- *  @see
- */
-void    NX_DEINTERLACE_SetCRSrcControl
-(
-    NX_DEINTERLACE_DIR      DirEnb,
-    NX_DEINTERLACE_BITWIDTH ByteSize,
-    U8                      VOffset,
-    U8                      HOffset
-)
-{
-    const   U32 DIRECT_ENB_BITPOS   = 18;
-    const   U32 BYTE_SIZE_BITPOS    = 16;
-    const   U32 VOFFSET_BITPOS      =  8;
-    const   U32 HOFFSET_BITPOS      =  0;
-    register U32 temp;
-
     NX_ASSERT( CNULL != __g_pRegister );
 
-    temp = ( DirEnb     << DIRECT_ENB_BITPOS ) | ( ByteSize   << BYTE_SIZE_BITPOS  )
-         | ( VOffset    << VOFFSET_BITPOS    ) | ( HOffset    << HOFFSET_BITPOS    );
-
-    //__g_pRegister->SRCSTRD_Y    = temp;
-    WriteIODW(&__g_pRegister->SRCCONT_CR, temp);
-
+    WriteIODW(&__g_pRegister->SRCSTRD_CR, CRSrcStride);
 }
 
 //------------------------------------------------------------------------------
@@ -2684,36 +2150,4 @@ U32     NX_DEINTERLACE_GetCRDestStride  ( void )
     return ( __g_pRegister->DESTSTRD_CR );
 }
 
-//------------------------------------------------------------------------------
-//  Command buffer configuration function
-//------------------------------------------------------------------------------
-void    NX_DEINTERLACE_CmdBufStart      ( void )
-{
-    NX_ASSERT( CNULL != __g_pRegister );
 
-    //__g_pRegister->CMDSTATE =    0x01;
-    WriteIODW( &__g_pRegister->CMDSTATE, 0x01 );
-}
-
-void    NX_DEINTERLACE_CmdBufStop       ( void )
-{
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    //__g_pRegister->CMDSTATE =    0x02;
-    WriteIODW( &__g_pRegister->CMDSTATE, 0x02 );
-}
-
-void    NX_DEINTERLACE_SetCmdBufAddr    ( U32 CmdBufAddr )
-{
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    //__g_pRegister->CMDBUFADDR =    CmdBufAddr;
-    WriteIODW( &__g_pRegister->CMDBUFADDR, CmdBufAddr );
-}
-
-U32     NX_DEINTERLACE_GetCmdBufAddr    ( void )
-{
-    NX_ASSERT( CNULL != __g_pRegister );
-
-    return ( __g_pRegister->CMDBUFADDR );
-}

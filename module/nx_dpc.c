@@ -2328,9 +2328,11 @@ void NX_DPC_SetSync
 	regvalue |= (((U32)FieldPolarity<<2) | ((U32)VSyncPolarity<<1) | ((U32)HSyncPolarity<<0));
 	WriteIODW(&pRegister->DPCCTRL0, (U32)regvalue);
 
-    regvalue1 =(U32)( ReadIODW(&pRegister -> DPCCTRL0) & 0xffff);
-    regvalue1 = (U32)((SyncGenMode<<9) | regvalue1);
-    WriteIODW(&pRegister -> DPCCTRL0, (U32)regvalue1);
+	// user never set INTERMODE in this config..
+	// INTERMODE must be set with SYNCENB
+    //regvalue1 =(U16)( ReadIODW(&pRegister -> DPCCTRL0) & 0xffff);
+    //regvalue1 = (U16)((SyncGenMode<<9) | regvalue1);
+    //WriteIODW(&pRegister -> DPCCTRL0, (U16)regvalue1);
 }
 
 
@@ -2660,8 +2662,6 @@ U32 NX_DPC_GetStatus( U32 ModuleIndex )
 
 	Reg = ReadIODW( &pRegister->DPCMPUSTATUS );
 
-//	NX_CONSOLE_Printf("[DEBUG] Reg = %x", Reg);
-
 	Reg = (Reg<<16)| ReadIODW( &pRegister->DPCMPURDATAL );
 
 	return Reg;
@@ -2704,8 +2704,141 @@ U32 NX_DPC_GetFieldFlag( U32 ModuleIndex )
 	return ((regvalue >> 5) && 0x01 );
 }
 
+void NX_DPC_SetEnable_WITH_INTERLACE
+(
+    U32 ModuleIndex,
+	CBOOL Enable,			///< [in] display controller enable
+	CBOOL RGBMode,          ///< [in] output format reb & ycbcr enable
+	CBOOL UseNTSCSync,		///< [in] use NTSC encoder sync
+	CBOOL UseAnalogOutput,	///< [in] use analog output(use DAC)
+	CBOOL SEAVEnable        ///< [in] Start of active and End of active Enable
+)
+{
+	U32 regvalue;
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( ~UseAnalogOutput | UseNTSCSync );
+
+	regvalue = ReadIODW(&pRegister->DPCCTRL0) & 0x0EFF;
+	regvalue = ReadIODW(&pRegister->DPCCTRL0) & 0x0EFF;
+	regvalue |= ((U32)Enable<<15) |
+				((U32)UseNTSCSync<<14) | ((U32)SEAVEnable<<8) |((U32)UseAnalogOutput<<13) | ((U32)RGBMode<<12);
+
+	// @added by choiyk 2014/05/08 pm0710
+	// INTERLACE MODE
+	regvalue |= (1<<9);
+
+	WriteIODW(&pRegister->DPCCTRL0, (U16)regvalue);
+}
+
+//===========================================================
+// NTSC encoder
+//===========================================================
+void NX_DPC_SetEncoderControlReg		(U32 ModuleIndex, U32 ParamA, U32 ParamB, U32 ParamC)
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+	WriteIODW(&pRegister->NTSC_ECMDA, ParamA);
+	WriteIODW(&pRegister->NTSC_ECMDB, ParamB);
+	WriteIODW(&pRegister->NTSC_ECMDC, ParamC);
+}
+
+void NX_DPC_SetEncoderSHCPhaseControl	(U32 ModuleIndex, U32 ChromaParam)
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+	WriteIODW(&pRegister->NTSC_SCH, ChromaParam);
+}
+
+void NX_DPC_SetEncoderTimingConfigReg	(U32 ModuleIndex, U32 ICNTL)
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+	WriteIODW(&pRegister->NTSC_ICNTL, ICNTL);
+}
+
+void NX_DPC_SetEncoderDACOutputSelect	(U32 ModuleIndex,
+										 U8 DACSEL0,    U8 DACSEL1,    U8 DACSEL2,
+									     U8 DACSEL3,    U8 DACSEL4,    U8 DACSEL5  )
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+	WriteIODW(&pRegister->NTSC_DACSEL10, ((DACSEL1&0xf)<<4) | (DACSEL0&0xf) );
+	WriteIODW(&pRegister->NTSC_DACSEL32, ((DACSEL3&0xf)<<4) | (DACSEL2&0xf) );
+	WriteIODW(&pRegister->NTSC_DACSEL54, ((DACSEL5&0xf)<<4) | (DACSEL4&0xf) );
+}
+
+void NX_DPC_SetEncoderSyncLocation		(U32 ModuleIndex,
+										 U16 HSOE,    U16 HSOB,    U16 VSOB,
+									     U16 VSOE,    U8 VSOST,    CBOOL NOVRST )
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+    WriteIODW(&pRegister->NTSC_HSVSO,(U16)((((VSOB&0x100)>>2)|((HSOB&0x700)>>5)|(HSOE&0x700)>>8)) );
+    WriteIODW(&pRegister->NTSC_HSOE ,(U16)(HSOE&0xff) );
+    WriteIODW(&pRegister->NTSC_HSOB ,(U16)(HSOB&0xff) );
+    WriteIODW(&pRegister->NTSC_VSOB ,(U16)(VSOB&0xff) );
+    WriteIODW(&pRegister->NTSC_VSOE ,(U16)(((VSOST&0x3)<<6) | (NOVRST<<5) | (VSOE&0x1f)) );
+}
+
+void NX_DPC_SetEncoderDACPowerEnable	(U32 ModuleIndex, U8 DACPD)
+{
+	register struct NX_DPC_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
+
+    WriteIODW(&pRegister->NTSC_DACPD, DACPD);
+}
 
 
+void	NX_DPC_SetYCOrder ( U32 ModuleIndex, NX_DPC_YCORDER ycorder )
+{
+	// DPC Control 1 register
+	const U16 YCORDER_POS	= 6;
+	register struct NX_DPC_RegisterSet*	pRegister;
+	U32 temp;
+
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( 4 > ycorder );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	temp  = pRegister->DPCCTRL1 & (~(0xF<<YCORDER_POS));
+	temp  = (U16)(temp | (ycorder << YCORDER_POS));
+	WriteIOW(&pRegister->DPCCTRL1, temp);
+}
+
+void	NX_DPC_SetLumaGain ( U32 ModuleIndex, U32 LumaGain )
+{
+	register struct NX_DPC_RegisterSet*	pRegister;
+	U32 temp;
+
+	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	WriteIOW(&pRegister->NTSC_CONT, LumaGain);
+}
 
 
 

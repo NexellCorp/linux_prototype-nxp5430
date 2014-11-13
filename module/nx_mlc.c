@@ -3154,7 +3154,22 @@ CBOOL	NX_MLC_GetVideoLayerGammaEnable( U32 ModuleIndex )
 	return(CBOOL)((__g_ModuleVariables[ModuleIndex].pRegister->MLCGAMMACONT & YUVGAMMAEMB_MASK) >> YUVGAMMAEMB_BITPOS);
 }
 
+// @added charles 20140530
+void	NX_MLC_SetGammaTable_Poweroff( U32 ModuleIndex, CBOOL Enb )
+{
+	register struct NX_MLC_RegisterSet *pRegister;
+	U32 regvalue;
 
+	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	if(Enb == CTRUE) {
+    	regvalue = pRegister->MLCGAMMACONT;
+    	regvalue = regvalue & 0xF3;
+    	WriteIODW(&pRegister->MLCGAMMACONT, regvalue);
+	}
+}
 
 
 //----------------------------------------------------------------
@@ -3407,7 +3422,7 @@ NX_MLC_SetVideoLayerControlParameter
     U32 InverseColor,       ///< [in] Inverse color
     CBOOL BlendEnable,      ///< [in] Alpha blending enable
     U8 AlphaValue,			///< [in] Use Alpha value in no Alpha value format case
-    YUVFMT	YUVFormat
+    NX_MLC_YUVFMT	YUVFormat
 )
 {
     U32 ControlEnb;
@@ -3424,7 +3439,7 @@ NX_MLC_SetVideoLayerControlParameter
 
 	VideoControlReg = ReadIODW(&pRegister ->MLCVIDEOLAYER. MLCCONTROL);
 
-    ControlEnb = (U32)((YUVFormat<<16) | (LayerEnable<<5) | (BlendEnable<<2) | (InvEnable<<1) | TpEnable) & 0x30027;
+    ControlEnb = (U32)((YUVFormat) | (LayerEnable<<5) | (BlendEnable<<2) | (InvEnable<<1) | TpEnable) & 0x30027;
     AlphaArgument = (U32)(AlphaValue&0xF);
 
     regvalue = (U32)(ControlEnb | VideoControlReg);
@@ -3435,7 +3450,6 @@ NX_MLC_SetVideoLayerControlParameter
 
     regvalue = (U32)((AlphaArgument<<28) | TransparencyColor);
     WriteIODW(&pRegister->MLCVIDEOLAYER.MLCINVCOLOR, regvalue );
-
 }
 
 
@@ -3594,6 +3608,45 @@ NX_MLC_SetVideoLayerCoordinate
 
 
 
+//---------------------
+// @added by choiyk 2013-09-27 오후 1:08:32
+// 함수 NX_MLC_SetVideoLayerCoordinate 의 계산식이 이상하므로
+// 하위 호환성을 위해사 아래 Scale 함수에서는 바로 Scale 값을 넣어준다.
+// 사용자는 제대로된 계산식으로 Scale을 직접 넣어준다.
+//
+// @note choiyk 2013-09-27 오후 1:07:01
+// Scale 계산식이 이상하다..
+// 왜 160 width를 1을 빼서 계산하지..? 이러면 당연히 오차가 발생한다.
+// 원래 160 width이고, 이를 80으로 축소한다고 하면
+//
+// 입력은
+//  * VideoLayerWith = 160
+//  * Left  = 40
+//  * Right = 119
+// 로 들어왔을 것이니.. 이를 계산할때는
+// VideoLayerWith * 2048 / (Right - Left + 1)
+// 위와 같이 해주어야 하는것 아닌가?
+//----------------------
+void
+NX_MLC_SetVideoLayerFilterScale
+(
+    U32 ModuleIndex,
+    U32 HScale,   ///< [in] Video Layer HScale
+    U32 VScale    ///< [in] Video Layer VScale
+)
+{
+	register struct NX_MLC_RegisterSet* pRegister;
+
+	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	U32 MLCHSCALE = ReadIODW(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
+	U32 MLCVSCALE = ReadIODW(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
+	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(MLCHSCALE | (HScale&0x00FFFFFF)));
+	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(MLCVSCALE | (VScale&0x00FFFFFF)));
+}
 
 
 
@@ -3669,5 +3722,39 @@ void NX_MLC_SetLayerAlpha256(U32 ModuleIndex, U32 Layer, U32 Alpha)
 	}
 
 }
+
+
+
+
+
+
+//------------------------------------------------------------------------------
+/**
+ */
+CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex )
+{
+	const U32 UNDERFLOW_PEND_POS	= 31;
+	const U32 UNDERFLOW_PEND_MASK	= 1UL<<UNDERFLOW_PEND_POS;
+
+	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	return (CBOOL)((__g_ModuleVariables[ModuleIndex].pRegister->MLCCONTROLT & UNDERFLOW_PEND_MASK) >> UNDERFLOW_PEND_POS );
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
