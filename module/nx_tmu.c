@@ -227,12 +227,12 @@ void	NX_TMU_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	ReadValue	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+//	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 
 //	ReadValue	&=	(U32)(~(1UL << IntNum));
 //	ReadValue	|=	(U32)Enable << IntNum ;
 
-//	WriteIODW(&pRegister->TINT_CSTAT, ReadValue);
+//	WriteIO32(&pRegister->TINT_CSTAT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -254,7 +254,7 @@ CBOOL	NX_TMU_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)0//( (ReadIODW(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
+	return	(CBOOL)0//( (ReadIO32(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -277,7 +277,7 @@ CBOOL	NX_TMU_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)0//( (ReadIODW(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)0//( (ReadIO32(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -302,10 +302,10 @@ void	NX_TMU_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK;
+//	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
 //	PendEnb |=	1UL<<(IntNum+PEND_POS);
 
-//	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+//	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ void	NX_TMU_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	else
 		SetValue	=	0;
 
-//	WriteIODW(&pRegister->TINT_CSTAT, SetValue);
+//	WriteIO32(&pRegister->TINT_CSTAT, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -356,7 +356,7 @@ CBOOL	NX_TMU_GetInterruptEnableAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	if( ReadIODW(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
+//	if( ReadIO32(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
 	{
 //		return CTRUE;
 	}
@@ -383,7 +383,7 @@ CBOOL	NX_TMU_GetInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	if( ReadIODW(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
+//	if( ReadIO32(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
 	{
 //		return CTRUE;
 	}
@@ -411,10 +411,10 @@ void	NX_TMU_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+//	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 //	PendEnb |=	PEND_MASK<<PEND_POS;
 
-//	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+//	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -436,7 +436,7 @@ U32		NX_TMU_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	NX_ASSERT( CNULL != pRegister );
 
-//	Pend	=	(ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
+//	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
 
 //	for( PendingIndex = 0; PendingIndex<NX_TIMER_INT; PendingIndex++)
 //		if(Pend & (1UL<<PendingIndex))

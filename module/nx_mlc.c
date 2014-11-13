@@ -246,7 +246,7 @@ void			NX_MLC_SetClockPClkMode( U32 ModuleIndex, NX_PCLKMODE mode )
 	regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
 
 //	pRegister->MLCCLKENB = regvalue;
-	WriteIODW(&pRegister->MLCCLKENB,regvalue);
+	WriteIO32(&pRegister->MLCCLKENB,regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ void			NX_MLC_SetClockBClkMode( U32 ModuleIndex, NX_BCLKMODE mode )
 	regvalue |= clkmode & 0x3;
 
 //	pRegister->MLCCLKENB = regvalue;
-	WriteIODW(&pRegister->MLCCLKENB, regvalue);
+	WriteIO32(&pRegister->MLCCLKENB, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -390,7 +390,7 @@ void	NX_MLC_SetTopPowerMode( U32 ModuleIndex, CBOOL bPower )
 	regvalue |= (bPower << PIXELBUFFER_PWD_POS);
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -472,7 +472,7 @@ void	NX_MLC_SetTopSleepMode( U32 ModuleIndex, CBOOL bSleep )
 	regvalue |= (bSleep << PIXELBUFFER_SLD_POS);
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -533,7 +533,7 @@ void	NX_MLC_SetTopDirtyFlag( U32 ModuleIndex )
 	regvalue |= DIRTYFLAG;
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -559,7 +559,7 @@ CBOOL	NX_MLC_GetTopDirtyFlag( U32 ModuleIndex )
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
 	return (CBOOL)(
-	(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MLCCONTROLT) & DIRTYFLAG_MASK) >> DIRTYFLAG_POS );
+	(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MLCCONTROLT) & DIRTYFLAG_MASK) >> DIRTYFLAG_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -601,7 +601,7 @@ void	NX_MLC_SetMLCEnable( U32 ModuleIndex, CBOOL bEnb )
 	regvalue |= (bEnb<<MLCENB_POS);
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -668,7 +668,7 @@ void	NX_MLC_SetFieldEnable( U32 ModuleIndex, CBOOL bEnb )
 	regvalue |= (bEnb<<FIELDENB_POS);
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -736,7 +736,7 @@ void	NX_MLC_SetLayerPriority( U32 ModuleIndex, NX_MLC_PRIORITY priority )
 	regvalue |= (priority<<PRIORITY_POS);
 
 //	pRegister->MLCCONTROLT = regvalue;
-	WriteIODW(&pRegister->MLCCONTROLT, regvalue);
+	WriteIO32(&pRegister->MLCCONTROLT, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -771,7 +771,7 @@ void	NX_MLC_SetScreenSize( U32 ModuleIndex, U32 width, U32 height )
 	regvalue  = ((height-1)<<16) | (width-1);
 
 //	pRegister->MLCSCREENSIZE = regvalue;
-	WriteIODW(&pRegister->MLCSCREENSIZE, regvalue);
+	WriteIO32(&pRegister->MLCSCREENSIZE, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -831,7 +831,7 @@ void	NX_MLC_SetBackground( U32 ModuleIndex, U32 color )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCBGCOLOR = color;
-	WriteIODW(&pRegister->MLCBGCOLOR, color);
+	WriteIO32(&pRegister->MLCBGCOLOR, color);
 }
 
 //--------------------------------------------------------------------------
@@ -877,7 +877,7 @@ void	NX_MLC_SetDirtyFlag( U32 ModuleIndex, U32 layer )
 		regvalue |= DIRTYFLG_MASK;
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 	}
 	else if( 3 == layer )
 	{
@@ -885,7 +885,7 @@ void	NX_MLC_SetDirtyFlag( U32 ModuleIndex, U32 layer )
 		regvalue |= DIRTYFLG_MASK;
 
 	//	pRegister->MLCVIDEOLAYER.MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
 	}
 }
 
@@ -978,7 +978,7 @@ void	NX_MLC_SetLayerEnable( U32 ModuleIndex, U32 layer, CBOOL bEnb )
 		regvalue |= (bEnb<<LAYERENB_POS);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 	}
 	else if( 3 == layer )
 	{
@@ -988,7 +988,7 @@ void	NX_MLC_SetLayerEnable( U32 ModuleIndex, U32 layer, CBOOL bEnb )
 		regvalue |= (bEnb<<LAYERENB_POS);
 
 	//	pRegister->MLCVIDEOLAYER.MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
 	}
 }
 
@@ -1077,7 +1077,7 @@ void	NX_MLC_SetLockSize( U32 ModuleIndex, U32 layer, U32 locksize )
 		regvalue |= (locksize<<12);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 	}
 }
 
@@ -1139,14 +1139,14 @@ void	NX_MLC_SetAlphaBlending( U32 ModuleIndex, U32 layer, CBOOL bEnb, U32 alpha 
 		regvalue |= (bEnb<<BLENDENB_POS);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 
 		regvalue = pRegister->MLCRGBLAYER[layer].MLCTPCOLOR;
 		regvalue &= ~ALPHA_MASK;
 		regvalue |= alpha << ALPHA_POS;
 
 	//	pRegister->MLCRGBLAYER[layer].MLCTPCOLOR = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCTPCOLOR, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCTPCOLOR, regvalue);
 	}
 	else if( 3 == layer )
 	{
@@ -1155,10 +1155,10 @@ void	NX_MLC_SetAlphaBlending( U32 ModuleIndex, U32 layer, CBOOL bEnb, U32 alpha 
 		regvalue |= (bEnb<<BLENDENB_POS);
 
 	//	pRegister->MLCVIDEOLAYER.MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
 
 	//	pRegister->MLCVIDEOLAYER.MLCTPCOLOR = alpha << ALPHA_POS;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, alpha << ALPHA_POS);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, alpha << ALPHA_POS);
 	}
 }
 
@@ -1214,14 +1214,14 @@ void	NX_MLC_SetTransparency( U32 ModuleIndex, U32 layer, CBOOL bEnb, U32 color )
 		regvalue |= (bEnb<<TPENB_POS);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 
 		regvalue = pRegister->MLCRGBLAYER[layer].MLCTPCOLOR;
 		regvalue &= ~TPCOLOR_MASK;
 		regvalue |= (color & TPCOLOR_MASK);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCTPCOLOR = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCTPCOLOR, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCTPCOLOR, regvalue);
 	}
 }
 
@@ -1277,14 +1277,14 @@ void	NX_MLC_SetColorInversion( U32 ModuleIndex, U32 layer, CBOOL bEnb, U32 color
 		regvalue |= (bEnb<<INVENB_POS);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 
 		regvalue = pRegister->MLCRGBLAYER[layer].MLCINVCOLOR;
 		regvalue &= ~INVCOLOR_MASK;
 		regvalue |= (color & INVCOLOR_MASK);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCINVCOLOR = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCINVCOLOR, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCINVCOLOR, regvalue);
 	}
 }
 
@@ -1437,7 +1437,7 @@ void	NX_MLC_SetFormatRGB( U32 ModuleIndex, U32 layer, NX_MLC_RGBFMT format )
 		regvalue |= (U32)format;
 
 	//	pRegister->MLCRGBLAYER[layer].MLCCONTROL = regvalue;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCCONTROL, regvalue);
 	}
 }
 
@@ -1476,7 +1476,7 @@ void	NX_MLC_SetFormatYUV( U32 ModuleIndex, NX_MLC_YUVFMT format )
 	temp |= (U32)format;
 
 //	pRegister->MLCVIDEOLAYER.MLCCONTROL	= temp;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, temp);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1521,26 +1521,26 @@ void	NX_MLC_SetPosition( U32 ModuleIndex, U32 layer, S32 sx, S32 sy, S32 ex, S32
 	if( 0 == layer || 1 == layer )
 	{
 	//	pRegister->MLCRGBLAYER[layer].MLCLEFTRIGHT	= (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL);
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
 
 	//	pRegister->MLCRGBLAYER[layer].MLCTOPBOTTOM =	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL);
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCTOPBOTTOM,	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCTOPBOTTOM,	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
 	}
 	else if( 2 == layer )
 	{
 //	pRegister->MLCRGBLAYER[layer].MLCLEFTRIGHT	= (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL);
-		WriteIODW(&pRegister->MLCRGBLAYER2.MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
+		WriteIO32(&pRegister->MLCRGBLAYER2.MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
 
 	//	pRegister->MLCRGBLAYER[layer].MLCTOPBOTTOM =	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL);
-		WriteIODW(&pRegister->MLCRGBLAYER2.MLCTOPBOTTOM,	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
+		WriteIO32(&pRegister->MLCRGBLAYER2.MLCTOPBOTTOM,	(((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
 	}
 	else if( 3 == layer )
 	{
 	//	pRegister->MLCVIDEOLAYER.MLCLEFTRIGHT = (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL);
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCLEFTRIGHT, (((U32)sx & 0xFFFUL)<<16) | ((U32)ex & 0xFFFUL));
 
 	//	pRegister->MLCVIDEOLAYER.MLCTOPBOTTOM = (((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL);
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCTOPBOTTOM, (((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCTOPBOTTOM, (((U32)sy & 0xFFFUL)<<16) | ((U32)ey & 0xFFFUL));
 	}
 }
 
@@ -1581,7 +1581,7 @@ void	NX_MLC_SetDitherEnableWhenUsingGamma( U32 ModuleIndex, CBOOL bEnable )
 	ReadValue |= ( (U32)bEnable << DITHERENB_BITPOS );
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1648,7 +1648,7 @@ void	NX_MLC_SetGammaPriority( U32 ModuleIndex, CBOOL bVideoLayer )
 	ReadValue |= ( (U32)bVideoLayer << ALPHASELECT_BITPOS );
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1725,18 +1725,18 @@ void	NX_MLC_SetRGBLayerInvalidPosition( U32 ModuleIndex, U32 layer, U32 region, 
 		if( 0 == region )
 		{
 		//	pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT0 = ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) );
-			WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT0, ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) ));
+			WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT0, ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) ));
 
 		//	pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM0 = ( ((sy&0x7FF)<<16) | (ey&0x7FF) );
-			WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM0, ( ((sy&0x7FF)<<16) | (ey&0x7FF) ));
+			WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM0, ( ((sy&0x7FF)<<16) | (ey&0x7FF) ));
 		}
 		else
 		{
 		//	pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT1 = ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) );
-			WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT1, ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) ));
+			WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCINVALIDLEFTRIGHT1, ((bEnb<<INVALIDENB_POS) | ((sx&0x7FF)<<16) | (ex&0x7FF) ));
 
 		//	pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM1 = ( ((sy&0x7FF)<<16) | (ey&0x7FF) );
-			WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM1, ( ((sy&0x7FF)<<16) | (ey&0x7FF) ));
+			WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCINVALIDTOPBOTTOM1, ( ((sy&0x7FF)<<16) | (ey&0x7FF) ));
 		}
 	}
 }
@@ -1778,18 +1778,18 @@ void	NX_MLC_SetRGBLayerStride( U32 ModuleIndex, U32 layer, S32 hstride, S32 vstr
 	if( 0 == layer || 1 == layer )
 	{
 	//	pRegister->MLCRGBLAYER[layer].MLCHSTRIDE = hstride;
-		WriteIODW((volatile U32 *)&pRegister->MLCRGBLAYER[layer].MLCHSTRIDE, hstride);
+		WriteIO32((volatile U32 *)&pRegister->MLCRGBLAYER[layer].MLCHSTRIDE, hstride);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCVSTRIDE = vstride;
-		WriteIODW((volatile U32 *)&pRegister->MLCRGBLAYER[layer].MLCVSTRIDE, vstride);
+		WriteIO32((volatile U32 *)&pRegister->MLCRGBLAYER[layer].MLCVSTRIDE, vstride);
 	}
 	else if( 2 == layer )
 	{
 	//	pRegister->MLCRGBLAYER[layer].MLCHSTRIDE = hstride;
-		WriteIODW((volatile U32 *)&pRegister->MLCRGBLAYER2.MLCHSTRIDE, hstride);
+		WriteIO32((volatile U32 *)&pRegister->MLCRGBLAYER2.MLCHSTRIDE, hstride);
 
 	//	pRegister->MLCRGBLAYER[layer].MLCVSTRIDE = vstride;
-		WriteIODW((volatile U32 *)&pRegister->MLCRGBLAYER2.MLCVSTRIDE, vstride);
+		WriteIO32((volatile U32 *)&pRegister->MLCRGBLAYER2.MLCVSTRIDE, vstride);
 	}
 }
 
@@ -1833,12 +1833,12 @@ void	NX_MLC_SetRGBLayerAddress( U32 ModuleIndex, U32 layer, U32 addr )
 	if( 0 == layer || 1 == layer )
 	{
 	//	pRegister->MLCRGBLAYER[layer].MLCADDRESS = addr;
-		WriteIODW(&pRegister->MLCRGBLAYER[layer].MLCADDRESS, addr);
+		WriteIO32(&pRegister->MLCRGBLAYER[layer].MLCADDRESS, addr);
 	}
 	else if( 2 == layer )
 	{
 	//	pRegister->MLCRGBLAYER[layer].MLCADDRESS = addr;
-		WriteIODW(&pRegister->MLCRGBLAYER2.MLCADDRESS, addr);
+		WriteIO32(&pRegister->MLCRGBLAYER2.MLCADDRESS, addr);
 	}
 }
 
@@ -1891,7 +1891,7 @@ void	NX_MLC_SetRGBLayerGamaTablePowerMode( U32 ModuleIndex, CBOOL bRed, CBOOL bG
 					((U32)bBlue	<< BGAMMATABLE_PWD_BITPOS) );
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1986,7 +1986,7 @@ void	NX_MLC_SetRGBLayerGamaTableSleepMode( U32 ModuleIndex, CBOOL bRed, CBOOL bG
 	else		{ ReadValue |=	BGAMMATABLE_SLD_MASK; }
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -2061,7 +2061,7 @@ void	NX_MLC_SetRGBLayerRGammaTable( U32 ModuleIndex, U32 dwAddress, U32 dwData )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCRGAMMATABLEWRITE = ((dwAddress << TABLEADDR_BITPOS) | dwData);
-	WriteIODW(&pRegister->MLCRGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
+	WriteIO32(&pRegister->MLCRGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
 }
 
 //------------------------------------------------------------------------------
@@ -2092,7 +2092,7 @@ void	NX_MLC_SetRGBLayerGGammaTable( U32 ModuleIndex, U32 dwAddress, U32 dwData )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCGGAMMATABLEWRITE = ((dwAddress << TABLEADDR_BITPOS) | dwData);
-	WriteIODW(&pRegister->MLCGGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
+	WriteIO32(&pRegister->MLCGGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
 }
 
 //------------------------------------------------------------------------------
@@ -2123,7 +2123,7 @@ void	NX_MLC_SetRGBLayerBGammaTable( U32 ModuleIndex, U32 dwAddress, U32 dwData )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCBGAMMATABLEWRITE = ((dwAddress << TABLEADDR_BITPOS) | dwData);
-	WriteIODW(&pRegister->MLCBGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
+	WriteIO32(&pRegister->MLCBGAMMATABLEWRITE, ((dwAddress << TABLEADDR_BITPOS) | dwData));
 }
 
 //------------------------------------------------------------------------------
@@ -2160,7 +2160,7 @@ void	NX_MLC_SetRGBLayerGammaEnable( U32 ModuleIndex, CBOOL bEnable )
 	ReadValue |= (U32)bEnable << RGBGAMMAEMB_BITPOS;
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -2225,13 +2225,13 @@ void	NX_MLC_SetVideoLayerStride( U32 ModuleIndex, S32 LuStride, S32 CbStride, S3
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCVIDEOLAYER.MLCVSTRIDE	= LuStride;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCVSTRIDE	, LuStride);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCVSTRIDE	, LuStride);
 
 //	pRegister->MLCVIDEOLAYER.MLCVSTRIDECB = CbStride;
-	WriteIODW((volatile U32 *)&pRegister->MLCVIDEOLAYER.MLCVSTRIDECB, CbStride);
+	WriteIO32((volatile U32 *)&pRegister->MLCVIDEOLAYER.MLCVSTRIDECB, CbStride);
 
 //	pRegister->MLCVIDEOLAYER.MLCVSTRIDECR = CrStride;
-	WriteIODW((volatile U32 *)&pRegister->MLCVIDEOLAYER.MLCVSTRIDECR, CrStride);
+	WriteIO32((volatile U32 *)&pRegister->MLCVIDEOLAYER.MLCVSTRIDECR, CrStride);
 }
 
 //------------------------------------------------------------------------------
@@ -2280,13 +2280,13 @@ void	NX_MLC_SetVideoLayerAddress( U32 ModuleIndex, U32 LuAddr, U32 CbAddr, U32 C
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCVIDEOLAYER.MLCADDRESS	= LuAddr;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCADDRESS,   LuAddr);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCADDRESS,   LuAddr);
 
 //	pRegister->MLCVIDEOLAYER.MLCADDRESSCB = CbAddr;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCADDRESSCB, CbAddr);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCADDRESSCB, CbAddr);
 
 //	pRegister->MLCVIDEOLAYER.MLCADDRESSCR	= CrAddr;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCADDRESSCR, CrAddr);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCADDRESSCR, CrAddr);
 }
 
 //------------------------------------------------------------------------------
@@ -2319,10 +2319,10 @@ void	NX_MLC_SetVideoLayerAddressYUYV( U32 ModuleIndex, U32 Addr, S32 Stride )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCVIDEOLAYER.MLCADDRESS = Addr;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCADDRESS, Addr);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCADDRESS, Addr);
 
 //	pRegister->MLCVIDEOLAYER.MLCVSTRIDE = Stride;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCVSTRIDE, Stride);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCVSTRIDE, Stride);
 }
 
 //------------------------------------------------------------------------------
@@ -2376,10 +2376,10 @@ void	NX_MLC_SetVideoLayerScaleFactor( U32 ModuleIndex, U32 hscale, U32 vscale, C
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCVIDEOLAYER.MLCHSCALE = ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) );
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) ));
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) ));
 
 //	pRegister->MLCVIDEOLAYER.MLCVSCALE = ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) );
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) ));
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) ));
 }
 
 //------------------------------------------------------------------------------
@@ -2434,14 +2434,14 @@ void	NX_MLC_SetVideoLayerScaleFilter( U32 ModuleIndex, CBOOL bHLumaEnb, CBOOL bH
 	ReadValue |= (bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS);
 
 //	pRegister->MLCVIDEOLAYER.MLCHSCALE = ReadValue;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ReadValue);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ReadValue);
 
 	ReadValue  = pRegister->MLCVIDEOLAYER.MLCVSCALE;
 	ReadValue &= SCALE_MASK;
 	ReadValue |= (bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS);
 
 //	pRegister->MLCVIDEOLAYER.MLCVSCALE = ReadValue;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ReadValue);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -2563,10 +2563,10 @@ void	NX_MLC_SetVideoLayerScale( U32 ModuleIndex, U32 sw, U32 sh, U32 dw, U32 dh,
 	}
 
 //	pRegister->MLCVIDEOLAYER.MLCHSCALE = ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) );
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) ));
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCHSCALE, ((bHLumaEnb << FILTER_LUMA_POS) | (bHChromaEnb << FILTER_CHOMA_POS) | (hscale & SCALE_MASK) ));
 
 //	pRegister->MLCVIDEOLAYER.MLCVSCALE = ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) );
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) ));
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCVSCALE, ((bVLumaEnb << FILTER_LUMA_POS) | (bVChromaEnb << FILTER_CHOMA_POS) | (vscale & SCALE_MASK) ));
 }
 
 //------------------------------------------------------------------------------
@@ -2602,7 +2602,7 @@ void	NX_MLC_SetVideoLayerLumaEnhance( U32 ModuleIndex, U32 contrast, S32 brightn
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 //	pRegister->MLCVIDEOLAYER.MLCLUENH = (((U32)brightness & 0xFFUL)<<8) | contrast;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCLUENH, (((U32)brightness & 0xFFUL)<<8) | contrast);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCLUENH, (((U32)brightness & 0xFFUL)<<8) | contrast);
 }
 
 //------------------------------------------------------------------------------
@@ -2677,21 +2677,21 @@ void	NX_MLC_SetVideoLayerChromaEnhance( U32 ModuleIndex, U32 quadrant, S32 CbA, 
 	if( 0 < quadrant )
 	{
 	//	pRegister->MLCVIDEOLAYER.MLCCHENH[quadrant-1] = temp;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCHENH[quadrant-1], temp);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCHENH[quadrant-1], temp);
 	}
 	else
 	{
 	//	pRegister->MLCVIDEOLAYER.MLCCHENH[0] = temp;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCHENH[0], temp);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCHENH[0], temp);
 
 	//	pRegister->MLCVIDEOLAYER.MLCCHENH[1] = temp;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCHENH[1], temp);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCHENH[1], temp);
 
 	//	pRegister->MLCVIDEOLAYER.MLCCHENH[2] = temp;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCHENH[2], temp);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCHENH[2], temp);
 
 	//	pRegister->MLCVIDEOLAYER.MLCCHENH[3] = temp;
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCHENH[3], temp);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCHENH[3], temp);
 	}
 }
 
@@ -2756,7 +2756,7 @@ void	NX_MLC_SetVideoLayerLineBufferPowerMode( U32 ModuleIndex, CBOOL bEnable )
 	regvalue |= ((U32)bEnable << LINEBUFF_PWD_POS);
 
 //	pRegister->MLCVIDEOLAYER.MLCCONTROL = regvalue;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -2849,7 +2849,7 @@ void	NX_MLC_SetVideoLayerLineBufferSleepMode( U32 ModuleIndex, CBOOL bEnable )
 	regvalue |= (bEnable << LINEBUFF_SLMD_POS);				// 0:sleep enable, 1:sleep disable
 
 //	pRegister->MLCVIDEOLAYER.MLCCONTROL = regvalue;
-	WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
+	WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -2938,7 +2938,7 @@ void	NX_MLC_SetVideoLayerGamaTablePowerMode( U32 ModuleIndex, CBOOL bY, CBOOL bU
 					((U32)bV << VGAMMATABLE_PWD_BITPOS) );
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -3039,7 +3039,7 @@ void	NX_MLC_SetVideoLayerGamaTableSleepMode( U32 ModuleIndex, CBOOL bY, CBOOL bU
 	else	{ ReadValue |= VGAMMATABLE_SLD_MASK;	}
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -3124,7 +3124,7 @@ void	NX_MLC_SetVideoLayerGammaEnable( U32 ModuleIndex, CBOOL bEnable )
 	ReadValue |= (U32)bEnable << YUVGAMMAEMB_BITPOS;
 
 //	pRegister->MLCGAMMACONT = ReadValue;
-	WriteIODW(&pRegister->MLCGAMMACONT, ReadValue);
+	WriteIO32(&pRegister->MLCGAMMACONT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -3200,10 +3200,10 @@ NX_MLC_SetMLCTopControlParameter
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	MLCTOPControlReg = ( ReadIODW(&pRegister->MLCCONTROLT) ) & 0xfffffcfc;
+	MLCTOPControlReg = ( ReadIO32(&pRegister->MLCCONTROLT) ) & 0xfffffcfc;
 
 	MLCTOPControlReg = (U32)(MLCTOPControlReg | ((Priority<<8) | ((1==MLCEnable)<<1) | (1==FieldEnable)) | (G3DAddrChangeAllowed<<12));
-	WriteIODW(&pRegister->MLCCONTROLT, MLCTOPControlReg);
+	WriteIO32(&pRegister->MLCCONTROLT, MLCTOPControlReg);
 }
 
 
@@ -3249,17 +3249,17 @@ NX_MLC_SetRGB0LayerControlParameter
     AlphaArgument = (U32)(AlphaValue&0xF);
 
 	// Masking 추가.
-    RGB0ControlReg = ReadIODW(&pRegister->MLCRGBLAYER[0].MLCCONTROL) & 0x10;
+    RGB0ControlReg = ReadIO32(&pRegister->MLCRGBLAYER[0].MLCCONTROL) & 0x10;
     regvalue = (U32)(((LayerFormat<<16) | ControlEnb | (LockSize<<12)) | RGB0ControlReg);
-    WriteIODW(&pRegister->MLCRGBLAYER[0].MLCCONTROL, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[0].MLCCONTROL, regvalue );
 
     //@todo choiyk 2012-10-15 오전 10:45:23
     // Alpha채널이 8bit로 늘어나게 된다. (이 함수자체는 4bit Alpha를 사용)
     regvalue  = (U32)((AlphaArgument<<28) | TransparencyColor);
-    WriteIODW(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR, regvalue );
 
     regvalue = InverseColor;
-    WriteIODW(&pRegister->MLCRGBLAYER[0].MLCINVCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[0].MLCINVCOLOR, regvalue );
 
 }
 
@@ -3341,18 +3341,18 @@ NX_MLC_SetRGB1LayerControlParameter
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 
-    RGB0ControlReg = ReadIODW(&pRegister->MLCRGBLAYER[1].MLCCONTROL) & 0x10;
+    RGB0ControlReg = ReadIO32(&pRegister->MLCRGBLAYER[1].MLCCONTROL) & 0x10;
     ControlEnb = (U32)((GRP3DEnable<<8) | (LayerEnable << 5) | (BlendEnable<<2) | (InvEnable<<1) | TpEnable) & 0x127;
     AlphaArgument = (U32)(AlphaValue&0xF);
 
     regvalue = (U32)(((LayerFormat<<16) | ControlEnb | (LockSize<<12)) | RGB0ControlReg);
-    WriteIODW(&pRegister->MLCRGBLAYER[1].MLCCONTROL, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[1].MLCCONTROL, regvalue );
 
     regvalue  = (U32)((AlphaArgument<<28) | TransparencyColor);
-    WriteIODW(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR, regvalue );
 
     regvalue = InverseColor;
-    WriteIODW(&pRegister->MLCRGBLAYER[1].MLCINVCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER[1].MLCINVCOLOR, regvalue );
 
 }
 
@@ -3393,18 +3393,18 @@ NX_MLC_SetRGB2LayerControlParameter
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 
-    RGB0ControlReg = ReadIODW(&pRegister->MLCRGBLAYER2.MLCCONTROL) & 0x10;
+    RGB0ControlReg = ReadIO32(&pRegister->MLCRGBLAYER2.MLCCONTROL) & 0x10;
     ControlEnb = (U32)((GRP3DEnable<<8) | (LayerEnable << 5) | (BlendEnable<<2) | (InvEnable<<1) | TpEnable) & 0x127;
     AlphaArgument = (U32)(AlphaValue&0xF);
 
     regvalue = (U32)(((LayerFormat<<16) | ControlEnb | (LockSize<<12)) | RGB0ControlReg);
-    WriteIODW(&pRegister->MLCRGBLAYER2.MLCCONTROL, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER2.MLCCONTROL, regvalue );
 
     regvalue  = (U32)((AlphaArgument<<28) | TransparencyColor);
-    WriteIODW(&pRegister->MLCRGBLAYER2.MLCTPCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER2.MLCTPCOLOR, regvalue );
 
     regvalue = InverseColor;
-    WriteIODW(&pRegister->MLCRGBLAYER2.MLCINVCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCRGBLAYER2.MLCINVCOLOR, regvalue );
 
 }
 
@@ -3437,16 +3437,16 @@ NX_MLC_SetVideoLayerControlParameter
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 
-	VideoControlReg = ReadIODW(&pRegister ->MLCVIDEOLAYER. MLCCONTROL);
+	VideoControlReg = ReadIO32(&pRegister ->MLCVIDEOLAYER. MLCCONTROL);
 
     ControlEnb = (U32)((YUVFormat) | (LayerEnable<<5) | (BlendEnable<<2) | (InvEnable<<1) | TpEnable) & 0x30027;
     AlphaArgument = (U32)(AlphaValue&0xF);
 
     regvalue = (U32)(ControlEnb | VideoControlReg);
-    WriteIODW(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue );
+    WriteIO32(&pRegister->MLCVIDEOLAYER.MLCCONTROL, regvalue );
 
 	regvalue = (U32)((AlphaArgument<<28) | TransparencyColor);
-    WriteIODW(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, regvalue );
 
     regvalue = (U32)((AlphaArgument<<28) | TransparencyColor);
     WriteIODW(&pRegister->MLCVIDEOLAYER.MLCINVCOLOR, regvalue );
@@ -3468,28 +3468,28 @@ void NX_MLC_SetSRAMMODE(U32 ModuleIndex, LATYERNAME LayerName, SRAMMODE SramMode
     switch (LayerName)
     {
         case TOPMLC :
-            ControlRegValue = ReadIODW(&pRegister -> MLCCONTROLT);
-            WriteIODW(&pRegister -> MLCCONTROLT, (U32)(ControlRegValue | (SramMode << 10)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCCONTROLT);
+            WriteIO32(&pRegister -> MLCCONTROLT, (U32)(ControlRegValue | (SramMode << 10)));
             ControlRegValue = 0;
             break;
         case RGB0 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER[0].MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER[0].MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER[0].MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER[0].MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
             ControlRegValue = 0;
             break;
         case RGB1 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER[1].MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER[1].MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER[1].MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER[1].MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
             ControlRegValue = 0;
             break;
         case RGB2 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER2.MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER2.MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER2.MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER2.MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
             ControlRegValue = 0;
             break;
         case VIDEO :
-            ControlRegValue = ReadIODW(&pRegister -> MLCVIDEOLAYER.MLCCONTROL);
-            WriteIODW(&pRegister -> MLCVIDEOLAYER.MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCVIDEOLAYER.MLCCONTROL);
+            WriteIO32(&pRegister -> MLCVIDEOLAYER.MLCCONTROL, (U32)(ControlRegValue | (SramMode << 14)));
             ControlRegValue = 0;
             break;
         default             :   NX_ASSERT(CFALSE); //MES_NEVER_GET_HERE();
@@ -3512,28 +3512,28 @@ NX_MLC_SetLayerRegFinish( U32 ModuleIndex, LATYERNAME LayerName )
     switch (LayerName)
     {
         case TOPMLC :
-            ControlRegValue = ReadIODW(&pRegister -> MLCCONTROLT);
-            WriteIODW(&pRegister -> MLCCONTROLT, (U32)(ControlRegValue | (1UL << 3)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCCONTROLT);
+            WriteIO32(&pRegister -> MLCCONTROLT, (U32)(ControlRegValue | (1UL << 3)));
             ControlRegValue = 0;
             break;
         case RGB0 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER[0].MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER[0].MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER[0].MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER[0].MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
             ControlRegValue = 0;
             break;
         case RGB1 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER[1].MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER[1].MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER[1].MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER[1].MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
             ControlRegValue = 0;
             break;
         case RGB2 :
-            ControlRegValue = ReadIODW(&pRegister -> MLCRGBLAYER2.MLCCONTROL);
-            WriteIODW(&pRegister -> MLCRGBLAYER2.MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCRGBLAYER2.MLCCONTROL);
+            WriteIO32(&pRegister -> MLCRGBLAYER2.MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
             ControlRegValue = 0;
             break;
 		case VIDEO :
-            ControlRegValue = ReadIODW(&pRegister -> MLCVIDEOLAYER.MLCCONTROL);
-            WriteIODW(&pRegister -> MLCVIDEOLAYER.MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
+            ControlRegValue = ReadIO32(&pRegister -> MLCVIDEOLAYER.MLCCONTROL);
+            WriteIO32(&pRegister -> MLCVIDEOLAYER.MLCCONTROL, (U32)(ControlRegValue | (1UL << 4)));
             ControlRegValue = 0;
             break;
         default             :   NX_ASSERT(CFALSE); //MES_NEVER_GET_HERE();
@@ -3576,8 +3576,8 @@ NX_MLC_SetVideoLayerCoordinate
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    WriteIODW(&pRegister -> MLCVIDEOLAYER.MLCLEFTRIGHT ,(S32)(((Left&0x0FFF)<<16) | (Right&0x0FFF)) );
-    WriteIODW(&pRegister -> MLCVIDEOLAYER.MLCTOPBOTTOM, (S32)(((Top&0x0FFF)<<16) | (Bottom&0x0FFF)));
+    WriteIO32(&pRegister -> MLCVIDEOLAYER.MLCLEFTRIGHT ,(S32)(((Left&0x0FFF)<<16) | (Right&0x0FFF)) );
+    WriteIO32(&pRegister -> MLCVIDEOLAYER.MLCTOPBOTTOM, (S32)(((Top&0x0FFF)<<16) | (Bottom&0x0FFF)));
 
     Source_Width  = (S32)(VideoLayerWith - 1);
     Source_Height = (S32)(VideoLayerHeight - 1);
@@ -3602,8 +3602,8 @@ NX_MLC_SetVideoLayerCoordinate
 	//HFilterEnb = (U32)(((HFilterEnable)<<28) & 0x30000000);
 	HFilterEnb = (U32)(((HFilterEnable_C<<29) | (HFilterEnable)<<28)) & 0x30000000;
 	VFilterEnb = (U32)(((VFilterEnable_C<<29) | (VFilterEnable)<<28)) & 0x30000000;
-	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(HFilterEnb | (HScale&0x00FFFFFF)));
-	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(VFilterEnb | (VScale&0x00FFFFFF)));
+	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(HFilterEnb | (HScale&0x00FFFFFF)));
+	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(VFilterEnb | (VScale&0x00FFFFFF)));
 }
 
 
@@ -3667,9 +3667,9 @@ void NX_MLC_SetGammaControlParameter
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	RegisterData	= ReadIODW(&pRegister->MLCGAMMACONT);
+	RegisterData	= ReadIO32(&pRegister->MLCGAMMACONT);
 	RegisterData = (RegisterData & 0xf0c) | ((YUVAlphaArray<<5) | (YUVGammaEnb<<4) | (RGBGammaEnb<<1) | (DitherEnb<<0));
-	WriteIODW(&pRegister->MLCGAMMACONT, RegisterData);
+	WriteIO32(&pRegister->MLCGAMMACONT, RegisterData);
 }
 
 
@@ -3697,35 +3697,31 @@ void NX_MLC_SetLayerAlpha256(U32 ModuleIndex, U32 Layer, U32 Alpha)
 
 	if( Layer == 0 ) // RGB Layer 0
 	{
-		RegisterData = ReadIODW(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR) & 0x00ffffff;
+		RegisterData = ReadIO32(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR) & 0x00ffffff;
 		RegisterData = RegisterData | (Alpha<<24);
-		WriteIODW(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR, RegisterData);
+		WriteIO32(&pRegister->MLCRGBLAYER[0].MLCTPCOLOR, RegisterData);
 
 	}
 	else if ( Layer == 1 ) // RGB Layer 1
 	{
-		RegisterData = ReadIODW(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR) & 0x00ffffff;
+		RegisterData = ReadIO32(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR) & 0x00ffffff;
 		RegisterData = RegisterData | (Alpha<<24);
-		WriteIODW(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR, RegisterData);
+		WriteIO32(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR, RegisterData);
 	}
 	else if ( Layer == 2 ) // RGB Layer 2
 	{
-		RegisterData = ReadIODW(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR) & 0x00ffffff;
+		RegisterData = ReadIO32(&pRegister->MLCRGBLAYER[1].MLCTPCOLOR) & 0x00ffffff;
 		RegisterData = RegisterData | (Alpha<<24);
-		WriteIODW(&pRegister->MLCRGBLAYER2.MLCTPCOLOR, RegisterData);
+		WriteIO32(&pRegister->MLCRGBLAYER2.MLCTPCOLOR, RegisterData);
 	}
 	else // Video Layer
 	{
-		RegisterData = ReadIODW(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR) & 0x00ffffff;
+		RegisterData = ReadIO32(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR) & 0x00ffffff;
 		RegisterData = RegisterData | (Alpha<<24);
-		WriteIODW(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, RegisterData);
+		WriteIO32(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, RegisterData);
 	}
 
 }
-
-
-
-
 
 
 //------------------------------------------------------------------------------
@@ -3742,19 +3738,3 @@ CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex )
 	return (CBOOL)((__g_ModuleVariables[ModuleIndex].pRegister->MLCCONTROLT & UNDERFLOW_PEND_MASK) >> UNDERFLOW_PEND_POS );
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

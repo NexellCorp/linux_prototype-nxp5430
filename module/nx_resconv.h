@@ -169,8 +169,8 @@ U32 NX_RESCONV_GetDMANumber ( U32 ModuleIndex, U32 DMAChannelIndex );
 
 //@}
 //================
-#define NX_RESCONV_IsOverFlow(ModuleIndex ) 	CFALSE
-#define NX_RESCONV_IsUnderFlow(ModuleIndex ) 	CFALSE
+#define NX_RESCONV_IsOverFlow(ModuleIndex )		CFALSE
+#define NX_RESCONV_IsUnderFlow(ModuleIndex )	CFALSE
 #define NX_RESCONV_SetS2IN_VS(ModuleIndex,	SG_S2IN_VS)
 #define NX_RESCONV_FIFO_Init(ModuleIndex, Enb )
 

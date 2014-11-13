@@ -200,8 +200,8 @@ CBOOL   NX_SDMMC_OpenModule( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CTRL) | INT_ENA;
-    WriteIODW(&pRegister->CTRL, SetValue);      // global interrupt enable bit for SDMMC module.
+    SetValue = ReadIO32(&pRegister->CTRL) | INT_ENA;
+    WriteIO32(&pRegister->CTRL, SetValue);      // global interrupt enable bit for SDMMC module.
 
     return CTRUE;
 }
@@ -228,8 +228,8 @@ CBOOL   NX_SDMMC_CloseModule( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue  = ReadIODW(&pRegister->CTRL) & ~INT_ENA;
-    WriteIODW(&pRegister->CTRL, SetValue);      // global interrupt disable bit for SDMMC module.
+    SetValue  = ReadIO32(&pRegister->CTRL) & ~INT_ENA;
+    WriteIO32(&pRegister->CTRL, SetValue);      // global interrupt disable bit for SDMMC module.
 
     return CTRUE;
 }
@@ -333,11 +333,11 @@ void    NX_SDMMC_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->INTMASK);
+    regval = ReadIO32(&pRegister->INTMASK);
     regval &= ~(1UL<<IntNum);
     regval |= ((U32)Enable)<<IntNum;
 
-    WriteIODW(&pRegister->INTMASK, regval);
+    WriteIO32(&pRegister->INTMASK, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -361,7 +361,7 @@ CBOOL   NX_SDMMC_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK) >> IntNum) & 1);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK) >> IntNum) & 1);
 }
 
 //------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ CBOOL   NX_SDMMC_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS) >> IntNum) & 1);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS) >> IntNum) & 1);
 }
 
 //------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ void    NX_SDMMC_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, (U32)1<<IntNum);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, (U32)1<<IntNum);
 }
 
 //------------------------------------------------------------------------------
@@ -438,7 +438,7 @@ void    NX_SDMMC_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
     if( Enable )    SetValue = 0x1FFFE; // 1 to 16
     else            SetValue = 0;
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK, SetValue);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -460,7 +460,7 @@ CBOOL   NX_SDMMC_GetInterruptEnableAll( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK) )
+    if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK) )
         return CTRUE;
 
     return CFALSE;
@@ -489,7 +489,7 @@ CBOOL   NX_SDMMC_GetInterruptPendingAll( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MINTSTS) )
+    if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MINTSTS) )
         return CTRUE;
 
     return CFALSE;
@@ -513,7 +513,7 @@ void    NX_SDMMC_ClearInterruptPendingAll( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, 0xFFFFFFFF);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, 0xFFFFFFFF);
 }
 
 //------------------------------------------------------------------------------
@@ -540,7 +540,7 @@ S32     NX_SDMMC_GetInterruptPendingNumber( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pend = ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MINTSTS);
+    pend = ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MINTSTS);
 
     if( 0 == pend )
         return -1;
@@ -579,7 +579,7 @@ void    NX_SDMMC_SetInterruptEnable32 ( U32 ModuleIndex, U32 EnableFlag )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK, EnableFlag & 0x1FFFE);   // 1 to 16
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK, EnableFlag & 0x1FFFE);   // 1 to 16
 }
 
 //------------------------------------------------------------------------------
@@ -603,7 +603,7 @@ U32 NX_SDMMC_GetInterruptEnable32 ( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->INTMASK);
 }
 
 //------------------------------------------------------------------------------
@@ -627,7 +627,7 @@ U32 NX_SDMMC_GetInterruptPending32 ( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS);
 }
 
 //------------------------------------------------------------------------------
@@ -651,7 +651,7 @@ void    NX_SDMMC_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, PendingFlag);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RINTSTS, PendingFlag);
 }
 
 
@@ -714,11 +714,11 @@ void    NX_SDMMC_SetPowerEnable( U32 ModuleIndex, U32 PowerIndex, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue  = ReadIODW(&pRegister->PWREN);
+    SetValue  = ReadIO32(&pRegister->PWREN);
     SetValue &= ~(1<<PowerIndex);
     SetValue |= (Enable<<PowerIndex);
 
-    WriteIODW(&pRegister->PWREN, SetValue);
+    WriteIO32(&pRegister->PWREN, SetValue);
 }
 
 CBOOL   NX_SDMMC_GetPowerEnable( U32 ModuleIndex, U32 PowerIndex )
@@ -726,7 +726,7 @@ CBOOL   NX_SDMMC_GetPowerEnable( U32 ModuleIndex, U32 PowerIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PWREN))>>PowerIndex) & 0x1 );
+    return (CBOOL)(((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PWREN))>>PowerIndex) & 0x1 );
 }
 
 
@@ -753,8 +753,8 @@ void    NX_SDMMC_AbortReadData( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CTRL) | ABORT_RDATA;
-    WriteIODW(&pRegister->CTRL, SetValue);
+    SetValue = ReadIO32(&pRegister->CTRL) | ABORT_RDATA;
+    WriteIO32(&pRegister->CTRL, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -779,8 +779,8 @@ void    NX_SDMMC_SendIRQResponse( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CTRL) | SEND_IRQ_RESP;
-    WriteIODW(&pRegister->CTRL, SetValue);
+    SetValue = ReadIO32(&pRegister->CTRL) | SEND_IRQ_RESP;
+    WriteIO32(&pRegister->CTRL, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -807,10 +807,10 @@ void    NX_SDMMC_SetReadWait( U32 ModuleIndex, CBOOL bAssert )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(1UL<<READ_WAIT_POS);
     regval |= (U32)bAssert << READ_WAIT_POS;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -844,10 +844,10 @@ void    NX_SDMMC_ResetDMAC( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(FIFORST | CTRLRST);
     regval |=   DMARST;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -871,10 +871,10 @@ void    NX_SDMMC_SetDMAMode( U32 ModuleIndex, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(1UL<<DMA_ENA_POS);
     regval |= (U32)Enable << DMA_ENA_POS;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 void NX_SDMMC_SetUseInternalDMAC( U32 ModuleIndex, CBOOL Enable )
@@ -889,10 +889,10 @@ void NX_SDMMC_SetUseInternalDMAC( U32 ModuleIndex, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(1UL<<INDMA_ENA_POS);
     regval |= (U32)Enable << INDMA_ENA_POS;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -911,7 +911,7 @@ CBOOL   NX_SDMMC_IsDMAReq( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DMAREQ_MASK) >> DMAREQ_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DMAREQ_MASK) >> DMAREQ_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -930,7 +930,7 @@ CBOOL   NX_SDMMC_IsDMAAck( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DMAACK_MASK) >> DMAACK_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DMAACK_MASK) >> DMAACK_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -965,10 +965,10 @@ void    NX_SDMMC_ResetFIFO( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(DMARST | CTRLRST);
     regval |=   FIFORST;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -989,7 +989,7 @@ CBOOL   NX_SDMMC_IsResetFIFO( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) & FIFORST_MASK)>>FIFORST_POS;
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) & FIFORST_MASK)>>FIFORST_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1025,10 +1025,10 @@ void    NX_SDMMC_ResetController( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(DMARST | FIFORST);
     regval |=   CTRLRST;
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1049,7 +1049,7 @@ CBOOL   NX_SDMMC_IsResetController( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) & CTRLRST_MASK)>>CTRLRST_POS;
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) & CTRLRST_MASK)>>CTRLRST_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1131,7 +1131,7 @@ void    NX_SDMMC_SetOutputClockDivider( U32 ModuleIndex, U32 divider )
     NX_ASSERT( (1==divider) || (0==(divider&1)) ); // 1 or even number
     NX_ASSERT( (1<=divider) && (510>=divider) );   // 1 <= divider <= 510
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKDIV, divider>>1);     // 2*n divider (0 : bypass)
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKDIV, divider>>1);     // 2*n divider (0 : bypass)
 }
 
 //------------------------------------------------------------------------------
@@ -1150,7 +1150,7 @@ U32     NX_SDMMC_GetOutputClockDivider( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    divider = ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKDIV);
+    divider = ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKDIV);
 
     return (divider) ? divider<<1 : 1;
 }
@@ -1184,10 +1184,10 @@ void    NX_SDMMC_SetLowPowerClockMode( U32 ModuleIndex, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CLKENA);
+    SetValue = ReadIO32(&pRegister->CLKENA);
     if( Enable )    SetValue |= LOWPWR;
     else            SetValue &= ~LOWPWR;
-    WriteIODW(&pRegister->CLKENA, SetValue);
+    WriteIO32(&pRegister->CLKENA, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1207,7 +1207,7 @@ CBOOL   NX_SDMMC_GetLowPowerClockMode( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKENA) & LOWPWR) ? CTRUE : CFALSE;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKENA) & LOWPWR) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1235,10 +1235,10 @@ void    NX_SDMMC_SetOutputClockEnable( U32 ModuleIndex, CBOOL Enable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CLKENA);
+    SetValue = ReadIO32(&pRegister->CLKENA);
     if( Enable )    SetValue |= CLKENA;
     else            SetValue &= ~CLKENA;
-    WriteIODW(&pRegister->CLKENA, SetValue);
+    WriteIO32(&pRegister->CLKENA, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1258,7 +1258,7 @@ CBOOL   NX_SDMMC_GetOutputClockEnable( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKENA) & CLKENA) ? CTRUE : CFALSE;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKENA) & CLKENA) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1287,10 +1287,10 @@ void    NX_SDMMC_SetDriveClockShiftPhase( U32 ModuleIndex, NX_SDMMC_CLKSHIFT Clo
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval  = ReadIODW(&pRegister->CLKCTRL);
+    regval  = ReadIO32(&pRegister->CLKCTRL);
     regval &= ~DCLKPHASE_MASK;
     regval |= ClockShift << DCLKPHASE_POS;
-    WriteIODW(&pRegister->CLKCTRL, regval);
+    WriteIO32(&pRegister->CLKCTRL, regval);
 }
 
 NX_SDMMC_CLKSHIFT   NX_SDMMC_GetDriveClockShiftPhase( U32 ModuleIndex )
@@ -1301,7 +1301,7 @@ NX_SDMMC_CLKSHIFT   NX_SDMMC_GetDriveClockShiftPhase( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (NX_SDMMC_CLKSHIFT)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & DCLKPHASE_MASK)>>DCLKPHASE_POS);
+    return (NX_SDMMC_CLKSHIFT)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & DCLKPHASE_MASK)>>DCLKPHASE_POS);
 }
 
 void    NX_SDMMC_SetSampleClockShiftPhase( U32 ModuleIndex, NX_SDMMC_CLKSHIFT ClockShift )
@@ -1320,10 +1320,10 @@ void    NX_SDMMC_SetSampleClockShiftPhase( U32 ModuleIndex, NX_SDMMC_CLKSHIFT Cl
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval  = ReadIODW(&pRegister->CLKCTRL);
+    regval  = ReadIO32(&pRegister->CLKCTRL);
     regval &= ~SCLKPHASE_MASK;
     regval |= ClockShift << SCLKPHASE_POS;
-    WriteIODW(&pRegister->CLKCTRL, regval);
+    WriteIO32(&pRegister->CLKCTRL, regval);
 }
 
 NX_SDMMC_CLKSHIFT   NX_SDMMC_GetSampleClockShiftPhase( U32 ModuleIndex )
@@ -1334,7 +1334,7 @@ NX_SDMMC_CLKSHIFT   NX_SDMMC_GetSampleClockShiftPhase( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (NX_SDMMC_CLKSHIFT)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & SCLKPHASE_MASK)>>SCLKPHASE_POS);
+    return (NX_SDMMC_CLKSHIFT)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & SCLKPHASE_MASK)>>SCLKPHASE_POS);
 }
 
 void    NX_SDMMC_SetDriveClockDelay( U32 ModuleIndex, U32 Delay )
@@ -1350,10 +1350,10 @@ void    NX_SDMMC_SetDriveClockDelay( U32 ModuleIndex, U32 Delay )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval  = ReadIODW(&pRegister->CLKCTRL);
+    regval  = ReadIO32(&pRegister->CLKCTRL);
     regval &= ~DCLKDELAY_MASK;
     regval |= Delay << DCLKDELAY_POS;
-    WriteIODW(&pRegister->CLKCTRL, regval);
+    WriteIO32(&pRegister->CLKCTRL, regval);
 }
 
 U32     NX_SDMMC_GetDriveClockDelay( U32 ModuleIndex )
@@ -1364,7 +1364,7 @@ U32     NX_SDMMC_GetDriveClockDelay( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & DCLKDELAY_MASK)>>DCLKDELAY_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & DCLKDELAY_MASK)>>DCLKDELAY_POS;
 }
 
 void    NX_SDMMC_SetSampleClockDelay( U32 ModuleIndex, U32 Delay )
@@ -1380,10 +1380,10 @@ void    NX_SDMMC_SetSampleClockDelay( U32 ModuleIndex, U32 Delay )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval  = ReadIODW(&pRegister->CLKCTRL);
+    regval  = ReadIO32(&pRegister->CLKCTRL);
     regval &= ~SCLKDELAY_MASK;
     regval |= Delay << SCLKDELAY_POS;
-    WriteIODW(&pRegister->CLKCTRL, regval);
+    WriteIO32(&pRegister->CLKCTRL, regval);
 }
 
 U32     NX_SDMMC_GetSampleClockDelay( U32 ModuleIndex )
@@ -1394,7 +1394,7 @@ U32     NX_SDMMC_GetSampleClockDelay( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & SCLKDELAY_MASK)>>SCLKDELAY_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKCTRL) & SCLKDELAY_MASK)>>SCLKDELAY_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1448,10 +1448,10 @@ void    NX_SDMMC_SetDataTimeOut( U32 ModuleIndex, U32 dwTimeOut )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->TMOUT);
+    regval = ReadIO32(&pRegister->TMOUT);
     regval &= ~DTMOUT_MASK;
     regval |= dwTimeOut << DTMOUT_POS;
-    WriteIODW(&pRegister->TMOUT, regval);
+    WriteIO32(&pRegister->TMOUT, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1470,7 +1470,7 @@ U32     NX_SDMMC_GetDataTimeOut( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TMOUT) & DTMOUT_MASK) >> DTMOUT_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TMOUT) & DTMOUT_MASK) >> DTMOUT_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1502,10 +1502,10 @@ void    NX_SDMMC_SetResponseTimeOut( U32 ModuleIndex, U32 dwTimeOut )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->TMOUT);
+    regval = ReadIO32(&pRegister->TMOUT);
     regval &= ~RSPTMOUT_MASK;
     regval |= dwTimeOut << RSPTMOUT_POS;
-    WriteIODW(&pRegister->TMOUT, regval);
+    WriteIO32(&pRegister->TMOUT, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1524,7 +1524,7 @@ U32     NX_SDMMC_GetResponseTimeOut( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TMOUT) & RSPTMOUT_MASK) >> RSPTMOUT_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TMOUT) & RSPTMOUT_MASK) >> RSPTMOUT_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1544,7 +1544,7 @@ void    NX_SDMMC_SetDataBusWidth( U32 ModuleIndex, U32 width )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CTYPE, width >> 2);  // 0 : 1-bit mode, 1 : 4-bit mode
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTYPE, width >> 2);  // 0 : 1-bit mode, 1 : 4-bit mode
 }
 
 //------------------------------------------------------------------------------
@@ -1562,7 +1562,7 @@ U32     NX_SDMMC_GetDataBusWidth( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CTYPE) & WIDTH) ? 4 : 1;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTYPE) & WIDTH) ? 4 : 1;
 }
 
 //------------------------------------------------------------------------------
@@ -1581,7 +1581,7 @@ void    NX_SDMMC_SetBlockSize( U32 ModuleIndex, U32 SizeInByte )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BLKSIZ, SizeInByte);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BLKSIZ, SizeInByte);
 }
 
 //------------------------------------------------------------------------------
@@ -1597,7 +1597,7 @@ U32     NX_SDMMC_GetBlockSize( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BLKSIZ);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BLKSIZ);
 }
 
 //------------------------------------------------------------------------------
@@ -1618,7 +1618,7 @@ void    NX_SDMMC_SetByteCount( U32 ModuleIndex, U32 SizeInByte )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BYTCNT, SizeInByte);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BYTCNT, SizeInByte);
 }
 
 //------------------------------------------------------------------------------
@@ -1634,7 +1634,7 @@ U32     NX_SDMMC_GetByteCount( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BYTCNT);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BYTCNT);
 }
 
 //------------------------------------------------------------------------------
@@ -1649,7 +1649,7 @@ void    NX_SDMMC_SetCommandArgument( U32 ModuleIndex, U32 argument )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMDARG, argument);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMDARG, argument);
 }
 
 //------------------------------------------------------------------------------
@@ -1682,7 +1682,7 @@ void    NX_SDMMC_SetCommand( U32 ModuleIndex, U32 Cmd, U32 flag )
     NX_ASSERT( 64 > Cmd );
     NX_ASSERT( (0==flag) || (64 < flag) );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMD, Cmd | flag);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMD, Cmd | flag);
 }
 
 //------------------------------------------------------------------------------
@@ -1708,8 +1708,8 @@ void    NX_SDMMC_StartCommand( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    SetValue = ReadIODW(&pRegister->CMD) | NX_SDMMC_CMDFLAG_STARTCMD;
-    WriteIODW(&pRegister->CMD, SetValue);
+    SetValue = ReadIO32(&pRegister->CMD) | NX_SDMMC_CMDFLAG_STARTCMD;
+    WriteIO32(&pRegister->CMD, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -1739,7 +1739,7 @@ CBOOL   NX_SDMMC_IsCommandBusy( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMD) >> STARTCMD_POS);
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMD) >> STARTCMD_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1755,7 +1755,7 @@ U32     NX_SDMMC_GetShortResponse( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RESP0);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RESP0);
 }
 
 //------------------------------------------------------------------------------
@@ -1809,7 +1809,7 @@ U32     NX_SDMMC_GetAutoStopResponse( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->RESP1);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->RESP1);
 }
 
 //------------------------------------------------------------------------------
@@ -1828,7 +1828,7 @@ U32     NX_SDMMC_GetResponseIndex( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & RSPINDEX_MASK) >> RSPINDEX_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & RSPINDEX_MASK) >> RSPINDEX_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1871,10 +1871,10 @@ void    NX_SDMMC_SetFIFORxThreshold( U32 ModuleIndex, U32 Threshold )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->FIFOTH);
+    regval = ReadIO32(&pRegister->FIFOTH);
     regval &= ~RXTH_MASK;
     regval |= Threshold << RXTH_POS;
-    WriteIODW(&pRegister->FIFOTH, regval);
+    WriteIO32(&pRegister->FIFOTH, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1896,7 +1896,7 @@ U32     NX_SDMMC_GetFIFORxThreshold( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->FIFOTH) & RXTH_MASK) >> RXTH_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->FIFOTH) & RXTH_MASK) >> RXTH_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1937,10 +1937,10 @@ void    NX_SDMMC_SetFIFOTxThreshold( U32 ModuleIndex, U32 Threshold )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->FIFOTH);
+    regval = ReadIO32(&pRegister->FIFOTH);
     regval &= ~TXTH_MASK;
     regval |= Threshold << TXTH_POS;
-    WriteIODW(&pRegister->FIFOTH, regval);
+    WriteIO32(&pRegister->FIFOTH, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1962,7 +1962,7 @@ U32     NX_SDMMC_GetFIFOTxThreshold( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->FIFOTH) & TXTH_MASK) >> TXTH_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->FIFOTH) & TXTH_MASK) >> TXTH_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -1983,7 +1983,7 @@ U32     NX_SDMMC_GetFIFOCount( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOCOUNT_MASK) >> FIFOCOUNT_POS;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOCOUNT_MASK) >> FIFOCOUNT_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -2006,7 +2006,7 @@ CBOOL   NX_SDMMC_IsFIFOFull( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOFULL_MASK) >> FIFOFULL_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOFULL_MASK) >> FIFOFULL_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2029,7 +2029,7 @@ CBOOL   NX_SDMMC_IsFIFOEmpty( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOEMPTY_MASK) >> FIFOEMPTY_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FIFOEMPTY_MASK) >> FIFOEMPTY_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2054,7 +2054,7 @@ CBOOL   NX_SDMMC_IsFIFOTxThreshold( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & TXWMARK_MASK) >> TXWMARK_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & TXWMARK_MASK) >> TXWMARK_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2079,7 +2079,7 @@ CBOOL   NX_SDMMC_IsFIFORxThreshold( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & RXWMARK_MASK) >> RXWMARK_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & RXWMARK_MASK) >> RXWMARK_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2094,7 +2094,7 @@ U32     NX_SDMMC_GetDataTransferSize( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TCBCNT);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TCBCNT);
 }
 
 //------------------------------------------------------------------------------
@@ -2109,7 +2109,7 @@ U32     NX_SDMMC_GetFIFOTransferSize( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->TBBCNT);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->TBBCNT);
 }
 
 //------------------------------------------------------------------------------
@@ -2130,7 +2130,7 @@ void    NX_SDMMC_SetData( U32 ModuleIndex, U32 dwData )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DATA, dwData);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DATA, dwData);
 }
 
 //------------------------------------------------------------------------------
@@ -2151,7 +2151,7 @@ U32     NX_SDMMC_GetData( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DATA);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DATA);
 }
 
 //------------------------------------------------------------------------------
@@ -2182,14 +2182,14 @@ void    NX_SDMMC_SetData32( U32 ModuleIndex, const U32 *pdwData )
     pDst = &pRegister->DATA;
 
     // Loop is unrolled to decrease CPU pipeline broken for a performance.
-    WriteIODW(pDst, pdwData[0]);
-    WriteIODW(pDst, pdwData[1]);
-    WriteIODW(pDst, pdwData[2]);
-    WriteIODW(pDst, pdwData[3]);
-    WriteIODW(pDst, pdwData[4]);
-    WriteIODW(pDst, pdwData[5]);
-    WriteIODW(pDst, pdwData[6]);
-    WriteIODW(pDst, pdwData[7]);
+    WriteIO32(pDst, pdwData[0]);
+    WriteIO32(pDst, pdwData[1]);
+    WriteIO32(pDst, pdwData[2]);
+    WriteIO32(pDst, pdwData[3]);
+    WriteIO32(pDst, pdwData[4]);
+    WriteIO32(pDst, pdwData[5]);
+    WriteIO32(pDst, pdwData[6]);
+    WriteIO32(pDst, pdwData[7]);
 }
 
 //------------------------------------------------------------------------------
@@ -2221,14 +2221,14 @@ void    NX_SDMMC_GetData32( U32 ModuleIndex, U32 *pdwData )
     pSrc = &pRegister->DATA;
 
     // Loop is unrolled to decrease CPU pipeline broken for a performance.
-    pdwData[0] = ReadIODW(pSrc);
-    pdwData[1] = ReadIODW(pSrc);
-    pdwData[2] = ReadIODW(pSrc);
-    pdwData[3] = ReadIODW(pSrc);
-    pdwData[4] = ReadIODW(pSrc);
-    pdwData[5] = ReadIODW(pSrc);
-    pdwData[6] = ReadIODW(pSrc);
-    pdwData[7] = ReadIODW(pSrc);
+    pdwData[0] = ReadIO32(pSrc);
+    pdwData[1] = ReadIO32(pSrc);
+    pdwData[2] = ReadIO32(pSrc);
+    pdwData[3] = ReadIO32(pSrc);
+    pdwData[4] = ReadIO32(pSrc);
+    pdwData[5] = ReadIO32(pSrc);
+    pdwData[6] = ReadIO32(pSrc);
+    pdwData[7] = ReadIO32(pSrc);
 }
 
 //------------------------------------------------------------------------------
@@ -2308,7 +2308,7 @@ void    NX_SDMMC_GetDataBIU( U32 ModuleIndex, NX_SDMMC_BIU *pBIU )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pBIU = (NX_SDMMC_BIU*)ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DBADDR);
+    pBIU = (NX_SDMMC_BIU*)ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DBADDR);
 }
 
 void    NX_SDMMC_SetDataBIU( U32 ModuleIndex, NX_SDMMC_BIU *pBIU )
@@ -2317,7 +2317,7 @@ void    NX_SDMMC_SetDataBIU( U32 ModuleIndex, NX_SDMMC_BIU *pBIU )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DBADDR, pBIU);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DBADDR, pBIU);
 }
 
 void NX_SDMMC_PollDemand( U32 ModuleIndex )
@@ -2325,7 +2325,7 @@ void NX_SDMMC_PollDemand( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PLDMND, 1);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PLDMND, 1);
 }
 
 void NX_SDMMC_SetDMACStatus( U32 ModuleIndex, U32 SetData )
@@ -2333,7 +2333,7 @@ void NX_SDMMC_SetDMACStatus( U32 ModuleIndex, U32 SetData )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDSTS, SetData);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IDSTS, SetData);
 }
 
 U32 NX_SDMMC_GetDMACStatus( U32 ModuleIndex )
@@ -2341,7 +2341,7 @@ U32 NX_SDMMC_GetDMACStatus( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDSTS);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IDSTS);
 }
 
 void NX_SDMMC_SetDMACIntEnable( U32 ModuleIndex, U32 IntFlag )
@@ -2349,7 +2349,7 @@ void NX_SDMMC_SetDMACIntEnable( U32 ModuleIndex, U32 IntFlag )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDINTEN, IntFlag);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IDINTEN, IntFlag);
 }
 
 U32 NX_SDMMC_GetDMACIntEnable( U32 ModuleIndex )
@@ -2357,7 +2357,7 @@ U32 NX_SDMMC_GetDMACIntEnable( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDINTEN);
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->IDINTEN);
 }
 
 CBOOL NX_SDMMC_GetDMACResetStatus( U32 ModuleIndex )
@@ -2365,7 +2365,7 @@ CBOOL NX_SDMMC_GetDMACResetStatus( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD) & 1UL<<0);
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD) & 1UL<<0);
 }
 
 void NX_SDMMC_SetDMACBurstLength( U32 ModuleIndex, U32 BurstLength )
@@ -2406,14 +2406,14 @@ void NX_SDMMC_SetDMACBurstLength( U32 ModuleIndex, U32 BurstLength )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    //regval = ReadIODW(&pRegister->BMOD);
+    //regval = ReadIO32(&pRegister->BMOD);
     //regval &= ~(7UL<<8);
     //regval |= bl<<8;
-    //WriteIODW(&pRegister->BMOD, regval);
-    regval = ReadIODW(&pRegister->FIFOTH);
+    //WriteIO32(&pRegister->BMOD, regval);
+    regval = ReadIO32(&pRegister->FIFOTH);
     regval &= ~(7UL<<28);
     regval |= bl<<28;
-    WriteIODW(&pRegister->FIFOTH, regval);
+    WriteIO32(&pRegister->FIFOTH, regval);
 }
 
 void NX_SDMMC_SetIDMACEnable( U32 ModuleIndex, CBOOL bEnable )
@@ -2427,10 +2427,10 @@ void NX_SDMMC_SetIDMACEnable( U32 ModuleIndex, CBOOL bEnable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->BMOD);
+    regval = ReadIO32(&pRegister->BMOD);
     regval &= ~(1UL<<7);
     regval |= bEnable<<7;
-    WriteIODW(&pRegister->BMOD, regval);
+    WriteIO32(&pRegister->BMOD, regval);
 }
 
 CBOOL NX_SDMMC_GetIDMACEnable( U32 ModuleIndex )
@@ -2438,7 +2438,7 @@ CBOOL NX_SDMMC_GetIDMACEnable( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD)>>7) & 0x1);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD)>>7) & 0x1);
 }
 
 void NX_SDMMC_SetDescSkipLen( U32 ModuleIndex, U32 uLength )
@@ -2452,10 +2452,10 @@ void NX_SDMMC_SetDescSkipLen( U32 ModuleIndex, U32 uLength )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->BMOD);
+    regval = ReadIO32(&pRegister->BMOD);
     regval &= ~(0x1FUL<<2);
     regval |= uLength<<2;
-    WriteIODW(&pRegister->BMOD, regval);
+    WriteIO32(&pRegister->BMOD, regval);
 }
 
 U32 NX_SDMMC_GetDescSkipLen( U32 ModuleIndex )
@@ -2463,7 +2463,7 @@ U32 NX_SDMMC_GetDescSkipLen( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD)>>2) & 0x1F);
+    return ((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD)>>2) & 0x1F);
 }
 
 void NX_SDMMC_ResetIDMAC( U32 ModuleIndex )
@@ -2476,9 +2476,9 @@ void NX_SDMMC_ResetIDMAC( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->BMOD);
+    regval = ReadIO32(&pRegister->BMOD);
     regval |= (1UL<<0);
-    WriteIODW(&pRegister->BMOD, regval);
+    WriteIO32(&pRegister->BMOD, regval);
 }
 
 CBOOL NX_SDMMC_IsResetIDMAC( U32 ModuleIndex )
@@ -2486,7 +2486,7 @@ CBOOL NX_SDMMC_IsResetIDMAC( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD) & 0x1);
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BMOD) & 0x1);
 }
 
 void NX_SDMMC_SetDebounce( U32 ModuleIndex, U32 uDebounce )
@@ -2495,7 +2495,7 @@ void NX_SDMMC_SetDebounce( U32 ModuleIndex, U32 uDebounce )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
     NX_ASSERT( !(0xFF000000 & uDebounce) );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DEBNCE, uDebounce);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DEBNCE, uDebounce);
 }
 
 U32 NX_SDMMC_GetDebounce( U32 ModuleIndex )
@@ -2503,7 +2503,7 @@ U32 NX_SDMMC_GetDebounce( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DEBNCE) & 0x00FFFFFF;
+    return ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DEBNCE) & 0x00FFFFFF;
 }
 
 CBOOL NX_SDMMC_IsIDMACSupported( U32 ModuleIndex )
@@ -2516,12 +2516,12 @@ CBOOL NX_SDMMC_IsIDMACSupported( U32 ModuleIndex )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
-    WriteIODW(&pRegister->CTRL, regval | 1UL<<25);
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
+    WriteIO32(&pRegister->CTRL, regval | 1UL<<25);
+    regval = ReadIO32(&pRegister->CTRL);
     if(regval & 1UL<<25)
     {
-        WriteIODW(&pRegister->CTRL, regval & ~(1UL<<25));
+        WriteIO32(&pRegister->CTRL, regval & ~(1UL<<25));
         return CTRUE;
     }
     return CFALSE;
@@ -2543,10 +2543,10 @@ void    NX_SDMMC_SetCardVoltage( U32 ModuleIndex, U32 VolBase, U32 VolOffset )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->CTRL);
+    regval = ReadIO32(&pRegister->CTRL);
     regval &= ~(0xFF<<16);
     regval |= VolOffset<<(16+VolBase*4);
-    WriteIODW(&pRegister->CTRL, regval);
+    WriteIO32(&pRegister->CTRL, regval);
 }
 
 U32     NX_SDMMC_GetCardVoltage( U32 ModuleIndex, U32 VolBase )
@@ -2555,7 +2555,7 @@ U32     NX_SDMMC_GetCardVoltage( U32 ModuleIndex, U32 VolBase )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
     NX_ASSERT( 0 == VolBase || 1== VolBase);
 
-    return (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) >> (16 + VolBase*4)) & 0xF;
+    return (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) >> (16 + VolBase*4)) & 0xF;
 }
 
 //------------------------------------------------------------------------------
@@ -2574,7 +2574,7 @@ CBOOL   NX_SDMMC_IsDataTransferBusy( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FSMBUSY_MASK) >> FSMBUSY_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & FSMBUSY_MASK) >> FSMBUSY_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2594,7 +2594,7 @@ CBOOL   NX_SDMMC_IsCardDataBusy( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DATBUSY_MASK) >> DATBUSY_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DATBUSY_MASK) >> DATBUSY_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2622,7 +2622,7 @@ CBOOL   NX_SDMMC_IsCardPresent( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & CPRESENT_MASK) >> CPRESENT_POS);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & CPRESENT_MASK) >> CPRESENT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -2643,10 +2643,10 @@ void    NX_SDMMC_SetDDRMode( U32 ModuleIndex, CBOOL bEnable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->UHS_REG);
+    regval = ReadIO32(&pRegister->UHS_REG);
     regval &= ~(1UL<<16);
     regval |= bEnable<<16;
-    WriteIODW(&pRegister->UHS_REG, regval);
+    WriteIO32(&pRegister->UHS_REG, regval);
 }
 
 CBOOL   NX_SDMMC_GetDDRMode( U32 ModuleIndex )
@@ -2654,7 +2654,7 @@ CBOOL   NX_SDMMC_GetDDRMode( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->UHS_REG)>>16) & 0x1);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->UHS_REG)>>16) & 0x1);
 }
 
 void    NX_SDMMC_SetVoltageMode( U32 ModuleIndex, CBOOL bEnable )
@@ -2668,10 +2668,10 @@ void    NX_SDMMC_SetVoltageMode( U32 ModuleIndex, CBOOL bEnable )
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    regval = ReadIODW(&pRegister->UHS_REG);
+    regval = ReadIO32(&pRegister->UHS_REG);
     regval &= ~(1UL<<0);
     regval |= bEnable<<0;
-    WriteIODW(&pRegister->UHS_REG, regval);
+    WriteIO32(&pRegister->UHS_REG, regval);
 }
 
 CBOOL   NX_SDMMC_GetVoltageMode( U32 ModuleIndex )
@@ -2679,7 +2679,7 @@ CBOOL   NX_SDMMC_GetVoltageMode( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (CBOOL)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->UHS_REG)>>0) & 0x1);
+    return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->UHS_REG)>>0) & 0x1);
 }
 
 //------------------------------------------------------------------------------
@@ -2697,6 +2697,6 @@ NX_SDMMC_CMDFSM NX_SDMMC_GetCommandFSM( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return (NX_SDMMC_CMDFSM)((ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & CMDFSM_MASK) >> CMDFSM_POS);
+    return (NX_SDMMC_CMDFSM)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & CMDFSM_MASK) >> CMDFSM_POS);
 }
 

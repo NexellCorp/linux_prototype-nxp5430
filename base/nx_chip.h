@@ -83,6 +83,7 @@ extern "C" {
 #define NUMBER_OF_TMCB_MODULE                               4
 #define NUMBER_OF_TMU_MODULE                                2
 #define NUMBER_OF_TZPC_MODULE                               7
+#define NUMBER_OF_CCI400_MODULE                             1
 
 
 //------------
@@ -106,12 +107,13 @@ extern "C" {
 
 #define PHY_BASEADDR_MCUSTOP_MODULE                         0xC0051000
 
-#define PHY_BASEADDR_DREX_MODULE_CH0_APB                    0xC00E0000
-#define PHY_BASEADDR_DREX_MODULE_CH1_APB                    0xC00E1000
+#define PHY_BASEADDR_DREX_MODULE_CH0_APB                    0xC00E0000		// drex
+#define PHY_BASEADDR_DREX_MODULE_CH1_APB                    0xC00E1000		// ddr phy
 #define PHY_BASEADDR_XIUA_DREX0_MODULE                      0xC00E2000
 #define PHY_BASEADDR_XIUA_DREX1_MODULE                      0xC00E3000
 #define PHY_BASEADDR_XIUA_DREX2_MODULE                      0xC00E4000
-#define PHY_BASEADDR_DREXTZASC_MODULE                       0xC0300000
+#define PHY_BASEADDR_DREX_TZ_MODULE                         0xC00E5000		// drex trustzone
+#define PHY_BASEADDR_DREXTZASC_MODULE                       0xC0300000		// address space controller
 
 #define PHY_BASEADDR_TIMER_MODULE                           0xC0017000
 #define PHY_BASEADDR_PWM_MODULE                             0xC0018000
@@ -275,6 +277,8 @@ extern "C" {
 #define PHY_BASEADDR_TZPC4_MODULE                           0xC0305000
 #define PHY_BASEADDR_TZPC5_MODULE                           0xC0306000
 #define PHY_BASEADDR_TZPC6_MODULE                           0xC0307000
+
+#define PHY_BASEADDR_CCI400_MODULE                          0xE0090000
 
 //------------------------------------------------------------------------------
 // Interrupt Number of mudules for the interrupt controller.

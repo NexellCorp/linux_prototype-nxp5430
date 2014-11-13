@@ -15,15 +15,9 @@
 //					2007/04/03	first
 // @choyk 2012/07/03 : Vic 용 prototype
 //------------------------------------------------------------------------------
-#include <nx_chip.h>
 #include "nx_intc.h"
 
-#define NX_INTC_NUM_OF_MODULE  ((NX_INTC_NUM_OF_INT+31)/32)
-#define NX_INTC_APB_STRIDE     4096
-
-static	struct NX_INTC_RegisterSet *__g_pRegister[NX_INTC_NUM_OF_MODULE] = { CNULL, };
-
-NX_CASSERT( 1==NUMBER_OF_INTC_MODULE );
+static	struct NX_INTC_RegisterSet (*__g_pRegister)[0];
 
 //------------------------------------------------------------------------------
 //	Module Interface
@@ -38,14 +32,10 @@ NX_CASSERT( 1==NUMBER_OF_INTC_MODULE );
 CBOOL	NX_INTC_Initialize( void )
 {
 	static CBOOL bInit = CFALSE;
-	U32 i;
-	
+
 	if( CFALSE == bInit )
 	{
-		for(i=0; i<NX_INTC_NUM_OF_MODULE; i++)
-		{
-			__g_pRegister[i] = CNULL;
-		}
+		__g_pRegister = CNULL;
 		bInit = CTRUE;
 	}
 
@@ -76,18 +66,14 @@ U32		NX_INTC_GetNumberOfModule( void )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-U32		NX_INTC_GetPhysicalAddress( U32 ModuleIndex )
+U32		NX_INTC_GetPhysicalAddress( void )
 {
-	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST( INTC ) }; // PHY_BASEADDR_UART?_MODULE
+	static const U32 PhysicalAddr[] = { PHY_BASEADDR_LIST( INTC ) }; // PHY_BASEADDR_INTC?_MODULE
 	NX_CASSERT( NUMBER_OF_INTC_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
-	#if (NUMBER_OF_INTC_MODULE==1)
+
 	NX_ASSERT( PHY_BASEADDR_INTC_MODULE == PhysicalAddr[0] );
-	#else
-	NX_ASSERT( PHY_BASEADDR_INTC0_MODULE == PhysicalAddr[0] );
-	NX_ASSERT( PHY_BASEADDR_INTC1_MODULE == PhysicalAddr[1] );
-	#endif
-	return (U32)PhysicalAddr[ModuleIndex];
+
+	return (U32)PhysicalAddr[0];
 }
 
 //------------------------------------------------------------------------------
@@ -101,11 +87,7 @@ U32		NX_INTC_GetPhysicalAddress( U32 ModuleIndex )
  */
 U32		NX_INTC_GetSizeOfRegisterSet( void )
 {
-#if (NX_INTC_NUM_OF_MODULE==1)	
 	return sizeof( struct NX_INTC_RegisterSet );
-#else
-	return sizeof( struct NX_INTC_RegisterSet ) + (NX_INTC_NUM_OF_MODULE-1) * NX_INTC_APB_STRIDE;
-#endif	
 }
 
 //------------------------------------------------------------------------------
@@ -118,18 +100,11 @@ U32		NX_INTC_GetSizeOfRegisterSet( void )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-void	NX_INTC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_INTC_SetBaseAddress( U32 BaseAddress )
 {
-	int i;
 	NX_ASSERT( CNULL != BaseAddress );
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
-	//__g_pRegister[ModuleIndex] = (struct NX_INTC_RegisterSet *)BaseAddress;
-	
-    for(i=0; i<NX_INTC_NUM_OF_MODULE; i++)
-	{
-		__g_pRegister[i] = (struct NX_INTC_RegisterSet *)(BaseAddress + i * NX_INTC_APB_STRIDE);
-	}	
-    //__g_pRegister[ModuleIndex] = (struct NX_INTC_RegisterSet *)(BaseAddress);
+
+	__g_pRegister = (struct NX_INTC_RegisterSet (*)[])BaseAddress;
 }
 
 //------------------------------------------------------------------------------
@@ -141,10 +116,9 @@ void	NX_INTC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-U32		NX_INTC_GetBaseAddress( U32 ModuleIndex )
+U32		NX_INTC_GetBaseAddress( void )
 {
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32)__g_pRegister;
 }
 
 
@@ -158,30 +132,17 @@ U32		NX_INTC_GetBaseAddress( U32 ModuleIndex )
  *												NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-CBOOL	NX_INTC_OpenModule( U32 ModuleIndex )
+CBOOL	NX_INTC_OpenModule( void )
 {
-	int i;
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
-
-	// set NX_INTC_INTMODE_IRQ
-	
-	//===============
-	//@modified choiyk 2013-01-25 오후 2:18:45 
-	// INTC 중복 호출을 방지한다.
-	//===============
-	if( ( __g_pRegister[i] != CNULL ) &&
-		(ReadIODW(&__g_pRegister[i]->PRIORIT) != 0) )
+	register U32 i;
+	for(i=0; i<((NX_INTC_NUM_OF_INT+31)/32); i++)
 	{
-		U32 NX_INTC_OpenModule_Called_once_more = CFALSE;
-		NX_ASSERT( NX_INTC_OpenModule_Called_once_more );
-		
-		return CFALSE;
+		WriteIO32(&__g_pRegister[i]->INTMODE,  0);
 	}
-	
-    for(i=0; i<NX_INTC_NUM_OF_MODULE; i++)
+	for(i=0; i<NX_INTC_NUM_OF_INT; i++)
 	{
-		WriteIODW(&__g_pRegister[i]->INTMODE,  0);
-	}	
+		WriteIO32(&__g_pRegister[i>>5]->VECTORADDR[i], i);
+	}
 	NX_INTC_SetInterruptEnableAll( CFALSE );
 	NX_INTC_ClearInterruptPendingAll();
 	return CTRUE;
@@ -197,9 +158,8 @@ CBOOL	NX_INTC_OpenModule( U32 ModuleIndex )
  *				NX_INTC_OpenModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-CBOOL	NX_INTC_CloseModule( U32 ModuleIndex )
+CBOOL	NX_INTC_CloseModule( void )
 {
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
 	NX_INTC_SetInterruptEnableAll( CFALSE );
 	NX_INTC_ClearInterruptPendingAll();
 	return CTRUE;
@@ -215,9 +175,8 @@ CBOOL	NX_INTC_CloseModule( U32 ModuleIndex )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *												NX_INTC_CanPowerDown
  */
-CBOOL	NX_INTC_CheckBusy( U32 ModuleIndex )
+CBOOL	NX_INTC_CheckBusy( void )
 {
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
 	return CFALSE;
 }
 
@@ -231,11 +190,11 @@ CBOOL	NX_INTC_CheckBusy( U32 ModuleIndex )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy
  */
-CBOOL	NX_INTC_CanPowerDown( U32 ModuleIndex )
+CBOOL	NX_INTC_CanPowerDown( void )
 {
-	NX_ASSERT( NUMBER_OF_INTC_MODULE > ModuleIndex );
 	return CTRUE;
 }
+
 
 //------------------------------------------------------------------------------
 // Interrupt Interface
@@ -263,10 +222,10 @@ void	NX_INTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 	register struct NX_INTC_RegisterSet *pRegister;
 	register int RegSel, RegBit;
 
-	// 2012/07/03 
+	// 2012/07/03
 	// primcell INTC (Vic)의 경우는 32개의 IRQ 포트를 가진다.
-	// 32를 기준으로 나누어서 몇번째 ModuleIndex를 사용해야 하는지 설정한다. 
-		
+	// 32를 기준으로 나누어서 몇번째 ModuleIndex를 사용해야 하는지 설정한다.
+
 	NX_ASSERT( NX_INTC_NUM_OF_INT > IntNum );
 	NX_ASSERT( (0==Enable) || (1==Enable) );
 	RegSel	= IntNum >> 5;		// 0 or NX_INTC_NUM_OF_MODULE-1
@@ -279,17 +238,17 @@ void	NX_INTC_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 		new_irq_enable |= ((U32)(1UL << RegBit));
 #if defined(__SOC__)
 		__g_pRegister_backup_INTENABLE[RegSel] |= ((U32)(1UL << RegBit));
-#endif		
+#endif
 	}
 	else
 	{
 		new_irq_enable &= (~(U32)(1UL << RegBit));
 #if defined(__SOC__)
 		__g_pRegister_backup_INTENABLE[RegSel] &= (~(U32)(1UL << RegBit));
-#endif		
+#endif
 	}
-	WriteIODW(&pRegister->INTDISABLE, ~new_irq_enable);
-	WriteIODW(&pRegister->INTENABLE, new_irq_enable);	
+	WriteIO32(&pRegister->INTDISABLE, ~new_irq_enable);
+	WriteIO32(&pRegister->INTENABLE, new_irq_enable);
 }
 
 //------------------------------------------------------------------------------
@@ -375,8 +334,8 @@ CBOOL	NX_INTC_GetInterruptEnable( S32 IntNum )
 //
 ////	pRegister->INTMASK[0] = EnableLow  & INTMASKL_MASK;
 ////	pRegister->INTMASK[1] = EnableHigh & INTMASKH_MASK;
-//	WriteIODW(&pRegister->INTMASK[0], EnableLow	 & INTMASKL_MASK);
-//	WriteIODW(&pRegister->INTMASK[1], EnableHigh & INTMASKH_MASK);
+//	WriteIO32(&pRegister->INTMASK[0], EnableLow	 & INTMASKL_MASK);
+//	WriteIO32(&pRegister->INTMASK[1], EnableHigh & INTMASKH_MASK);
 //}
 
 //------------------------------------------------------------------------------
@@ -580,8 +539,8 @@ void	NX_INTC_ClearInterruptPending( S32 IntNum )
 //
 ////	pRegister->INTPEND[0] = PendingLow	& INTPENDL_MASK;
 ////	pRegister->INTPEND[1] = PendingHigh & INTPENDH_MASK;
-//	WriteIODW(&pRegister->INTPEND[0], PendingLow  & INTPENDL_MASK);
-//	WriteIODW(&pRegister->INTPEND[1], PendingHigh & INTPENDH_MASK);
+//	WriteIO32(&pRegister->INTPEND[0], PendingLow  & INTPENDL_MASK);
+//	WriteIO32(&pRegister->INTPEND[1], PendingHigh & INTPENDH_MASK);
 //}
 
 //------------------------------------------------------------------------------
@@ -615,11 +574,11 @@ void	NX_INTC_SetInterruptEnableAll( CBOOL Enable )
 	{
 		pRegister = __g_pRegister[i];
 	    NX_ASSERT( CNULL != pRegister );
-		WriteIODW(&pRegister->INTDISABLE, ~regvalue);
-		WriteIODW(&pRegister->INTENABLE, regvalue);
+		WriteIO32(&pRegister->INTDISABLE, ~regvalue);
+		WriteIO32(&pRegister->INTENABLE, regvalue);
 #if defined(__SOC__)
 		__g_pRegister_backup_INTENABLE[i] = regvalue;
-#endif		
+#endif
 	}
 }
 
@@ -644,12 +603,12 @@ CBOOL	NX_INTC_GetInterruptEnableAll( void )
 	{
 		pRegister = __g_pRegister[i];
 		NX_ASSERT( CNULL != pRegister );
-		
+
 		if( 0 != ( pRegister->INTENABLE & (~pRegister->INTDISABLE) ) )
         {
             return CTRUE;
 		}
-	}	
+	}
 	return CFALSE;
 }
 
@@ -674,12 +633,12 @@ CBOOL	NX_INTC_GetInterruptPendingAll( void )
 	{
 		pRegister = __g_pRegister[i];
 		NX_ASSERT( CNULL != pRegister );
-		
-		if( 0 != ( pRegister->IRQSTATUS ) ) 
+
+		if( 0 != ( pRegister->IRQSTATUS ) )
         {
             return CTRUE;
 		}
-	}	
+	}
 	return CFALSE;
 }
 
@@ -717,12 +676,12 @@ S32		NX_INTC_GetInterruptPendingNumber( void )	// -1 if None
 	U32 intpend;
 	register struct NX_INTC_RegisterSet *pRegister;
 	U32 i;
-	
+
 	for(i=0; i<NX_INTC_NUM_OF_MODULE; i++)
 	{
 		pRegister = __g_pRegister[i];
 	    NX_ASSERT( CNULL != pRegister );
-	    // @modified nick C_IRQ_Handler 에서 NX_INTC_SetInterruptEnableAll( CFALSE ); 
+	    // @modified nick C_IRQ_Handler 에서 NX_INTC_SetInterruptEnableAll( CFALSE );
 	    //				  하기전에 이 함수를 호출하기로 함. ( 검수자 ) 이현행,최영경
 		intpend = pRegister->IRQSTATUS;
 		//intpend = pRegister->RAWINTR;
@@ -768,7 +727,7 @@ void	NX_INTC_SetInterruptMode ( U32 IntNum, NX_INTC_INTMODE IntMode	)
 		pRegister->INTMODE |= ((U32)(1<<RegBit));
 		break;
 	default:
-		// 절대 여기에 들어오면 안된다. 
+		// 절대 여기에 들어오면 안된다.
 		NX_ASSERT( CFALSE );
 	}
 }
@@ -796,7 +755,7 @@ void	NX_INTC_SetPriorityMode( U32 ArbiterNum, U32 OrderSel )
 {
     NX_ASSERT( CFALSE ); // TODO
 	return;
-// 2012/07/03 @ 우선 구현 안함. 
+// 2012/07/03 @ 우선 구현 안함.
 //	register struct NX_INTC_RegisterSet *pRegister;
 //	register U32 reg;
 //
@@ -812,7 +771,7 @@ void	NX_INTC_SetPriorityMode( U32 ArbiterNum, U32 OrderSel )
 //	reg |= (OrderSel<<(ArbiterNum<<1));
 //
 ////	pRegister->PRIORDER = reg;
-//	WriteIODW(&pRegister->PRIORDER, reg);
+//	WriteIO32(&pRegister->PRIORDER, reg);
 }
 
 
@@ -829,8 +788,8 @@ void	NX_INTC_SOC_OnEnter_IRQHandler ( void )
 		pRegister = __g_pRegister[i];
 	    NX_ASSERT( CNULL != pRegister );
 	    __g_pRegister_backup_INTENABLE[i] = pRegister->INTENABLE;
-		WriteIODW(&pRegister->INTDISABLE,(~0));
-		WriteIODW(&pRegister->INTENABLE, ( 0));
+		WriteIO32(&pRegister->INTDISABLE,(~0));
+		WriteIO32(&pRegister->INTENABLE, ( 0));
 	}
 }
 
@@ -842,8 +801,8 @@ void	NX_INTC_SOC_OnLeave_IRQHandler ( void )
 	{
 		pRegister = __g_pRegister[i];
 	    NX_ASSERT( CNULL != pRegister );
-		WriteIODW(&pRegister->INTDISABLE, ~__g_pRegister_backup_INTENABLE[i]);
-		WriteIODW(&pRegister->INTENABLE, __g_pRegister_backup_INTENABLE[i]);
+		WriteIO32(&pRegister->INTDISABLE, ~__g_pRegister_backup_INTENABLE[i]);
+		WriteIO32(&pRegister->INTENABLE, __g_pRegister_backup_INTENABLE[i]);
 	}
 }
 #endif

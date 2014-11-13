@@ -36,7 +36,7 @@ U32 NX_TIEOFF_GetPhysicalAddress( void )
 {
 	const U32 PhysicalAddr[] =  {   PHY_BASEADDR_LIST( TIEOFF )  }; // PHY_BASEADDR_TIEOFF_MODULE
 
-	NX_CASSERT( 1 == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
+    NX_CASSERT( NUMBER_OF_TIEOFF_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
 
 	return (U32)PhysicalAddr[0];
 }
@@ -68,20 +68,20 @@ void		NX_TIEOFF_Set(U32 tieoff_index, U32 tieoff_value)
 	{
 		MSB &= 0x1F;
 		mask		= ~(0xffffffff<<LSB);
-		regval		= ReadIODW(&__g_pRegister->TIEOFFREG[regindex]) & mask;
+		regval		= ReadIO32(&__g_pRegister->TIEOFFREG[regindex]) & mask;
 		regval		|= ((tieoff_value & ((1UL<<BitWidth)-1))<<LSB);
-		WriteIODW(&__g_pRegister->TIEOFFREG[regindex], regval);
+		WriteIO32(&__g_pRegister->TIEOFFREG[regindex], regval);
 
 		mask	= (0xffffffff<<MSB);
-		regval		= ReadIODW(&__g_pRegister->TIEOFFREG[regindex+1]) & mask;
+		regval		= ReadIO32(&__g_pRegister->TIEOFFREG[regindex+1]) & mask;
 		regval		|= ((tieoff_value & ((1UL<<BitWidth)-1))>>MSB);
-		WriteIODW(&__g_pRegister->TIEOFFREG[regindex+1], regval);
+		WriteIO32(&__g_pRegister->TIEOFFREG[regindex+1], regval);
 	}else
 	{
 		mask		= (0xffffffff<<MSB) | (~(0xffffffff<<LSB));
-		regval		= ReadIODW(&__g_pRegister->TIEOFFREG[regindex]) & mask;
+		regval		= ReadIO32(&__g_pRegister->TIEOFFREG[regindex]) & mask;
 		regval		|= ((tieoff_value & ((1UL<<BitWidth)-1))<<LSB);
-		WriteIODW(&__g_pRegister->TIEOFFREG[regindex], regval);
+		WriteIO32(&__g_pRegister->TIEOFFREG[regindex], regval);
 	}
 }
 
@@ -104,15 +104,15 @@ U32			NX_TIEOFF_Get(U32 tieoff_index)
 	{
 		MSB &= 0x1F;
 		mask		= 0xffffffff<<LSB;
-		regval		= ReadIODW(&__g_pRegister->TIEOFFREG[regindex]) & mask;
+		regval		= ReadIO32(&__g_pRegister->TIEOFFREG[regindex]) & mask;
 		regval		>>= LSB;
 
 		mask		= ~(0xffffffff<<MSB);
-		regval		|= ((ReadIODW(&__g_pRegister->TIEOFFREG[regindex+1]) & mask) << (32-LSB));
+		regval		|= ((ReadIO32(&__g_pRegister->TIEOFFREG[regindex+1]) & mask) << (32-LSB));
 	}else
 	{
 		mask		= ~(0xffffffff<<MSB) & (0xffffffff<<LSB);
-		regval		= ReadIODW(&__g_pRegister->TIEOFFREG[regindex]) & mask;
+		regval		= ReadIO32(&__g_pRegister->TIEOFFREG[regindex]) & mask;
 		regval		>>= LSB;
 	}
 	return regval;

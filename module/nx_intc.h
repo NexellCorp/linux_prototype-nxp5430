@@ -72,14 +72,14 @@ U32		NX_INTC_GetNumberOfModule( void );
 ///	@name	Basic Interface
 //@{
 
-U32		NX_INTC_GetPhysicalAddress( U32 ModuleIndex );
+U32		NX_INTC_GetPhysicalAddress( void );
 U32		NX_INTC_GetSizeOfRegisterSet( void );
-void	NX_INTC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32		NX_INTC_GetBaseAddress( U32 ModuleIndex );
-CBOOL	NX_INTC_OpenModule( U32 ModuleIndex );
-CBOOL	NX_INTC_CloseModule( U32 ModuleIndex );
-CBOOL	NX_INTC_CheckBusy( U32 ModuleIndex );
-CBOOL	NX_INTC_CanPowerDown( U32 ModuleIndex );
+void	NX_INTC_SetBaseAddress( U32 BaseAddress );
+U32		NX_INTC_GetBaseAddress( void );
+CBOOL	NX_INTC_OpenModule( void );
+CBOOL	NX_INTC_CloseModule( void );
+CBOOL	NX_INTC_CheckBusy( void );
+CBOOL	NX_INTC_CanPowerDown( void );
 //@}
 
 //------------------------------------------------------------------------------

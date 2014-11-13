@@ -1433,7 +1433,7 @@ void    NX_DWC_GMAC_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enabl
     regvalue &= ~( 1UL << IntNum );
     regvalue |= (U32)Enable << IntNum;
 
-    WriteIODW(&pRegister->INTCTRL, regvalue);
+    WriteIO32(&pRegister->INTCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1517,7 +1517,7 @@ void    NX_DWC_GMAC_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
     NX_ASSERT( NUMBER_OF_DWC_GMAC_MODULE > ModuleIndex );
     NX_ASSERT( (CNULL != __g_pRegister[GMAC_CSR][ModuleIndex]->REGSET) | (CNULL != __g_pRegister[GMAC_DMA][ModuleIndex]->REGSET) );
     pRegister = __g_pRegister[ModuleIndex];
-    WriteIODW(&pRegister->INTPEND, 1UL << IntNum);
+    WriteIO32(&pRegister->INTPEND, 1UL << IntNum);
 }
 
 //------------------------------------------------------------------------------
@@ -1550,7 +1550,7 @@ void    NX_DWC_GMAC_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
     pRegister = __g_pRegister[ModuleIndex];
     regvalue  = Enable ? 0xFFFFFFFF : 0 ;
 
-    WriteIODW(&pRegister->INTCTRL, regvalue);
+    WriteIO32(&pRegister->INTCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1628,7 +1628,7 @@ void    NX_DWC_GMAC_ClearInterruptPendingAll( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_DWC_GMAC_MODULE > ModuleIndex );
     NX_ASSERT( (CNULL != __g_pRegister[GMAC_CSR][ModuleIndex]->REGSET) | (CNULL != __g_pRegister[GMAC_DMA][ModuleIndex]->REGSET) );
     pRegister = __g_pRegister[ModuleIndex];
-    WriteIODW(&pRegister->INTPEND, 0xFFFFFFFF); // just write operation make pending clear
+    WriteIO32(&pRegister->INTPEND, 0xFFFFFFFF); // just write operation make pending clear
 }
 
 //------------------------------------------------------------------------------

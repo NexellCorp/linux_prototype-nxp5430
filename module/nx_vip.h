@@ -162,18 +162,18 @@ typedef struct
 		NX_VIP_FORMAT_420				= 0UL,	/// Separated YUV 420
 		NX_VIP_FORMAT_422				= 1UL,	/// Separated YUV 422
 		NX_VIP_FORMAT_444				= 2UL,	/// Separated YUV 444
-		NX_VIP_FORMAT_L422              = 3UL,	/// Non-Separated YUYV 422
-		NX_VIP_FORMAT_YUYV              = 3UL,	/// Non-Separated YUYV 422
+		NX_VIP_FORMAT_L422				= 3UL,	/// Non-Separated YUYV 422
+		NX_VIP_FORMAT_YUYV				= 3UL,	/// Non-Separated YUYV 422
 
 		NX_VIP_FORMAT_420_CBCR			= 4UL,	/// Separated YUV 420 CBCR packed
 		NX_VIP_FORMAT_422_CBCR			= 5UL,	/// Separated YUV 422 CBCR packed
 		NX_VIP_FORMAT_444_CBCR			= 6UL,	/// Separated YUV 444 CBCR packed
-		NX_VIP_FORMAT_RESERVED00        = 7UL,	/// Reserved
+		NX_VIP_FORMAT_RESERVED00		= 7UL,	/// Reserved
 
 		NX_VIP_FORMAT_420_CRCB			= 8UL,	/// Separated YUV 420 CRCB packed
 		NX_VIP_FORMAT_422_CRCB			= 9UL,	/// Separated YUV 422 CRCB packed
 		NX_VIP_FORMAT_444_CRCB			= 10UL,	/// Separated YUV 444 CRCB packed
-		NX_VIP_FORMAT_RESERVED01        = 11UL	/// Reserved
+		NX_VIP_FORMAT_RESERVED01		= 11UL	/// Reserved
 	} NX_VIP_FORMAT;
 
 	/// @brief	input port select

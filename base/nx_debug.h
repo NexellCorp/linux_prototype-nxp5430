@@ -48,7 +48,7 @@
 
 	// Debug break definition, default is noexist
 	#ifdef NX_DEBUG
-	#define	NX_DEBUG_BREAK()	{ volatile static int i = 1; while(i); }
+	#define	NX_DEBUG_BREAK()	{ static volatile int i = 1; while(i); }
 	#endif
 #endif	// __arm
 
@@ -80,7 +80,7 @@
 
 	// Debug break definition, default is noexist
 	#ifdef NX_DEBUG
-	#define	NX_DEBUG_BREAK() 	{ volatile static int i = 1; while(i); }
+	#define	NX_DEBUG_BREAK() 	{ static volatile int i = 1; while(i); }
 	#endif
 #endif	// LINUX / GNU C Compiler
 
@@ -102,7 +102,7 @@
 
 	// 다시 무한대기로 변경..
 	//#define	NX_DEBUG_BREAK()	{ NX_SIMIO_Exit(); }
-	#define	NX_DEBUG_BREAK()	{ volatile int i = 1; while(i); }
+	#define	NX_DEBUG_BREAK()	{ static volatile int i = 1; while(i); }
 
 	#endif
 #endif	// __SOC__

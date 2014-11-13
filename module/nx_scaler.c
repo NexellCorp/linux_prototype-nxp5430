@@ -165,22 +165,22 @@ CBOOL   NX_SCALER_OpenModule( U32 ModuleIndex )
     //pRegister->HVSOFTREG        = 0x00000000;
     //pRegister->CLKENB           = 0x00000000;
 
-    WriteIODW(&pRegister->SCRUNREG,     0x00000000);
-    WriteIODW(&pRegister->SCCFGREG,     0x00000000);
-    WriteIODW(&pRegister->SCINTREG,     0x00000100);
-    WriteIODW(&pRegister->SCSRCADDREG,  0x00000000);
-    WriteIODW(&pRegister->SCSRCSTRIDE,  0x00000000);
-    WriteIODW(&pRegister->SCSRCSIZEREG, 0x00000000);
-    WriteIODW(&pRegister->SCDESTADDREG0,0x00000000);
-    WriteIODW(&pRegister->SCDESTSTRIDE0,0x00000000);
-    WriteIODW(&pRegister->SCDESTADDREG1,0x00000000);
-    WriteIODW(&pRegister->SCDESTSTRIDE1,0x00000000);
-    WriteIODW(&pRegister->SCDESTSIZEREG,0x00000000);
-    WriteIODW(&pRegister->DELTAXREG,    0x00000000);
-    WriteIODW(&pRegister->DELTAYREG,    0x00000000);
-    WriteIODW(&pRegister->HVSOFTREG,    0x00000000);
-    WriteIODW(&pRegister->CMDBUFCON,    0x00000000);
-    WriteIODW(&pRegister->CMDBUFADDR,   0x00000000);
+    WriteIO32(&pRegister->SCRUNREG,     0x00000000);
+    WriteIO32(&pRegister->SCCFGREG,     0x00000000);
+    WriteIO32(&pRegister->SCINTREG,     0x00000100);
+    WriteIO32(&pRegister->SCSRCADDREG,  0x00000000);
+    WriteIO32(&pRegister->SCSRCSTRIDE,  0x00000000);
+    WriteIO32(&pRegister->SCSRCSIZEREG, 0x00000000);
+    WriteIO32(&pRegister->SCDESTADDREG0,0x00000000);
+    WriteIO32(&pRegister->SCDESTSTRIDE0,0x00000000);
+    WriteIO32(&pRegister->SCDESTADDREG1,0x00000000);
+    WriteIO32(&pRegister->SCDESTSTRIDE1,0x00000000);
+    WriteIO32(&pRegister->SCDESTSIZEREG,0x00000000);
+    WriteIO32(&pRegister->DELTAXREG,    0x00000000);
+    WriteIO32(&pRegister->DELTAYREG,    0x00000000);
+    WriteIO32(&pRegister->HVSOFTREG,    0x00000000);
+    WriteIO32(&pRegister->CMDBUFCON,    0x00000000);
+    WriteIO32(&pRegister->CMDBUFADDR,   0x00000000);
 
     return CTRUE;
 }
@@ -216,22 +216,22 @@ CBOOL   NX_SCALER_CloseModule( U32 ModuleIndex )
     //pRegister->HVSOFTREG        = 0x00000000;
     //pRegister->CLKENB           = 0x00000000;
 
-    WriteIODW(&pRegister->SCRUNREG,     0x00000000);
-    WriteIODW(&pRegister->SCCFGREG,     0x00000000);
-    WriteIODW(&pRegister->SCINTREG,     0x00000100);
-    WriteIODW(&pRegister->SCSRCADDREG,  0x00000000);
-    WriteIODW(&pRegister->SCSRCSTRIDE,  0x00000000);
-    WriteIODW(&pRegister->SCSRCSIZEREG, 0x00000000);
-    WriteIODW(&pRegister->SCDESTADDREG0,0x00000000);
-    WriteIODW(&pRegister->SCDESTSTRIDE0,0x00000000);
-    WriteIODW(&pRegister->SCDESTADDREG1,0x00000000);
-    WriteIODW(&pRegister->SCDESTSTRIDE1,0x00000000);
-    WriteIODW(&pRegister->SCDESTSIZEREG,0x00000000);
-    WriteIODW(&pRegister->DELTAXREG,    0x00000000);
-    WriteIODW(&pRegister->DELTAYREG,    0x00000000);
-    WriteIODW(&pRegister->HVSOFTREG,    0x00000000);
-    WriteIODW(&pRegister->CMDBUFCON,    0x00000000);
-    WriteIODW(&pRegister->CMDBUFADDR,   0x00000000);
+    WriteIO32(&pRegister->SCRUNREG,     0x00000000);
+    WriteIO32(&pRegister->SCCFGREG,     0x00000000);
+    WriteIO32(&pRegister->SCINTREG,     0x00000100);
+    WriteIO32(&pRegister->SCSRCADDREG,  0x00000000);
+    WriteIO32(&pRegister->SCSRCSTRIDE,  0x00000000);
+    WriteIO32(&pRegister->SCSRCSIZEREG, 0x00000000);
+    WriteIO32(&pRegister->SCDESTADDREG0,0x00000000);
+    WriteIO32(&pRegister->SCDESTSTRIDE0,0x00000000);
+    WriteIO32(&pRegister->SCDESTADDREG1,0x00000000);
+    WriteIO32(&pRegister->SCDESTSTRIDE1,0x00000000);
+    WriteIO32(&pRegister->SCDESTSIZEREG,0x00000000);
+    WriteIO32(&pRegister->DELTAXREG,    0x00000000);
+    WriteIO32(&pRegister->DELTAYREG,    0x00000000);
+    WriteIO32(&pRegister->HVSOFTREG,    0x00000000);
+    WriteIO32(&pRegister->CMDBUFCON,    0x00000000);
+    WriteIO32(&pRegister->CMDBUFADDR,   0x00000000);
 
     return CTRUE;
 }
@@ -319,7 +319,7 @@ void    NX_SCALER_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable 
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG = ((U32)Enable << SC_INT_ENB_BITPOS);
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, ((U32)Enable << (SC_INT_ENB_BITPOS+IntNum)));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, ((U32)Enable << (SC_INT_ENB_BITPOS+IntNum)));
 }
 
 //------------------------------------------------------------------------------
@@ -369,7 +369,7 @@ void    NX_SCALER_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG = ((EnableFlag & 0x01) << SC_INT_ENB_BITPOS);
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, ((EnableFlag & 0x03) << SC_INT_ENB_BITPOS));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, ((EnableFlag & 0x03) << SC_INT_ENB_BITPOS));
 }
 
 //------------------------------------------------------------------------------
@@ -475,7 +475,7 @@ void    NX_SCALER_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG |= (0x01 << SC_INT_CLR_BITPOS);
     regval = __g_ModuleVariables[ModuleIndex].pRegister->SCINTREG | (0x01 << (SC_INT_CLR_BITPOS+IntNum));
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ void    NX_SCALER_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG |=  (PendingFlag&0x01) << PEND_BITPOS;
     regval = __g_ModuleVariables[ModuleIndex].pRegister->SCINTREG | (PendingFlag&0x03) << PEND_BITPOS;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -529,9 +529,9 @@ void    NX_SCALER_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     if( CTRUE == Enable)
-        WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, (SC_INT_ENB_MASK << SC_INT_ENB_BITPOS));
+        WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, (SC_INT_ENB_MASK << SC_INT_ENB_BITPOS));
     else
-        WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, 0x00);
+        WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, 0x00);
 
 }
 
@@ -601,7 +601,7 @@ void    NX_SCALER_ClearInterruptPendingAll( U32 ModuleIndex )
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG |= (0x01 << SC_INT_CLR_BITPOS);
     regval = __g_ModuleVariables[ModuleIndex].pRegister->SCINTREG | (0x03 << SC_INT_CLR_BITPOS);
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCINTREG, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -677,7 +677,7 @@ void            NX_SCALER_SetClockPClkMode( U32 ModuleIndex, NX_PCLKMODE mode )
     regvalue &= ~(1UL<<PCLKMODE_POS);
     regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
     //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
+    WriteIO32(&pRegister->CLKENB, regvalue);
 }
 */
 
@@ -737,7 +737,7 @@ void NX_SCALER_SetClockBClkMode( U32 ModuleIndex, NX_BCLKMODE mode )
     regvalue &= ~(0x03);
     regvalue |= clkmode & 0x03;
     //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
+    WriteIO32(&pRegister->CLKENB, regvalue);
 }
 */
 
@@ -821,7 +821,7 @@ void    NX_SCALER_Run( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG = 0x01;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG, 0x01);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG, 0x01);
 }
 
 //------------------------------------------------------------------------------
@@ -836,7 +836,7 @@ void    NX_SCALER_Stop( U32 ModuleIndex )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG = 0x00;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG, 0x00);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCRUNREG, 0x00);
 }
 
 //------------------------------------------------------------------------------
@@ -886,7 +886,7 @@ void    NX_SCALER_SetFilterEnable( U32 ModuleIndex, CBOOL enable )
     }
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG = temp;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -935,7 +935,7 @@ void    NX_SCALER_SetFilterRatio( U32 ModuleIndex, U32 RatioH, U32 RatioV )
     NX_ASSERT( (1<<5) > RatioV );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->HVSOFTREG = ( (RatioH << H_RATIO_BITPOS ) | ( RatioV << V_RATIO_BITPOS ) );
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->HVSOFTREG, ( (RatioH << H_RATIO_BITPOS ) | ( RatioV << V_RATIO_BITPOS ) ));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->HVSOFTREG, ( (RatioH << H_RATIO_BITPOS ) | ( RatioV << V_RATIO_BITPOS ) ));
 }
 
 //------------------------------------------------------------------------------
@@ -980,7 +980,7 @@ void    NX_SCALER_SetYVFilter( U32 ModuleIndex, U32 FilterSel, U32 FilterIndex, 
     NX_ASSERT( FilterIndex < 8 );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->YVFILTER[FilterSel][FilterIndex] = (S8)FilterVal;
-    WriteIODW( &__g_ModuleVariables[ModuleIndex].pRegister->YVFILTER[FilterSel][FilterIndex], (U32)FilterVal );
+    WriteIO32( &__g_ModuleVariables[ModuleIndex].pRegister->YVFILTER[FilterSel][FilterIndex], (U32)FilterVal );
 }
 
 void    NX_SCALER_SetYHFilter( U32 ModuleIndex, U32 FilterSel, U32 FilterIndex, U32 FilterVal )
@@ -991,7 +991,7 @@ void    NX_SCALER_SetYHFilter( U32 ModuleIndex, U32 FilterSel, U32 FilterIndex, 
     NX_ASSERT( FilterIndex < 64 );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->YHFILTER[FilterSel][FilterIndex] = (S16)FilterVal;
-    WriteIODW( &__g_ModuleVariables[ModuleIndex].pRegister->YHFILTER[FilterSel][FilterIndex], (U32)FilterVal );
+    WriteIO32( &__g_ModuleVariables[ModuleIndex].pRegister->YHFILTER[FilterSel][FilterIndex], (U32)FilterVal );
 }
 
 //------------------------------------------------------------------------------
@@ -1017,7 +1017,7 @@ void    NX_SCALER_SetRotateMode( U32 ModuleIndex, NX_SCALER_ROTATE rotate )
     temp = ( temp & ~ROT_MASK ) | ( (U32)rotate << ROT_BITPOS );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG = temp ;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
 }
 */
 
@@ -1065,7 +1065,7 @@ void    NX_SCALER_SetMode( U32 ModuleIndex, NX_SCALER_MODE mode )
     temp = ( temp & ~MOD_MASK ) | ( (U32)mode << MOD_BITPOS );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG = temp ;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCCFGREG, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1110,7 +1110,7 @@ void    NX_SCALER_SetSrcAddr( U32 ModuleIndex, U32 Addr )
     //NX_ASSERT( 0 == (0x50007007 & Addr) );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCSRCADDREG  = Addr;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCADDREG, Addr);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCADDREG, Addr);
 }
 
 //------------------------------------------------------------------------------
@@ -1148,7 +1148,7 @@ void    NX_SCALER_SetSrcStride( U32 ModuleIndex, U32 Stride )
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCSRCADDREG  = Addr;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCSTRIDE, Stride);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCSTRIDE, Stride);
 }
 
 //------------------------------------------------------------------------------
@@ -1191,12 +1191,12 @@ void    NX_SCALER_SetDestAddr( U32 ModuleIndex, U32 DstIndex, U32 Addr )
 
     switch( DstIndex )
     {
-        case 0: WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG0, Addr);    break;
-        case 1: WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG1, Addr);    break;
+        case 0: WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG0, Addr);    break;
+        case 1: WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG1, Addr);    break;
     }
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG = Addr;
-    //WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG, Addr);
+    //WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG, Addr);
 }
 
 //------------------------------------------------------------------------------
@@ -1246,12 +1246,12 @@ void    NX_SCALER_SetDestStride( U32 ModuleIndex, U32 DstIndex, U32 Stride )
 
     switch( DstIndex )
     {
-        case 0: WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE0, Stride);  break;
-        case 1: WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE1, Stride);  break;
+        case 0: WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE0, Stride);  break;
+        case 1: WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE1, Stride);  break;
     }
 
     //__g_ModuleVariables[ModuleIndex].pRegister->SCDESTADDREG = Addr;
-    //WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE, Stride);
+    //WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSTRIDE, Stride);
 }
 
 //------------------------------------------------------------------------------
@@ -1308,33 +1308,33 @@ void    NX_SCALER_SetImageSize
 
     temp = ( ( dwSrcHeight - 1 ) << HEIGHT_BITPOS ) | ( ( dwSrcWidth - 1 ) << WIDTH_BITPOS );
     //__g_ModuleVariables[ModuleIndex].pRegister->SCSRCSIZEREG = temp;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCSIZEREG, temp);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCSRCSIZEREG, temp);
 
     temp = ( ( dwDestHeight - 1 ) << HEIGHT_BITPOS ) | ( ( dwDestWidth - 1 ) << WIDTH_BITPOS );
     //__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSIZEREG = temp;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSIZEREG, temp);
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->SCDESTSIZEREG, temp);
 
     // Setting DeltaX, DeltaY
     //__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG = ( dwSrcWidth * 0x10000 ) / ( dwDestWidth-1 );
     //__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG = ( dwSrcHeight * 0x10000 ) / ( dwDestHeight-1 );
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG, ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth -1 ));
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG, ( dwSrcHeight * 0x10000 ) / ( dwDestHeight-1 ));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG, ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth -1 ));
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG, ( dwSrcHeight * 0x10000 ) / ( dwDestHeight-1 ));
     //--------------------------------------------------------------------------
     // 2009.11.10, Goofy : Fix to appear abnormal gray vertical pattern
     //                     in the region is filled with a single gray color.
     //--------------------------------------------------------------------------
     //__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG = ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth  );
     //__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG = ( dwSrcHeight * 0x10000 ) / ( dwDestHeight );
-    //WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG, ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth  ));
-    //WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG, ( dwSrcHeight * 0x10000 ) / ( dwDestHeight ));
-/*
+    //WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAXREG, ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth  ));
+    //WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->DELTAYREG, ( dwSrcHeight * 0x10000 ) / ( dwDestHeight ));
+#if 0
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: SRC WIDTH  : 0x%d\n", dwSrcWidth-1 );
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: SRC HEIGHT : 0x%d\n", dwSrcHeight-1 );
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: DST WIDTH  : 0x%d\n", dwDestWidth-1 );
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: DST HEIGHT : 0x%d\n", dwDestHeight-1 );
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: DELTA      : 0x%x\n", ( dwSrcWidth  * 0x10000 ) / ( dwDestWidth -1 ));
     NX_CONSOLE_Printf( "[NXLOG] SCALER:: DELTA      : 0x%x\n", ( dwSrcHeight * 0x10000 ) / ( dwDestHeight-1 ));
-*/
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1382,7 +1382,7 @@ void    NX_SCALER_SetCmdBufAddr( U32 ModuleIndex, U32 Addr )
     NX_ASSERT( NUMBER_OF_SCALER_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFADDR, Addr );
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFADDR, Addr );
 }
 
 U32     NX_SCALER_GetCmdBufAddr( U32 ModuleIndex )
@@ -1398,7 +1398,7 @@ void    NX_SCALER_RunCmdBuf( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SCALER_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFCON, 0x01 );
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFCON, 0x01 );
 }
 
 void    NX_SCALER_StopCmdBuf( U32 ModuleIndex )
@@ -1406,6 +1406,6 @@ void    NX_SCALER_StopCmdBuf( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_SCALER_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFCON, 0x02 );
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMDBUFCON, 0x02 );
 }
 

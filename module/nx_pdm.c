@@ -267,7 +267,7 @@ void	NX_PDM_SetInterruptMode( U32 ModuleIndex, U32 Mode )
 	NX_ASSERT( Mode <= 8 && Mode >= 0 );
 
 	regvalue = Mode;
-	WriteIODW(&pRegister->PDM_IRQCTRL, regvalue);
+	WriteIO32(&pRegister->PDM_IRQCTRL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -296,7 +296,7 @@ CBOOL	NX_PDM_GetInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( CNULL != pRegister );
 
 
-	regvalue  = ReadIODW(&pRegister->PDM_IRQCTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_IRQCTRL);
 	if( (regvalue >> 6) && 0x01 )   return CTRUE;
 	else 							return CFALSE;
 }
@@ -325,9 +325,9 @@ void	NX_PDM_ClearInterruptPendingAll( U32 ModuleIndex )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue  = ReadIODW(&pRegister->PDM_IRQCTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_IRQCTRL);
 	regvalue  = regvalue | (1<<5);
-	WriteIODW(&pRegister->PDM_IRQCTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_IRQCTRL, regvalue);	// just write operation make pending clear
 }
 
 
@@ -373,12 +373,12 @@ void NX_PDM_InitSet( U32 ModuleIndex, U32 Enb )
 
 	NX_ASSERT( Enb == CTRUE || Enb == CFALSE );
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL);
 
 	if( Enb == CTRUE )	regvalue = regvalue | 0x01;
 	else				regvalue = regvalue & (~0x01);
 
-	WriteIODW(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
 }
 
 // S16으로 처리할때는 모든 연산에 S16을 처리해주도록 하자
@@ -393,7 +393,7 @@ void NX_PDM_SetGain0( U32 ModuleIndex, S16 Gainx4, S16 Gainx2 )
 	NX_ASSERT( CNULL != pRegister );
 	regvalue  = ((0xFFFF & (S16)Gainx4) << 16) | ((0xFFFF & (S16)Gainx2) << 0);
 
-	WriteIODW(&pRegister->PDM_GAIN0, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_GAIN0, regvalue);	// just write operation make pending clear
 }
 
 
@@ -406,7 +406,7 @@ void NX_PDM_SetGain1( U32 ModuleIndex, S16 GainxMinus4, S16 GainxMinus2 )
 	NX_ASSERT( CNULL != pRegister );
 	regvalue  = ((0xFFFF & (S16)GainxMinus4) << 16) | ((0xFFFF & (S16)GainxMinus2) << 0);
 
-	WriteIODW(&pRegister->PDM_GAIN1, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_GAIN1, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_SetCoeff( U32 ModuleIndex, S16 Coeff1, S16 Coeff0 )
@@ -418,7 +418,7 @@ void NX_PDM_SetCoeff( U32 ModuleIndex, S16 Coeff1, S16 Coeff0 )
 	NX_ASSERT( CNULL != pRegister );
 	regvalue  = ((0xFFFF & (S16)Coeff1) << 16) | ((0xFFFF & (S16)Coeff0) << 0);
 
-	WriteIODW(&pRegister->PDM_COEFF, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_COEFF, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_SetOverSample( U32 ModuleIndex, U32 OverSample )
@@ -430,11 +430,11 @@ void NX_PDM_SetOverSample( U32 ModuleIndex, U32 OverSample )
 	NX_ASSERT( CNULL != pRegister );
 	NX_ASSERT( OverSample < 128 ); // 7 bit : 128
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL);
 	regvalue  = regvalue & (~( 0x7f<<16 ));
 	regvalue  = regvalue | (OverSample << 16);
 
-	WriteIODW(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_SetStrobeShift( U32 ModuleIndex, U32 StrobeShift )
@@ -446,11 +446,11 @@ void NX_PDM_SetStrobeShift( U32 ModuleIndex, U32 StrobeShift )
 	NX_ASSERT( CNULL != pRegister );
 	NX_ASSERT( StrobeShift < 32 ); // 5 bit : 32
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL);
 	regvalue  = regvalue & (~( 0x1f<<8 ));
 	regvalue  = regvalue | (StrobeShift << 8);
 
-	WriteIODW(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_DMAMode( U32 ModuleIndex, U32 DMAMode )
@@ -462,11 +462,11 @@ void NX_PDM_DMAMode( U32 ModuleIndex, U32 DMAMode )
 	NX_ASSERT( CNULL != pRegister );
 	NX_ASSERT( DMAMode < 2 ); // 1 bit : 2
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL);
 	regvalue  = regvalue & (~( 0x1<<2 ));
 	regvalue  = regvalue | (DMAMode << 2);
 
-	WriteIODW(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
 }
 
 
@@ -479,13 +479,13 @@ void NX_PDM_StartEnable( U32 ModuleIndex, CBOOL Enb )
 	NX_ASSERT( CNULL != pRegister );
 	NX_ASSERT( Enb == CTRUE || Enb == CFALSE );
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL);
 
 
 	if( Enb == CTRUE )	regvalue  = regvalue | (0x1<<1);
 	else				regvalue  = regvalue & (~( 0x1<<1 ));
 
-	WriteIODW(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL, regvalue);	// just write operation make pending clear
 }
 
 
@@ -498,11 +498,11 @@ void NX_PDM_SetShiftPerPixel( U32 ModuleIndex, U32 NUM )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL1);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL1);
 	regvalue = regvalue & (~(0x7 << 16));
 	regvalue = regvalue | ((NUM&0x7)<<16);
 
-	WriteIODW(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_SetNumOfClock( U32 ModuleIndex, U32 NUM )
@@ -513,11 +513,11 @@ void NX_PDM_SetNumOfClock( U32 ModuleIndex, U32 NUM )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL1);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL1);
 	regvalue = regvalue & (~(0xff << 8));
 	regvalue = regvalue | ((NUM&0xff)<<8);
 
-	WriteIODW(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
 }
 
 void NX_PDM_SetSamplePosition( U32 ModuleIndex, U32 NUM )
@@ -528,11 +528,11 @@ void NX_PDM_SetSamplePosition( U32 ModuleIndex, U32 NUM )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue  = ReadIODW(&pRegister->PDM_CTRL1);
+	regvalue  = ReadIO32(&pRegister->PDM_CTRL1);
 	regvalue = regvalue & (~(0xff << 0));
 	regvalue = regvalue | ((NUM&0xff)<<0);
 
-	WriteIODW(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
 }
 
 
@@ -546,7 +546,7 @@ void NX_PDM_SetCTRL1( U32 ModuleIndex, U32 Shift, U32 Numof, U32 Sample )
 	NX_ASSERT( CNULL != pRegister );
 
 	regvalue = ((Shift&0x7)<<16) | ((Numof&0xff)<<8) | ((Sample&0xff)<<0);
-	WriteIODW(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
+	WriteIO32(&pRegister->PDM_CTRL1, regvalue);	// just write operation make pending clear
 
 }
 
@@ -644,7 +644,7 @@ CBOOL NX_PDM_CheckReg( U32 Addr, U32 initvalue, U32 writevalue, char *RegName)
 	//------
 	// Init Value Check.
 	//------
-	U32 regvalue = ReadIODW( Addr );
+	U32 regvalue = ReadIO32( Addr );
 	if( regvalue != initvalue )
 	{
 		NX_CONSOLE_Printf("\n[ERROR] %s Register's initial value Error ( read = %x, golden = %x )",
@@ -655,8 +655,8 @@ CBOOL NX_PDM_CheckReg( U32 Addr, U32 initvalue, U32 writevalue, char *RegName)
 	//------
 	// write value Check.
 	//------
-	WriteIODW( Addr, writevalue );
-	regvalue = ReadIODW( Addr );
+	WriteIO32( Addr, writevalue );
+	regvalue = ReadIO32( Addr );
 	if( regvalue != writevalue )
 	{
 		NX_CONSOLE_Printf("\n[ERROR] %s Register write Error ( read = %x, golden = %x )",

@@ -34,7 +34,6 @@ extern "C"
 //------------------------------------------------------------------------------
 #define NX_TIMER_CHANNEL	5
 #define NX_TIMER_INT		4
-#define NX_PWM_CHANNEL		4
 
 //------------------------------------------------------------------------------
 /// @brief  TIMER register set structure
@@ -144,6 +143,9 @@ U32		NX_TIMER_GetInterruptPendingNumber( U32 ModuleIndex );	// -1 if None
 //@{
 void	NX_TIMER_SetPrescaler(U32 Channel, U32 value);
 U32		NX_TIMER_GetPrescaler(U32 Channel);
+CBOOL	NX_TIMER_SetDividerPath(U32 Channel, NX_TIMER_DIVIDSELECT divider);
+NX_TIMER_DIVIDSELECT NX_TIMER_GetDividerPath(U32 Channel);
+
 
 void	NX_TIMER_SetDeadZoneLength(U32 Channel, U32 Length);
 U32		NX_TIMER_GetDeadZoneLength(U32 Channel);
@@ -153,9 +155,6 @@ CBOOL	NX_TIMER_GetDeadZoneEnable(U32 Channel);
 
 CBOOL	NX_TIMER_SetOutInvert(U32 Channel, CBOOL Enable);
 CBOOL	NX_TIMER_GetOutInvert(U32 Channel);
-
-CBOOL	NX_TIMER_SetDividerPath(U32 Channel, NX_TIMER_DIVIDSELECT divider);
-NX_TIMER_DIVIDSELECT NX_TIMER_GetDividerPath(U32 Channel);
 
 void	NX_TIMER_SetShotMode(U32 Channel, NX_TIMER_LOADMODE ShotMode);
 NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel);

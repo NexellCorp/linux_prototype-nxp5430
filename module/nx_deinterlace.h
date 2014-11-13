@@ -65,7 +65,7 @@ extern "C"
         volatile U32 DESTADDRD_CB;                  ///< 0x210 : CB Field Base Address
         volatile U32 DESTSTRD_CB;                   ///< 0x214 : CB Field Destination Stride Register
         volatile U32 RESERVED_2[(0x300-0x218)/4];   ///< 0x218 ~ 0x300 : Reserved
-        
+
         // CR
         volatile U32 SRCSIZE_CR;                    ///< 0x300 : CR Field Image Size Register
         volatile U32 SRCADDRC_CR;                   ///< 0x304 : CR Current Field Address Register
@@ -266,4 +266,3 @@ U32		NX_DEINTERLACE_GetCRDestStride	( void );
 #endif
 
 #endif  // __NX_DEINTERLACE_H__
-

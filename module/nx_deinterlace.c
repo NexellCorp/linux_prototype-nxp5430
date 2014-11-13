@@ -490,7 +490,7 @@ void    NX_DEINTERLACE_ClearInterruptPending32( U32 PendingFlag )
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->INTPEND = (PendingFlag & PEND_MASK);
-    WriteIODW(&__g_pRegister->INTPEND, (PendingFlag & PEND_MASK));
+    WriteIO32(&__g_pRegister->INTPEND, (PendingFlag & PEND_MASK));
 }
 
 //------------------------------------------------------------------------------
@@ -992,7 +992,7 @@ void    NX_DEINTERLACE_SetCBFieldInfo
     temp |= (U32)field << CB_BITPOS;
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1043,7 +1043,7 @@ void    NX_DEINTERLACE_SetYFieldInfo
     temp |= (U32)field << Y_BITPOS;
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1135,7 +1135,7 @@ void    NX_DEINTERLACE_SetCREnable
     }
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1189,7 +1189,7 @@ void    NX_DEINTERLACE_SetCBEnable
     }
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1243,7 +1243,7 @@ void    NX_DEINTERLACE_SetYEnable
     }
 
     //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1304,7 +1304,7 @@ void    NX_DEINTERLACE_SetYCBCREnable
     if( CTRUE == CRenable ) temp |= CRENB_MASK;
 
     //pRegister->MODE =   temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1443,11 +1443,8 @@ void    NX_DEINTERLACE_DeinterlaceStop( void )
     pRegister = __g_pRegister;
 
     temp = pRegister->MODE;
-
     temp |= STOP_MASK;
-
-    //pRegister->MODE = temp;
-    WriteIODW(&pRegister->MODE, temp);
+    WriteIO32(&pRegister->MODE, temp);
 }
 */
 
@@ -1480,7 +1477,7 @@ void    NX_DEINTERLACE_SetYSrcImageSize
     temp = ( YSrcHeight << YHEIGHT_BITPOS ) | ( YSrcWidth << YWIDTH_BITPOS ) ;
 
     //__g_pRegister->SRCSIZE_Y    = temp;
-    WriteIODW(&__g_pRegister->SRCSIZE_Y, temp);
+    WriteIO32(&__g_pRegister->SRCSIZE_Y, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1499,7 +1496,7 @@ void    NX_DEINTERLACE_SetYSrcAddrPrev
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->SRCADDRP_Y = YSrcAddrPrev;
-    WriteIODW(&__g_pRegister->SRCADDRP_Y, YSrcAddrPrev);
+    WriteIO32(&__g_pRegister->SRCADDRP_Y, YSrcAddrPrev);
 }
 
 //------------------------------------------------------------------------------
@@ -1517,7 +1514,7 @@ void    NX_DEINTERLACE_SetYSrcAddrCurr
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->SRCADDRC_Y   = YSrcAddrCurr;
-    WriteIODW(&__g_pRegister->SRCADDRC_Y, YSrcAddrCurr);
+    WriteIO32(&__g_pRegister->SRCADDRC_Y, YSrcAddrCurr);
 }
 
 //------------------------------------------------------------------------------
@@ -1535,7 +1532,7 @@ void    NX_DEINTERLACE_SetYSrcAddrNext
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->SRCADDRN_Y   = YSrcAddrNext;
-    WriteIODW(&__g_pRegister->SRCADDRN_Y, YSrcAddrNext);
+    WriteIO32(&__g_pRegister->SRCADDRN_Y, YSrcAddrNext);
 }
 
 //------------------------------------------------------------------------------
@@ -1747,7 +1744,7 @@ void    NX_DEINTERLACE_SetCBSrcImageSize
     temp = ( CBSrcHeight << CBHEIGHT_BITPOS ) | ( CBSrcWidth << CBWIDTH_BITPOS ) ;
 
     //__g_pRegister->SRCSIZE_CB   = temp;
-    WriteIODW(&__g_pRegister->SRCSIZE_CB, temp);
+    WriteIO32(&__g_pRegister->SRCSIZE_CB, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1803,7 +1800,7 @@ void    NX_DEINTERLACE_SetCBDestAddrDIT
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTADDRD_CB =   CBDestAddrDIT;
-    WriteIODW(&__g_pRegister->DESTADDRD_CB, CBDestAddrDIT);
+    WriteIO32(&__g_pRegister->DESTADDRD_CB, CBDestAddrDIT);
 }
 
 //------------------------------------------------------------------------------
@@ -1823,7 +1820,7 @@ void    NX_DEINTERLACE_SetCBDestAddrFil
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTADDRF_CB =   CBDestAddrFil;
-    WriteIODW(&__g_pRegister->DESTADDRF_CB, CBDestAddrFil);
+    WriteIO32(&__g_pRegister->DESTADDRF_CB, CBDestAddrFil);
 }
 
 //------------------------------------------------------------------------------
@@ -1844,7 +1841,7 @@ void    NX_DEINTERLACE_SetCBDestStride
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTSTRD_CB =    CBDestStride;
-    WriteIODW(&__g_pRegister->DESTSTRD_CB,  CBDestStride);
+    WriteIO32(&__g_pRegister->DESTSTRD_CB,  CBDestStride);
 }
 
 
@@ -1964,7 +1961,7 @@ void    NX_DEINTERLACE_SetCRSrcImageSize
     temp = ( CRSrcHeight << CRHEIGHT_BITPOS ) | ( CRSrcWidth << CRWIDTH_BITPOS ) ;
 
     //__g_pRegister->SRCSIZE_CR   = temp;
-    WriteIODW(&__g_pRegister->SRCSIZE_CR, temp);
+    WriteIO32(&__g_pRegister->SRCSIZE_CR, temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1983,7 +1980,7 @@ void    NX_DEINTERLACE_SetCRSrcAddrCurr
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->SRCADDRC_CR  = CRSrcAddrCurr;
-    WriteIODW(&__g_pRegister->SRCADDRC_CR, CRSrcAddrCurr);
+    WriteIO32(&__g_pRegister->SRCADDRC_CR, CRSrcAddrCurr);
 }
 
 //------------------------------------------------------------------------------
@@ -2020,7 +2017,7 @@ void    NX_DEINTERLACE_SetCRDestAddrDIT
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTADDRD_CR =   CRDestAddrDIT;
-    WriteIODW(&__g_pRegister->DESTADDRD_CR, CRDestAddrDIT);
+    WriteIO32(&__g_pRegister->DESTADDRD_CR, CRDestAddrDIT);
 }
 
 //------------------------------------------------------------------------------
@@ -2040,7 +2037,7 @@ void    NX_DEINTERLACE_SetCRDestAddrFil
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTADDRF_CR =   CRDestAddrFil;
-    WriteIODW(&__g_pRegister->DESTADDRF_CR, CRDestAddrFil);
+    WriteIO32(&__g_pRegister->DESTADDRF_CR, CRDestAddrFil);
 }
 
 //------------------------------------------------------------------------------
@@ -2061,7 +2058,7 @@ void    NX_DEINTERLACE_SetCRDestStride
     NX_ASSERT( CNULL != __g_pRegister );
 
     //__g_pRegister->DESTSTRD_CR =    CRDestStride;
-    WriteIODW(&__g_pRegister->DESTSTRD_CR,  CRDestStride);
+    WriteIO32(&__g_pRegister->DESTSTRD_CR,  CRDestStride);
 }
 
 //------------------------------------------------------------------------------
@@ -2149,5 +2146,3 @@ U32     NX_DEINTERLACE_GetCRDestStride  ( void )
 
     return ( __g_pRegister->DESTSTRD_CR );
 }
-
-

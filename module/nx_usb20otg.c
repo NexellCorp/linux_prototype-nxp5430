@@ -231,7 +231,7 @@ void	NX_USB20OTG_SetInterruptEnableAll(  CBOOL Enable )
 	regvalue  = Enable ? 0xF77EFCFE : 0 ;
 
 
-	WriteIODW(&pRegister->GINTMSK, regvalue);
+	WriteIO32(&pRegister->GINTMSK, regvalue);
 
 }
 
@@ -284,8 +284,8 @@ void	NX_USB20OTG_ClearInterruptPendingAll(  )
 	register U32 	regvalue;
 	pRegister = __g_pRegister[0];
 	regvalue  = pRegister->GAHBCFG;
-	WriteIODW(&pRegister->GAHBCFG, regvalue & 0xFFFFFFFE);
-	WriteIODW(&pRegister->GINTSTS, 0xFFFFFFFF);
+	WriteIO32(&pRegister->GAHBCFG, regvalue & 0xFFFFFFFE);
+	WriteIO32(&pRegister->GINTSTS, 0xFFFFFFFF);
 }
 
 //------------------------------------------------------------------------------

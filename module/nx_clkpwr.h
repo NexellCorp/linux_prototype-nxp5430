@@ -90,11 +90,11 @@ extern "C"
 		volatile U32 __Reserved0;				///< 0x004
 		volatile U32 PLLSETREG[4];				///< 0x008 ~ 0x014 : PLL Setting Register
 		volatile U32 __Reserved1[2];			///< 0x018 ~ 0x01C
-		volatile U32 DVOREG[5];					///< 0x020 ~ 0x030 : Divider Setting Register
-		volatile U32 __Reserved2[5];			///< 0x034 ~ 0x044
+		volatile U32 DVOREG[9];					///< 0x020 ~ 0x040 : Divider Setting Register
+		volatile U32 __Reserved2;				///< 0x044
 		volatile U32 PLLSETREG_SSCG[6];			///< 0x048 ~ 0x05C
-		volatile U32 __reserved3[8];			///< 0x060 ~ 0x07C
-		volatile U32 __Reserved4[(512-128)/4];	// padding (0x200-..)/4
+		volatile U8  __Reserved3[0x80-0x60];	///< 0x060 ~ 0x07C
+		volatile U8  __Reserved4[0x200-0x80];	// padding (0x80 ~ 0x1FF)
 		volatile U32 GPIOWAKEUPRISEENB;			///< 0x200 : GPIO Rising Edge Detect Enable Register
 		volatile U32 GPIOWAKEUPFALLENB;			///< 0x204 : GPIO Falling Edge Detect Enable Register
 		volatile U32 GPIORSTENB;				///< 0x208 : GPIO Reset Enable Register
@@ -109,14 +109,14 @@ extern "C"
 		volatile U32 __Reserved5;				///< 0x22C : Reserved Region
 		volatile U32 SCRATCH[3];				///< 0x230 ~ 0x238	: Scratch Register
 		volatile U32 SYSRSTCONFIG;				///< 0x23C : System Reset Configuration Register.
-		volatile U8  __Reserved6[0x100-0x80];	///< 0x80 ~ 0xFC	: Reserved Region
-		volatile U32 PADSTRENGTHGPIO[5][2];		///< 0x100, 0x104 : GPIOA Pad Strength Register
-												///< 0x108, 0x10C : GPIOB Pad Strength Register
-												///< 0x110, 0x114 : GPIOC Pad Strength Register
-												///< 0x118, 0x11C : GPIOD Pad Strength Register
-												///< 0x120, 0x124 : GPIOE Pad Strength Register
-		volatile U32 __Reserved7[2];			///< 0x128 ~ 0x12C: Reserved Region
-		volatile U32 PADSTRENGTHBUS;			///< 0x130		: Bus Pad Strength Register
+		volatile U8  __Reserved6[0x2A0-0x240];	// padding (0x240 ~ 0x29F)
+		volatile U32 CPUPOWERDOWNREQ;			///< 0x2A0 : CPU Power Down Request Register
+		volatile U32 CPUPOWERONREQ;				///< 0x2A4 : CPU Power On Request Register
+		volatile U32 CPURESETMODE;				///< 0x2A8 : CPU Reset Mode Register
+		volatile U32 CPUWARMRESETREQ;			///< 0x2AC : CPU Warm Reset Request Register
+		volatile U32 __Reserved7;				///< 0x2B0
+		volatile U32 CPUSTATUS;					///< 0x2B4 : CPU Status Register
+		volatile U8  __Reserved8[0x400-0x2B8];	// padding (0x2B8 ~ 0x33F)
 	};
 
 	///@brief	CLKPWR Interrupts for interrupt interfaces
@@ -162,17 +162,13 @@ extern "C"
 
 	}	NX_CLKPWR_POWERMODE;
 
-	/// @brief	Bus type
+	/// @brief	CPU Reset mode
 	typedef enum
 	{
-		NX_CLKPWR_BUSPAD_STATIC_CNTL	= 22UL,		///< Static Control Pad
-		NX_CLKPWR_BUSPAD_STATIC_ADDR	= 20UL,		///< Static Address Pad
-		NX_CLKPWR_BUSPAD_STATIC_DATA	= 18UL,		///< Static Data Pad
-		NX_CLKPWR_BUSPAD_VSYNC			= 6UL,		///< Vertical Sync Pad
-		NX_CLKPWR_BUSPAD_HSYNC			= 4UL,		///< Horizontal Sync Pad
-		NX_CLKPWR_BUSPAD_DE				= 2UL,		///< Data Enable Pad
+		NX_CLKPWR_CPU_RESETMODE_SAFE	= 1UL,		///< Safe reset mode
+		NX_CLKPWR_CPU_RESETMODE_DIRECT	= 2UL,      ///< Direct reset mode
 
-	}	NX_CLKPWR_BUSPAD;
+	}	NX_CLKPWR_CPU_RESETMODE;
 
 	/// @brief	pll number
 	typedef enum
@@ -270,9 +266,10 @@ S32		NX_CLKPWR_GetInterruptPendingNumber( void );	// -1 if None
 //------------------------------------------------------------------------------
 /// @name	Clock Management
 //@{
-void	NX_CLKPWR_SetPLLPMS    ( U32 pllnumber, U32 PDIV, U32 MDIV, U32 SDIV );
-U32		NX_CLKPWR_GetPLLFreq	(U32 pllnumber, U32 XTalFreqKHz);
-void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  );
+void	NX_CLKPWR_SetOSCFreq    ( U32 FreqKHz );
+void	NX_CLKPWR_SetPLLPMS     ( U32 pllnumber, U32 PDIV, U32 MDIV, U32 SDIV );
+U32		NX_CLKPWR_GetPLLFreq    ( U32 pllnumber );
+void	NX_CLKPWR_SetPLLDither  ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  );
 void	NX_CLKPWR_SetPLLPowerOn ( CBOOL On );
 void	NX_CLKPWR_DoPLLChange( void );
 CBOOL	NX_CLKPWR_IsPLLStable( void );
@@ -339,16 +336,23 @@ U32		NX_CLKPWR_GetSystemResetConfiguration( void );
 //@}
 
 //------------------------------------------------------------------------------
+/// @name	CPU Power Management
+//@{
+void	NX_CLKPWR_SetCPUPowerDown( U32 nCPU );
+void	NX_CLKPWR_SetCPUPowerOn( U32 nCPU );
+void	NX_CLKPWR_SetCPUResetMode( NX_CLKPWR_CPU_RESETMODE mode );
+void	NX_CLKPWR_SetCPUWarmReset( U32 nCPU );
+CBOOL	NX_CLKPWR_GetCPUPowerStatus( U32 nCPU );
+CBOOL	NX_CLKPWR_GetCPUClockStatus( U32 nCPU );
+//@}
+
+//------------------------------------------------------------------------------
 /// @name	PAD Strength Management
 //@{
-void	NX_CLKPWR_SetGPIOPadStrength( U32 Group, U32 BitNumber, U32 mA );
-U32		NX_CLKPWR_GetGPIOPadStrength( U32 Group, U32 BitNumber );
-void	NX_CLKPWR_SetBusPadStrength( NX_CLKPWR_BUSPAD Bus, U32 mA );
-U32		NX_CLKPWR_GetBusPadStrength( NX_CLKPWR_BUSPAD Bus );
 void	NX_CLKPWR_SetPllOutGMux(U32 pll_number, NX_CLKPWR_GMUX gmux);
 void	NX_CLKPWR_UpdatePllSetReg(U32 pll_number);
 CBOOL	NX_CLKPWR_IsPLLStableUpdate( void );
-void NX_CLKPWR_SetPLLPower( U32 pllnumber, NX_CLKPWR_PLL_POWER powermode );
+void	NX_CLKPWR_SetPLLPower( U32 pllnumber, NX_CLKPWR_PLL_POWER powermode );
 //@}
 
 //------------------------------------------------------------------------------

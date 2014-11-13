@@ -8,11 +8,11 @@
 //  BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 //  FOR A PARTICULAR PURPOSE.
 //
-//  Module     : I2C
-//  File       : nx_i2c.c
-//  Description:
-//  Author     : Firmware Team
-//  History    : 2012.08.01 parkjh - sec02034_I2S proto type
+//  Module     	: I2C
+//  File		  	: nx_i2c.c
+//  Description	:
+//  Author     	: Firmware Team
+//  History    	: 2014.10.01	Revision Comment & Function Define. (Deoks)
 //------------------------------------------------------------------------------
 
 #include "nx_chip.h"
@@ -30,16 +30,11 @@ static  struct
 //------------------------------------------------------------------------------
 /**
  *  @brief  Initialize of prototype enviroment & local variables.
- *  @return \b CTRUE  indicates that Initialize is succeeded.\n
- *          \b CFALSE indicates that Initialize is failed.\n
- *  @see    NX_I2C_SelectModule,
- *          NX_I2C_GetCurrentModule,   NX_I2C_GetNumberOfModule
+ *  @return  CTRUE  indicates that Initialize is succeeded.
+ *  			CFALSE indicates that Initialize is failed.
  */
 CBOOL   NX_I2C_Initialize( void )
 {
-    //  @modified Gamza static variable(__g_ModuleVariables) is automatically filled by '0'
-    //                  만약 초기화 과정에 전역변수를 0으로 초기화 하는 작업 이외의 일을
-    //                  해야한다면 bInit 값을 CFALSE로 수정해야한다.
     static CBOOL bInit = CTRUE;
     U32 i;
 
@@ -58,10 +53,8 @@ CBOOL   NX_I2C_Initialize( void )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get number of modules in the chip.
- *  @return     Module's number.
- *  @see        NX_I2C_Initialize,         NX_I2C_SelectModule,
- *              NX_I2C_GetCurrentModule
+ *  @brief     	 Get number of modules in the chip.
+ *  @return     	 Module's number.
  */
 U32     NX_I2C_GetNumberOfModule( void )
 {
@@ -72,13 +65,9 @@ U32     NX_I2C_GetNumberOfModule( void )
 // Basic Interface
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get module's physical address.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Module's physical address
- *  @see        NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief      	Get module's physical address.
+ *  @param[in] 	ModuleIndex     A index of module.
+ *  @return     	Module's physical address
  */
 U32     NX_I2C_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -94,12 +83,8 @@ U32     NX_I2C_GetPhysicalAddress( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get a size, in byte, of register set.
- *  @return     Size of module's register set.
- *  @see        NX_I2C_GetPhysicalAddress,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief	Get a size, in byte, of register set.
+ *  @return	Size of module's register set.
  */
 U32     NX_I2C_GetSizeOfRegisterSet( void )
 {
@@ -108,14 +93,10 @@ U32     NX_I2C_GetSizeOfRegisterSet( void )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Set a base address of register set.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  BaseAddress Module's base address
- *  @return     None.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief		Set a base address of register set.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	BaseAddress Module's base address
+ *  @return		None.
  */
 void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
 {
@@ -127,13 +108,9 @@ void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get a base address of register set
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Module's base address.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief      	Get a base address of register set
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return		Module's base address.
  */
 U32     NX_I2C_GetBaseAddress( U32 ModuleIndex )
 {
@@ -144,14 +121,10 @@ U32     NX_I2C_GetBaseAddress( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Initialize selected modules with default value.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that Initialize is succeeded. \n
- *              \b CFALSE indicates that Initialize is failed.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief       	Initialize selected modules with default value.
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return		CTRUE  indicates that Initialize is succeeded. 
+ *              		CFALSE indicates that Initialize is failed.
  */
 CBOOL   NX_I2C_OpenModule( U32 ModuleIndex )
 {
@@ -162,14 +135,10 @@ CBOOL   NX_I2C_OpenModule( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Deinitialize selected module to the proper stage.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that Deinitialize is succeeded. \n
- *              \b CFALSE indicates that Deinitialize is failed.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,
- *              NX_I2C_CheckBusy,            NX_I2C_CanPowerDown
+ *  @brief      	Deinitialize selected module to the proper stage.
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return     	CTRUE  indicates that Deinitialize is succeeded. 
+ *              		CFALSE indicates that Deinitialize is failed.
  */
 CBOOL   NX_I2C_CloseModule( U32 ModuleIndex )
 {
@@ -180,14 +149,10 @@ CBOOL   NX_I2C_CloseModule( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Indicates whether the selected modules is busy or not.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that Module is Busy. \n
- *              \b CFALSE indicates that Module is NOT Busy.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CanPowerDown
+ *  @brief      	Indicates whether the selected modules is busy or not.
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return     	CTRUE  indicates that Module is Busy. 
+ *              		CFALSE indicates that Module is NOT Busy.
  */
 CBOOL   NX_I2C_CheckBusy( U32 ModuleIndex )
 {
@@ -198,14 +163,10 @@ CBOOL   NX_I2C_CheckBusy( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Indicaes whether the selected modules is ready to enter power-down stage
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that Ready to enter power-down stage. \n
- *              \b CFALSE indicates that This module can't enter to power-down stage.
- *  @see        NX_I2C_GetPhysicalAddress,   NX_I2C_GetSizeOfRegisterSet,
- *              NX_I2C_SetBaseAddress,       NX_I2C_GetBaseAddress,
- *              NX_I2C_OpenModule,           NX_I2C_CloseModule,
- *              NX_I2C_CheckBusy
+ *  @brief      	Indicaes whether the selected modules is ready to enter power-down stage
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return     	CTRUE  indicates that Ready to enter power-down stage. 
+ *              		CFALSE indicates that This module can't enter to power-down stage.
  */
 CBOOL   NX_I2C_CanPowerDown( U32 ModuleIndex )
 {
@@ -218,16 +179,9 @@ CBOOL   NX_I2C_CanPowerDown( U32 ModuleIndex )
 // Interrupt Interface
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get a interrupt number for interrupt controller.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Interrupt number
- *  @see                                            NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @brief      	Get a interrupt number for interrupt controller.
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return    	Interrupt number
  */
 S32     NX_I2C_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -243,17 +197,10 @@ S32     NX_I2C_GetInterruptNumber( U32 ModuleIndex )
  *  @brief      Set a specified interrupt to be enable or disable.
  *  @param[in]  ModuleIndex     A index of module.
  *  @param[in]  IntNum  Interrupt Number ( 0 ).
- *  @param[in]  Enable  \b CTRUE  indicates that Interrupt Enable. \n
- *                      \b CFALSE indicates that Interrupt Disable.
+ *  @param[in]  Enable  CTRUE  indicates that Interrupt Enable.
+ *   					    CFALSE indicates that Interrupt Disable.
  *  @return     None.
- *  @remarks    I2C Module have one interrupt. So always \e IntNum set to 0.
- *  @see        NX_I2C_GetInterruptNumber,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @remarks    I2C Module have one interrupt. So always  IntNum set to 0.
  */
 void    NX_I2C_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 {
@@ -270,57 +217,46 @@ void    NX_I2C_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 
     pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
 
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
 
     ReadValue   &=  ~IRQ_ENB_MASK;
     ReadValue   |=  (U32)Enable << IRQ_ENB_POS;
 
-    //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether a specified interrupt is enabled or disabled.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  IntNum  Interrupt Number ( 0 ).
- *  @return     \b CTRUE  indicates that Interrupt is enabled. \n
- *              \b CFALSE indicates that Interrupt is disabled.
- *  @remarks    I2C Module have one interrupt. So always \e IntNum set to 0.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *                                                  NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	IntNum  Interrupt Number ( 0 ).
+ *  @return		CTRUE  indicates that Interrupt is enabled. 
+ *              		CFALSE indicates that Interrupt is disabled.
+ *  @remarks    I2C Module have one interrupt. So always IntNum set to 0.
  */
 CBOOL   NX_I2C_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 {
     const U32 IRQ_ENB_POS   = 5;
     const U32 IRQ_ENB_MASK  = 1UL << IRQ_ENB_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    //NX_ASSERT( 0 == IntNum );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & IRQ_ENB_MASK) >> IRQ_ENB_POS );
+	NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+	//NX_ASSERT( 0 == IntNum );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICCR) & IRQ_ENB_MASK) >> IRQ_ENB_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Set a specified interrupt to be enable or disable.
  *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  EnableFlag  Specify interrupt bit for enable of disable. Each bit's meaning is like below  \n
- *                          - EnableFlag[0] : Set TX/RX interrupt enable or disable. \n
+ *  @param[in]  EnableFlag  Specify interrupt bit for enable of disable. Each bit's meaning is like below 
+ *                   - EnableFlag[0] : Set TX/RX interrupt enable or disable. 
  *  @return     None.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
  */
 void    NX_I2C_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag )
 {
@@ -331,115 +267,101 @@ void    NX_I2C_SetInterruptEnable32( U32 ModuleIndex, U32 EnableFlag )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
 
     ReadValue   &=  ~IRQ_ENB_MASK;
     ReadValue   |=  (U32)(EnableFlag & 0x01) << IRQ_ENB_POS;
 
-    //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Indicates current setting value of interrupt enable bit.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Current setting value of interrupt. \n
- *              "1" means interrupt is enabled. \n
- *              "0" means interrupt is disabled. \n
- *              - Return Value[0] : TX/RX interrupt's setting value. \n
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *                                                  NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @brief     	Indicates current setting value of interrupt enable bit.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return		Current setting value of interrupt. 
+ *              		"1" means interrupt is enabled. 
+ *              		"0" means interrupt is disabled. 
+ *              		- Return Value[0] : TX/RX interrupt's setting value. 
  */
 U32     NX_I2C_GetInterruptEnable32( U32 ModuleIndex )
 {
     const U32 IRQ_ENB_POS   = 5;
     const U32 IRQ_ENB_MASK  = 1UL << IRQ_ENB_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (U32)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & IRQ_ENB_MASK) >> IRQ_ENB_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+
+    return  (U32)( (ReadIO32(&pRegister->ICCR) & IRQ_ENB_MASK) >> IRQ_ENB_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether a specified interrupt is pended or not
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  IntNum  Interrupt Number ( 0 ).
- *  @return     \b CTRUE  indicates that Pending is seted. \n
- *              \b CFALSE indicates that Pending is Not Seted.
- *  @remarks    I2C Module have one interrupt. So always \e IntNum set to 0.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	IntNum  Interrupt Number ( 0 ).
+ *  @return   	CTRUE  indicates that Pending is seted.
+ *             		CFALSE indicates that Pending is Not Seted.
+ *  @remarks    I2C Module have one interrupt. So always IntNum set to 0.
+
  */
 CBOOL   NX_I2C_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
     const U32 PEND_POS   = 4;
     const U32 PEND_MASK  = 1UL << PEND_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    //NX_ASSERT( 0 == IntNum );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & PEND_MASK) >> PEND_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+    //NX_ASSERT( 0 == IntNum );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICCR) & PEND_MASK) >> PEND_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Indicates current setting value of interrupt pending bit.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Current setting value of pending bit. \n
- *              "1" means pend bit is occured. \n
- *              "0" means pend bit is NOT occured. \n
- *              - Return Value[0] : TX/RX pending state. \n
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *                                                  NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @brief      	Indicates current setting value of interrupt pending bit.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return     	Current setting value of pending bit. 
+ *              		"1" means pend bit is occured. 
+ *              		"0" means pend bit is NOT occured. 
+ *              		- Return Value[0] : TX/RX pending state. 
  */
 U32     NX_I2C_GetInterruptPending32( U32 ModuleIndex )
 {
     const U32 PEND_POS   = 4;
     const U32 PEND_MASK  = 1UL << PEND_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (U32)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & PEND_MASK) >> PEND_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+
+    return  (U32)( (ReadIO32(&pRegister->ICCR) & PEND_MASK) >> PEND_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Clear a pending state of specified interrupt.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  IntNum          Interrupt number ( 0 ).
- *  @return     None.
- *  @remarks    I2C Module have one interrupt. So always \e IntNum set to 0.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @brief      	Clear a pending state of specified interrupt.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	IntNum          Interrupt number ( 0 ).
+ *  @return     	None.
+ *  @remarks    I2C Module have one interrupt. So always IntNum set to 0.
  */
 void    NX_I2C_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
@@ -452,32 +374,25 @@ void    NX_I2C_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     //NX_ASSERT( 0 == IntNum );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
     ReadValue   &=  ~PEND_MASK;
     ReadValue   |=  INTC_MASK;
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Clear a pending state of specified interrupt.
  *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  PendingFlag     Specify pend bit to clear. Each bit's meaning is like below  \n \n
- *                              - PendingFlag[0] : TX/RX pending bit. \n
+ *  @param[in]  PendingFlag     Specify pend bit to clear. Each bit's meaning is like below 
+ *                      - PendingFlag[0] : TX/RX pending bit. \n
  *  @return     None.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *                                                  NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
  */
 void    NX_I2C_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
 {
@@ -490,31 +405,24 @@ void    NX_I2C_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
     ReadValue   &=  (~PEND_MASK | (~PendingFlag << PEND_POS ));
     ReadValue   |=  INTC_MASK;
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Set all interrupts to be enables or disables.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  Enable  \b CTRUE  indicates that Set to all interrupt enable. \n
- *                      \b CFALSE indicates that Set to all interrupt disable.
+ *  @brief		Set all interrupts to be enables or disables.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	Enable	CTRUE  indicates that Set to all interrupt enable.
+ *					 	CFALSE indicates that Set to all interrupt disable.
  *  @return     None.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
  */
 void    NX_I2C_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
@@ -525,82 +433,69 @@ void    NX_I2C_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( (0==Enable) ||(1==Enable) );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
 
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
 
     ReadValue   &=  ~IRQ_ENB_MASK;
     ReadValue   |=  (U32)Enable << IRQ_ENB_POS;
 
-    //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether some of interrupts are enable or not.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that At least one( or more ) interrupt is enabled. \n
- *              \b CFALSE indicates that All interrupt is disabled.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32,     NX_I2C_SetInterruptEnableAll,
- *                                                  NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return		CTRUE  indicates that At least one( or more ) interrupt is enabled.
+ *            		CFALSE indicates that All interrupt is disabled.
  */
 CBOOL   NX_I2C_GetInterruptEnableAll( U32 ModuleIndex )
 {
     const U32 IRQ_ENB_POS   = 5;
     const U32 IRQ_ENB_MASK  = 1UL << IRQ_ENB_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & IRQ_ENB_MASK) >> IRQ_ENB_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICCR) & IRQ_ENB_MASK) >> IRQ_ENB_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether some of interrupts are pended or not.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     \b CTRUE  indicates that At least one( or more ) pending is seted. \n
- *              \b CFALSE indicates that All pending is NOT seted.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,
- *              NX_I2C_ClearInterruptPendingAll,    NX_I2C_GetInterruptPendingNumber
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return		CTRUE  indicates that At least one( or more ) pending is seted.
+ *   				CFALSE indicates that All pending is NOT seted.
  */
 CBOOL   NX_I2C_GetInterruptPendingAll( U32 ModuleIndex )
 {
     const U32 PEND_POS   = 4;
     const U32 PEND_MASK  = 1UL << PEND_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & PEND_MASK) >> PEND_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICCR) & PEND_MASK) >> PEND_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Clear pending state of all interrupts.
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     None.
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *                                                  NX_I2C_GetInterruptPendingNumber
+ *  @brief      	Clear pending state of all interrupts.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return     	None.
  */
 void    NX_I2C_ClearInterruptPendingAll( U32 ModuleIndex )
 {
@@ -613,29 +508,22 @@ void    NX_I2C_ClearInterruptPendingAll( U32 ModuleIndex )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-    ReadValue   =   pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
     ReadValue   &=  ~PEND_MASK;
     ReadValue   |=  INTC_MASK;
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get a interrupt number which has the most prority of pended interrupts
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Pending Number( If all pending is not set then return -1 ).
- *  @see        NX_I2C_GetInterruptNumber,          NX_I2C_SetInterruptEnable,
- *              NX_I2C_GetInterruptEnable,          NX_I2C_SetInterruptEnable32,
- *              NX_I2C_GetInterruptEnable32,        NX_I2C_GetInterruptPending,
- *              NX_I2C_GetInterruptPending32,       NX_I2C_ClearInterruptPending,
- *              NX_I2C_ClearInterruptPending32, NX_I2C_SetInterruptEnableAll,
- *              NX_I2C_GetInterruptEnableAll,       NX_I2C_GetInterruptPendingAll,
- *              NX_I2C_ClearInterruptPendingAll
+ *  @brief      	Get a interrupt number which has the most prority of pended interrupts
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return     	Pending Number( If all pending is not set then return -1 ).
  */
 S32     NX_I2C_GetInterruptPendingNumber( U32 ModuleIndex )  // -1 if None
 {
@@ -645,17 +533,19 @@ S32     NX_I2C_GetInterruptPendingNumber( U32 ModuleIndex )  // -1 if None
 
     const U32   I2CInterruptNumber[NUMBER_OF_I2C_MODULE] = { INTNUM_LIST( I2C ) };
 
-    register struct NX_I2C_RegisterSet *pRegister;
-    register U32 Pend;
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
-    pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-    Pend = ((pRegister->ICCR >> IRQ_ENB_POS) & (pRegister->ICCR >> PEND_POS));
+    ReadValue = ((ReadIO32(&pRegister->ICCR) >> IRQ_ENB_POS) 
+					& (ReadIO32(&pRegister->ICCR) >> PEND_POS));
 
-    if( Pend & 0x01 )
+    if( ReadValue & 0x01 )
     {
         return  I2CInterruptNumber[ModuleIndex];
     }
@@ -663,82 +553,13 @@ S32     NX_I2C_GetInterruptPendingNumber( U32 ModuleIndex )  // -1 if None
     return -1;
 }
 
-//------------------------------------------------------------------------------
-// Clock Control Interface
-//------------------------------------------------------------------------------
-/**
- *  @brief      Set a PCLK mode
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  mode    PCLK mode
- *  @return     None.
- *  @remarks    I2C controller only support NX_PCLKMODE_ALWAYS.\n
- *              If user set to NX_PCLKMODE_DYNAMIC, then I2C controller \b NOT operate.
- *  @see        NX_I2C_GetClockPClkMode
- */
-/*
-void            NX_I2C_SetClockPClkMode( U32 ModuleIndex, NX_PCLKMODE mode )
-{
-    const U32 PCLKMODE_POS  =   3;
-
-    register U32 regvalue;
-    register struct NX_I2C_RegisterSet* pRegister;
-
-    U32 clkmode=0;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-    switch(mode)
-    {
-        case NX_PCLKMODE_DYNAMIC:  clkmode = 0;     break;
-        case NX_PCLKMODE_ALWAYS:    clkmode = 1;        break;
-        default: NX_ASSERT( CFALSE );
-    }
-
-    regvalue = pRegister->CLKENB;
-
-    regvalue &= ~(1UL<<PCLKMODE_POS);
-    regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
-
-    //pRegister->CLKENB = regvalue;
-    WriteIODW(&pRegister->CLKENB, regvalue);
-}
-*/
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get current PCLK mode
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Current PCLK mode
- *  @remarks    I2C controller only support NX_PCLKMODE_ALWAYS.\n
- *              If user set to NX_PCLKMODE_DYNAMIC, then I2C controller \b NOT operate.
- *  @see        NX_I2C_SetClockPClkMode,
- */
-/*
-NX_PCLKMODE    NX_I2C_GetClockPClkMode( U32 ModuleIndex )
-{
-    const U32 PCLKMODE_POS  = 3;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    if( __g_ModuleVariables[ModuleIndex].pRegister->CLKENB & ( 1UL << PCLKMODE_POS ) )
-    {
-        return NX_PCLKMODE_ALWAYS;
-    }
-
-    return  NX_PCLKMODE_DYNAMIC;
-}
-*/
-//------------------------------------------------------------------------------
-/**
- *  @brief      Get current reset number
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Current reset number
+ *  @brief      	Get current reset number
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @return		Current reset number
  *  @remarks
- *  @see        NX_I2C_SetClockPClkMode,        NX_I2C_GetClockPClkMode
  */
 U32     NX_I2C_GetClockNumber( U32 ModuleIndex )
 {
@@ -755,11 +576,10 @@ U32     NX_I2C_GetClockNumber( U32 ModuleIndex )
 
 //------------------------------------------------------------------------------
 /**
- *  @brief      Get current reset number
- *  @param[in]  ModuleIndex     A index of module.
- *  @return     Current reset number
+ *  @brief      	Get current reset number
+ *  @param[in]   ModuleIndex     A index of module.
+ *  @return     	Current reset number
  *  @remarks
- *  @see        NX_I2C_SetClockPClkMode,        NX_I2C_GetClockPClkMode
  */
 U32     NX_I2C_GetResetNumber( U32 ModuleIndex )
 {
@@ -778,31 +598,32 @@ U32     NX_I2C_GetResetNumber( U32 ModuleIndex )
 // Configuration Function
 //--------------------------------------------------------------------------
 /**
- *  @brief      Set PCLK divider and clock prescaler.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[in]  PclkDivider     Set PCLK divider ( 16, 256 )
- *  @param[in]  Prescaler       Set prescaler. \n
- *                              2 ~ 16 ( when PCLK divider is seted 16 ). \n
- *                              1 ~ 16 ( when PCLK divider is seted 256 ).
+ *  @brief      	Set PCLK divider and clock prescaler.
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	PclkDivider	Set PCLK divider ( 16, 256 )
+ *  @param[in]	Prescaler      Set prescaler. 
+ *                       2 ~ 16 ( when PCLK divider is seted 16 ). 
+ *                       1 ~ 16 ( when PCLK divider is seted 256 ).
  *  @return     None.
- *  @see        NX_I2C_GetClockPrescaler,
- *              NX_I2C_SetSlaveAddress,
- *              NX_I2C_SetDataDelay,           NX_I2C_SetDataDelay
  */
 void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescaler )
 {
-    const U32   CLKSRC_POS  = 6;
-    const U32   CLKSRC_MASK = 1UL << CLKSRC_POS;
+    const U32   CLKSRC_POS  	= 6;
+    const U32   CLKSRC_MASK 	= 1UL << CLKSRC_POS;
     const U32   CLK_SCALER_MASK = 0x0F;
 
-    register U32 SetPclkDivider=0;
+    register U32 SetPclkDivider	= 0;
+
+    register struct NX_I2C_RegisterSet* pRegister;
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( (16==PclkDivider) || (256==PclkDivider) );
     NX_ASSERT( 1 <= Prescaler && Prescaler <= 16 );
-    NX_ASSERT( (16!=PclkDivider) || ( 2 <= Prescaler && Prescaler <= 16) )
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    NX_ASSERT( (16!=PclkDivider) || ( 2 <= Prescaler && Prescaler <= 16) );
 
     if( 16 == PclkDivider )
     {
@@ -813,25 +634,21 @@ void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescale
         SetPclkDivider = 1;
     }
 
-    ReadValue   =   __g_ModuleVariables[ModuleIndex].pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
 
     ReadValue   &=  ~( CLKSRC_MASK | CLK_SCALER_MASK );
     ReadValue   |=  ((SetPclkDivider << CLKSRC_POS) | (Prescaler-1));
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->ICCR = ReadValue;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Set PCLK divider and clock prescaler.
- *  @param[in]  ModuleIndex     A index of module.
- *  @param[out] pPclkDivider     Get PCLK divider ( 16, 256 )
- *  @param[out] pPrescaler       Get prescaler. \n
+ *  @param[in]    ModuleIndex	A index of module.
+ *  @param[out]	 pPclkDivider     	Get PCLK divider ( 16, 256 )
+ *  @param[out] pPrescaler       	Get prescaler.
  *  @return     None.
- *  @see        NX_I2C_SetClockPrescaler,
- *              NX_I2C_SetSlaveAddress,
- *              NX_I2C_SetDataDelay,           NX_I2C_SetDataDelay
  */
 void    NX_I2C_GetClockPrescaler( U32 ModuleIndex, U32* pPclkDivider, U32* pPrescaler )
 {
@@ -839,14 +656,17 @@ void    NX_I2C_GetClockPrescaler( U32 ModuleIndex, U32* pPclkDivider, U32* pPres
     const U32   CLKSRC_MASK = 1UL << CLKSRC_POS;
     const U32   CLK_SCALER_MASK = 0x0F;
 
+    register struct NX_I2C_RegisterSet* pRegister;
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( CNULL != pPclkDivider );
     NX_ASSERT( CNULL != pPrescaler );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    ReadValue   =   __g_ModuleVariables[ModuleIndex].pRegister->ICCR;
+    ReadValue   =   ReadIO32(&pRegister->ICCR);
 
     if( ReadValue & CLKSRC_MASK )
     {
@@ -862,88 +682,56 @@ void    NX_I2C_GetClockPrescaler( U32 ModuleIndex, U32* pPclkDivider, U32* pPres
 
 //------------------------------------------------------------------------------
 /**
- * @brief       Set Salve Address
- * @param[in]   ModuleIndex     A index of module.
- * @param[in]   Address    Value of Salve Address ( 0x02 ~ 0xFE )
- * @return      None.
- * @remarks     LSB[0] bit must set to 0. Slave Address can change ONLY ICSR[TXRX_ENB] bit is 0.
- * @see         NX_I2C_SetClockPrescaler,      NX_I2C_GetClockPrescaler
- *              NX_I2C_SetDataDelay,           NX_I2C_GetDataDelay
+ * @brief       	Set Salve Address
+ * @param[in]    ModuleIndex		A index of module.
+ * @param[in]    Address    		Value of Salve Address ( 0x02 ~ 0xFE )
+ * @return      	None.
+ * @remarks     	LSB[0] bit must set to 0. Slave Address can change ONLY ICSR[TXRX_ENB] bit is 0.
  */
 void    NX_I2C_SetSlaveAddress( U32 ModuleIndex, U8 Address )
 {
+    register struct NX_I2C_RegisterSet* pRegister;
+
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( 0 == (Address & 0x01) );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->IAR  =   (U32)Address;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IAR, (U32)Address);
+    WriteIO32(&pRegister->IAR, (U32)Address);
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief       Set delay, in PCLKs, between SCL and SDA
- * @param[in]   ModuleIndex     A index of module.
- * @param[in]   delay    number of PCLK ( 1 ~ 32 ) for delay
- * @return      None.
- * @remarks     SDA must be changed at center of low state of SCL from I2C spec.
- *              For this, you have to set delay for SDA change position from falling edge of SCL when TX.
- *              This delay is also used for SDA fetch postiion from rising edge of SCL when RX.
- *              Usually this dealy is 1/4 of SCL period in PCLKs.
- * @see         NX_I2C_SetClockPrescaler,      NX_I2C_GetClockPrescaler
- *              NX_I2C_SetSlaveAddress,        NX_I2C_GetSlaveAddress,
- *                                              NX_I2C_GetDataDelay
+ * @brief       	Get Salve Address
+ * @param[in]    ModuleIndex		A index of module.
+ * @param[in]    Address			Value of Salve Address ( 0x02 ~ 0xFE )
+ * @return      	None.
+ * @remarks     	LSB[0] bit must set to 0. Slave Address can change ONLY ICSR[TXRX_ENB] bit is 0.
  */
-/*
-void    NX_I2C_SetDataDelay( U32 ModuleIndex, U32 delay )
+U32    NX_I2C_GetSlaveAddress( U32 ModuleIndex )
 {
+    register struct NX_I2C_RegisterSet* pRegister;
+
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( 1 <= delay && delay <= 32 );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX = delay-1;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX, delay-1);
+    return (U32)(ReadIO32(&pRegister->IAR) & 0xFF);
+
 }
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief       Get PCLK number from rising or falling edge to data.
- * @param[in]   ModuleIndex     A index of module.
- * @return      Number of PCLK ( 1 ~ 32 )
- * @remarks     SDA must be changed at center of low state of SCL from I2C spec.
- *              For this, you have to set delay for SDA change position from falling edge of SCL when TX.
- *              This delay is also used for SDA fetch postiion from rising edge of SCL when RX.
- *              Usually this dealy is 1/4 of SCL period in PCLKs.
- * @see
- *              NX_I2C_SetSlaveAddress,        NX_I2C_GetSlaveAddress,
- *              NX_I2C_SetDataDelay
- */
-/*
-U32     NX_I2C_GetDataDelay ( U32 ModuleIndex )
-{
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    return (__g_ModuleVariables[ModuleIndex].pRegister->QCNT_MAX + 1);
-}
-*/
 
 //------------------------------------------------------------------------------
 // Operation Function
 //------------------------------------------------------------------------------
 /**
- * @brief      Set Ack Generation Enable or Diable
- * @param[in]  ModuleIndex      A index of module.
- * @param[in]  bAckGen   \b CTRUE indicates that Ack Generate. \n
- *                       \b CFALSE indicates that Ack Not Generation.
- * @return     None.
- * @remarks    Use only for receiver mode.
- * @see                                            NX_I2C_GetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *             NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *             NX_I2C_IsBusy,
- *             NX_I2C_BusDisable
+ * @brief      	Set Ack Generation Enable or Diable
+ * @param[in] 	ModuleIndex      A index of module.
+ * @param[in] 	bAckGen CTRUE indicates that Ack Generate.
+ *                       		CFALSE indicates that Ack Not Generation.
+ * @return     	None.
+ * @remarks 	Use only for receiver mode.
  */
 void        NX_I2C_SetAckGenerationEnable( U32 ModuleIndex, CBOOL bAckGen )
 {
@@ -954,83 +742,50 @@ void        NX_I2C_SetAckGenerationEnable( U32 ModuleIndex, CBOOL bAckGen )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( (0==bAckGen) ||(1==bAckGen) );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    ReadValue   =   pRegister->ICCR;
+    ReadValue    =  ReadIO32(&pRegister->ICCR);
 
     ReadValue   &=  ~ACK_GEN_MASK;
     ReadValue   |=  (U32)bAckGen << ACK_GEN_POS;
 
-    //pRegister->ICCR  =   ReadValue;
-    WriteIODW(&pRegister->ICCR, ReadValue);
+    WriteIO32(&pRegister->ICCR, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  * @brief      Get Setting Value of Ack Generation
- * @param[in]  ModuleIndex      A index of module.
- * @return     \b CTRUE Indicate that Ack Generation Enabled. \n
- *             \b CFALSE Indicate that Ack Generation Disabled.
- * @see        NX_I2C_SetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *             NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *             NX_I2C_IsBusy,
- *             NX_I2C_BusDisable
+ * @param[in]	ModuleIndex      A index of module.
+ * @return		CTRUE Indicate that Ack Generation Enabled. 
+ *             		CFALSE Indicate that Ack Generation Disabled.
  */
 CBOOL       NX_I2C_GetAckGenerationEnable( U32 ModuleIndex )
 {
     const U32 ACK_GEN_POS   = 7;
     const U32 ACK_GEN_MASK  = 1UL << ACK_GEN_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICCR & ACK_GEN_MASK) >> ACK_GEN_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICCR) & ACK_GEN_MASK) >> ACK_GEN_POS );
 }
+
 
 //------------------------------------------------------------------------------
 /**
- * @brief      Clear Operation Hold.
- * @return     None.
- * @remarks    I2C module's operation will be hold after transmiting or
- *             receiving a byte. Therefore you have to clear hold status to continue
- *             next progress.\n
- *             Also, user must clear hold status after module's start/stop setting.
- * @see        NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *                                                 NX_I2C_ControlMode,
- *             NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *             NX_I2C_IsBusy,
- *             NX_I2C_BusDisable
- */
-/*
-void        NX_I2C_ClearOperationHold  ( U32 ModuleIndex )
-{
-    const U32    OP_HOLD_MASK = ( 0x01 << 1 ) ;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    //__g_ModuleVariables[ModuleIndex].pRegister->PEND = (U16)OP_HOLD_MASK;
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PEND, (U16)OP_HOLD_MASK);
-}
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief      Set I2C Control Mode
- * @param[in]  ModuleIndex  A index of module.
- * @param[in]  TxRxMode     Value of I2C's Mode ( Master tx/rx or Slave tx/rx )
- * @param[in]  Signal       Select Start/Stop signal ( NX_I2C_SIGNAL_START, NX_I2C_SIGNAL_STOP )
- * @return     None.
- * @remarks    This function make start/stop signal of I2C mode ( master tx/rx, slave tx/rx ).
- * @see        NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,
- *             NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *             NX_I2C_IsBusy,
- *             NX_I2C_BusDisable
+ * @brief      	Set I2C Control Mode
+ * @param[in] 	ModuleIndex  A index of module.
+ * @param[in] 	TxRxMode	Value of I2C's Mode ( Master tx/rx or Slave tx/rx )
+ * @param[in] 	Signal       	Select Start/Stop signal ( NX_I2C_SIGNAL_START, NX_I2C_SIGNAL_STOP )
+ * @return     	None.
+ * @remarks    	This function make start/stop signal of I2C mode ( master tx/rx, slave tx/rx ).
  */
 void        NX_I2C_ControlMode ( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode, NX_I2C_SIGNAL Signal )
 {
@@ -1039,101 +794,197 @@ void        NX_I2C_ControlMode ( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode, NX_I
     const U32   TXRX_ENB_MASK   =   1UL << 4;
     //const U32   ST_ENB_MASK     =   1UL << 12;
 
-    register struct NX_I2C_RegisterSet*    pRegister;
-    register U32    temp;
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
     NX_ASSERT( 4 > TxRxMode );
     NX_ASSERT( 2 > Signal );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+    ReadValue = ReadIO32(&pRegister->ICSR) & 0x0F;
 
-    //temp = pRegister->ICSR & 0x1F0F;
-    temp = pRegister->ICSR & 0x0F;
-
-    // State enable 이 뭘까??
-    //pRegister->ICSR =   ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK | ST_ENB_MASK );
-    //WriteIODW(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK | ST_ENB_MASK ));
-    WriteIODW(&pRegister->ICSR , ( temp | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK ));
+    WriteIO32(&pRegister->ICSR , ( ReadValue | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK ));
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief      Check I2C's status
- * @param[in]  ModuleIndex  A index of module.
- * @return     \b CTRUE Indicate that I2C is Busy.\n
- *             \b CFALSE Indicate that I2C is Not Busy.
- * @see        NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *             NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *             NX_I2C_BusDisable
+ * @brief      	Set Filter Enable or Disable
+ * @param[in] 	ModuleIndex  A index of module.
+ * @param[in]	Enable		 CTRUE 	 Indicate that Filter Enable
+ *             					 CFALSE Indicate that Filter Disable
+ * @return		None.
+ */
+void		NX_I2C_SetFilterEnable( U32 ModuleIndex, CBOOL bEnable )
+{	
+    const U32 FILTER_ENB_POS   = 2;
+    const U32 FILTER_ENB_MASK  = 1UL << FILTER_ENB_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+    NX_ASSERT( (0==bEnable) ||(1==bEnable) );
+
+    ReadValue   =   ReadIO32(&pRegister->ICLC);
+
+    ReadValue   &=  ~FILTER_ENB_MASK;
+    ReadValue   |=  (U32)bEnable << FILTER_ENB_POS;
+
+    WriteIO32(&pRegister->ICLC, ReadValue);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * @brief      	Get Filter Enable or Disable
+ * @param[in]	ModuleIndex  A index of module.
+ * @return     	CTRUE 	 Indicate that Filter Enable
+ *             		CFALSE Indicate that Filter Disable
+ */
+CBOOL       NX_I2C_GetFilterEnable( U32 ModuleIndex )
+{
+    const U32 FILTER_ENB_POS   = 2;
+    const U32 FILTER_ENB_MASK  = 1UL << FILTER_ENB_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+	
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+
+    return (CBOOL)( (ReadIO32(&pRegister->ICLC) & FILTER_ENB_MASK) ? CTRUE : CFALSE );
+}
+
+//------------------------------------------------------------------------------
+/**
+ * @brief      	Set SDA Output Delay
+ * @param[in] 	ModuleIndex  A index of module.
+ * @param[in]	Delay	(0: 0CLK, 1:5CLK, 2:10CLK, 3:15CLK)
+ * @return		None.
+ */
+void		NX_I2C_SetSDAOutputDelay( U32 ModuleIndex, NX_I2C_SDA_DELAY Delay )
+{	
+    const U32 SDA_DELAY_POS   = 0;
+    const U32 SDA_DELAY_MASK  = 1UL << SDA_DELAY_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+
+    NX_ASSERT( ( 3 >= Delay) );
+
+    ReadValue   =   ReadIO32(&pRegister->ICLC);
+
+    ReadValue   &=  ~SDA_DELAY_MASK;
+    ReadValue   |=  (U32)Delay << SDA_DELAY_POS;
+
+    WriteIO32(&pRegister->ICLC, ReadValue);
+}
+
+//------------------------------------------------------------------------------
+/**
+ * @brief      	Set SDA Output Delay
+ * @param[in] 	ModuleIndex  A index of module.
+ * @return		Delay	(0: 0CLK, 1:5CLK, 2:10CLK, 3:15CLK)
+ */
+NX_I2C_SDA_DELAY	NX_I2C_GetSDAOutputDelay( U32 ModuleIndex )
+{
+    const U32 SDA_DELAY_POS   = 0;
+    const U32 SDA_DELAY_MASK  = 1UL << SDA_DELAY_POS;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+
+    return (NX_I2C_SDA_DELAY)( (ReadIO32(&pRegister->ICLC) & SDA_DELAY_MASK) ? CTRUE : CFALSE );
+}
+
+//------------------------------------------------------------------------------
+/**
+ * @brief      	Check I2C's status
+ * @param[in]  	ModuleIndex  A index of module.
+ * @return		CTRUE Indicate that I2C is Busy.
+ *             		CFALSE Indicate that I2C is Not Busy.
  */
 CBOOL       NX_I2C_IsBusy( U32 ModuleIndex )
 {
     const U32   ST_BUSY_POS     =   5;
     const U32   ST_BUSY_MASK    = 1UL << ST_BUSY_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ST_BUSY_MASK) >> ST_BUSY_POS );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister )
+
+
+    return  (CBOOL)( (ReadIO32(&pRegister->ICSR) & ST_BUSY_MASK) >> ST_BUSY_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief      Set Send Data
- * @param[in]  ModuleIndex  A index of module.
- * @param[in]  WriteData     Value of Write Data ( 0x0 ~ 0xFF )
- * @return     None.
- * @see        NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *                                                 NX_I2C_ReadByte,
- *             NX_I2C_IsBusy,                     NX_I2C_BusDisable
+ * @brief      	Set Send Data
+ * @param[in] 	ModuleIndex  A index of module.
+ * @param[in]	WriteData     Value of Write Data ( 0x0 ~ 0xFF )
+ * @return		None.
  */
 void        NX_I2C_WriteByte ( U32 ModuleIndex, U8 WriteData )
 {
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( 0x100 > WriteData );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    //__g_ModuleVariables[ModuleIndex].pRegister->IDSR = (U32)( WriteData );
-    WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->IDSR, (U32)( WriteData ));
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+    NX_ASSERT( 0xFF >= WriteData );
+
+    WriteIO32(&pRegister->IDSR, (U8)WriteData);
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief      Get Received Data
- * @param[in]  ModuleIndex  A index of module.
- * @return     Received Data ( 0x0 ~ 0xFF )
- * @see        NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *             NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *             NX_I2C_WriteByte,
- *             NX_I2C_IsBusy,                     NX_I2C_BusDisable
+ * @brief      	Get Received Data
+ * @param[in]	ModuleIndex  A index of module.
+ * @return		Received Data ( 0x0 ~ 0xFF )
  */
 U8          NX_I2C_ReadByte ( U32 ModuleIndex )
 {
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return (U8)__g_ModuleVariables[ModuleIndex].pRegister->IDSR;
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+
+    return (U8)(ReadIO32(&pRegister->IDSR));
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief       I2C's Bus Disable
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
+ * @brief       	I2C's Bus Disable
+ * @param[in]	ModuleIndex A index of module.
+ * @return      	None.
+ * @remarks	Only use for Clear Arbitration fail status. 
+ *              		Arbitration status means that conflicting two I2C master device when
+ *              		data send. 
+ *              		This case, master device ( high prority ) send data, but master
+ *              		device(low prority) become arbitraion fail status.
  *
- * @see         NX_I2C_SetAckGenerationEnable,     NX_I2C_GetAckGenerationEnable,
- *              NX_I2C_ClearOperationHold,         NX_I2C_ControlMode,
- *              NX_I2C_WriteByte,                  NX_I2C_ReadByte,
- *              NX_I2C_IsBusy
  */
 void        NX_I2C_BusDisable( U32 ModuleIndex )
 {
@@ -1143,96 +994,14 @@ void        NX_I2C_BusDisable( U32 ModuleIndex )
     register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
     ReadValue   =   pRegister->ICSR;
     ReadValue   &=  ~TXRX_ENB_MASK;
 
-    //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's do not generate ack for the last transfer data
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_DataLineRelease,            NX_I2C_ClockLineRelease
- */
-void    NX_I2C_NotAckGen( U32 ModuleIndex )
-{
-    const U32 NOT_ACK_MASK  = ( 0x01 << 2 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, NOT_ACK_MASK);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's data bus release
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_NotAckGen                   NX_I2C_ClockLineRelease
- */
-void    NX_I2C_DataLineRelease( U32 ModuleIndex )
-{
-    const U32 DAT_REL_MASK  = ( 0x01 << 1 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-    
-	NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, DAT_REL_MASK);
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       I2C's Bus clock bus release
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @remarks     Only use for Clear Arbitration fail status. \n
- *              Arbitration status means that conflicting two I2C master device when
- *              data send. \n
- *              This case, master device ( high prority ) send data, but master
- *              device(low prority) become arbitraion fail status.
- *
- * @see         NX_I2C_NotAckGen                    NX_I2C_ClockLineRelease
- */
-void    NX_I2C_ClockLineRelease( U32 ModuleIndex )
-{
-    const U32 CLK_REL_MASK  = ( 0x01 << 0 );
-
-    register struct NX_I2C_RegisterSet* pRegister;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    WriteIODW(&pRegister->STOPCON, CLK_REL_MASK);
+    WriteIO32(&pRegister->ICSR, ReadValue);
 }
 
 
@@ -1240,195 +1009,34 @@ void    NX_I2C_ClockLineRelease( U32 ModuleIndex )
 // Checking Function of external Interrupt's source when interrupt is occurred.
 //------------------------------------------------------------------------------
 /**
- * @brief       Check state of slave address is matched or NOT.
- * @param[in]   ModuleIndex A index of module.
- * @return      \b CTRUE Indicate that Slave address is matched. \n
- *              \b CFALSE Indicate that Slave address is NOT matched.
- * @remarks     Interrupt is occurred when slave address is matched. \n
- * @see                                        NX_I2C_ClearSlaveAddressMatch,
- *              NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *              NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
+ * @brief       	Check state of slave address is matched or NOT.
+ * @param[in]	ModuleIndex A index of module.
+ * @return      	CTRUE Indicate that Slave address is matched. 
+ *              		CFALSE Indicate that Slave address is NOT matched.
+ * @remarks 	Interrupt is occurred when slave address is matched. 
  */
 CBOOL       NX_I2C_IsSlaveAddressMatch( U32 ModuleIndex )
 {
     const U32   SLAVE_MATCH_OCCUR_POS     =   2;
     const U32   SLAVE_MATCH_OCCUR_MASK    =   1UL << SLAVE_MATCH_OCCUR_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & SLAVE_MATCH_OCCUR_MASK) >> SLAVE_MATCH_OCCUR_POS );
-}
-
-//------------------------------------------------------------------------------
-/**
- * @brief       Clear state of slave address is matched.
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @see         NX_I2C_IsSlaveAddressMatch,
- *              NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *              NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
- */
-/*
-void        NX_I2C_ClearSlaveAddressMatch( U32 ModuleIndex )
-{
-    const U32   ST_ENB_MASK               = 1UL << 12;
-    const U32   SLAVE_MATCH_OCCUR_POS     = 10;
-    const U32   SLAVE_MATCH_OCCUR_MASK    = 1UL << SLAVE_MATCH_OCCUR_POS;
-
     register struct NX_I2C_RegisterSet* pRegister;
-    register U32 ReadValue;
 
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
 
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    ReadValue   =    pRegister->ICSR;
-    ReadValue   &= ~( ST_ENB_MASK | SLAVE_MATCH_OCCUR_MASK );
-
-    //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
+    return  (CBOOL)( (ReadIO32(&pRegister->ICSR) & SLAVE_MATCH_OCCUR_MASK) >> SLAVE_MATCH_OCCUR_POS );
 }
-*/
 
 //------------------------------------------------------------------------------
 /**
- * @brief       Check state of General call is occurred or NOT.
- * @param[in]   ModuleIndex A index of module.
- * @return      \b CTRUE Indicate that General call is occurred. \n
- *              \b CFALSE Indicate that General call is NOT occurred.
- * @remarks     Interrupt is occurred when general call is occurred.\n
- *              General call means that master device send a command to all slave device( broadcasting ).
- * @see         NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *                                              NX_I2C_ClearGeneralCall,
- *              NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
- */
-/*
-CBOOL       NX_I2C_IsGeneralCall( U32 ModuleIndex )
-{
-    const U32   GENERAL_CALL_OCCUR_POS     =   9;
-    const U32   GENERAL_CALL_OCCUR_MASK    =   1UL << GENERAL_CALL_OCCUR_POS;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & GENERAL_CALL_OCCUR_MASK) >> GENERAL_CALL_OCCUR_POS );
-}
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief       Clear state of general call is occurred.
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @see         NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *              NX_I2C_IsGeneralCall,
- *              NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
- */
-/*
-void        NX_I2C_ClearGeneralCall( U32 ModuleIndex )
-{
-    const U32   ST_ENB_MASK                = 1UL << 12;
-    const U32   GENERAL_CALL_OCCUR_POS     = 9;
-    const U32   GENERAL_CALL_OCCUR_MASK    = 1UL << GENERAL_CALL_OCCUR_POS;
-
-    register struct NX_I2C_RegisterSet* pRegister;
-    register U32 ReadValue;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    ReadValue   =    pRegister->ICSR;
-    ReadValue   &= ~( ST_ENB_MASK | GENERAL_CALL_OCCUR_MASK );
-
-    //pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
-}
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief       Check state of slave RX is stopped or NOT.
- * @param[in]   ModuleIndex A index of module.
- * @return      \b CTRUE Indicate that Slave RX is stopped. \n
- *              \b CFALSE Indicate that Slave RX is NOT stopped.
- * @remarks     Interrupt is occurred when slave RX is stopped.\n
- * @see         NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *              NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *                                              NX_I2C_ClearSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
- */
-/*
-CBOOL       NX_I2C_IsSlaveRxStop( U32 ModuleIndex )
-{
-    const U32   SLV_RX_STOP_POS     = 0;
-    const U32   SLV_RX_STOP_MASK    = 1UL << SLV_RX_STOP_POS;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & SLV_RX_STOP_MASK) >> SLV_RX_STOP_POS );
-}
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief       Clear state of Slave RX is stopped.
- * @param[in]   ModuleIndex A index of module.
- * @return      None.
- * @see         NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *              NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *              NX_I2C_IsSlaveRxStop,
- *              NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived,
- *              NX_I2C_IsTxMode
- */
-/*
-void        NX_I2C_ClearSlaveRxStop( U32 ModuleIndex )
-{
-    const U32   ST_ENB_MASK         = 1UL << 12;
-    const U32   SLV_RX_STOP_POS     = 8;
-    const U32   SLV_RX_STOP_MASK    = 1UL << SLV_RX_STOP_POS;
-
-    register struct NX_I2C_RegisterSet* pRegister;
-    register U32 ReadValue;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
-    pRegister   =   __g_ModuleVariables[ModuleIndex].pRegister;
-
-    ReadValue   =    pRegister->ICSR;
-    ReadValue   &= ~( ST_ENB_MASK | SLV_RX_STOP_MASK );
-
-//  pRegister->ICSR = ReadValue;
-    WriteIODW(&pRegister->ICSR, ReadValue);
-}
-*/
-
-//------------------------------------------------------------------------------
-/**
- * @brief      Check Bus Arbitration status
- * @param[in]  ModuleIndex  A index of module.
- * @return     \b CTRUE Indicate that Bus Arbitration Failed. \n
- *             \b CFALSE Indicate that Bus Arbitration is Not Failed.
- * @remarks    Interrupt is Occured when Extend IRQ Enable and Bus arbitration is failed.
- * @see        NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *             NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *             NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *                                             NX_I2C_IsACKReceived,
- *             NX_I2C_IsTxMode
+ * @brief      	Check Bus Arbitration status
+ * @param[in]	ModuleIndex  A index of module.
+ * @return     	CTRUE Indicate that Bus Arbitration Failed. 
+ *             		CFALSE Indicate that Bus Arbitration is Not Failed.
+ * @remarks   	 Interrupt is Occured when Extend IRQ Enable and Bus arbitration is failed.
  */
 CBOOL       NX_I2C_IsBusArbitFail( U32 ModuleIndex )
 {
@@ -1438,52 +1046,51 @@ CBOOL       NX_I2C_IsBusArbitFail( U32 ModuleIndex )
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    return  (CBOOL)( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ARBIT_FAIL_MASK) >> ARBIT_FAIL_POS );
+    return  (CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->ICSR) & ARBIT_FAIL_MASK) >> ARBIT_FAIL_POS );
 }
 
 //------------------------------------------------------------------------------
 /**
- * @brief      Check ACK Status
- * @param[in]  ModuleIndex  A index of module.
- * @return     \b CTRUE Indicate that ACK Received.\n
- *             \b CFALSE Indicate that ACK \b NOT received.
- * @remarks    Interrupt is Occured when Extend IRQ Enable and NAck Received.\n
- * @see        NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *             NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *             NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *             NX_I2C_IsBusArbitFail,
- *             NX_I2C_IsTxMode
+ * @brief      	Check ACK Status
+ * @param[in]	ModuleIndex  A index of module.
+ * @return     	CTRUE Indicate that ACK Received.
+ *             		CFALSE Indicate that ACK NOT received.
+ * @remarks    	Interrupt is Occured when Extend IRQ Enable and NAck Received.
  */
 CBOOL       NX_I2C_IsACKReceived( U32 ModuleIndex )
 {
     const U32   ACK_STATUS_POS    = 0;
     const U32   ACK_STATUS_MASK   = 1UL << ACK_STATUS_POS;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    //return  (CBOOL)(((__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ACK_STATUS_MASK) >> ACK_STATUS_POS ));  // 0 : CTRUE, 1 : CFALSE
-    return  (CBOOL)(((__g_ModuleVariables[ModuleIndex].pRegister->ICSR & ACK_STATUS_MASK) >> ACK_STATUS_POS ) ^ 1);  // 0 : CTRUE, 1 : CFALSE
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+
+    return  (CBOOL)(!((ReadIO32(&pRegister->ICSR) & ACK_STATUS_MASK) >> ACK_STATUS_POS ));  // 0 : CTRUE, 1 : CFALSE
 }
 
 
 //------------------------------------------------------------------------------
-/**
- * @brief      Check I2C's Mode ( Rx or Tx )
- * @return     \b CTRUE Indicate that I2C's mode is Tx \n
- *             \b CFALSE Indicate that I2C's mode is Rx.
- * @see        NX_I2C_IsSlaveAddressMatch,    NX_I2C_ClearSlaveAddressMatch,
- *             NX_I2C_IsGeneralCall,          NX_I2C_ClearGeneralCall,
- *             NX_I2C_IsSlaveRxStop,          NX_I2C_ClearSlaveRxStop,
- *             NX_I2C_IsBusArbitFail,         NX_I2C_IsACKReceived
+/** 
+ * @brief		Check I2C's Mode ( Rx or Tx )
+ * @param[in]	ModuleIndex  A index of module. 
+ * @return		CTRUE Indicate that I2C's mode is Tx 
+ *             		CFALSE Indicate that I2C's mode is Rx.
  */
 CBOOL       NX_I2C_IsTxMode( U32 ModuleIndex )
 {
     const U32 TX_RX_MASK = 1UL << 6;
 
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+    register struct NX_I2C_RegisterSet* pRegister;
 
-    return ( (__g_ModuleVariables[ModuleIndex].pRegister->ICSR & TX_RX_MASK) ? CTRUE : CFALSE );
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );;
+
+    return ( (ReadIO32(&pRegister->ICSR) & TX_RX_MASK) ? CTRUE : CFALSE );
 }
 

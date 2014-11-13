@@ -179,14 +179,14 @@ CBOOL	NX_AC97_OpenModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// check reset value
-	NX_ASSERT( ReadIODW(&pRegister->GLBCTRL) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->GLBSTAT) == 0x1 );
-	NX_ASSERT( ReadIODW(&pRegister->CODEC_CMD) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->CODEC_STAT) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->PCMADDR) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->MICADDR) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->PCMDATA) == 0x0 );
-	NX_ASSERT( ReadIODW(&pRegister->MICDATA) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->GLBCTRL) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->GLBSTAT) == 0x1 );
+	NX_ASSERT( ReadIO32(&pRegister->CODEC_CMD) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->CODEC_STAT) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->PCMADDR) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->MICADDR) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->PCMDATA) == 0x0 );
+	NX_ASSERT( ReadIO32(&pRegister->MICDATA) == 0x0 );
 
 	return CTRUE;
 }
@@ -212,14 +212,14 @@ CBOOL	NX_AC97_CloseModule( U32 ModuleIndex )
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
 	// set up reset value
-	WriteIODW(&pRegister->GLBCTRL, 0x0);
-	WriteIODW(&pRegister->GLBSTAT, 0x1);
-	WriteIODW(&pRegister->CODEC_CMD, 0x0);
-	WriteIODW(&pRegister->CODEC_STAT, 0x0);
-	WriteIODW(&pRegister->PCMADDR, 0x0);
-	WriteIODW(&pRegister->MICADDR, 0x0);
-	WriteIODW(&pRegister->PCMDATA, 0x0);
-	WriteIODW(&pRegister->MICDATA, 0x0);
+	WriteIO32(&pRegister->GLBCTRL, 0x0);
+	WriteIO32(&pRegister->GLBSTAT, 0x1);
+	WriteIO32(&pRegister->CODEC_CMD, 0x0);
+	WriteIO32(&pRegister->CODEC_STAT, 0x0);
+	WriteIO32(&pRegister->PCMADDR, 0x0);
+	WriteIO32(&pRegister->MICADDR, 0x0);
+	WriteIO32(&pRegister->PCMDATA, 0x0);
+	WriteIO32(&pRegister->MICDATA, 0x0);
 
 	return CTRUE;
 }
@@ -314,12 +314,12 @@ void	NX_AC97_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	ReadValue	=	ReadIODW(&pRegister->GLBCTRL) & ~PEND_MASK;
+	ReadValue	=	ReadIO32(&pRegister->GLBCTRL) & ~PEND_MASK;
 
 	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
 	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
-	WriteIODW(&pRegister->GLBCTRL, ReadValue);
+	WriteIO32(&pRegister->GLBCTRL, ReadValue);
 }
 
 //------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ CBOOL	NX_AC97_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 7 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -367,7 +367,7 @@ CBOOL	NX_AC97_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 	NX_ASSERT( 7 > IntNum );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
@@ -395,7 +395,7 @@ void	NX_AC97_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->GLBCTRL, ((1 << IntNum) & PEND_MASK) << PEND_POS );
+	WriteIO32(&pRegister->GLBCTRL, ((1 << IntNum) & PEND_MASK) << PEND_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -429,7 +429,7 @@ void	NX_AC97_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 		SetValue	|=	INT_MASK << PEND_POS;
 	}
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL, SetValue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL, SetValue);
 }
 
 //------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ CBOOL	NX_AC97_GetInterruptEnableAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL) & (INT_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL) & (INT_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -480,7 +480,7 @@ CBOOL	NX_AC97_GetInterruptPendingAll( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	if( ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -511,7 +511,7 @@ void	NX_AC97_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 
-	WriteIODW(&pRegister->GLBCTRL, (PEND_MASK<<PEND_POS));
+	WriteIO32(&pRegister->GLBCTRL, (PEND_MASK<<PEND_POS));
 }
 
 //------------------------------------------------------------------------------
@@ -539,7 +539,7 @@ U32		NX_AC97_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	Pend	=	(ReadIODW(&pRegister->GLBSTAT)>>PEND_POS) & PEND_MASK;
+	Pend	=	(ReadIO32(&pRegister->GLBSTAT)>>PEND_POS) & PEND_MASK;
 
 	for( PendingIndex=0 ; PendingIndex<=10 ; PendingIndex++)
 		if(Pend & ((U32)0x1)<<PendingIndex)
@@ -599,14 +599,14 @@ void	NX_AC97_SetGLBCTRL( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL, value);
 }
 U32		NX_AC97_GetGLBCTRL( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBCTRL));
 }
 
 U32		NX_AC97_GetGLBSTAT( U32 ModuleIndex )
@@ -614,7 +614,7 @@ U32		NX_AC97_GetGLBSTAT( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GLBSTAT));
 }
 
 void	NX_AC97_SetCODEC_CMD( U32 ModuleIndex, U32 value )
@@ -622,14 +622,14 @@ void	NX_AC97_SetCODEC_CMD( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_CMD, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_CMD, value);
 }
 U32		NX_AC97_GetCODEC_CMD( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_CMD));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_CMD));
 }
 
 U32		NX_AC97_GetCODEC_STAT( U32 ModuleIndex )
@@ -637,7 +637,7 @@ U32		NX_AC97_GetCODEC_STAT( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_STAT));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CODEC_STAT));
 }
 
 U32		NX_AC97_GetPCMADDR( U32 ModuleIndex )
@@ -645,7 +645,7 @@ U32		NX_AC97_GetPCMADDR( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PCMADDR));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PCMADDR));
 }
 
 U32		NX_AC97_GetMICADDR( U32 ModuleIndex )
@@ -653,7 +653,7 @@ U32		NX_AC97_GetMICADDR( U32 ModuleIndex )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MICADDR));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MICADDR));
 }
 
 void	NX_AC97_SetPCMDATA( U32 ModuleIndex, U32 value )
@@ -661,14 +661,14 @@ void	NX_AC97_SetPCMDATA( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PCMDATA, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PCMDATA, value);
 }
 U32		NX_AC97_GetPCMDATA( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->PCMDATA));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PCMDATA));
 }
 
 void	NX_AC97_SetMICDATA( U32 ModuleIndex, U32 value )
@@ -676,14 +676,14 @@ void	NX_AC97_SetMICDATA( U32 ModuleIndex, U32 value )
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	WriteIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MICDATA, value);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MICDATA, value);
 }
 U32		NX_AC97_GetMICDATA( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-	return (U32)(ReadIODW(&__g_ModuleVariables[ModuleIndex].pRegister->MICDATA));
+	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->MICDATA));
 }
 
 

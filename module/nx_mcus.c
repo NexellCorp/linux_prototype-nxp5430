@@ -237,13 +237,13 @@ void	NX_MCUS_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
 	regvalue |= (U32)Enable<<IRQENB_POS;
 
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -271,7 +271,7 @@ CBOOL	NX_MCUS_GetInterruptEnable( S32 IntNum )
 	NX_ASSERT( 0 == IntNum );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
+	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ CBOOL	NX_MCUS_GetInterruptPending( S32 IntNum )
 	NX_ASSERT( 0 == IntNum );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_pRegister->NFCONTROL) & IRQPEND_MASK) >> IRQPEND_POS );
+	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND_MASK) >> IRQPEND_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -333,12 +333,12 @@ void	NX_MCUS_ClearInterruptPending( S32 IntNum )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST );
 	regvalue |= IRQPEND;
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -373,12 +373,12 @@ void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
 	regvalue |= ( (U32)Enable<<IRQENB_POS );
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -402,7 +402,7 @@ CBOOL	NX_MCUS_GetInterruptEnableAll( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return	(CBOOL)( (ReadIODW(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
+	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
 }
 
 //------------------------------------------------------------------------------
@@ -435,7 +435,7 @@ CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval	= ReadIODW(&__g_pRegister->NFCONTROL);
+	regval	= ReadIO32(&__g_pRegister->NFCONTROL);
 	intpend	= (regval & IRQPEND_MASK) >> IRQPEND_POS;
 	intenb	= (regval & IRQENB_MASK ) >> IRQENB_POS;
 
@@ -469,12 +469,12 @@ void	NX_MCUS_ClearInterruptPendingAll( void )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST );
 	regvalue |= IRQPEND;
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -510,12 +510,12 @@ void	NX_MCUS_SetInterruptEnable32 ( U32 EnableFlag )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
 	regvalue |= ( (U32)(EnableFlag & 1)<<IRQENB_POS );
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -540,7 +540,7 @@ U32	NX_MCUS_GetInterruptEnable32 ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFCONTROL) & IRQENB)>>IRQENB_POS;
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB)>>IRQENB_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -565,7 +565,7 @@ U32	NX_MCUS_GetInterruptPending32 ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFCONTROL) & IRQPEND)>>IRQPEND_POS;
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND)>>IRQPEND_POS;
 }
 
 //------------------------------------------------------------------------------
@@ -598,12 +598,12 @@ void	NX_MCUS_ClearInterruptPending32( U32 PendingFlag )
 
 	pRegister = __g_pRegister;
 
-	regvalue = ReadIODW(&pRegister->NFCONTROL);
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
 	regvalue &= ~(IRQPEND | ECCRST);
 	regvalue |= ( (U32)(PendingFlag & 1)<<IRQPEND_POS );
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&pRegister->NFCONTROL, regvalue);
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -633,7 +633,7 @@ S32		NX_MCUS_GetInterruptPendingNumber( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 
 	if( (regval & IRQENB_MASK) && (regval & IRQPEND_MASK) )
 	{
@@ -668,7 +668,7 @@ NX_MCUS_SBUSID		NX_MCUS_GetISRAMCS( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->MEMBW) & ISRAMSHADOW) ? NX_MCUS_SBUSID_STATIC12 : NX_MCUS_SBUSID_STATIC0;
+	return (ReadIO32(&__g_pRegister->MEMBW) & ISRAMSHADOW) ? NX_MCUS_SBUSID_STATIC12 : NX_MCUS_SBUSID_STATIC0;
 }
 
 //------------------------------------------------------------------------------
@@ -692,7 +692,7 @@ NX_MCUS_SBUSID		NX_MCUS_GetIROMCS( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->MEMBW) & IROMSHADOW) ? NX_MCUS_SBUSID_STATIC13 : NX_MCUS_SBUSID_STATIC0;
+	return (ReadIO32(&__g_pRegister->MEMBW) & IROMSHADOW) ? NX_MCUS_SBUSID_STATIC13 : NX_MCUS_SBUSID_STATIC0;
 }
 
 //------------------------------------------------------------------------------
@@ -789,72 +789,72 @@ void	NX_MCUS_SetStaticBUSConfig
 //	pRegister->MEMTIMECOS[regindex4] = (pRegister->MEMTIMECOS[regindex4] & ~(0x0FUL<<bitpos4)) | (tCOS<<bitpos4);
 //	pRegister->MEMTIMECOH[regindex4] = (pRegister->MEMTIMECOH[regindex4] & ~(0x0FUL<<bitpos4)) | (tCOH<<bitpos4);
 //	pRegister->MEMTIMEACC[regindex8] = (pRegister->MEMTIMEACC[regindex8] & ~(0xFFUL<<bitpos8)) | (tACC<<bitpos8);
-	regval = ReadIODW(&pRegister->MEMTIMEACS[regindex4]);
+	regval = ReadIO32(&pRegister->MEMTIMEACS[regindex4]);
 	regval &= ~(0x0FUL<<bitpos4);
 	regval |= (tACS<<bitpos4);
-	WriteIODW(&pRegister->MEMTIMEACS[regindex4], regval);
+	WriteIO32(&pRegister->MEMTIMEACS[regindex4], regval);
 
-	regval = ReadIODW(&pRegister->MEMTIMECAH[regindex4]);
+	regval = ReadIO32(&pRegister->MEMTIMECAH[regindex4]);
 	regval &= ~(0x0FUL<<bitpos4);
 	regval |= (tCAH<<bitpos4);
-	WriteIODW(&pRegister->MEMTIMECAH[regindex4], regval);
+	WriteIO32(&pRegister->MEMTIMECAH[regindex4], regval);
 
-	regval = ReadIODW(&pRegister->MEMTIMECOS[regindex4]);
+	regval = ReadIO32(&pRegister->MEMTIMECOS[regindex4]);
 	regval &= ~(0x0FUL<<bitpos4);
 	regval |= (tCOS<<bitpos4);
-	WriteIODW(&pRegister->MEMTIMECOS[regindex4], regval);
+	WriteIO32(&pRegister->MEMTIMECOS[regindex4], regval);
 
-	regval = ReadIODW(&pRegister->MEMTIMECOH[regindex4]);
+	regval = ReadIO32(&pRegister->MEMTIMECOH[regindex4]);
 	regval &= ~(0x0FUL<<bitpos4);
 	regval |= (tCOH<<bitpos4);
-	WriteIODW(&pRegister->MEMTIMECOH[regindex4], regval);
+	WriteIO32(&pRegister->MEMTIMECOH[regindex4], regval);
 
-	regval = ReadIODW(&pRegister->MEMTIMEACC[regindex8]);
+	regval = ReadIO32(&pRegister->MEMTIMEACC[regindex8]);
 	regval &= ~(0xFFUL<<bitpos8);
 	regval |= (tACC<<bitpos8);
-	WriteIODW(&pRegister->MEMTIMEACC[regindex8], regval);
+	WriteIO32(&pRegister->MEMTIMEACC[regindex8], regval);
 
 	//if( NX_MCUS_SBUSID_STATIC13 >= Id	)	// For static bus #0 ~ #13
 	{
 //		pRegister->MEMTIMESACC[regindex8] = (pRegister->MEMTIMESACC[regindex8] & ~(0xFFUL<<bitpos8)) | (tSACC<<bitpos8);
-		regval = ReadIODW(&pRegister->MEMTIMESACC[regindex8]);
+		regval = ReadIO32(&pRegister->MEMTIMESACC[regindex8]);
 		regval &= ~(0xFFUL<<bitpos8);
 		regval |= (tSACC<<bitpos8);
-		WriteIODW(&pRegister->MEMTIMESACC[regindex8], regval);
+		WriteIO32(&pRegister->MEMTIMESACC[regindex8], regval);
 
 		// Bus Width
-		if( BitWidth == 16 )	ReadIODW(&pRegister->MEMBW) |=	(1UL<<((U32)Id));	// 1: 16-bit
-		else					ReadIODW(&pRegister->MEMBW) &= ~(1UL<<((U32)Id));	// 0:	8-bit
+		if( BitWidth == 16 )	ReadIO32(&pRegister->MEMBW) |=	(1UL<<((U32)Id));	// 1: 16-bit
+		else					ReadIO32(&pRegister->MEMBW) &= ~(1UL<<((U32)Id));	// 0:	8-bit
 
 		// Burst Mode
-		regval = ReadIODW(&pRegister->MEMBURST);
+		regval = ReadIO32(&pRegister->MEMBURST);
 		regval &= ~(0xFUL<<bitpos4);
 		regval |= ((U32)BurstRead )<<(bitpos4+0);
 		regval |= ((U32)BurstWrite)<<(bitpos4+2);
 //		pRegister->MEMBURST = regval;
-		WriteIODW(&pRegister->MEMBURST, regval);
+		WriteIO32(&pRegister->MEMBURST, regval);
 
 		// Wait control
 //		pRegister->MEMWAIT = (pRegister->MEMWAIT & ~(0x3UL<<bitpos2)) | (((U32)WaitMode)<<bitpos2);
-		regval = ReadIODW(&pRegister->MEMWAIT);
+		regval = ReadIO32(&pRegister->MEMWAIT);
 		regval &= ~(0x3UL<<bitpos2);
 		regval |=(((U32)WaitMode)<<bitpos2);
-		WriteIODW(&pRegister->MEMWAIT, regval);
+		WriteIO32(&pRegister->MEMWAIT, regval);
 	}
 	//else if( NX_MCUS_SBUSID_IDE == Id )	// IDE
 	//{
 //	//	pRegister->MEMTIMEWACC[regindex8] = (pRegister->MEMTIMEWACC[regindex8] & ~(0xFFUL<<bitpos8)) | (tSACC<<bitpos8);
-	//	regval = ReadIODW(&pRegister->MEMTIMEWACC[regindex8]);
+	//	regval = ReadIO32(&pRegister->MEMTIMEWACC[regindex8]);
 	//	regval &= ~(0xFFUL<<bitpos8);
 	//	regval |= (tSACC<<bitpos8);
-	//	WriteIODW(&pRegister->MEMTIMEWACC[regindex8], regval);
+	//	WriteIO32(&pRegister->MEMTIMEWACC[regindex8], regval);
     //
 	//	// Wait control
 //	//	pRegister->MEMWAIT = (pRegister->MEMWAIT & ~(0x3UL<<bitpos2)) | (((U32)WaitMode)<<bitpos2);
-	//	regval = ReadIODW(&pRegister->MEMWAIT);
+	//	regval = ReadIO32(&pRegister->MEMWAIT);
 	//	regval &= ~(0x3UL<<bitpos2);
 	//	regval |= (((U32)WaitMode)<<bitpos2);
-	//	WriteIODW(&pRegister->MEMWAIT, regval);
+	//	WriteIO32(&pRegister->MEMWAIT, regval);
 	//}
 }
 
@@ -907,29 +907,29 @@ void	NX_MCUS_GetStaticBUSConfig
 		//--------------------------------------------------------------------------
 		// Get timing for tACS, tCOS, tOCH.
 		// 0 : 1 cycle, 1 : 2 cycle, 2 : 3 cycle, ......, 15 : 16 cycle
-		if( CNULL != ptACS )	*ptACS = ((ReadIODW(&pRegister->MEMTIMEACS[regindex4]) >> bitpos4) & 0x0FUL) + 1;
-		if( CNULL != ptCOS )	*ptCOS = ((ReadIODW(&pRegister->MEMTIMECOS[regindex4]) >> bitpos4) & 0x0FUL) + 1;
-		if( CNULL != ptCOH )	*ptCOH = ((ReadIODW(&pRegister->MEMTIMECOH[regindex4]) >> bitpos4) & 0x0FUL) + 1;
+		if( CNULL != ptACS )	*ptACS = ((ReadIO32(&pRegister->MEMTIMEACS[regindex4]) >> bitpos4) & 0x0FUL) + 1;
+		if( CNULL != ptCOS )	*ptCOS = ((ReadIO32(&pRegister->MEMTIMECOS[regindex4]) >> bitpos4) & 0x0FUL) + 1;
+		if( CNULL != ptCOH )	*ptCOH = ((ReadIO32(&pRegister->MEMTIMECOH[regindex4]) >> bitpos4) & 0x0FUL) + 1;
 
 		//--------------------------------------------------------------------------
 		// Get timing for tCAH.
 		// 0 : 2 cycle, 1 : 3 cycle, 2 : 4 cycle, ......, 15 : 1 cycle
 		if( CNULL != ptCAH )
 		{
-			*ptCAH = (ReadIODW(&pRegister->MEMTIMECAH[regindex4]) >> bitpos4) & 0x0FUL;
+			*ptCAH = (ReadIO32(&pRegister->MEMTIMECAH[regindex4]) >> bitpos4) & 0x0FUL;
 			*ptCAH = ((*ptCAH + 1) % 16) + 1;
 		}
 
 		//--------------------------------------------------------------------------
 		// Get timing for tACC, tSACC
 		// tACC	= n+1 cycle
-		if( CNULL != ptACC )	*ptACC = ((ReadIODW(&pRegister->MEMTIMEACC[regindex8]) >> bitpos8) & 0xFFUL) + 1;
+		if( CNULL != ptACC )	*ptACC = ((ReadIO32(&pRegister->MEMTIMEACC[regindex8]) >> bitpos8) & 0xFFUL) + 1;
 
 		// tSACC = n+1 cycle
-		if( CNULL != ptSACC )	*ptSACC = ((ReadIODW(&pRegister->MEMTIMEWACC[regindex8]) >> bitpos8) & 0xFFUL) + 1;
+		if( CNULL != ptSACC )	*ptSACC = ((ReadIO32(&pRegister->MEMTIMEWACC[regindex8]) >> bitpos8) & 0xFFUL) + 1;
 
 		// Wait control
-		if( CNULL != pWaitMode )	{ *pWaitMode	= (NX_MCUS_WAITMODE)((ReadIODW(&pRegister->MEMWAIT) >> bitpos2) & 0x3UL);		}
+		if( CNULL != pWaitMode )	{ *pWaitMode	= (NX_MCUS_WAITMODE)((ReadIO32(&pRegister->MEMWAIT) >> bitpos2) & 0x3UL);		}
 	}
 	else
 	{
@@ -938,25 +938,25 @@ void	NX_MCUS_GetStaticBUSConfig
 		// 0 : 1 cycle, 1 : 2 cycle, 2 : 3 cycle, ......, 15 : 0 cycle
 		if( CNULL != ptACS )
 		{
-			*ptACS = (ReadIODW(&pRegister->MEMTIMEACS[regindex4]) >> bitpos4) & 0x0FUL;
+			*ptACS = (ReadIO32(&pRegister->MEMTIMEACS[regindex4]) >> bitpos4) & 0x0FUL;
 			*ptACS = (*ptACS + 1) % 16;
 		}
 
 		if( CNULL != ptCAH )
 		{
-			*ptCAH = (ReadIODW(&pRegister->MEMTIMECAH[regindex4]) >> bitpos4) & 0x0FUL;
+			*ptCAH = (ReadIO32(&pRegister->MEMTIMECAH[regindex4]) >> bitpos4) & 0x0FUL;
 			*ptCAH = (*ptCAH + 1) % 16;
 		}
 
 		if( CNULL != ptCOS )
 		{
-			*ptCOS = (ReadIODW(&pRegister->MEMTIMECOS[regindex4]) >> bitpos4) & 0x0FUL;
+			*ptCOS = (ReadIO32(&pRegister->MEMTIMECOS[regindex4]) >> bitpos4) & 0x0FUL;
 			*ptCOS = (*ptCOS + 1) % 16;
 		}
 
 		if( CNULL != ptCOH )
 		{
-			*ptCOH = (ReadIODW(&pRegister->MEMTIMECOH[regindex4]) >> bitpos4) & 0x0FUL;
+			*ptCOH = (ReadIO32(&pRegister->MEMTIMECOH[regindex4]) >> bitpos4) & 0x0FUL;
 			*ptCOH = (*ptCOH + 1) % 16;
 		}
 
@@ -965,7 +965,7 @@ void	NX_MCUS_GetStaticBUSConfig
 		// tACC	= n+1 cycle
 		if( CNULL != ptACC )
 		{
-			*ptACC = (ReadIODW(&pRegister->MEMTIMEACC[regindex8]) >> bitpos8) & 0xFFUL;
+			*ptACC = (ReadIO32(&pRegister->MEMTIMEACC[regindex8]) >> bitpos8) & 0xFFUL;
 			*ptACC += 1;
 		}
 
@@ -974,16 +974,16 @@ void	NX_MCUS_GetStaticBUSConfig
 			// tSACC = n+1 cycle
 			if( CNULL != ptSACC )
 			{
-				*ptSACC = (ReadIODW(&pRegister->MEMTIMESACC[regindex8]) >> bitpos8) & 0xFFUL;
+				*ptSACC = (ReadIO32(&pRegister->MEMTIMESACC[regindex8]) >> bitpos8) & 0xFFUL;
 				*ptSACC += 1;
 			}
 
-			if( CNULL != pBitWidth )	{ *pBitWidth		= (ReadIODW(&pRegister->MEMBW) & (1UL<<((U32)Id))) ? 16 : 8;						}
-			if( CNULL != pBurstRead )	{ *pBurstRead		= (NX_MCUS_BURSTMODE)((ReadIODW(&pRegister->MEMBURST) >> (bitpos4+0)) & 0x3UL);	}
-			if( CNULL != pBurstWrite )	{ *pBurstWrite	= (NX_MCUS_BURSTMODE)((ReadIODW(&pRegister->MEMBURST) >> (bitpos4+2)) & 0x3UL);	}
+			if( CNULL != pBitWidth )	{ *pBitWidth		= (ReadIO32(&pRegister->MEMBW) & (1UL<<((U32)Id))) ? 16 : 8;						}
+			if( CNULL != pBurstRead )	{ *pBurstRead		= (NX_MCUS_BURSTMODE)((ReadIO32(&pRegister->MEMBURST) >> (bitpos4+0)) & 0x3UL);	}
+			if( CNULL != pBurstWrite )	{ *pBurstWrite	= (NX_MCUS_BURSTMODE)((ReadIO32(&pRegister->MEMBURST) >> (bitpos4+2)) & 0x3UL);	}
 
 			// Wait control
-			if( CNULL != pWaitMode )	{ *pWaitMode	= (NX_MCUS_WAITMODE)((ReadIODW(&pRegister->MEMWAIT) >> bitpos2) & 0x3UL);		}
+			if( CNULL != pWaitMode )	{ *pWaitMode	= (NX_MCUS_WAITMODE)((ReadIO32(&pRegister->MEMWAIT) >> bitpos2) & 0x3UL);		}
 		}
 	}
 }
@@ -1023,30 +1023,30 @@ void	NX_MCUS_SetNANDBUSConfig
 	tACC	-= 1;	// tACC	= n+1 cycle
 
 	//--------------------------------------------------------------------------
-	regval = ReadIODW(&pRegister->NFTACS);
+	regval = ReadIO32(&pRegister->NFTACS);
 	regval &= ~(0x0FUL<<(NFBank*4));
 	regval |= (tACS<<(NFBank*4));
-	WriteIODW(&pRegister->NFTACS, regval);
+	WriteIO32(&pRegister->NFTACS, regval);
 
-	regval = ReadIODW(&pRegister->NFTCAH);
+	regval = ReadIO32(&pRegister->NFTCAH);
 	regval &= ~(0x0FUL<<(NFBank*4));
 	regval |= (tCAH<<(NFBank*4));
-	WriteIODW(&pRegister->NFTCAH, regval);
+	WriteIO32(&pRegister->NFTCAH, regval);
 
-	regval = ReadIODW(&pRegister->NFTCOS);
+	regval = ReadIO32(&pRegister->NFTCOS);
 	regval &= ~(0x0FUL<<(NFBank*4));
 	regval |= (tCOS<<(NFBank*4));
-	WriteIODW(&pRegister->NFTCOS, regval);
+	WriteIO32(&pRegister->NFTCOS, regval);
 
-	regval = ReadIODW(&pRegister->NFTOCH);
+	regval = ReadIO32(&pRegister->NFTOCH);
 	regval &= ~(0x0FUL<<(NFBank*4));
 	regval |= (tOCH<<(NFBank*4));
-	WriteIODW(&pRegister->NFTOCH, regval);
+	WriteIO32(&pRegister->NFTOCH, regval);
 
-	regval = ReadIODW(&pRegister->NFTACC);
+	regval = ReadIO32(&pRegister->NFTACC);
 	regval &= ~(0xFFUL<<(NFBank*8));
 	regval |= (tACC<<(NFBank*8));
-	WriteIODW(&pRegister->NFTACC, regval);
+	WriteIO32(&pRegister->NFTACC, regval);
 }
 void	NX_MCUS_GetNANDBUSConfig
 (
@@ -1067,25 +1067,25 @@ void	NX_MCUS_GetNANDBUSConfig
 	// 0 : 1 cycle, 1 : 2 cycle, 2 : 3 cycle, ......, 15 : 0 cycle
 	if( CNULL != ptACS )
 	{
-		*ptACS = (ReadIODW(&pRegister->NFTACS ) >> (NFBank*4)) & 0x0FUL;
+		*ptACS = (ReadIO32(&pRegister->NFTACS ) >> (NFBank*4)) & 0x0FUL;
 		*ptACS = (*ptACS + 1) & 0xF;
 	}
 
 	if( CNULL != ptCAH )
 	{
-		*ptCAH = (ReadIODW(&pRegister->NFTCAH ) >> (NFBank*4)) & 0x0FUL;
+		*ptCAH = (ReadIO32(&pRegister->NFTCAH ) >> (NFBank*4)) & 0x0FUL;
 		*ptCAH = (*ptCAH + 1) & 0xF;
 	}
 
 	if( CNULL != ptCOS )
 	{
-		*ptCOS = (ReadIODW(&pRegister->NFTCOS ) >> (NFBank*4)) & 0x0FUL;
+		*ptCOS = (ReadIO32(&pRegister->NFTCOS ) >> (NFBank*4)) & 0x0FUL;
 		*ptCOS = (*ptCOS + 1) & 0xF;
 	}
 
 	if( CNULL != ptOCH )
 	{
-		*ptOCH = (ReadIODW(&pRegister->NFTOCH ) >> (NFBank*4)) & 0x0FUL;
+		*ptOCH = (ReadIO32(&pRegister->NFTOCH ) >> (NFBank*4)) & 0x0FUL;
 		*ptOCH = (*ptOCH + 1) & 0xF;
 	}
 
@@ -1094,7 +1094,7 @@ void	NX_MCUS_GetNANDBUSConfig
 	// tACC	= n+1 cycle
 	if( CNULL != ptACC )
 	{
-		*ptACC = (ReadIODW(&pRegister->NFTACC ) >> (NFBank*8)) & 0xFFUL;
+		*ptACC = (ReadIO32(&pRegister->NFTACC ) >> (NFBank*8)) & 0xFFUL;
 		*ptACC += 1;
 	}
 }
@@ -1127,12 +1127,12 @@ void	NX_MCUS_SetNFType ( NX_MCUS_NFTYPE type )
 	NX_ASSERT( 4 > type );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~(IRQPEND | BIT_MASK);		// Unmask bits include IRQPEND.
 	regval |= (((U32)type) << BIT_POS);
 	regval  = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1156,7 +1156,7 @@ NX_MCUS_NFTYPE	NX_MCUS_GetNFType ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (NX_MCUS_NFTYPE)((ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
+	return (NX_MCUS_NFTYPE)((ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1182,14 +1182,14 @@ void	NX_MCUS_SetNFEXChannelEnable( CBOOL bEnb )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~IRQPEND;					// Unmask IRQPEND.
 	if( bEnb )	regval |=	BIT_MASK;
 	else		regval &= ~BIT_MASK;
 
 	regval = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1212,7 +1212,7 @@ CBOOL	NX_MCUS_GetNFEXChannelEnable ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1238,12 +1238,12 @@ void	NX_MCUS_SetNFBank( U32 Bank )
 	NX_ASSERT( 4 > Bank );
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~(IRQPEND | BIT_MASK);		// Unmask bits include IRQPEND.
 	regval |= (Bank << BIT_POS);
 	regval  = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1264,7 +1264,7 @@ U32		NX_MCUS_GetNFBank ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ((ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
+	return ((ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1296,14 +1296,14 @@ void	NX_MCUS_SetNFCSEnable( CBOOL bEnb )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~IRQPEND;					// Unmask IRQPEND.
 	if( bEnb )	regval |=	BIT_MASK;
 	else		regval &= ~BIT_MASK;
 
 	regval  = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1325,7 +1325,7 @@ CBOOL	NX_MCUS_GetNFCSEnable ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1351,7 +1351,7 @@ CBOOL	NX_MCUS_IsNFReady ( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1384,14 +1384,14 @@ void	NX_MCUS_SetAutoResetEnable( CBOOL bEnb )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~IRQPEND;					// Unmask IRQPEND.
 	if( bEnb )	regval |=	BIT_MASK;
 	else		regval &= ~BIT_MASK;
 
 	regval  = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1415,7 +1415,7 @@ CBOOL	NX_MCUS_GetAutoResetEnable( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) ? CTRUE : CFALSE;
 }
 
 //------------------------------------------------------------------------------
@@ -1439,12 +1439,12 @@ void	NX_MCUS_ResetNFECCBlock( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regvalue = ReadIODW(&__g_pRegister->NFCONTROL);
+	regvalue = ReadIO32(&__g_pRegister->NFCONTROL);
 	regvalue &= ~IRQPEND;
 	regvalue |= ECCRST;
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regvalue);
+	WriteIO32(&__g_pRegister->NFCONTROL, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -1471,12 +1471,12 @@ void	NX_MCUS_SetECCMode( NX_MCUS_ECCMODE EccMode )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFCONTROL);
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
 	regval &= ~(IRQPEND | BIT_MASK);		// Unmask bits include IRQPEND.
 	regval |= (EccMode << BIT_POS);
 	regval  = __NX_MCUS_NFCONTROL_RESET_BIT(regval);
 
-	WriteIODW(&__g_pRegister->NFCONTROL, regval);
+	WriteIO32(&__g_pRegister->NFCONTROL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1500,7 +1500,7 @@ U32		NX_MCUS_GetECCMode( void )
 	NX_ASSERT( CNULL != __g_pRegister );
 
 	// NFECCMODE[1:0] = 0(4), 1(8), 2(16)
-	return (4UL << ((ReadIODW(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS));
+	return (4UL << ((ReadIO32(&__g_pRegister->NFCONTROL) & BIT_MASK) >> BIT_POS));
 }
 
 //------------------------------------------------------------------------------
@@ -1523,7 +1523,7 @@ U32		NX_MCUS_GetNFWriteDataCount( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ((ReadIODW(&__g_pRegister->NFCNT) & BIT_MASK) >> BIT_POS);
+	return ((ReadIO32(&__g_pRegister->NFCNT) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1546,7 +1546,7 @@ U32		NX_MCUS_GetNFReadDataCount( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ((ReadIODW(&__g_pRegister->NFCNT) & BIT_MASK) >> BIT_POS);
+	return ((ReadIO32(&__g_pRegister->NFCNT) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1572,7 +1572,7 @@ CBOOL	NX_MCUS_IsNFError( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1598,7 +1598,7 @@ CBOOL	NX_MCUS_IsNFReadEnd( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 
 //------------------------------------------------------------------------------
@@ -1624,7 +1624,7 @@ CBOOL	NX_MCUS_IsNFWriteEnd( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 
 CBOOL	NX_MCUS_IsDecodeError( void )
@@ -1635,7 +1635,7 @@ CBOOL	NX_MCUS_IsDecodeError( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 CBOOL	NX_MCUS_IsNFECCBusy(void)
 {
@@ -1645,7 +1645,7 @@ CBOOL	NX_MCUS_IsNFECCBusy(void)
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (CBOOL)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (CBOOL)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 
 U32		NX_MCUS_GetNumOfError( void )
@@ -1656,7 +1656,7 @@ U32		NX_MCUS_GetNumOfError( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (U32)((ReadIODW(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
+	return (U32)((ReadIO32(&__g_pRegister->NFECCSTATUS) & BIT_MASK) >> BIT_POS);
 }
 
 void	NX_MCUS_LoadELP( void )
@@ -1670,11 +1670,11 @@ void	NX_MCUS_LoadELP( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval |= BIT_MASK;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 void NX_MCUS_SetNFDecMode( NX_MCUS_DECMODE dMode )
@@ -1688,12 +1688,12 @@ void NX_MCUS_SetNFDecMode( NX_MCUS_DECMODE dMode )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval &= ~BIT_MASK;
 	regval |= (U32)dMode<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 };
 
 NX_MCUS_DECMODE NX_MCUS_GetNFDecMode( void )
@@ -1704,7 +1704,7 @@ NX_MCUS_DECMODE NX_MCUS_GetNFDecMode( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (NX_MCUS_DECMODE)((ReadIODW(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS);
+	return (NX_MCUS_DECMODE)((ReadIO32(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS);
 }
 
 void	NX_MCUS_RunECCEncDec( void )
@@ -1718,11 +1718,11 @@ void	NX_MCUS_RunECCEncDec( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval |= BIT_MASK;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 //------------------------------------------------------------------------------
@@ -1749,8 +1749,8 @@ void	NX_MCUS_GetNFECC4( U32* pECC )
 
 	pReg = &__g_pRegister->NFECC[0];
 
-	pECC[0] = ReadIODW(&pReg[0]);
-	pECC[1] = ReadIODW(&pReg[1]) & BIT_MASK;
+	pECC[0] = ReadIO32(&pReg[0]);
+	pECC[1] = ReadIO32(&pReg[1]) & BIT_MASK;
 }
 
 //------------------------------------------------------------------------------
@@ -1779,10 +1779,10 @@ void	NX_MCUS_GetNFECC8( U32* pECC )
 
 	pReg = &__g_pRegister->NFECC[0];
 
-	pECC[0] = ReadIODW(&pReg[0]);
-	pECC[1] = ReadIODW(&pReg[1]);
-	pECC[2] = ReadIODW(&pReg[2]);
-	pECC[3] = ReadIODW(&pReg[3]) & BIT_MASK;
+	pECC[0] = ReadIO32(&pReg[0]);
+	pECC[1] = ReadIO32(&pReg[1]);
+	pECC[2] = ReadIO32(&pReg[2]);
+	pECC[3] = ReadIO32(&pReg[3]) & BIT_MASK;
 }
 
 void	NX_MCUS_GetNFECC12( U32* pECC )
@@ -1795,11 +1795,11 @@ void	NX_MCUS_GetNFECC12( U32* pECC )
 
 	pReg = &__g_pRegister->NFECC[0];
 
-	pECC[0] = ReadIODW(&pReg[0]);
-	pECC[1] = ReadIODW(&pReg[1]);
-	pECC[2] = ReadIODW(&pReg[2]);
-	pECC[3] = ReadIODW(&pReg[3]);
-	pECC[4] = ReadIODW(&pReg[4]) & BIT_MASK;
+	pECC[0] = ReadIO32(&pReg[0]);
+	pECC[1] = ReadIO32(&pReg[1]);
+	pECC[2] = ReadIO32(&pReg[2]);
+	pECC[3] = ReadIO32(&pReg[3]);
+	pECC[4] = ReadIO32(&pReg[4]) & BIT_MASK;
 }
 
 //------------------------------------------------------------------------------
@@ -1828,13 +1828,13 @@ void	NX_MCUS_GetNFECC16( U32* pECC )
 
 	pReg = &__g_pRegister->NFECC[0];
 
-	pECC[0] = ReadIODW(&pReg[0]);
-	pECC[1] = ReadIODW(&pReg[1]);
-	pECC[2] = ReadIODW(&pReg[2]);
-	pECC[3] = ReadIODW(&pReg[3]);
-	pECC[4] = ReadIODW(&pReg[4]);
-	pECC[5] = ReadIODW(&pReg[5]);
-	pECC[6] = ReadIODW(&pReg[6]) & BIT_MASK;
+	pECC[0] = ReadIO32(&pReg[0]);
+	pECC[1] = ReadIO32(&pReg[1]);
+	pECC[2] = ReadIO32(&pReg[2]);
+	pECC[3] = ReadIO32(&pReg[3]);
+	pECC[4] = ReadIO32(&pReg[4]);
+	pECC[5] = ReadIO32(&pReg[5]);
+	pECC[6] = ReadIO32(&pReg[6]) & BIT_MASK;
 }
 
 //------------------------------------------------------------------------------
@@ -1865,17 +1865,17 @@ void	NX_MCUS_GetNFECC24( U32* pECC )
 	pReg = &__g_pRegister->NFECC[0];
 	//pRegH = &__g_pRegister->NFECCH[0];
 
-	pECC[0] = ReadIODW(&pReg[0]);
-	pECC[1] = ReadIODW(&pReg[1]);
-	pECC[2] = ReadIODW(&pReg[2]);
-	pECC[3] = ReadIODW(&pReg[3]);
-	pECC[4] = ReadIODW(&pReg[4]);
-	pECC[5] = ReadIODW(&pReg[5]);
-	pECC[6] = ReadIODW(&pReg[6]);
-	pECC[7] = ReadIODW(&pReg[7]);
-	pECC[8] = ReadIODW(&pReg[8]);
-	pECC[9] = ReadIODW(&pReg[9]);
-	pECC[10]= ReadIODW(&pReg[10]) & BIT_MASK;
+	pECC[0] = ReadIO32(&pReg[0]);
+	pECC[1] = ReadIO32(&pReg[1]);
+	pECC[2] = ReadIO32(&pReg[2]);
+	pECC[3] = ReadIO32(&pReg[3]);
+	pECC[4] = ReadIO32(&pReg[4]);
+	pECC[5] = ReadIO32(&pReg[5]);
+	pECC[6] = ReadIO32(&pReg[6]);
+	pECC[7] = ReadIO32(&pReg[7]);
+	pECC[8] = ReadIO32(&pReg[8]);
+	pECC[9] = ReadIO32(&pReg[9]);
+	pECC[10]= ReadIO32(&pReg[10]) & BIT_MASK;
 }
 
 //------------------------------------------------------------------------------
@@ -1904,8 +1904,8 @@ void	NX_MCUS_SetNFOriginECC4( U32 *pECC )
 
 	pReg = &__g_pRegister->NFORGECC[0];
 
-	WriteIODW(&pReg[0], pECC[0]);
-	WriteIODW(&pReg[1], pECC[1]);
+	WriteIO32(&pReg[0], pECC[0]);
+	WriteIO32(&pReg[1], pECC[1]);
 }
 
 //------------------------------------------------------------------------------
@@ -1934,10 +1934,10 @@ void	NX_MCUS_SetNFOriginECC8( U32 *pECC )
 
 	pReg = &__g_pRegister->NFORGECC[0];
 
-	WriteIODW(&pReg[0], pECC[0]);
-	WriteIODW(&pReg[1], pECC[1]);
-	WriteIODW(&pReg[2], pECC[2]);
-	WriteIODW(&pReg[3], pECC[3]);
+	WriteIO32(&pReg[0], pECC[0]);
+	WriteIO32(&pReg[1], pECC[1]);
+	WriteIO32(&pReg[2], pECC[2]);
+	WriteIO32(&pReg[3], pECC[3]);
 }
 
 void	NX_MCUS_SetNFOriginECC12( U32 *pECC )
@@ -1950,11 +1950,11 @@ void	NX_MCUS_SetNFOriginECC12( U32 *pECC )
 
 	pReg = &__g_pRegister->NFORGECC[0];
 
-	WriteIODW(&pReg[0], pECC[0]);
-	WriteIODW(&pReg[1], pECC[1]);
-	WriteIODW(&pReg[2], pECC[2]);
-	WriteIODW(&pReg[3], pECC[3]);
-	WriteIODW(&pReg[4], pECC[4]);
+	WriteIO32(&pReg[0], pECC[0]);
+	WriteIO32(&pReg[1], pECC[1]);
+	WriteIO32(&pReg[2], pECC[2]);
+	WriteIO32(&pReg[3], pECC[3]);
+	WriteIO32(&pReg[4], pECC[4]);
 }
 
 //------------------------------------------------------------------------------
@@ -1983,13 +1983,13 @@ void	NX_MCUS_SetNFOriginECC16( U32 *pECC )
 
 	pReg = &__g_pRegister->NFORGECC[0];
 
-	WriteIODW(&pReg[0], pECC[0]);
-	WriteIODW(&pReg[1], pECC[1]);
-	WriteIODW(&pReg[2], pECC[2]);
-	WriteIODW(&pReg[3], pECC[3]);
-	WriteIODW(&pReg[4], pECC[4]);
-	WriteIODW(&pReg[5], pECC[5]);
-	WriteIODW(&pReg[6], pECC[6]);
+	WriteIO32(&pReg[0], pECC[0]);
+	WriteIO32(&pReg[1], pECC[1]);
+	WriteIO32(&pReg[2], pECC[2]);
+	WriteIO32(&pReg[3], pECC[3]);
+	WriteIO32(&pReg[4], pECC[4]);
+	WriteIO32(&pReg[5], pECC[5]);
+	WriteIO32(&pReg[6], pECC[6]);
 }
 
 //------------------------------------------------------------------------------
@@ -2020,17 +2020,17 @@ void	NX_MCUS_SetNFOriginECC24( U32 *pECC )
 	pReg = &__g_pRegister->NFORGECC[0];
 	//pRegH = &__g_pRegister->NFORGECCH[0];
 
-	WriteIODW(&pReg[0], pECC[0]);
-	WriteIODW(&pReg[1], pECC[1]);
-	WriteIODW(&pReg[2], pECC[2]);
-	WriteIODW(&pReg[3], pECC[3]);
-	WriteIODW(&pReg[4], pECC[4]);
-	WriteIODW(&pReg[5], pECC[5]);
-	WriteIODW(&pReg[6], pECC[6]);
-	WriteIODW(&pReg[7], pECC[7]);
-	WriteIODW(&pReg[8], pECC[8]);
-	WriteIODW(&pReg[9], pECC[9]);
-	WriteIODW(&pReg[10], pECC[10]);
+	WriteIO32(&pReg[0], pECC[0]);
+	WriteIO32(&pReg[1], pECC[1]);
+	WriteIO32(&pReg[2], pECC[2]);
+	WriteIO32(&pReg[3], pECC[3]);
+	WriteIO32(&pReg[4], pECC[4]);
+	WriteIO32(&pReg[5], pECC[5]);
+	WriteIO32(&pReg[6], pECC[6]);
+	WriteIO32(&pReg[7], pECC[7]);
+	WriteIO32(&pReg[8], pECC[8]);
+	WriteIO32(&pReg[9], pECC[9]);
+	WriteIO32(&pReg[10], pECC[10]);
 }
 
 void	NX_MCUS_SetNFOriginECC40( U32 *pECC )
@@ -2047,7 +2047,7 @@ void	NX_MCUS_SetNFOriginECC40( U32 *pECC )
 	//pRegH = &__g_pRegister->NFORGECCH[0];
 	for (i=0; i<18; i++)
 	{
-		WriteIODW(&pReg[i], pECC[i]);
+		WriteIO32(&pReg[i], pECC[i]);
 	}
 }
 
@@ -2064,7 +2064,7 @@ void	NX_MCUS_SetNFOriginECC60( U32 *pECC )
 	//pRegH = &__g_pRegister->NFORGECCH[0];
 	for (i=0; i<27; i++)
 	{
-		WriteIODW(&pReg[i], pECC[i]);
+		WriteIO32(&pReg[i], pECC[i]);
 	}
 }
 
@@ -2095,11 +2095,11 @@ void	NX_MCUS_GetNFECCOddSyndrome4( U32* pSyndrome )
 
 	pReg = &__g_pRegister->NFSYNDROME[0];
 
-	regval = ReadIODW(&pReg[0]);
+	regval = ReadIO32(&pReg[0]);
 	pSyndrome[0] = (regval				& BIT_MASK);	// Syndrome	1 - NFSYNDROME[0][13: 0]
 	pSyndrome[1] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	3 - NFSYNDROME[0][29:16]
 
-	regval = ReadIODW(&pReg[1]);
+	regval = ReadIO32(&pReg[1]);
 	pSyndrome[2] = (regval				& BIT_MASK);	// Syndrome	5 - NFSYNDROME[1][13: 0]
 	pSyndrome[3] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	7 - NFSYNDROME[1][29:16]
 }
@@ -2131,19 +2131,19 @@ void	NX_MCUS_GetNFECCOddSyndrome8( U32* pSyndrome )
 
 	pReg = &__g_pRegister->NFSYNDROME[0];
 
-	regval = ReadIODW(&pReg[0]);
+	regval = ReadIO32(&pReg[0]);
 	pSyndrome[0] = (regval				& BIT_MASK);	// Syndrome	1 - NFSYNDROME[0][13: 0]
 	pSyndrome[1] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	3 - NFSYNDROME[0][29:16]
 
-	regval = ReadIODW(&pReg[1]);
+	regval = ReadIO32(&pReg[1]);
 	pSyndrome[2] = (regval				& BIT_MASK);	// Syndrome	5 - NFSYNDROME[1][13: 0]
 	pSyndrome[3] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	7 - NFSYNDROME[1][29:16]
 
-	regval = ReadIODW(&pReg[2]);
+	regval = ReadIO32(&pReg[2]);
 	pSyndrome[4] = (regval				& BIT_MASK);	// Syndrome	9 - NFSYNDROME[2][13: 0]
 	pSyndrome[5] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 11 - NFSYNDROME[2][29:16]
 
-	regval = ReadIODW(&pReg[3]);
+	regval = ReadIO32(&pReg[3]);
 	pSyndrome[6] = (regval				& BIT_MASK);	// Syndrome 13 - NFSYNDROME[3][13: 0]
 	pSyndrome[7] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 15 - NFSYNDROME[3][29:16]
 }
@@ -2174,27 +2174,27 @@ void	NX_MCUS_GetNFECCOddSyndrome12( U32* pSyndrome )
 
 	pReg = &__g_pRegister->NFSYNDROME[0];
 
-	regval = ReadIODW(&pReg[0]);
+	regval = ReadIO32(&pReg[0]);
 	pSyndrome[0] = (regval				& BIT_MASK);	// Syndrome	1 - NFSYNDROME[0][13: 0]
 	pSyndrome[1] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	3 - NFSYNDROME[0][29:16]
 
-	regval = ReadIODW(&pReg[1]);
+	regval = ReadIO32(&pReg[1]);
 	pSyndrome[2] = (regval				& BIT_MASK);	// Syndrome	5 - NFSYNDROME[1][13: 0]
 	pSyndrome[3] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	7 - NFSYNDROME[1][29:16]
 
-	regval = ReadIODW(&pReg[2]);
+	regval = ReadIO32(&pReg[2]);
 	pSyndrome[4] = (regval				& BIT_MASK);	// Syndrome	9 - NFSYNDROME[2][13: 0]
 	pSyndrome[5] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 11 - NFSYNDROME[2][29:16]
 
-	regval = ReadIODW(&pReg[3]);
+	regval = ReadIO32(&pReg[3]);
 	pSyndrome[6] = (regval				& BIT_MASK);	// Syndrome 13 - NFSYNDROME[3][13: 0]
 	pSyndrome[7] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 15 - NFSYNDROME[3][29:16]
 
-	regval = ReadIODW(&pReg[4]);
+	regval = ReadIO32(&pReg[4]);
 	pSyndrome[8] = (regval				& BIT_MASK);	// Syndrome 17 - NFSYNDROME[4][13: 0]
 	pSyndrome[9] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 19 - NFSYNDROME[4][29:16]
 
-	regval = ReadIODW(&pReg[5]);
+	regval = ReadIO32(&pReg[5]);
 	pSyndrome[10] = (regval				& BIT_MASK);	// Syndrome 21 - NFSYNDROME[5][13: 0]
 	pSyndrome[11] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 23 - NFSYNDROME[5][29:16]
 }
@@ -2226,35 +2226,35 @@ void	NX_MCUS_GetNFECCOddSyndrome16( U32* pSyndrome )
 
 	pReg = &__g_pRegister->NFSYNDROME[0];
 
-	regval = ReadIODW(&pReg[0]);
+	regval = ReadIO32(&pReg[0]);
 	pSyndrome[0] = (regval				& BIT_MASK);	// Syndrome	1 - NFSYNDROME[0][13: 0]
 	pSyndrome[1] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	3 - NFSYNDROME[0][29:16]
 
-	regval = ReadIODW(&pReg[1]);
+	regval = ReadIO32(&pReg[1]);
 	pSyndrome[2] = (regval				& BIT_MASK);	// Syndrome	5 - NFSYNDROME[1][13: 0]
 	pSyndrome[3] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	7 - NFSYNDROME[1][29:16]
 
-	regval = ReadIODW(&pReg[2]);
+	regval = ReadIO32(&pReg[2]);
 	pSyndrome[4] = (regval				& BIT_MASK);	// Syndrome	9 - NFSYNDROME[2][13: 0]
 	pSyndrome[5] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 11 - NFSYNDROME[2][29:16]
 
-	regval = ReadIODW(&pReg[3]);
+	regval = ReadIO32(&pReg[3]);
 	pSyndrome[6] = (regval				& BIT_MASK);	// Syndrome 13 - NFSYNDROME[3][13: 0]
 	pSyndrome[7] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 15 - NFSYNDROME[3][29:16]
 
-	regval = ReadIODW(&pReg[4]);
+	regval = ReadIO32(&pReg[4]);
 	pSyndrome[8] = (regval				& BIT_MASK);	// Syndrome 17 - NFSYNDROME[4][13: 0]
 	pSyndrome[9] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 19 - NFSYNDROME[4][29:16]
 
-	regval = ReadIODW(&pReg[5]);
+	regval = ReadIO32(&pReg[5]);
 	pSyndrome[10] = (regval				& BIT_MASK);	// Syndrome 21 - NFSYNDROME[5][13: 0]
 	pSyndrome[11] = (regval >> BIT_POS) & BIT_MASK;		// Syndrome 23 - NFSYNDROME[5][29:16]
 
-	regval = ReadIODW(&pReg[6]);
+	regval = ReadIO32(&pReg[6]);
 	pSyndrome[12] = (regval				& BIT_MASK);	// Syndrome 25 - NFSYNDROME[6][13: 0]
 	pSyndrome[13] = (regval >> BIT_POS) & BIT_MASK;		// Syndrome 27 - NFSYNDROME[6][29:16]
 
-	regval = ReadIODW(&pReg[7]);
+	regval = ReadIO32(&pReg[7]);
 	pSyndrome[14] = (regval				& BIT_MASK);	// Syndrome 29 - NFSYNDROME[7][13: 0]
 	pSyndrome[15] = (regval >> BIT_POS) & BIT_MASK;		// Syndrome 31 - NFSYNDROME[7][29:16]
 }
@@ -2288,51 +2288,51 @@ void	NX_MCUS_GetNFECCOddSyndrome24( U32* pSyndrome )
 	pReg = &__g_pRegister->NFSYNDROME[0];
 	//pRegH = &__g_pRegister->NFSYNDROMEH[0];
 
-	regval = ReadIODW(&pReg[0]);
+	regval = ReadIO32(&pReg[0]);
 	pSyndrome[0] = (regval				& BIT_MASK);	// Syndrome	1 - NFSYNDROME[0][13: 0]
 	pSyndrome[1] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	3 - NFSYNDROME[0][29:16]
 
-	regval = ReadIODW(&pReg[1]);
+	regval = ReadIO32(&pReg[1]);
 	pSyndrome[2] = (regval				& BIT_MASK);	// Syndrome	5 - NFSYNDROME[1][13: 0]
 	pSyndrome[3] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome	7 - NFSYNDROME[1][29:16]
 
-	regval = ReadIODW(&pReg[2]);
+	regval = ReadIO32(&pReg[2]);
 	pSyndrome[4] = (regval				& BIT_MASK);	// Syndrome	9 - NFSYNDROME[2][13: 0]
 	pSyndrome[5] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 11 - NFSYNDROME[2][29:16]
 
-	regval = ReadIODW(&pReg[3]);
+	regval = ReadIO32(&pReg[3]);
 	pSyndrome[6] = (regval				& BIT_MASK);	// Syndrome 13 - NFSYNDROME[3][13: 0]
 	pSyndrome[7] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 15 - NFSYNDROME[3][29:16]
 
-	regval = ReadIODW(&pReg[4]);
+	regval = ReadIO32(&pReg[4]);
 	pSyndrome[8] = (regval				& BIT_MASK);	// Syndrome 17 - NFSYNDROME[4][13: 0]
 	pSyndrome[9] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 19 - NFSYNDROME[4][29:16]
 
-	regval = ReadIODW(&pReg[5]);
+	regval = ReadIO32(&pReg[5]);
 	pSyndrome[10] = (regval				& BIT_MASK);	// Syndrome 21 - NFSYNDROME[5][13: 0]
 	pSyndrome[11] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 23 - NFSYNDROME[5][29:16]
 
-	regval = ReadIODW(&pReg[6]);
+	regval = ReadIO32(&pReg[6]);
 	pSyndrome[12] = (regval				& BIT_MASK);	// Syndrome 25 - NFSYNDROME[6][13: 0]
 	pSyndrome[13] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 27 - NFSYNDROME[6][29:16]
 
-	regval = ReadIODW(&pReg[7]);
+	regval = ReadIO32(&pReg[7]);
 	pSyndrome[14] = (regval				& BIT_MASK);	// Syndrome 29 - NFSYNDROME[7][13: 0]
 	pSyndrome[15] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 31 - NFSYNDROME[7][29:16]
 
-	regval = ReadIODW(&pReg[8]);
+	regval = ReadIO32(&pReg[8]);
 	pSyndrome[16] = (regval				& BIT_MASK);	// Syndrome 33 - NFSYNDROMEH[0][13: 0]
 	pSyndrome[17] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 35 - NFSYNDROMEH[4][29:16]
 
-	regval = ReadIODW(&pReg[9]);
+	regval = ReadIO32(&pReg[9]);
 	pSyndrome[18] = (regval				& BIT_MASK);	// Syndrome 37 - NFSYNDROMEH[5][13: 0]
 	pSyndrome[19] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 39 - NFSYNDROMEH[5][29:16]
 
-	regval = ReadIODW(&pReg[10]);
+	regval = ReadIO32(&pReg[10]);
 	pSyndrome[20] = (regval				& BIT_MASK);	// Syndrome 41 - NFSYNDROMEH[6][13: 0]
 	pSyndrome[21] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 43 - NFSYNDROMEH[6][29:16]
 
-	regval = ReadIODW(&pReg[11]);
+	regval = ReadIO32(&pReg[11]);
 	pSyndrome[22] = (regval				& BIT_MASK);	// Syndrome 45 - NFSYNDROMEH[7][13: 0]
 	pSyndrome[23] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 47 - NFSYNDROMEH[7][29:16]
 }
@@ -2346,14 +2346,14 @@ void NX_MCUS_SetNumOfELP(U32 ELPNum)
 	U32 DecMode;
 
 	NX_ASSERT( CNULL != __g_pRegister );
-	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum || 24 == ELPNum );
+	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum || 24 == ELPNum || 40 == ELPNum  );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval &= ~BIT_MASK;
 	regval |= (ELPNum << BIT_POS) & BIT_MASK;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 U32 NX_MCUS_GetNumOfELP( void )
@@ -2364,7 +2364,7 @@ U32 NX_MCUS_GetNumOfELP( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ( ReadIODW(&__g_pRegister->NFECCCTRL) & BIT_MASK ) >> BIT_POS;
+	return ( ReadIO32(&__g_pRegister->NFECCCTRL) & BIT_MASK ) >> BIT_POS;
 }
 
 void	NX_MCUS_SetParityCount( U32 ParityByte )
@@ -2378,12 +2378,12 @@ void	NX_MCUS_SetParityCount( U32 ParityByte )
 	NX_ASSERT( CNULL != __g_pRegister );
 	//NX_ASSERT( 6 == ParityByte || 12 == ParityByte || 19 == ParityByte || 25 == ParityByte || 41 == ParityByte );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval &= ~BIT_MASK;
 	regval |= (ParityByte << BIT_POS) & BIT_MASK;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 U32		NX_MCUS_GetParityCount( void )
@@ -2394,7 +2394,7 @@ U32		NX_MCUS_GetParityCount( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return (ReadIODW(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS;
+	return (ReadIO32(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS;
 }
 
 void	NX_MCUS_SetNANDRWDataNum( U32 DataNum )
@@ -2408,12 +2408,12 @@ void	NX_MCUS_SetNANDRWDataNum( U32 DataNum )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( 512 == DataNum || 1024 == DataNum );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL);
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
 	regval = (regval&0xaffffff)|DecMode;
 	regval &= ~BIT_MASK;
 	regval |= ((DataNum-1) << BIT_POS) & BIT_MASK;
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 U32		NX_MCUS_GetNANDRWDataNum( void )
@@ -2424,7 +2424,7 @@ U32		NX_MCUS_GetNANDRWDataNum( void )
 
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	return ((ReadIODW(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS)+1;
+	return ((ReadIO32(&__g_pRegister->NFECCCTRL) & BIT_MASK) >> BIT_POS)+1;
 }
 
 void	NX_MCUS_SetNANDECCAutoMode(CBOOL UseCPUELP, CBOOL UseCPUSYNDROM)
@@ -2440,7 +2440,7 @@ void	NX_MCUS_SetNANDECCAutoMode(CBOOL UseCPUELP, CBOOL UseCPUSYNDROM)
 
 	regval = ((UseCPUELP << ELPBIT_POS)|(UseCPUSYNDROM<<SYNBIT_POS));
 
-	WriteIODW(&__g_pRegister->NFECCAUTOMODE, regval);
+	WriteIO32(&__g_pRegister->NFECCAUTOMODE, regval);
 }
 
 void	NX_MCUS_SetELP4( U16 *pELP )
@@ -2455,10 +2455,10 @@ void	NX_MCUS_SetELP4( U16 *pELP )
 
 	regval =  (U32)(pELP[0] & BIT_MASK)
 			| (U32)(pELP[1] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[0], regval);
+	WriteIO32(&__g_pRegister->NFELP[0], regval);
 	regval =  (U32)(pELP[2] & BIT_MASK)
 			| (U32)(pELP[3] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[1], regval);
+	WriteIO32(&__g_pRegister->NFELP[1], regval);
 }
 void	NX_MCUS_SetELP8( U16 *pELP )
 {
@@ -2472,16 +2472,16 @@ void	NX_MCUS_SetELP8( U16 *pELP )
 
 	regval =  (U32)(pELP[0] & BIT_MASK)
 			| (U32)(pELP[1] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[0], regval);
+	WriteIO32(&__g_pRegister->NFELP[0], regval);
 	regval =  (U32)(pELP[2] & BIT_MASK)
 			| (U32)(pELP[3] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[1], regval);
+	WriteIO32(&__g_pRegister->NFELP[1], regval);
 	regval =  (U32)(pELP[4] & BIT_MASK)
 			| (U32)(pELP[5] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[2], regval);
+	WriteIO32(&__g_pRegister->NFELP[2], regval);
 	regval =  (U32)(pELP[6] & BIT_MASK)
 			| (U32)(pELP[7] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[3], regval);
+	WriteIO32(&__g_pRegister->NFELP[3], regval);
 }
 void	NX_MCUS_SetELP12( U16 *pELP )
 {
@@ -2495,22 +2495,22 @@ void	NX_MCUS_SetELP12( U16 *pELP )
 
 	regval =  (U32)(pELP[0] & BIT_MASK)
 			| (U32)(pELP[1] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[0], regval);
+	WriteIO32(&__g_pRegister->NFELP[0], regval);
 	regval =  (U32)(pELP[2] & BIT_MASK)
 			| (U32)(pELP[3] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[1], regval);
+	WriteIO32(&__g_pRegister->NFELP[1], regval);
 	regval =  (U32)(pELP[4] & BIT_MASK)
 			| (U32)(pELP[5] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[2], regval);
+	WriteIO32(&__g_pRegister->NFELP[2], regval);
 	regval =  (U32)(pELP[6] & BIT_MASK)
 			| (U32)(pELP[7] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[3], regval);
+	WriteIO32(&__g_pRegister->NFELP[3], regval);
 	regval =  (U32)(pELP[8] & BIT_MASK)
 			| (U32)(pELP[9] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[4], regval);
+	WriteIO32(&__g_pRegister->NFELP[4], regval);
 	regval =  (U32)(pELP[10] & BIT_MASK)
 			| (U32)(pELP[11] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[5], regval);
+	WriteIO32(&__g_pRegister->NFELP[5], regval);
 }
 
 void	NX_MCUS_SetELP16( U16 *pELP )
@@ -2525,28 +2525,28 @@ void	NX_MCUS_SetELP16( U16 *pELP )
 
 	regval =  (U32)(pELP[0] & BIT_MASK)
 			| (U32)(pELP[1] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[0], regval);
+	WriteIO32(&__g_pRegister->NFELP[0], regval);
 	regval =  (U32)(pELP[2] & BIT_MASK)
 			| (U32)(pELP[3] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[1], regval);
+	WriteIO32(&__g_pRegister->NFELP[1], regval);
 	regval =  (U32)(pELP[4] & BIT_MASK)
 			| (U32)(pELP[5] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[2], regval);
+	WriteIO32(&__g_pRegister->NFELP[2], regval);
 	regval =  (U32)(pELP[6] & BIT_MASK)
 			| (U32)(pELP[7] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[3], regval);
+	WriteIO32(&__g_pRegister->NFELP[3], regval);
 	regval =  (U32)(pELP[8] & BIT_MASK)
 			| (U32)(pELP[9] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[4], regval);
+	WriteIO32(&__g_pRegister->NFELP[4], regval);
 	regval =  (U32)(pELP[10] & BIT_MASK)
 			| (U32)(pELP[11] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[5], regval);
+	WriteIO32(&__g_pRegister->NFELP[5], regval);
 	regval =  (U32)(pELP[12] & BIT_MASK)
 			| (U32)(pELP[13] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[6], regval);
+	WriteIO32(&__g_pRegister->NFELP[6], regval);
 	regval =  (U32)(pELP[14] & BIT_MASK)
 			| (U32)(pELP[15] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[7], regval);
+	WriteIO32(&__g_pRegister->NFELP[7], regval);
 }
 void	NX_MCUS_SetELP24( U16 *pELP )
 {
@@ -2560,40 +2560,40 @@ void	NX_MCUS_SetELP24( U16 *pELP )
 
 	regval =  (U32)(pELP[0] & BIT_MASK)
 			| (U32)(pELP[1] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[0], regval);
+	WriteIO32(&__g_pRegister->NFELP[0], regval);
 	regval =  (U32)(pELP[2] & BIT_MASK)
 			| (U32)(pELP[3] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[1], regval);
+	WriteIO32(&__g_pRegister->NFELP[1], regval);
 	regval =  (U32)(pELP[4] & BIT_MASK)
 			| (U32)(pELP[5] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[2], regval);
+	WriteIO32(&__g_pRegister->NFELP[2], regval);
 	regval =  (U32)(pELP[6] & BIT_MASK)
 			| (U32)(pELP[7] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[3], regval);
+	WriteIO32(&__g_pRegister->NFELP[3], regval);
 	regval =  (U32)(pELP[8] & BIT_MASK)
 			| (U32)(pELP[9] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[4], regval);
+	WriteIO32(&__g_pRegister->NFELP[4], regval);
 	regval =  (U32)(pELP[10] & BIT_MASK)
 			| (U32)(pELP[11] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[5], regval);
+	WriteIO32(&__g_pRegister->NFELP[5], regval);
 	regval =  (U32)(pELP[12] & BIT_MASK)
 			| (U32)(pELP[13] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[6], regval);
+	WriteIO32(&__g_pRegister->NFELP[6], regval);
 	regval =  (U32)(pELP[14] & BIT_MASK)
 			| (U32)(pELP[15] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[7], regval);
+	WriteIO32(&__g_pRegister->NFELP[7], regval);
 	regval =  (U32)(pELP[16] & BIT_MASK)
 			| (U32)(pELP[17] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[8], regval);
+	WriteIO32(&__g_pRegister->NFELP[8], regval);
 	regval =  (U32)(pELP[18] & BIT_MASK)
 			| (U32)(pELP[19] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[9], regval);
+	WriteIO32(&__g_pRegister->NFELP[9], regval);
 	regval =  (U32)(pELP[20] & BIT_MASK)
 			| (U32)(pELP[21] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[10], regval);
+	WriteIO32(&__g_pRegister->NFELP[10], regval);
 	regval =  (U32)(pELP[22] & BIT_MASK)
 			| (U32)(pELP[23] & BIT_MASK)<<BIT_POS;
-	WriteIODW(&__g_pRegister->NFELP[11], regval);
+	WriteIO32(&__g_pRegister->NFELP[11], regval);
 }
 void	NX_MCUS_GetErrLoc4( U16 *pELoc )
 {
@@ -2605,10 +2605,10 @@ void	NX_MCUS_GetErrLoc4( U16 *pELoc )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( CNULL != pELoc );
 
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[0]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[0]);
 	pELoc[0] = (U16)(regval & BIT_MASK);
 	pELoc[1] = (U16)((regval >> BIT_POS) & BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[1]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[1]);
 	pELoc[2] = (U16)(regval & BIT_MASK);
 	pELoc[3] = (U16)((regval >> BIT_POS) & BIT_MASK);
 }
@@ -2622,16 +2622,16 @@ void	NX_MCUS_GetErrLoc8( U16 *pELoc )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( CNULL != pELoc );
 
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[0]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[0]);
 	pELoc[0] = (U16)(regval					& BIT_MASK);
 	pELoc[1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[1]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[1]);
 	pELoc[2] = (U16)(regval					& BIT_MASK);
 	pELoc[3] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[2]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[2]);
 	pELoc[4] = (U16)(regval					& BIT_MASK);
 	pELoc[5] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[3]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[3]);
 	pELoc[6] = (U16)(regval					& BIT_MASK);
 	pELoc[7] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 }
@@ -2645,22 +2645,22 @@ void	NX_MCUS_GetErrLoc12( U16 *pELoc )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( CNULL != pELoc );
 
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[0]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[0]);
 	pELoc[0] = (U16)(regval					& BIT_MASK);
 	pELoc[1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[1]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[1]);
 	pELoc[2] = (U16)(regval					& BIT_MASK);
 	pELoc[3] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[2]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[2]);
 	pELoc[4] = (U16)(regval					& BIT_MASK);
 	pELoc[5] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[3]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[3]);
 	pELoc[6] = (U16)(regval					& BIT_MASK);
 	pELoc[7] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[4]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[4]);
 	pELoc[8] = (U16)(regval					& BIT_MASK);
 	pELoc[9] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[5]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[5]);
 	pELoc[10] = (U16)(regval				& BIT_MASK);
 	pELoc[11] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 }
@@ -2674,28 +2674,28 @@ void	NX_MCUS_GetErrLoc16( U16 *pELoc )
 	NX_ASSERT( CNULL != __g_pRegister );
 	NX_ASSERT( CNULL != pELoc );
 
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[0]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[0]);
 	pELoc[0] = (U16)(regval					& BIT_MASK);
 	pELoc[1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[1]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[1]);
 	pELoc[2] = (U16)(regval					& BIT_MASK);
 	pELoc[3] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[2]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[2]);
 	pELoc[4] = (U16)(regval					& BIT_MASK);
 	pELoc[5] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[3]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[3]);
 	pELoc[6] = (U16)(regval					& BIT_MASK);
 	pELoc[7] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[4]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[4]);
 	pELoc[8] = (U16)(regval					& BIT_MASK);
 	pELoc[9] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[5]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[5]);
 	pELoc[10] = (U16)(regval				& BIT_MASK);
 	pELoc[11] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[6]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[6]);
 	pELoc[12] = (U16)(regval				& BIT_MASK);
 	pELoc[13] = (U16)((regval >> BIT_POS)	& BIT_MASK);
-	regval = ReadIODW(&__g_pRegister->NFERRLOCATION[7]);
+	regval = ReadIO32(&__g_pRegister->NFERRLOCATION[7]);
 	pELoc[14] = (U16)(regval				& BIT_MASK);
 	pELoc[15] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 }
@@ -2712,7 +2712,7 @@ void	NX_MCUS_GetErrLoc24( U16 *pELoc )
 	NX_ASSERT( CNULL != pELoc );
 	for (i=0; i<24; i=i+2 )
 	{
-		regval = ReadIODW(&__g_pRegister->NFERRLOCATION[i/2]);
+		regval = ReadIO32(&__g_pRegister->NFERRLOCATION[i/2]);
 		pELoc[i] = (U16)(regval					& BIT_MASK);
 		pELoc[i+1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 	}
@@ -2730,7 +2730,7 @@ void	NX_MCUS_GetErrLoc40( U16 *pELoc )
 	NX_ASSERT( CNULL != pELoc );
 	for (i=0; i<40; i=i+2 )
 	{
-		regval = ReadIODW(&__g_pRegister->NFERRLOCATION[i/2]);
+		regval = ReadIO32(&__g_pRegister->NFERRLOCATION[i/2]);
 		pELoc[i] = (U16)(regval					& BIT_MASK);
 		pELoc[i+1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 	}
@@ -2748,7 +2748,7 @@ void	NX_MCUS_GetErrLoc60( U16 *pELoc )
 	NX_ASSERT( CNULL != pELoc );
 	for (i=0; i<60; i=i+2 )
 	{
-		regval = ReadIODW(&__g_pRegister->NFERRLOCATION[i/2]);
+		regval = ReadIO32(&__g_pRegister->NFERRLOCATION[i/2]);
 		pELoc[i] = (U16)(regval					& BIT_MASK);
 		pELoc[i+1] = (U16)((regval >> BIT_POS)	& BIT_MASK);
 	}
@@ -2787,17 +2787,17 @@ U32  	NX_MCUS_ReadNANDData		( void )
 //)
 //{
 //	NX_ASSERT( CNULL != __g_pRegister );
-//	ECC0 = (U32)ReadIODW(&__g_pRegister->NFECC[0]);
-//	ECC1 = (U32)ReadIODW(&__g_pRegister->NFECC[1]);
-//	ECC2 = (U32)ReadIODW(&__g_pRegister->NFECC[2]);
-//	ECC3 = (U32)ReadIODW(&__g_pRegister->NFECC[3]);
-//	ECC4 = (U32)ReadIODW(&__g_pRegister->NFECC[4]);
-//	ECC5 = (U32)ReadIODW(&__g_pRegister->NFECC[5]);
-//	ECC6 = (U32)ReadIODW(&__g_pRegister->NFECC[6]);
-//	ECC7 = (U32)ReadIODW(&__g_pRegister->NFECC[7]);
-//	ECC8 = (U32)ReadIODW(&__g_pRegister->NFECC[8]);
-//	ECC9 = (U32)ReadIODW(&__g_pRegister->NFECC[9]);
-//	ECC10 = (U32)ReadIODW(&__g_pRegister->NFECC[10]);
+//	ECC0 = (U32)ReadIO32(&__g_pRegister->NFECC[0]);
+//	ECC1 = (U32)ReadIO32(&__g_pRegister->NFECC[1]);
+//	ECC2 = (U32)ReadIO32(&__g_pRegister->NFECC[2]);
+//	ECC3 = (U32)ReadIO32(&__g_pRegister->NFECC[3]);
+//	ECC4 = (U32)ReadIO32(&__g_pRegister->NFECC[4]);
+//	ECC5 = (U32)ReadIO32(&__g_pRegister->NFECC[5]);
+//	ECC6 = (U32)ReadIO32(&__g_pRegister->NFECC[6]);
+//	ECC7 = (U32)ReadIO32(&__g_pRegister->NFECC[7]);
+//	ECC8 = (U32)ReadIO32(&__g_pRegister->NFECC[8]);
+//	ECC9 = (U32)ReadIO32(&__g_pRegister->NFECC[9]);
+//	ECC10 = (U32)ReadIO32(&__g_pRegister->NFECC[10]);
 //}
 
 void NX_MCUS_SetNANDECCCONFIG(CBOOL DECMODE, U32 DATASIZE, U32 PARITYSIZE, U32 ELPNUMBER)
@@ -2805,10 +2805,10 @@ void NX_MCUS_SetNANDECCCONFIG(CBOOL DECMODE, U32 DATASIZE, U32 PARITYSIZE, U32 E
 	U32 regval;
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	regval = ReadIODW(&__g_pRegister->NFECCCTRL)& ~0x011fffff;
+	regval = ReadIO32(&__g_pRegister->NFECCCTRL)& ~0x011fffff;
 	regval = (regval | (DECMODE<<24) | DATASIZE | (PARITYSIZE<<10) | (ELPNUMBER<<16));
 
-	WriteIODW(&__g_pRegister->NFECCCTRL, regval);
+	WriteIO32(&__g_pRegister->NFECCCTRL, regval);
 }
 
 U32 NX_MCUS_GetErrorPos( U32 number )
@@ -2816,7 +2816,7 @@ U32 NX_MCUS_GetErrorPos( U32 number )
 	U32 Reg;
 	NX_ASSERT( CNULL != __g_pRegister );
 
-	Reg = ReadIODW(&__g_pRegister->NFERRLOCATION[number/2]);
+	Reg = ReadIO32(&__g_pRegister->NFERRLOCATION[number/2]);
 
 	if (number&0x1) Reg = Reg >> 14;
 

@@ -209,9 +209,9 @@ U32		NX_GPIO_GetSlew32	( U32 ModuleIndex );
 void	NX_GPIO_SetDriveStrength(U32 ModuleIndex, U32 BitNumber, NX_GPIO_DRVSTRENGTH drvstrength);
 NX_GPIO_DRVSTRENGTH		NX_GPIO_GetDriveStrength(U32 ModuleIndex, U32 BitNumber);
 void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL PullSel );
-NX_GPIO_PULL NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
+NX_GPIO_PULL	NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
 void	NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 PullEnb, U32 PullSel );
-U32		NX_GPIO_GetPullEnable32	( U32 ModuleIndex, U32* PullEnb, U32* PullSel );
+void	NX_GPIO_GetPullEnable32	( U32 ModuleIndex, U32* PullEnb, U32* PullSel );
 
 
 U32				NX_GPIO_GetValidBit( U32 ModuleIndex );

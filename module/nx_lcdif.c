@@ -261,7 +261,7 @@ void NX_LCDINTERFACE_Set_DISPCNTL0		( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 U32 NX_LCDINTERFACE_Get_DISPCNTL0		( U32 ModuleIndex)
@@ -276,7 +276,7 @@ U32 NX_LCDINTERFACE_Get_DISPCNTL0		( U32 ModuleIndex)
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0);
 
 	return regvalue;
 }
@@ -294,7 +294,7 @@ void NX_LCDINTERFACE_Set_DISPCNTL1      ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPCNTL1, regvalue);
+	WriteIO32(&pRegister->DISPCNTL1, regvalue);
 }
 
 
@@ -309,7 +309,7 @@ void NX_LCDINTERFACE_Set_DISPDELYCNT0   ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPDELYCNT0, regvalue);
+	WriteIO32(&pRegister->DISPDELYCNT0, regvalue);
 }
 
 
@@ -324,7 +324,7 @@ void NX_LCDINTERFACE_Set_DISPPADLOC0    ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+	WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 }
 
 
@@ -339,7 +339,7 @@ void NX_LCDINTERFACE_Set_DISPPADLOC1    ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+	WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 }
 
 
@@ -354,7 +354,7 @@ void NX_LCDINTERFACE_Set_DISPPADLOC2    ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+	WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 }
 
 
@@ -369,7 +369,7 @@ void NX_LCDINTERFACE_Set_DISPPADLOC3    ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+	WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 }
 
 
@@ -384,7 +384,7 @@ void NX_LCDINTERFACE_Set_DISPRGBMASK    ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+	WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 }
 
 
@@ -399,7 +399,7 @@ void NX_LCDINTERFACE_Set_I80DATARW      ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80DATARW, regvalue);
+	WriteIO32(&pRegister->I80DATARW, regvalue);
 }
 
 
@@ -414,7 +414,7 @@ void NX_LCDINTERFACE_Set_I80REGRW       ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80REGRW, regvalue);
+	WriteIO32(&pRegister->I80REGRW, regvalue);
 }
 
 
@@ -429,7 +429,7 @@ void NX_LCDINTERFACE_Set_I80TIMING      ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80TIMING, regvalue);
+	WriteIO32(&pRegister->I80TIMING, regvalue);
 }
 
 
@@ -444,7 +444,7 @@ void NX_LCDINTERFACE_Set_I80POLCTRL     ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80POLCTRL, regvalue);
+	WriteIO32(&pRegister->I80POLCTRL, regvalue);
 }
 
 
@@ -459,7 +459,7 @@ void NX_LCDINTERFACE_Set_DISPCMDBUFCTRL0( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPCMDBUFCTRL0, regvalue);
+	WriteIO32(&pRegister->DISPCMDBUFCTRL0, regvalue);
 }
 
 
@@ -474,7 +474,7 @@ void NX_LCDINTERFACE_Set_DISPCMDBUFDATA ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPCMDBUFDATA, regvalue);
+	WriteIO32(&pRegister->DISPCMDBUFDATA, regvalue);
 }
 
 
@@ -489,7 +489,7 @@ void NX_LCDINTERFACE_Set_DISPSOURCESEL  ( U32 ModuleIndex, U32 regvalue )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->DISPSOURCESEL, regvalue);
+	WriteIO32(&pRegister->DISPSOURCESEL, regvalue);
 }
 
 
@@ -505,7 +505,7 @@ void	NX_LCDINTERFACE_Write_i80DATA( U32 ModuleIndex, U32 Data ) // RS==0
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80DATARW, Data);
+	WriteIO32(&pRegister->I80DATARW, Data);
 }
 
 U32		NX_LCDINTERFACE_Read_i80DATA( U32 ModuleIndex ) // RS==0
@@ -519,7 +519,7 @@ U32		NX_LCDINTERFACE_Read_i80DATA( U32 ModuleIndex ) // RS==0
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	return ReadIODW(&pRegister->I80DATARW);
+	return ReadIO32(&pRegister->I80DATARW);
 }
 
 void	NX_LCDINTERFACE_Write_i80Reg( U32 ModuleIndex, U32 Data ) // RS==1
@@ -533,7 +533,7 @@ void	NX_LCDINTERFACE_Write_i80Reg( U32 ModuleIndex, U32 Data ) // RS==1
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIODW(&pRegister->I80REGRW, Data);
+	WriteIO32(&pRegister->I80REGRW, Data);
 }
 
 U32		NX_LCDINTERFACE_Read_i80Reg( U32 ModuleIndex ) // RS==1
@@ -547,7 +547,7 @@ U32		NX_LCDINTERFACE_Read_i80Reg( U32 ModuleIndex ) // RS==1
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	return ReadIODW(&pRegister->I80REGRW);
+	return ReadIO32(&pRegister->I80REGRW);
 }
 
 
@@ -569,10 +569,10 @@ void	NX_LCDINTERFACE_SetLCDIFEnable( U32 ModuleIndex, CBOOL bEnb )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0);
 	regvalue = regvalue | (bEnb << 15);
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 CBOOL	NX_LCDINTERFACE_GetLCDIFEnable( U32 ModuleIndex )
@@ -587,7 +587,7 @@ CBOOL	NX_LCDINTERFACE_GetLCDIFEnable( U32 ModuleIndex )
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0);
 
 	if( (regvalue >> 15) & 0x01 )
 	{
@@ -651,7 +651,7 @@ void	NX_LCDINTERFACE_SetDelay( U32 ModuleIndex, U32 DelayHS, U32 DelayVS, U32 De
 
 	regvalue = (DelayDE << DELYDE_POS) | (DelayVS << DELYVSYNC_POS) | (DelayHS << DELYHSYNC_POS);
 
-	WriteIODW(&pRegister->DISPDELYCNT0, regvalue);
+	WriteIO32(&pRegister->DISPDELYCNT0, regvalue);
 }
 
 
@@ -671,7 +671,7 @@ void	NX_LCDINTERFACE_GetDelay( U32 ModuleIndex, U32 *DelayHS, U32 *DelayVS, U32 
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPDELYCNT0);
+	regvalue = ReadIO32(&pRegister->DISPDELYCNT0);
 
 	*DelayDE = (regvalue>>DELYDE_POS)    & 0x3f;
 	*DelayVS = (regvalue>>DELYVSYNC_POS) & 0x3f;
@@ -699,10 +699,10 @@ void	NX_LCDINTERFACE_SetDither( U32 ModuleIndex, NX_LCDINTERFACE_DITHER DitherR,
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1) & (~0x3f);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1) & (~0x3f);
 	regvalue |= (DitherB << BDITH_POS) | (DitherG << GDITH_POS) | (DitherR << RDITH_POS);
 
-	WriteIODW(&pRegister->DISPCNTL1, regvalue);
+	WriteIO32(&pRegister->DISPCNTL1, regvalue);
 }
 
 
@@ -722,7 +722,7 @@ void	NX_LCDINTERFACE_GetDither( U32 ModuleIndex, NX_LCDINTERFACE_DITHER *pDither
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1) & (~0x3f);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1) & (~0x3f);
 
 	*pDitherR =  (regvalue >> RDITH_POS) & 0x03;
 	*pDitherG =  (regvalue >> GDITH_POS) & 0x03;
@@ -767,23 +767,23 @@ Mask	| 1| 1| 1| 1| 1| 1| 1| 1| 1| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (11 << 25) | (7 << 20) | (6 << 15) | (5 << 10) | (4 << 5) | (3 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (20 << 25) | (19 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (2 << 25) | (1 << 20) | (0 << 15) | (23 << 10) | (22 << 5) | (21 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (18 << 25) | (17 << 20) | (16 << 15) | (10 << 10) | (9 << 5) | (8 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	(0<< 23 ) | (0<< 22 ) | (0<< 21 ) | (0<< 20 ) | (0<< 19 ) | (0<< 18 ) |
 					(0<< 17 ) | (0<< 16 ) | (0<< 15 ) | (1<< 14 ) | (1<< 13 ) | (1<< 12 ) |
 					(1<< 11 ) | (1<< 10 ) | (1<<  9 ) | (1<<  8 ) | (1<<  7 ) | (1<<  6 ) |
 					(1<<  5 ) | (1<<  4 ) | (1<<  3 ) | (1<<  2 ) | (1<< 1) | (1<< 0) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 		NX_LCDINTERFACE_SetDither(ModuleIndex, NX_LCDINTERFACE_DITHER_5BIT, NX_LCDINTERFACE_DITHER_5BIT, NX_LCDINTERFACE_DITHER_5BIT);
 	}
 	else if( format == NX_LCDINTERFACE_FORMAT_RGB565)
@@ -800,23 +800,23 @@ Mask	| 0| 0| 0| 0| 0| 1| 1| 1| 0| 0| 0| 0| 0| 0| 1| 1| 0| 0| 0| 0| 0| 1| 1| 1|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (5 << 25) | (4 << 20) | (3 << 15) | (2 << 10) | (1 << 5) | (0 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (11 << 25) | (10 << 20) | (9 << 15) | (8 << 10) | (7 << 5) | (6 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (17 << 25) | (16 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (23 << 25) | (22 << 20) | (21 << 15) | (20 << 10) | (19 << 5) | (18 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 1<< 23 ) | ( 1<< 22 ) | ( 1<< 21 ) | ( 1<< 20 ) | ( 1<< 19 ) | ( 0<< 18 ) |
 					( 0<< 17 ) | ( 0<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 0<<  9 ) | ( 0<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 0<<  2 ) | ( 0<<  1 ) | ( 0<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 		NX_LCDINTERFACE_SetDither(ModuleIndex, NX_LCDINTERFACE_DITHER_5BIT, NX_LCDINTERFACE_DITHER_6BIT, NX_LCDINTERFACE_DITHER_5BIT);
 	}
 	else if ( format ==NX_LCDINTERFACE_FORMAT_RGB666	)
@@ -833,23 +833,23 @@ Mask	| 0| 0| 0| 0| 0| 1| 1| 1| 0| 0| 0| 0| 0| 0| 1| 1| 0| 0| 0| 0| 0| 1| 1| 1|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (5 << 25) | (4 << 20) | (3 << 15) | (2 << 10) | (1 << 5) | (0 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (11 << 25) | (10 << 20) | (9 << 15) | (8 << 10) | (7 << 5) | (6 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (17 << 25) | (16 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (23 << 25) | (22 << 20) | (21 << 15) | (20 << 10) | (19 << 5) | (18 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 1<< 23 ) | ( 1<< 22 ) | ( 1<< 21 ) | ( 1<< 20 ) | ( 1<< 19 ) | ( 1<< 18 ) |
 					( 0<< 17 ) | ( 0<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 0<<  9 ) | ( 0<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 0<<  1 ) | ( 0<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 		NX_LCDINTERFACE_SetDither(ModuleIndex, NX_LCDINTERFACE_DITHER_6BIT, NX_LCDINTERFACE_DITHER_6BIT, NX_LCDINTERFACE_DITHER_6BIT);
 	}
 
@@ -867,23 +867,23 @@ Mask	| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (5 << 25) | (4 << 20) | (3 << 15) | (2 << 10) | (1 << 5) | (0 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (11 << 25) | (10 << 20) | (9 << 15) | (8 << 10) | (7 << 5) | (6 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (17 << 25) | (16 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (23 << 25) | (22 << 20) | (21 << 15) | (20 << 10) | (19 << 5) | (18 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 1<< 23 ) | ( 1<< 22 ) | ( 1<< 21 ) | ( 1<< 20 ) | ( 1<< 19 ) | ( 1<< 18 ) |
 					( 1<< 17 ) | ( 1<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 1<<  9 ) | ( 1<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 1<<  1 ) | ( 1<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 	}
 
 	else if (format == NX_LCDINTERFACE_FORMAT_MRGB565	)
@@ -904,31 +904,31 @@ Mask	| 1| 1| 1| 1| 0| 0| 0| 0| 0| 0| 0| 0| 1| 1| 1| 1| 0| 0| 0| 0| 0| 0| 0| 0|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (10 << 25) | (7 << 20) | (6 << 15) | (5 << 10) | (4 << 5) | (3 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (8 << 25) | (2 << 20) | (1 << 15) | (0 << 10) | (12 << 5) | (11 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (21 << 25) | (20 << 20) | (19 << 15) | (15 << 10) | (14 << 5) | (13 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (18 << 25) | (17 << 20) | (16 << 15) | (9 << 10) | (23 << 5) | (22 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 0<< 23 ) | ( 0<< 22 ) | ( 0<< 21 ) | ( 0<< 20 ) | ( 1<< 19 ) | ( 1<< 18 ) |
 					( 1<< 17 ) | ( 1<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 0<< 11 ) | ( 0<< 10 ) | ( 0<<  9 ) | ( 0<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 1<<  1 ) | ( 1<<  0 ) ;
 		NX_CONSOLE_Printf("\n[DEBUG] NX_LCDINTERFACE_FORMAT_MRGB565 Mask Value = %x\n", regvalue);
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 
 		// Serial Format Setting
-		regvalue = ReadIODW(&pRegister->DISPCNTL1);
+		regvalue = ReadIO32(&pRegister->DISPCNTL1);
 		regvalue = regvalue & ~(0xf << 8); // Format Masking
 		regvalue = regvalue | (NX_LCDINTERFACE_SERIAL_FORMAT_MRGB << 8);
 
-		WriteIODW(&pRegister->DISPCNTL1, regvalue);
+		WriteIO32(&pRegister->DISPCNTL1, regvalue);
 	}
 	else if (format == NX_LCDINTERFACE_FORMAT_SRGB888	)
 	{
@@ -950,30 +950,30 @@ Mask	| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0|
 		*/
 
 		regvalue = (21 << 25) | (20 << 20) | (19 << 15) | (18 << 10) | (17 << 5) | (17 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (11 << 25) | (10 << 20) | (9 << 15) | (8 << 10) | (23 << 5) | (22 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (1 << 25) | (0 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (7 << 25) | (6 << 20) | (5 << 15) | (4 << 10) | (3 << 5) | (2 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 1<< 23 ) | ( 1<< 22 ) | ( 1<< 21 ) | ( 1<< 20 ) | ( 1<< 19 ) | ( 1<< 18 ) |
 					( 1<< 17 ) | ( 1<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 1<<  9 ) | ( 1<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 1<<  1 ) | ( 1<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 
 		// Serial Format Setting
-		regvalue = ReadIODW(&pRegister->DISPCNTL1);
+		regvalue = ReadIO32(&pRegister->DISPCNTL1);
 		regvalue = regvalue & ~(0xf << 8); // Format Masking
 		regvalue = regvalue | (NX_LCDINTERFACE_SERIAL_FORMAT_SRGB3 << 8);
 
-		WriteIODW(&pRegister->DISPCNTL1, regvalue);
+		WriteIO32(&pRegister->DISPCNTL1, regvalue);
 	}
 
 	else if (format == NX_LCDINTERFACE_FORMAT_SRGBD8888 )
@@ -997,30 +997,30 @@ Mask	| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0|
 		*/
 
 		regvalue = (21 << 25) | (20 << 20) | (19 << 15) | (18 << 10) | (17 << 5) | (17 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (11 << 25) | (10 << 20) | (9 << 15) | (8 << 10) | (23 << 5) | (22 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (1 << 25) | (0 << 20) | (15 << 15) | (14 << 10) | (13 << 5) | (12 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (7 << 25) | (6 << 20) | (5 << 15) | (4 << 10) | (3 << 5) | (2 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 1<< 23 ) | ( 1<< 22 ) | ( 1<< 21 ) | ( 1<< 20 ) | ( 1<< 19 ) | ( 1<< 18 ) |
 					( 1<< 17 ) | ( 1<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 1<<  9 ) | ( 1<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 1<<  1 ) | ( 1<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 
 		// Serial Format Setting
-		regvalue = ReadIODW(&pRegister->DISPCNTL1);
+		regvalue = ReadIO32(&pRegister->DISPCNTL1);
 		regvalue = regvalue & ~(0xf << 8); // Format Masking
 		regvalue = regvalue | (NX_LCDINTERFACE_SERIAL_FORMAT_SRGB4 << 8);
 
-		WriteIODW(&pRegister->DISPCNTL1, regvalue);
+		WriteIO32(&pRegister->DISPCNTL1, regvalue);
 	}
 	else if( format == NX_LCDINTERFACE_FORMAT_RGB565_I80)
 	{
@@ -1036,23 +1036,23 @@ Mask	| 0| 0| 0| 0| 0| 0| 0| 0| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1| 1|
 		-------------------------------------------------------------------------
 		*/
 		regvalue = (10 << 25) | (7 << 20) | (6 << 15) | (5 << 10) | (4 << 5) | (3 << 0);
-		WriteIODW(&pRegister->DISPPADLOC0, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC0, regvalue);
 
 		regvalue = (19 << 25) | (15 << 20) | (14 << 15) | (13 << 10) | (12 << 5) | (11 << 0);
-		WriteIODW(&pRegister->DISPPADLOC1, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC1, regvalue);
 
 		regvalue = (0 << 25) | (0 << 20) | (23 << 15) | (22 << 10) | (21 << 5) | (20 << 0);
-		WriteIODW(&pRegister->DISPPADLOC2, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC2, regvalue);
 
 		regvalue = (0 << 25) | (0 << 20) | (0 << 15) | (0 << 10) | (0 << 5) | (0 << 0);
-		WriteIODW(&pRegister->DISPPADLOC3, regvalue);
+		WriteIO32(&pRegister->DISPPADLOC3, regvalue);
 
-		regvalue = ReadIODW(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
+		regvalue = ReadIO32(&pRegister->DISPRGBMASK) & (0xff000000); // RGBMASK Masking
 		regvalue |=	( 0<< 23 ) | ( 0<< 22 ) | ( 0<< 21 ) | ( 0<< 20 ) | ( 0<< 19 ) | ( 0<< 18 ) |
 					( 0<< 17 ) | ( 0<< 16 ) | ( 1<< 15 ) | ( 1<< 14 ) | ( 1<< 13 ) | ( 1<< 12 ) |
 					( 1<< 11 ) | ( 1<< 10 ) | ( 1<<  9 ) | ( 1<<  8 ) | ( 1<<  7 ) | ( 1<<  6 ) |
 					( 1<<  5 ) | ( 1<<  4 ) | ( 1<<  3 ) | ( 1<<  2 ) | ( 1<<  1 ) | ( 1<<  0 ) ;
-		WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+		WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 		NX_LCDINTERFACE_SetDither(ModuleIndex, NX_LCDINTERFACE_DITHER_5BIT, NX_LCDINTERFACE_DITHER_6BIT, NX_LCDINTERFACE_DITHER_5BIT);
 	}
 
@@ -1074,10 +1074,10 @@ void	NX_LCDINTERFACE_SetRGBShift( U32 ModuleIndex, U32 RGBSHIFT )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPRGBMASK) & 0x01ffffff;
+	regvalue = ReadIO32(&pRegister->DISPRGBMASK) & 0x01ffffff;
 	regvalue |= (RGBSHIFT << 25);
 
-	WriteIODW(&pRegister->DISPRGBMASK, regvalue);
+	WriteIO32(&pRegister->DISPRGBMASK, regvalue);
 }
 
 
@@ -1093,7 +1093,7 @@ U32	NX_LCDINTERFACE_GetRGBShift( U32 ModuleIndex )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = (ReadIODW(&pRegister->DISPRGBMASK) >> 25) & 0x1f;
+	regvalue = (ReadIO32(&pRegister->DISPRGBMASK) >> 25) & 0x1f;
 
 	return regvalue;
 }
@@ -1112,11 +1112,11 @@ void	NX_LCDINTERFACE_SetSerialFormat( U32 ModuleIndex, NX_LCDINTERFACE_SERIAL_FO
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1);
 	regvalue = regvalue & ~(0xf << 8); // Format Masking
 	regvalue = regvalue | (SerialFormat << 8);
 
-	WriteIODW(&pRegister->DISPCNTL1, regvalue);
+	WriteIO32(&pRegister->DISPCNTL1, regvalue);
 }
 
 
@@ -1133,7 +1133,7 @@ NX_LCDINTERFACE_SERIAL_FORMAT	NX_LCDINTERFACE_GetSerialFormat( U32 ModuleIndex )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1);
 	regvalue = (regvalue >> 8) & 0x03;
 
 	return regvalue;
@@ -1152,13 +1152,13 @@ void	NX_LCDINTERFACE_Seti80Mode( U32 ModuleIndex, CBOOL Enable )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1);
 	if( Enable == CTRUE )
 		regvalue = regvalue | (1<<12);
 	else
 		regvalue = regvalue & ~(1<<12);
 
-	WriteIODW(&pRegister->DISPCNTL1, regvalue);
+	WriteIO32(&pRegister->DISPCNTL1, regvalue);
 }
 
 
@@ -1174,7 +1174,7 @@ CBOOL	NX_LCDINTERFACE_Geti80Mode( U32 ModuleIndex)
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL1);
+	regvalue = ReadIO32(&pRegister->DISPCNTL1);
 	regvalue = (regvalue >> 12) & 0x01;
 
 	return regvalue;
@@ -1195,13 +1195,13 @@ void	NX_LCDINTERFACE_SetDirtyFlag( U32 ModuleIndex, CBOOL Enable)
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0);
 	if( Enable == CTRUE )
 		regvalue = regvalue | (1<<31);
 	else
 		regvalue = regvalue & ~(1<<31);
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 
@@ -1219,7 +1219,7 @@ CBOOL	NX_LCDINTERFACE_GetDirtyFlagClear( U32 ModuleIndex)
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0);
 
 	// Dirty Flag가 남아있으므로 Clear되지 않았으므로 CFALSE
 	if( 0x01 == (regvalue >> 31 ) & 0x01  )
@@ -1252,10 +1252,10 @@ void NX_LCDINTERFACE_SetCmdBufferClear( U32 ModuleIndex)
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCMDBUFCTRL0);
+	regvalue = ReadIO32(&pRegister->DISPCMDBUFCTRL0);
 	regvalue = regvalue & 0x01;
 
-	WriteIODW(&pRegister->DISPCMDBUFCTRL0, regvalue);
+	WriteIO32(&pRegister->DISPCMDBUFCTRL0, regvalue);
 }
 
 void NX_LCDINTERFACE_SetCmdBufferWrite( U32 ModuleIndex, U32 regvalue)
@@ -1269,7 +1269,7 @@ void NX_LCDINTERFACE_SetCmdBufferWrite( U32 ModuleIndex, U32 regvalue)
 
 
 	pRegister = __g_pRegister[ModuleIndex];
-	WriteIODW(&pRegister->DISPCMDBUFDATA, regvalue);
+	WriteIO32(&pRegister->DISPCMDBUFDATA, regvalue);
 }
 
 void NX_LCDINTERFACE_SetCmdBufferFlush( U32 ModuleIndex, CBOOL Enb )
@@ -1285,12 +1285,12 @@ void NX_LCDINTERFACE_SetCmdBufferFlush( U32 ModuleIndex, CBOOL Enb )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCMDBUFCTRL0);
+	regvalue = ReadIO32(&pRegister->DISPCMDBUFCTRL0);
 
 	if( Enb == CTRUE ) regvalue = 0x02;
 	else regvalue = 0;
 
-	WriteIODW(&pRegister->DISPCMDBUFCTRL0, regvalue);
+	WriteIO32(&pRegister->DISPCMDBUFCTRL0, regvalue);
 }
 
 
@@ -1307,7 +1307,7 @@ CBOOL NX_LCDINTERFACE_GetInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = (ReadIODW(&pRegister->DISPCNTL0) >> 10) & 0x01;
+	regvalue = (ReadIO32(&pRegister->DISPCNTL0) >> 10) & 0x01;
 
 	if( regvalue == 0x01 ) return CTRUE;
 	else return CFALSE;
@@ -1325,11 +1325,11 @@ void NX_LCDINTERFACE_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0) ;
+	regvalue = ReadIO32(&pRegister->DISPCNTL0) ;
 
 	regvalue = regvalue | (0x01<<10);
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 
@@ -1348,11 +1348,11 @@ void	NX_LCDINTERFACE_SetTFTPolarity( U32 ModuleIndex, CBOOL PHS, CBOOL PVS, CBOO
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0) & (~0x07);
+	regvalue = ReadIO32(&pRegister->DISPCNTL0) & (~0x07);
 
 	regvalue = regvalue | (PDE<<2) | (PVS<<1) | (PHS<<0);
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 
@@ -1376,7 +1376,7 @@ void	NX_LCDINTERFACE_SetReg( U32 ModuleIndex, U32 Data ) // RS==0
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	WriteIODW(&pRegister->I80REGRW, Data);
+	WriteIO32(&pRegister->I80REGRW, Data);
 }
 
 U32		NX_LCDINTERFACE_GetStatus( U32 ModuleIndex ) // RS==0
@@ -1391,7 +1391,7 @@ U32		NX_LCDINTERFACE_GetStatus( U32 ModuleIndex ) // RS==0
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	return ReadIODW(&pRegister->I80REGRW);
+	return ReadIO32(&pRegister->I80REGRW);
 }
 
 void	NX_LCDINTERFACE_SetData( U32 ModuleIndex, U32 Data ) // RS==1
@@ -1406,7 +1406,7 @@ void	NX_LCDINTERFACE_SetData( U32 ModuleIndex, U32 Data ) // RS==1
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	WriteIODW(&pRegister->I80DATARW, Data);
+	WriteIO32(&pRegister->I80DATARW, Data);
 }
 
 U32		NX_LCDINTERFACE_GetData( U32 ModuleIndex ) // RS==1
@@ -1421,7 +1421,7 @@ U32		NX_LCDINTERFACE_GetData( U32 ModuleIndex ) // RS==1
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	return ReadIODW(&pRegister->I80DATARW);
+	return ReadIO32(&pRegister->I80DATARW);
 }
 
 void	NX_LCDINTERFACE_Set_i80Timing( U32 ModuleIndex, U32 tSetup, U32 tHold, U32 tAcc)
@@ -1438,7 +1438,7 @@ void	NX_LCDINTERFACE_Set_i80Timing( U32 ModuleIndex, U32 tSetup, U32 tHold, U32 
 
 	regvalue = (tAcc <<  20)| (tHold <<  10) | (tSetup <<  0);
 
-	WriteIODW(&pRegister->I80TIMING, regvalue);
+	WriteIO32(&pRegister->I80TIMING, regvalue);
 }
 
 
@@ -1459,11 +1459,11 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 
 	pRegister = __g_pRegister[ModuleIndex];
 
-	regvalue = ReadIODW(&pRegister->DISPCNTL0) & (~(0x07<<16));
+	regvalue = ReadIO32(&pRegister->DISPCNTL0) & (~(0x07<<16));
 
 	regvalue = regvalue | (SourceSel <<16);
 
-	WriteIODW(&pRegister->DISPCNTL0, regvalue);
+	WriteIO32(&pRegister->DISPCNTL0, regvalue);
 }
 
 
@@ -1515,13 +1515,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //		default: NX_ASSERT( CFALSE );
 //	}
 //
-//	regvalue = ReadIODW(&pRegister->CLKENB);
+//	regvalue = ReadIO32(&pRegister->CLKENB);
 //
 //	regvalue &= ~3UL;
 //	regvalue |= ( clkmode & 0x03 );
 //
 ////	pRegister->CLKENB = regvalue;
-//	WriteIODW(&pRegister->CLKENB, regvalue);
+//	WriteIO32(&pRegister->CLKENB, regvalue);
 //}
 //
 //NX_BCLKMODE	NX_LCDINTERFACE_GetClockBClkMode( U32 ModuleIndex )
@@ -1537,7 +1537,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	mode = ( ReadIODW(&pRegister->CLKENB) & 3UL );
+//	mode = ( ReadIO32(&pRegister->CLKENB) & 3UL );
 //	switch(mode)
 //	{
 //		case 0: return NX_BCLKMODE_DISABLE;
@@ -1572,13 +1572,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //		default: NX_ASSERT( CFALSE );
 //	}
 //
-//	regvalue = ReadIODW(&pRegister->CLKENB);
+//	regvalue = ReadIO32(&pRegister->CLKENB);
 //
 //	regvalue &= ~(1UL<<PCLKMODE_POS);
 //	regvalue |= ( clkmode & 0x01 ) << PCLKMODE_POS;
 //
 ////	pRegister->CLKENB = regvalue;
-//	WriteIODW(&pRegister->CLKENB, regvalue);
+//	WriteIO32(&pRegister->CLKENB, regvalue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1603,7 +1603,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	if( ReadIODW(&pRegister->CLKENB) & ( 1UL << PCLKMODE_POS ) )
+//	if( ReadIO32(&pRegister->CLKENB) & ( 1UL << PCLKMODE_POS ) )
 //	{
 //		return NX_PCLKMODE_ALWAYS;
 //	}
@@ -1640,13 +1640,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	ReadValue = ReadIODW(&pRegister->CLKGEN[Index<<1]);
+//	ReadValue = ReadIO32(&pRegister->CLKGEN[Index<<1]);
 //
 //	ReadValue &= ~CLKSRCSEL_MASK;
 //	ReadValue |= ClkSrc << CLKSRCSEL_POS;
 //
 ////	pRegister->CLKGEN[Index<<1] = ReadValue;
-//	WriteIODW(&pRegister->CLKGEN[Index<<1], ReadValue);
+//	WriteIO32(&pRegister->CLKGEN[Index<<1], ReadValue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1674,7 +1674,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	return ( ReadIODW(&pRegister->CLKGEN[Index<<1]) & CLKSRCSEL_MASK ) >> CLKSRCSEL_POS;
+//	return ( ReadIO32(&pRegister->CLKGEN[Index<<1]) & CLKSRCSEL_MASK ) >> CLKSRCSEL_POS;
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1705,12 +1705,12 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	ReadValue	=	ReadIODW(&pRegister->CLKGEN[Index<<1]);
+//	ReadValue	=	ReadIO32(&pRegister->CLKGEN[Index<<1]);
 //
 //	ReadValue	&= ~CLKDIV_MASK;
 //	ReadValue	|= (Divisor-1) << CLKDIV_POS;
 //
-//	WriteIODW(&pRegister->CLKGEN[Index<<1], ReadValue);
+//	WriteIO32(&pRegister->CLKGEN[Index<<1], ReadValue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1738,7 +1738,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	return ((ReadIODW(&pRegister->CLKGEN[Index<<1]) & CLKDIV_MASK) >> CLKDIV_POS) + 1;
+//	return ((ReadIO32(&pRegister->CLKGEN[Index<<1]) & CLKDIV_MASK) >> CLKDIV_POS) + 1;
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1768,13 +1768,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	ReadValue	=	ReadIODW(&pRegister->CLKENB);
+//	ReadValue	=	ReadIO32(&pRegister->CLKENB);
 //	//ReadValue	=	NX_LCDINTERFACE_GetClockDivisorEnable(ModuleIndex);
 //	ReadValue	&=	~CLKGENENB_MASK;
 //	ReadValue	|= (U32)Enable << CLKGENENB_POS;
 //
 ////	pRegister->CLKENB	=	ReadValue;
-//	WriteIODW(&pRegister->CLKENB, ReadValue);
+//	WriteIO32(&pRegister->CLKENB, ReadValue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -1801,7 +1801,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	return	(CBOOL)( (ReadIODW(&pRegister->CLKENB) & CLKGENENB_MASK) >> CLKGENENB_POS );
+//	return	(CBOOL)( (ReadIO32(&pRegister->CLKENB) & CLKGENENB_MASK) >> CLKGENENB_POS );
 //}
 //
 //void			NX_LCDINTERFACE_SetClockOutInv( U32 ModuleIndex, U32 Index, CBOOL OutClkInv )
@@ -1819,13 +1819,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	ReadValue	=	ReadIODW(&pRegister->CLKGEN[Index<<1]);
+//	ReadValue	=	ReadIO32(&pRegister->CLKGEN[Index<<1]);
 //
 //	ReadValue	&=	~OUTCLKINV_MASK;
 //	ReadValue	|=	OutClkInv << OUTCLKINV_POS;
 //
 //	//pRegister->CLKGEN[Index<<1]	=	ReadValue;
-//	WriteIODW(&pRegister->CLKGEN[Index<<1], ReadValue);
+//	WriteIO32(&pRegister->CLKGEN[Index<<1], ReadValue);
 //}
 //
 //CBOOL			NX_LCDINTERFACE_GetClockOutInv( U32 ModuleIndex, U32 Index )
@@ -1844,7 +1844,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	NX_ASSERT( CNULL != pRegister );
 //
-//	return (CBOOL)((ReadIODW(&pRegister->CLKGEN[Index<<1]) & OUTCLKINV_MASK ) >> OUTCLKINV_POS);
+//	return (CBOOL)((ReadIO32(&pRegister->CLKGEN[Index<<1]) & OUTCLKINV_MASK ) >> OUTCLKINV_POS);
 //}
 //
 ////void			NX_LCDINTERFACE_SetClockInInv( U32 ModuleIndex, CBOOL InClkInv )
@@ -1863,7 +1863,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 ////	ReadValue	|=	InClkInv << INCLKINV_POS;
 ////
 ////	pRegister->CLKENB	=	ReadValue;
-////	WriteIODW(&pRegister->CLKENB, ReadValue);
+////	WriteIO32(&pRegister->CLKENB, ReadValue);
 ////}
 ////
 ////CBOOL			NX_LCDINTERFACE_GetClockInInv( U32 ModuleIndex)
@@ -1894,13 +1894,13 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //
 //
 //	NX_ASSERT( (0==InClkInv) ||(1==InClkInv) );
-//	ReadValue	=	ReadIODW(&pRegister->CLKENB);
+//	ReadValue	=	ReadIO32(&pRegister->CLKENB);
 //
 //	ReadValue	&=	~INCLKINV_MASK;
 //	ReadValue	|=	InClkInv << INCLKINV_POS;
 //
 //	//pRegister->CLKENB	=	ReadValue;
-//	WriteIODW(&pRegister->CLKENB, ReadValue);
+//	WriteIO32(&pRegister->CLKENB, ReadValue);
 //}
 //
 //CBOOL		NX_LCDINTERFACE_GetInputInv( U32 ModuleIndex, U32 Index )
@@ -1916,7 +1916,7 @@ void NX_LCDINTERFACE_SetOutputClock( U32 ModuleIndex, U32 SourceSel )
 //
 //	pRegister = __g_pRegister[ModuleIndex];
 //
-//	return (CBOOL)((ReadIODW(&pRegister->CLKENB) & INCLKINV_MASK ) >> INCLKINV_POS);
+//	return (CBOOL)((ReadIO32(&pRegister->CLKENB) & INCLKINV_MASK ) >> INCLKINV_POS);
 //}
 //*********************************************************************************************
 

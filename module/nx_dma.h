@@ -14,6 +14,10 @@ extern "C"
 //@{
 	#define NUMBER_OF_DMA_CHANNEL	8
 	#define NX_DMA_NUM_OF_INT 2 // @todo ??
+	#define	LLI_BUFFERADDR		(0x45000000)
+	#define	LLI_BUFFERSIZE		(0x1000000 )
+
+	#define NX_DEBUGLOG 1
 
 	/// @brief	DMA Module's Register List
 	struct	NX_DMALLI_RegisterSet
@@ -50,7 +54,7 @@ extern "C"
 		volatile U32	_Reserved0[(0x100-0x38)/4];
 		struct NX_DMAChannel_RegisterSet Channel[NUMBER_OF_DMA_CHANNEL];
 	};
-
+   //-------------------------------------------------------------------
 	typedef enum{
 		NX_DMA_DATAWIDTH_8_BIT		= 0,
 		NX_DMA_DATAWIDTH_16_BIT	= 1,
@@ -101,6 +105,67 @@ extern "C"
 		NX_DMA_OPMODE_SIO_TO_IO	= 7UL			///< Peripheral to Peripheral operation source sync mode
 	} NX_DMA_OPMODE ;
 
+	//-------------------------------------------------------------------
+	typedef struct NX_DMA_HwLLI
+	{
+		unsigned int SrcAddr;
+		unsigned int DstAddr;
+		unsigned int LLIAddr;
+		unsigned int Control;
+	} NX_DMA_HWLLI;
+
+	typedef struct NX_DMA_LLINode
+	{
+		struct NX_DMA_LLINode *next;
+		struct NX_DMA_LLINode *prev;
+		unsigned int ptr;
+		unsigned int size;
+	} NX_DMA_LLINODE;
+
+	typedef struct NX_DMA_LLIList
+	{
+		NX_DMA_LLINODE* head;
+		NX_DMA_LLINODE* tail;
+		NX_DMA_LLINODE* cur;
+		unsigned int cnt;
+	} NX_DMA_LLILIST;
+
+	typedef NX_DMA_LLINODE *DMA_NODEPTR;
+
+	typedef struct NX_DMA_CmdSet
+	{
+		U32 				SrcAddr;
+		U32					DstAddr;
+
+		U32					TxSize;
+		NX_DMA_BURST_SIZE	SrcBurstSize;
+		NX_DMA_BURST_SIZE	DstBurstSize;
+		NX_DMA_DATAWIDTH	SrcWidth;
+		NX_DMA_DATAWIDTH	DstWidth;
+		CBOOL				SrcAHBSel;
+		CBOOL				DstAHBSel;
+		CBOOL				SrcAddrInc;		
+		CBOOL				DstAddrInc; 	
+
+		U32					SrcPeriID;
+		U32					DstPeriID;
+		NX_DMA_OPMODE		FlowCtrl;
+		CBOOL				IntITC;
+		CBOOL				IntIE;
+		CBOOL               fInfinite;
+
+		NX_DMA_HWLLI 		HwLLI;
+
+		U32 				Control;
+		U32 				Configuration;
+
+		U32					OffsetPerTx;
+		U32					SizePerTx;
+		U32					BoffSetPerTx;
+	} NX_DMA_CMDSET;
+
+	//-------------------------------------------------------------------
+
 //------------------------------------------------------------------------------
 /// @name	Module Interface
 //@{
@@ -144,36 +209,9 @@ U32		NX_DMA_GetInterruptPendingNumber( U32 nChannel );	// -1 if None
 //------------------------------------------------------------------------------
 ///	@name	DMA Configuration Function
 //@{
-void	NX_DMA_TransferMemToMem( U32 nChannel, const void* pSource, void* pDestination, U32 TransferSize );
-void	NX_DMA_TransferMemToIO( U32 nChannel,
-								const void* pSource,
-								void* pDestination,
-								U32 DestinationPeriID,
-								U32 DestinationBitWidth,
-								U32 TransferSize );
-void	NX_DMA_TransferIOToMem( U32 nChannel,
-								const void* pSource,
-								U32 SourcePeriID,
-								U32 SourceBitWidth,
-								void* pDestination,
-								U32 TransferSize );
-
-void	NX_DMA_TransferMemToIO_Burst( U32 nChannel,
-								const void* pSource,
-								void* pDestination,
-								U32 DestinationPeriID,
-								U32 DestinationBitWidth,
-								NX_DMA_BURST_SIZE DestinationBurstSize,
-								U32 TransferSize );
-void	NX_DMA_TransferIOToMem_Burst( U32 nChannel,
-								const void* pSource,
-								U32 SourcePeriID,
-								U32 SourceBitWidth,
-								NX_DMA_BURST_SIZE SourceBurstSize,
-								void* pDestination,
-								U32 TransferSize );
-CBOOL	NX_DMA_Build_LLI( U32 pSource, U32 pDestination, U32 ControlReg, U32 LLI_ADDR, U32 NextLLI);
-
+void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
+CBOOL 	NX_DMA_Build_LLI( U32 nChannel, NX_DMA_CMDSET *pDMAConfig );
+void    NX_DMA_Transfer( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
 //@}
 
 //------------------------------------------------------------------------------
@@ -181,6 +219,17 @@ CBOOL	NX_DMA_Build_LLI( U32 pSource, U32 pDestination, U32 ControlReg, U32 LLI_A
 //@{
 void	NX_DMA_Run( U32 nChannel );
 U32		NX_DMA_CheckRunning ( U32 nChannel );
+void	NX_DMA_Stop ( U32 nChannel, CBOOL Enable );
+//@}
+
+//------------------------------------------------------------------------------
+///	@name	DMA LLI Allocate Function ( Not-Cahe Area )
+//@{
+void    NX_DMA_CreateLLI( U32 start, U32 size );
+void* 	NX_DMA_LLIuAlloc( U32 size, U32 alignment );
+void    NX_DMA_LLIuFree( void *addr );
+void    NX_DMA_SetLLIAddress( U32 LLIAddress, U32 LLISize );
+U32     NX_DMA_GetLLIAddress( void );
 void	NX_DMA_Stop ( U32 nChannel, CBOOL Enable );
 //@}
 

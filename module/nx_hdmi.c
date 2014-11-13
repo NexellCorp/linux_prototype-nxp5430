@@ -52,7 +52,7 @@ U32  NX_HDMI_GetReg( U32 ModuleIndex, U32 Offset )
 	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
 
 	RegAddr = HDMI_BaseAddr + Offset;
-	regvalue = ReadIODW( (U32*)RegAddr );
+	regvalue = ReadIO32( (U32*)RegAddr );
 	return regvalue;
 }
 
@@ -63,7 +63,7 @@ void NX_HDMI_SetReg( U32 ModuleIndex, U32 Offset, U32 regvalue )
 
 	RegAddr = HDMI_BaseAddr + Offset;
 
-	WriteIODW( (U32*)RegAddr, regvalue );
+	WriteIO32( (U32*)RegAddr, regvalue );
 }
 
 //------------------------------------------------------------------------------
@@ -313,7 +313,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 //	regvalue &=	~( 1UL << IntNum );
 //	regvalue |= (U32)Enable << IntNum;
 //
-//	WriteIODW(&pRegister->INTCTRL, regvalue);
+//	WriteIO32(&pRegister->INTCTRL, regvalue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -397,7 +397,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 //	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
 //	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 //	pRegister = __g_pRegister[ModuleIndex];
-//	WriteIODW(&pRegister->INTPEND, 1UL << IntNum);
+//	WriteIO32(&pRegister->INTPEND, 1UL << IntNum);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -430,7 +430,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 //	pRegister = __g_pRegister[ModuleIndex];
 //	regvalue  = Enable ? 0xFFFFFFFF : 0 ;
 //
-//	WriteIODW(&pRegister->INTCTRL, regvalue);
+//	WriteIO32(&pRegister->INTCTRL, regvalue);
 //}
 //
 ////------------------------------------------------------------------------------
@@ -508,7 +508,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 //	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
 //	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 //	pRegister = __g_pRegister[ModuleIndex];
-//	WriteIODW(&pRegister->INTPEND, 0xFFFFFFFF);	// just write operation make pending clear
+//	WriteIO32(&pRegister->INTPEND, 0xFFFFFFFF);	// just write operation make pending clear
 //}
 //
 ////------------------------------------------------------------------------------

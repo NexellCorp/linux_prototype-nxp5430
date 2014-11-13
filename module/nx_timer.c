@@ -9,11 +9,12 @@
 //	FOR A PARTICULAR PURPOSE.
 //
 //	Module		: TIMER
-//	File		: nx_timer.c
+//	File			: nx_timer.c
 //	Description	:
 //	Author		: Jonghyuk Park(charles@nexell.co.kr)
-//	History		: 20120830 first implementation
-//					20140805 hans modify to functionality
+//	History		: 2012.08.30 first implementation
+//				  2014.08.05 hans modify to functionality
+//				  2014.10.15 deoks modify to functionality
 //------------------------------------------------------------------------------
 #include "nx_timer.h"
 
@@ -25,8 +26,8 @@ static struct NX_TIMER_RegisterSet *__g_pRegister[5];
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicates that Initialize is successed.\r\n
- *			\b CFALSE indicates that Initialize is failed.\r\n
+ *	@return CTRUE		indicates that Initialize is successed.\r\n
+ *			CFALSE		indicates that Initialize is failed.\r\n
  *	@see	NX_TIMER_GetNumberOfModule
  */
 CBOOL	NX_TIMER_Initialize( void )
@@ -71,10 +72,6 @@ U32		NX_TIMER_GetNumberOfChannel( void )
  *	@brief		Get module's physical address.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's physical address
- *	@see		NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
  */
 U32		NX_TIMER_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -89,10 +86,6 @@ U32		NX_TIMER_GetPhysicalAddress( U32 ModuleIndex )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_TIMER_GetPhysicalAddress,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
  */
 U32		NX_TIMER_GetSizeOfRegisterSet( void )
 {
@@ -105,10 +98,6 @@ U32		NX_TIMER_GetSizeOfRegisterSet( void )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
  */
 void	NX_TIMER_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
 {
@@ -123,10 +112,6 @@ void	NX_TIMER_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
  */
 U32		NX_TIMER_GetBaseAddress( U32 ModuleIndex )
 {
@@ -139,12 +124,8 @@ U32		NX_TIMER_GetBaseAddress( U32 ModuleIndex )
 /**
  *	@brief		Initialize selected modules with default value.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Initialize is successed. \r\n
- *				\b CFALSE	indicates that Initialize is failed.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
+ *	@return		CTRUE			indicates that Initialize is successed.
+ *				CFALSE			indicates that Initialize is failed.
  */
 CBOOL	NX_TIMER_OpenModule( U32 ModuleIndex )
 {
@@ -157,12 +138,8 @@ CBOOL	NX_TIMER_OpenModule( U32 ModuleIndex )
 /**
  *	@brief		Deinitialize selected module to the proper stage.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Deinitialize is successed. \r\n
- *				\b CFALSE	indicates that Deinitialize is failed.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,
- *				NX_TIMER_CheckBusy,			NX_TIMER_CanPowerDown
+ *	@return		CTRUE			indicates that Deinitialize is successed. 
+ *				CFALSE			indicates that Deinitialize is failed.
  */
 CBOOL	NX_TIMER_CloseModule( U32 ModuleIndex )
 {
@@ -175,12 +152,8 @@ CBOOL	NX_TIMER_CloseModule( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Module is Busy. \r\n
- *				\b CFALSE	indicates that Module is NOT Busy.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CanPowerDown
+ *	@return		CTRUE			indicates that Module is Busy. 
+ *				CFALSE			indicates that Module is NOT Busy.
  */
 CBOOL	NX_TIMER_CheckBusy( U32 ModuleIndex )
 {
@@ -193,12 +166,8 @@ CBOOL	NX_TIMER_CheckBusy( U32 ModuleIndex )
 /**
  *	@brief		Indicaes whether the selected modules is ready to enter power-down stage
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Ready to enter power-down stage. \r\n
- *				\b CFALSE	indicates that This module can't enter to power-down stage.
- *	@see		NX_TIMER_GetPhysicalAddress,	NX_TIMER_GetSizeOfRegisterSet,
- *				NX_TIMER_SetBaseAddress,		NX_TIMER_GetBaseAddress,
- *				NX_TIMER_OpenModule,			NX_TIMER_CloseModule,
- *				NX_TIMER_CheckBusy
+ *	@return		CTRUE			indicates that Ready to enter power-down stage. 
+ *				CFALSE			indicates that This module can't enter to power-down stage.
  */
 CBOOL	NX_TIMER_CanPowerDown( U32 ModuleIndex )
 {
@@ -213,25 +182,21 @@ CBOOL	NX_TIMER_CanPowerDown( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's clock index.
- *	@return		Module's clock index.\n
+ *	@return		Module's clock index.
  *				It is equal to CLOCKINDEX_OF_TIMER?_MODULE in <nx_chip.h>.
- *	@see		NX_CLKGEN_SetClockDivisorEnable,
- *				NX_CLKGEN_GetClockDivisorEnable,
- *				NX_CLKGEN_SetClockSource,
- *				NX_CLKGEN_GetClockSource,
- *				NX_CLKGEN_SetClockDivisor,
- *				NX_CLKGEN_GetClockDivisor
  */
 U32 NX_TIMER_GetClockNumber ( U32 ModuleIndex, U32 Channel )
 {
 	const U32 ClockNumber[] =
 	{
-		CLOCKINDEX_LIST( TIMER ),
+//		CLOCKINDEX_LIST( TIMER ),
+		CLOCKINDEX_OF_TIMER_MODULE,
+		CLOCKINDEX_OF_TIMER_MODULE,
 		CLOCKINDEX_OF_Inst_TIMER01_MODULE,
-		CLOCKINDEX_OF_Inst_TIMER02_MODULE,
-		CLOCKINDEX_OF_Inst_TIMER03_MODULE
+		CLOCKINDEX_OF_Inst_TIMER01_MODULE,
+		CLOCKINDEX_OF_Inst_TIMER01_MODULE
 	};
-	//NX_CASSERT( NUMBER_OF_TIMER_MODULE == (sizeof(ClockNumber)/sizeof(ClockNumber[0])) );
+	
     NX_ASSERT( NUMBER_OF_TIMER_MODULE > ModuleIndex );
     NX_ASSERT( NX_TIMER_CHANNEL > Channel );
 
@@ -241,11 +206,8 @@ U32 NX_TIMER_GetClockNumber ( U32 ModuleIndex, U32 Channel )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.\n
+ *	@return		Module's reset index.
  *				It is equal to RESETINDEX_OF_TIMER?_MODULE_i_nRST in <nx_chip.h>.
- *	@see		NX_RSTCON_Enter,
- *				NX_RSTCON_Leave,
- *				NX_RSTCON_GetStatus
  */
 U32 NX_TIMER_GetResetNumber ( U32 ModuleIndex )
 {
@@ -266,11 +228,6 @@ U32 NX_TIMER_GetResetNumber ( U32 ModuleIndex )
  *	@brief		Get a interrupt number for interrupt controller.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Interrupt number
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 U32		NX_TIMER_GetInterruptNumber( U32 ModuleIndex, U32 Channel )
 {
@@ -292,15 +249,10 @@ U32		NX_TIMER_GetInterruptNumber( U32 ModuleIndex, U32 Channel )
 /**
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@param[in]	Enable	\b CTRUE	indicates that Interrupt Enable. \r\n
- *						\b CFALSE	indicates that Interrupt Disable.
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@param[in]	Enable	CTRUE	indicates that Interrupt Enable.
+ *						CFALSE	indicates that Interrupt Disable.
  *	@return		None.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 void	NX_TIMER_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 {
@@ -315,26 +267,21 @@ void	NX_TIMER_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	ReadValue	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+	ReadValue	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 
 	ReadValue	&=	(U32)(~(1UL << IntNum));
 	ReadValue	|=	(U32)Enable << IntNum ;
 
-	WriteIODW(&pRegister->TINT_CSTAT, ReadValue);
+	WriteIO32(&pRegister->TINT_CSTAT, ReadValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Interrupt is enabled. \r\n
- *				\b CFALSE	indicates that Interrupt is disabled.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@return		CTRUE			indicates that Interrupt is enabled. 
+ *				CFALSE			indicates that Interrupt is disabled.
  */
 CBOOL	NX_TIMER_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 {
@@ -347,21 +294,16 @@ CBOOL	NX_TIMER_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)( (ReadIODW(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> IntNum) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Pending is seted. \r\n
- *				\b CFALSE	indicates that Pending is Not Seted.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
+ *	@param[in]	IntNum			Interrupt Number.
+ *	@return		CTRUE			indicates that Pending is seted. 
+ *				CFALSE			indicates that Pending is Not Seted.
  */
 CBOOL	NX_TIMER_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
@@ -375,20 +317,15 @@ CBOOL	NX_TIMER_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return	(CBOOL)( (ReadIODW(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
+	return	(CBOOL)( (ReadIO32(&pRegister->TINT_CSTAT) >> (IntNum+PEND_POS)) & 0x01 );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ 5 ).
- *	@param[in]	IntNum	Interrupt number.
+ *	@param[in]	IntNum			Interrupt number.
  *	@return		None.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 void	NX_TIMER_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
@@ -405,24 +342,19 @@ void	NX_TIMER_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK;
 	PendEnb |=	1UL<<(IntNum+PEND_POS);
 
-	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set all interrupts to be enables or disables.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	Enable	\b CTRUE	indicates that Set to all interrupt enable. \r\n
- *						\b CFALSE	indicates that Set to all interrupt disable.
+ *	@param[in]	Enable	CTRUE	indicates that Set to all interrupt enable. 
+ *						CFALSE	indicates that Set to all interrupt disable.
  *	@return		None.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 void	NX_TIMER_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
@@ -442,20 +374,15 @@ void	NX_TIMER_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 	else
 		SetValue	=	0;
 
-	WriteIODW(&pRegister->TINT_CSTAT, SetValue);
+	WriteIO32(&pRegister->TINT_CSTAT, SetValue);
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) interrupt is enabled. \r\n
- *				\b CFALSE	indicates that All interrupt is disabled.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
+ *	@return		CTRUE			indicates that At least one( or more ) interrupt is enabled. 
+ *				CFALSE			indicates that All interrupt is disabled.
  */
 CBOOL	NX_TIMER_GetInterruptEnableAll( U32 ModuleIndex )
 {
@@ -469,7 +396,7 @@ CBOOL	NX_TIMER_GetInterruptEnableAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if( ReadIODW(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (INT_MASK << ENABLE_POS) )
 	{
 		return CTRUE;
 	}
@@ -481,13 +408,8 @@ CBOOL	NX_TIMER_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) pending is seted. \r\n
- *				\b CFALSE	indicates that All pending is NOT seted.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
+ *	@return		CTRUE	indicates that At least one( or more ) pending is seted.
+ *				CFALSE	indicates that All pending is NOT seted.
  */
 CBOOL	NX_TIMER_GetInterruptPendingAll( U32 ModuleIndex )
 {
@@ -501,7 +423,7 @@ CBOOL	NX_TIMER_GetInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if( ReadIODW(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
+	if( ReadIO32(&pRegister->TINT_CSTAT) & (PEND_MASK << PEND_POS) )
 	{
 		return CTRUE;
 	}
@@ -514,11 +436,6 @@ CBOOL	NX_TIMER_GetInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		None.
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 void	NX_TIMER_ClearInterruptPendingAll( U32 ModuleIndex )
 {
@@ -534,10 +451,10 @@ void	NX_TIMER_ClearInterruptPendingAll( U32 ModuleIndex )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	PendEnb	=	ReadIODW(&pRegister->TINT_CSTAT) & 0x1F;
+	PendEnb	=	ReadIO32(&pRegister->TINT_CSTAT) & 0x1F;
 	PendEnb |=	PEND_MASK<<PEND_POS;
 
-	WriteIODW(&pRegister->TINT_CSTAT, PendEnb );
+	WriteIO32(&pRegister->TINT_CSTAT, PendEnb );
 }
 
 //------------------------------------------------------------------------------
@@ -545,11 +462,6 @@ void	NX_TIMER_ClearInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Get a interrupt number which has the most prority of pended interrupts
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Pending Number( If all pending is not set then return -1 ).
- *	@see		NX_TIMER_GetInterruptNumber,
- *				NX_TIMER_GetInterruptEnable,			NX_TIMER_GetInterruptPending,
- *				NX_TIMER_ClearInterruptPending,		NX_TIMER_SetInterruptEnableAll,
- *				NX_TIMER_GetInterruptEnableAll,		NX_TIMER_GetInterruptPendingAll,
- *				NX_TIMER_ClearInterruptPendingAll,	NX_TIMER_GetInterruptPendingNumber
  */
 U32		NX_TIMER_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 {
@@ -564,7 +476,7 @@ U32		NX_TIMER_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 
 	NX_ASSERT( CNULL != pRegister );
 
-	Pend	=	(ReadIODW(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
+	Pend	=	(ReadIO32(&pRegister->TINT_CSTAT) & PEND_MASK)>>PEND_POS;
 
 	for( PendingIndex = 0; PendingIndex<NX_TIMER_INT; PendingIndex++)
 		if(Pend & (1UL<<PendingIndex))
@@ -575,6 +487,7 @@ U32		NX_TIMER_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 	else
 		return PendingIndex;
 }
+
 
 //--------------------------------------------------------------------------
 // @name	Configuration operations
@@ -599,14 +512,14 @@ void	NX_TIMER_SetPrescaler(U32 Channel, U32 value)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
 
 	if(Channel & 0x6)
-		regvalue &= ((value-1) & 0xFF)<<8;		// timer channel 2, 3, 4
+		regvalue |= ((value-1) & 0xFF)<<8;		// timer channel 2, 3, 4
 	else
-		regvalue &= ((value-1) & 0xFF)<<0;		// timer channel 0, 1
+		regvalue |= ((value-1) & 0xFF)<<0;		// timer channel 0, 1
 
-	WriteIODW(&pRegister->TCFG0, regvalue);
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -625,12 +538,74 @@ U32		NX_TIMER_GetPrescaler(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
+	
 	if(Channel & 0x6)
-		return ((regvalue & 0xFF<<8)>>8)+1;		// timer channel 2, 3, 4
+		return ((regvalue>>8) & 0xFF)+1;		// timer channel 2, 3, 4
 	else
-		return ((regvalue & 0xFF<<0)>>0)+1;		// timer channel 0, 1
+		return ((regvalue>>0) & 0xFF)+1;		// timer channel 0, 1
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set divider path
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	divider		.
+ *	@return		CTRUE : this channel can select which selecting.
+ *				CFALSE: channel cannot select selecting path divider channel.
+ */
+CBOOL	NX_TIMER_SetDividerPath(U32 Channel, NX_TIMER_DIVIDSELECT divider)
+{
+	register struct NX_TIMER_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue, updatevalue;
+
+	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
+	modulechannel = Channel%NX_TIMER_CHANNEL;
+	NX_ASSERT( NX_TIMER_DIVIDSELECT_TCLK >= divider );
+
+	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	if(modulechannel == 4 && NX_TIMER_DIVIDSELECT_TCLK == divider)
+		return CFALSE;
+
+	updatevalue = divider<<(4*modulechannel);
+
+	regvalue = ReadIO32(&pRegister->TCFG1);
+	regvalue &= ~(0xF<<modulechannel);
+	regvalue |= updatevalue;
+	WriteIO32(&pRegister->TCFG1, regvalue);
+
+	return CTRUE;
+}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get divider path
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		current Divider path number
+ */
+NX_TIMER_DIVIDSELECT NX_TIMER_GetDividerPath(U32 Channel)
+{
+	register struct NX_TIMER_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue;
+
+	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
+
+	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	modulechannel = Channel%NX_TIMER_CHANNEL;
+
+	regvalue = ReadIO32(&pRegister->TCFG1);
+	regvalue >>= (4*modulechannel);
+	regvalue &= 0xF;
+
+	return (NX_TIMER_DIVIDSELECT)regvalue;
+}
+
 
 //------------------------------------------------------------------------------
 /**
@@ -649,10 +624,10 @@ void	NX_TIMER_SetDeadZoneLength(U32 Channel, U32 Length)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCFG0);
+	regvalue = ReadIO32(&pRegister->TCFG0);
 	regvalue &= ~(0xFF<<16);
 	regvalue |= (Length & 0xFF)<<16;
-	WriteIODW(&pRegister->TCFG0, regvalue);
+	WriteIO32(&pRegister->TCFG0, regvalue);
 }
 //------------------------------------------------------------------------------
 /**
@@ -669,7 +644,7 @@ U32		NX_TIMER_GetDeadZoneLength(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	return (U32)(ReadIODW(&pRegister->TCFG0)>>16)&0xFF;
+	return (U32)(ReadIO32(&pRegister->TCFG0)>>16)&0xFF;
 }
 
 //------------------------------------------------------------------------------
@@ -694,13 +669,13 @@ CBOOL	NX_TIMER_SetDeadZoneEnable(U32 Channel, CBOOL Enable)
 	if(Channel != 0)
 		return CFALSE;
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	if(Enable)
 		regvalue |= (1UL<<4);
 	else
 		regvalue &= ~(1UL<<4);
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 
 	return CTRUE;
 }
@@ -709,7 +684,8 @@ CBOOL	NX_TIMER_SetDeadZoneEnable(U32 Channel, CBOOL Enable)
 /**
  *	@brief		Get Dead Zone run status
  *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
- *	@return		CTRUE: dead zone is working, CFALSE: not working.
+ *	@return		CTRUE 		Dead zone is working
+ 				CFALSE 		Not working.
  */
 CBOOL	NX_TIMER_GetDeadZoneEnable(U32 Channel)
 {
@@ -724,7 +700,7 @@ CBOOL	NX_TIMER_GetDeadZoneEnable(U32 Channel)
 	if(Channel != 0)
 		return CFALSE;
 
-	if(ReadIODW(&pRegister->TCON) & (1UL<<4))
+	if(ReadIO32(&pRegister->TCON) & (1UL<<4))
 		return CTRUE;
 
 	return CFALSE;
@@ -735,8 +711,8 @@ CBOOL	NX_TIMER_GetDeadZoneEnable(U32 Channel)
  *	@brief		Set Output Invert
  *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
  *	@param[in]	Enable		CTRUE: enable, CFALSE: disable.
- *	@return		CTRUE: this channel can invert output signal.
- *				CFALSE: channel has no output port, so cannot invert signal.
+ *	@return		CTRUE		this channel can invert output signal.
+ *				CFALSE: 	channel has no output port, so cannot invert signal.
  */
 CBOOL	NX_TIMER_SetOutInvert(U32 Channel, CBOOL Enable)
 {
@@ -759,13 +735,13 @@ CBOOL	NX_TIMER_SetOutInvert(U32 Channel, CBOOL Enable)
 	else
 		updatevalue = 1UL<<(4*(modulechannel+1)+2);
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	if(Enable)
 		regvalue |= updatevalue;
 	else
 		regvalue &= ~updatevalue;
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 
 	return CTRUE;
 }
@@ -796,78 +772,27 @@ CBOOL	NX_TIMER_GetOutInvert(U32 Channel)
 	else
 		comparevalue = 1UL<<(4*(modulechannel+1)+2);
 
-	if(comparevalue & ReadIODW(&pRegister->TCON))
+	if(comparevalue & ReadIO32(&pRegister->TCON))
 		return CTRUE;
 
 	return CFALSE;
 }
 
+
 //------------------------------------------------------------------------------
 /**
- *	@brief		Set divider path
+ *	@brief		Set LoadMode is AutoReload or Manual
  *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
- *	@param[in]	divider		.
- *	@return		CTRUE: this channel can select which selecting.
- *				CFALSE: channel cannot select selecting path divider channel.
+ *	@param[in]	ShotMode	LoadMode (0:Manual, 1:Auto Updata)
+ *	@return		None.
  */
-CBOOL	NX_TIMER_SetDividerPath(U32 Channel, NX_TIMER_DIVIDSELECT divider)
-{
-	register struct NX_TIMER_RegisterSet	*pRegister;
-	register U32 modulechannel, regvalue, updatevalue;
-
-	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
-	modulechannel = Channel%NX_TIMER_CHANNEL;
-	NX_ASSERT( NX_TIMER_DIVIDSELECT_TCLK >= divider );
-
-	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
-
-	NX_ASSERT( CNULL != pRegister );
-
-
-	if(modulechannel == 4 && NX_TIMER_DIVIDSELECT_TCLK == divider)
-		return CFALSE;
-
-	updatevalue = divider<<(4*modulechannel);
-
-	regvalue = ReadIODW(&pRegister->TCFG1);
-	regvalue &= ~(0xF<<modulechannel);
-	regvalue |= updatevalue;
-	WriteIODW(&pRegister->TCFG1, regvalue);
-
-	return CTRUE;
-}
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get divider path
- *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
- *	@return		current Divider path number
- */
-NX_TIMER_DIVIDSELECT NX_TIMER_GetDividerPath(U32 Channel)
-{
-	register struct NX_TIMER_RegisterSet	*pRegister;
-	register U32 modulechannel, regvalue;
-
-	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
-
-	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
-
-	NX_ASSERT( CNULL != pRegister );
-
-	modulechannel = Channel%NX_TIMER_CHANNEL;
-
-	regvalue = ReadIODW(&pRegister->TCFG1);
-	regvalue >>= (4*modulechannel);
-	regvalue &= 0xF;
-
-	return (NX_TIMER_DIVIDSELECT)regvalue;
-}
-
 void	NX_TIMER_SetShotMode(U32 Channel, NX_TIMER_LOADMODE ShotMode)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel, regvalue;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
+	
 	modulechannel = Channel%NX_TIMER_CHANNEL;
 	NX_ASSERT( (NX_TIMER_LOADMODE_ONESHOT == ShotMode) || (NX_TIMER_LOADMODE_AUTORELOAD == ShotMode));
 
@@ -875,25 +800,29 @@ void	NX_TIMER_SetShotMode(U32 Channel, NX_TIMER_LOADMODE ShotMode)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
-{
+	{
 		regvalue &= ~(1UL<<3);
 		regvalue |= ShotMode<<3;
-	}else
-	if(modulechannel == 4)
-	{
-		regvalue &= ~(1UL<<22);
-		regvalue |= ShotMode<<22;
-	}else
+	}
+	else
 	{
 		regvalue &= ~(1UL<<(4*(modulechannel+1)+3));
 		regvalue |= ShotMode<<(4*(modulechannel+1)+3);
+	}
+
+	WriteIO32(&pRegister->TCON, regvalue);
 }
 
-	WriteIODW(&pRegister->TCON, regvalue);
-}
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set LoadMode is AutoReload or Manual
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return 	ShotMode	LoadMode (0:Manual, 1:Auto Updata)
+ */
+
 NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
@@ -906,24 +835,31 @@ NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
-{
+	{
 		regvalue >>= 3;
-	}else
+	}
+	
 	if(modulechannel == 4)
 	{
 		regvalue >>= 22;
 	}else
 	{
 		regvalue >>= (4*(modulechannel+1)+3);
-}
+	}
 	regvalue &= 0x1;
 
 	return (NX_TIMER_LOADMODE)regvalue;
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TCNTx, TCMPx Manual Update
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
 void	NX_TIMER_UpdateCounter(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
@@ -936,47 +872,61 @@ void	NX_TIMER_UpdateCounter(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 	updatedonevalue = regvalue;
 	if(modulechannel == 0)
 	{
 		regvalue |= 1UL<<1;
 		updatedonevalue &= ~(1UL<<1);
-}
+	}
 	else
-{
+	{
 		regvalue |= 1<<(4*(modulechannel+1)+1);
 		updatedonevalue &= ~(1<<(4*(modulechannel+1)+1));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
-	WriteIODW(&pRegister->TCON, updatedonevalue);
+	WriteIO32(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, updatedonevalue);
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TIMER Start(Run)
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
 void	NX_TIMER_Run(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel, regvalue;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
-	modulechannel = Channel%NX_TIMER_CHANNEL;
+	modulechannel = Channel % NX_TIMER_CHANNEL;
 
 	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
-{
+	{
 		regvalue |= 1UL<<0;
-	}else
+	}
+	else
 	{
 		regvalue |= 1<<(4*(modulechannel+1));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TIMER Stop
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
 void	NX_TIMER_Stop(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
@@ -989,18 +939,26 @@ void	NX_TIMER_Stop(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
-{
+	{
 		regvalue &= ~(1UL<<0);
-	}else
-{
+	}
+	else
+	{
 		regvalue &= ~(1<<(4*(modulechannel+1)));
 	}
 
-	WriteIODW(&pRegister->TCON, regvalue);
+	WriteIO32(&pRegister->TCON, regvalue);
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get TIMER Running state.
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		None.
+ */
 CBOOL	NX_TIMER_IsRun(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
@@ -1013,13 +971,14 @@ CBOOL	NX_TIMER_IsRun(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	regvalue = ReadIODW(&pRegister->TCON);
+	regvalue = ReadIO32(&pRegister->TCON);
 
 	if(modulechannel == 0)
-{
+	{
 		regvalue >>= 0;
-	}else
-{
+	}
+	else
+	{
 		regvalue >>= (4*(modulechannel+1));
 	}
 	regvalue &= 0x1;
@@ -1027,58 +986,99 @@ CBOOL	NX_TIMER_IsRun(U32 Channel)
 	return (CBOOL)regvalue;
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TIMER Period (Count).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Period		TIMER Period ( range : 0 ~ 65535 )
+ *	@return		None.
+ */
 void	NX_TIMER_SetPeriod(U32 Channel, U32 Period)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel;
-	volatile U32 *setreg;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
-	modulechannel = Channel%NX_TIMER_CHANNEL;
+	modulechannel = Channel % NX_TIMER_CHANNEL;
 
 	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if(modulechannel == 4)
+	if(modulechannel == 0)
 	{
-		WriteIODW(&pRegister->TCNTO4, Period);
-	}else
+		WriteIO32(&pRegister->TCNTB0, Period);
+	}
+	else if(modulechannel == 1)
 	{
-		setreg = &pRegister->TCNTB0;
-		setreg += modulechannel;
-		WriteIODW(setreg, Period);
+		WriteIO32(&pRegister->TCNTB1, Period);
+	}
+	else if(modulechannel == 2)
+	{
+		WriteIO32(&pRegister->TCNTB2, Period);
+	}
+	else if(modulechannel == 3)
+	{
+		WriteIO32(&pRegister->TCNTB3, Period);
+	}	
+	else if(modulechannel == 4)
+	{
+		WriteIO32(&pRegister->TCNTB4, Period);
+	}
 }
-}
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TIMER Period (Count).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Period		TIMER Period ( range : 0 ~ 65535 )
+ */
 U32		NX_TIMER_GetPeriod(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel;
-	volatile U32 *setreg;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
 	modulechannel = Channel%NX_TIMER_CHANNEL;
 
 	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
-
 	NX_ASSERT( CNULL != pRegister );
 
-	if(modulechannel == 4)
+	if(modulechannel == 0)
 	{
-		return ReadIODW(&pRegister->TCNTO4);
-	}else
-	{
-		setreg = &pRegister->TCNTB0;
-		setreg += modulechannel;
-		return ReadIODW(setreg);
+		return ReadIO32(&pRegister->TCNTB0);
 	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCNTB1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCNTB2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCNTB3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return ReadIO32(&pRegister->TCNTB4);
+	}
+
+	return CTRUE;
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Set TIMER Duty (Compare).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@param[in]	Duty		TIMER Duty ( range : 0 ~ 65535 )
+ *	@return		None.
+ */
 CBOOL	NX_TIMER_SetDuty(U32 Channel, U32 Duty)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel;
-	volatile U32 *setreg;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
 	modulechannel = Channel%NX_TIMER_CHANNEL;
@@ -1087,20 +1087,41 @@ CBOOL	NX_TIMER_SetDuty(U32 Channel, U32 Duty)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if(modulechannel == 4)
-		return CFALSE;
 
-	setreg = &pRegister->TCMPB0;
-	setreg += modulechannel;
-	WriteIODW(setreg, Duty);
+	if(modulechannel == 0)
+	{
+		WriteIO32(&pRegister->TCMPB0, Duty);;
+	}
+	else if(modulechannel == 1)
+	{
+		WriteIO32(&pRegister->TCMPB1, Duty);
+	}
+	else if(modulechannel == 2)
+	{
+		WriteIO32(&pRegister->TCMPB2, Duty);
+	}
+	else if(modulechannel == 3)
+	{
+		WriteIO32(&pRegister->TCMPB3, Duty);
+	}	
+	else if(modulechannel == 4)
+	{
+		return CFALSE;
+	}
 
 	return CTRUE;
 }
+
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get TIMER Duty (Compare).
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Dury		TIMER Duty. ( range : 0 ~ 65535 )
+ */
 U32		NX_TIMER_GetDuty(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel;
-	volatile U32 *setreg;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
 	modulechannel = Channel%NX_TIMER_CHANNEL;
@@ -1109,38 +1130,70 @@ U32		NX_TIMER_GetDuty(U32 Channel)
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if(modulechannel == 4)
+	if(modulechannel == 0)
 	{
-		return -1;
-	}else
-{
-		setreg = &pRegister->TCMPB0;
-		setreg += modulechannel;
-		return ReadIODW(setreg);
-}
+		return ReadIO32(&pRegister->TCMPB0);
+	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCMPB1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCMPB2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCMPB3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return CFALSE;
+	}
+
+	return CTRUE;
 }
 
+//------------------------------------------------------------------------------
+/**
+ *	@brief		Get TIMER Current Count.
+ *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
+ *	@return		Count		TIMER Count. ( range : 0 ~ x )
+ */
 U32		NX_TIMER_GetCurrentCount(U32 Channel)
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
 	register U32 modulechannel;
-	volatile U32 *setreg;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NX_TIMER_CHANNEL );
-	modulechannel = Channel%NX_TIMER_CHANNEL;
+	modulechannel = Channel % NX_TIMER_CHANNEL;
 
 	pRegister	=	__g_pRegister[Channel/NX_TIMER_CHANNEL];
 
 	NX_ASSERT( CNULL != pRegister );
 
-	if(modulechannel == 4)
+	if(modulechannel == 0)
 	{
-		return ReadIODW(&pRegister->TCNTO4);
-	}else
-{
-		setreg = &pRegister->TCNTO0;
-		setreg += modulechannel;
-		return ReadIODW(setreg);
-}
+		return ReadIO32(&pRegister->TCNTO0);
+	}
+	else if(modulechannel == 1)
+	{
+		return ReadIO32(&pRegister->TCNTO1);;
+	}
+	else if(modulechannel == 2)
+	{
+		return ReadIO32(&pRegister->TCNTO2);
+	}
+	else if(modulechannel == 3)
+	{
+		return ReadIO32(&pRegister->TCNTO3);
+	}	
+	else if(modulechannel == 4)
+	{
+		return ReadIO32(&pRegister->TCNTO4);
+	}
+
+	return CTRUE;
 }
 //@}
+
