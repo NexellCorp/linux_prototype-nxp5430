@@ -12,7 +12,7 @@
 //  Description :
 //  Author      :
 //  History     :
-//      2012/08/08 parkjh - 1st release
+//      2013/12/05 Sei - 1st release
 //------------------------------------------------------------------------------
 
 #ifndef __NX_DEINTERLACE_H__
@@ -266,4 +266,3 @@ U32		NX_DEINTERLACE_GetCRDestStride	( void );
 #endif
 
 #endif  // __NX_DEINTERLACE_H__
-

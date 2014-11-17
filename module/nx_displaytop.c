@@ -348,13 +348,13 @@ void	NX_DISPLAYTOP_SetHDMIField( U32 Enable,			// Enable
 			|	((InitVal& 0x01)<<1)
 			|	((VSyncToggle&0x3fff)<<2)
 			|	((HSyncToggle&0x3fff)<<17);
-	WriteIO32(&pRegister->HDMIFIELDCTRL, regvalue);
+	WriteIODW(&pRegister->HDMIFIELDCTRL, regvalue);
 
 	regvalue = 	( (FieldUse&0x01)<<31 )
 			|	( (MUXSEL&0x01)<<30	)
 			|	( (HSyncClr)<<15 )
 			|	( (VSyncClr)<<0 );
-	WriteIO32(&pRegister->GREG0, regvalue);
+	WriteIODW(&pRegister->GREG0, regvalue);
 }
 
 //enum PrimPAD_MUX_Index{ // Primary TFT MUX
@@ -383,7 +383,7 @@ void	NX_DISPLAYTOP_SetPADClock( U32	MUX_Index,
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
 
-	regvalue = ReadIO32(&pRegister->GREG1);
+	regvalue = ReadIODW(&pRegister->GREG1);
 
 	if( PADMUX_SecondaryMLC == MUX_Index ) { // Second
 		regvalue = regvalue & (~(0x7 << 3));
@@ -395,7 +395,7 @@ void	NX_DISPLAYTOP_SetPADClock( U32	MUX_Index,
 		regvalue = regvalue & (~(0x7 << 0));
 		regvalue = regvalue | (PADCLK_Cfg<<0);
 	}
-	WriteIO32(&pRegister->GREG1, regvalue);
+	WriteIODW(&pRegister->GREG1, regvalue);
 }
 
 void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb )
@@ -406,9 +406,27 @@ void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb )
 	NX_ASSERT( CNULL != pRegister );
 	pRegister = __g_ModuleVariables.pRegister;
 
-	regvalue = ReadIO32(&pRegister->GREG1);
+	regvalue = ReadIODW(&pRegister->GREG1);
 	regvalue = regvalue & (~(0x1 << 9));
 	regvalue = regvalue | ((Enb&0x1)<<9);
 
-	WriteIO32(&pRegister->GREG1, regvalue);
+	WriteIODW(&pRegister->GREG1, regvalue);
 }
+
+
+//enum PrimPAD_MUX_Index{ // Primary TFT MUX
+//	PADMUX_PrimaryMLC = 0,
+//	PADMUX_PrimaryMPU = 1,
+//	PADMUX_SecondaryMLC = 2,
+//	PADMUX_ResolutionConv = 3,
+//};
+//enum PADCLK_Config {
+//	PADCLK_CLK = 0,
+//	PADCLK_InvCLK = 1,
+//	PADCLK_ReservedCLK = 2,
+//	PADCLK_ReservedInvCLK = 3,
+//	PADCLK_CLK_div2_0   = 4,
+//	PADCLK_CLK_div2_90  = 5,
+//	PADCLK_CLK_div2_180 = 6,
+//	PADCLK_CLK_div2_270 = 7,
+//};

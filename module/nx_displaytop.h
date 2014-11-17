@@ -291,7 +291,7 @@ struct NX_DISPLAYTOP_RegisterSet
 
 	volatile U32 TFTMPU_MUX;            // 0x24
 	volatile U32 HDMIFIELDCTRL;         // 0x28
-	
+
 	volatile U32 GREG0;         // 0x2C
 	volatile U32 GREG1;         // 0x30
 	volatile U32 GREG2;         // 0x34
@@ -378,7 +378,7 @@ void	NX_DISPLAYTOP_SetHDMIField(U32 Enable,			// Enable
 									U32 VSyncClr,
 									U32 HSyncClr,
 									U32 FieldUse,
-									U32 MUXSEL 	); // MUXSEL, 0 : Prim 1 : Second 
+									U32 MUXSEL 	); // MUXSEL, 0 : Prim 1 : Second
 
 //enum PrimPAD_MUX_Index{ // Primary TFT MUX
 //	PADMUX_PrimaryMLC = 0,
@@ -403,7 +403,21 @@ void	NX_DISPLAYTOP_SetPADClock(	U32 MUX_Index,
 									U32 PADCLK_Cfg );
 void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb );
 
+void	NX_DISPLAYTOP_SetHDMIField(U32 Enable,			// Enable
+									U32 InitVal,		// Init Value
+									U32 VSyncToggle,	// VSync Toggle
+									U32 HSyncToggle,		// HSync Toggle
+									U32 VSyncClr,
+									U32 HSyncClr,
+									U32 FieldUse,
+									U32 MUXSEL 	); // MUXSEL, 0 : Prim 1 : Second 
 
+//enum PrimPAD_MUX_Index{ // Primary TFT MUX
+//	PADMUX_PrimaryMLC = 0,
+//	PADMUX_PrimaryMPU = 1,
+//	PADMUX_SecondaryMLC = 2,
+//	PADMUX_ResolutionConv = 3,
+//};
 
 //@}
 
