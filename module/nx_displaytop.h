@@ -419,24 +419,6 @@ void	NX_DISPLAYTOP_SetHDMIField(U32 Enable,			// Enable
 //	PADMUX_ResolutionConv = 3,
 //};
 
-enum PADCLK_Config {
-	PADCLK_CLK = 0,
-	PADCLK_InvCLK = 1,
-	PADCLK_ReservedCLK = 2,
-	PADCLK_ReservedInvCLK = 3,
-	PADCLK_CLK_div2_0   = 4,
-	PADCLK_CLK_div2_90  = 5,
-	PADCLK_CLK_div2_180 = 6,
-	PADCLK_CLK_div2_270 = 7,
-};
-
-
-void	NX_DISPLAYTOP_SetPADClock(	U32 MUX_Index,
-									U32 PADCLK_Cfg );
-void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb );
-
-
-
 //@}
 
 #ifdef	__cplusplus
