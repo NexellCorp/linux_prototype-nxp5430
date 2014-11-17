@@ -693,12 +693,12 @@ U32		NX_CLKPWR_GetPLLFreq( U32 pllnumber )
 	RegValue1 = ReadIO32(&__g_pRegister->PLLSETREG_SSCG[pllnumber]);
 	nK = (RegValue1 >> PLL_KDIV_BIT_POS) & 0xFFFF;
 
-    if ((pllnumber > 1) && nK) {
-        temp = (U32)(((((nK * 1000) / 65536) * __g_OSC_KHz) / nP) >> nS);
-    }
+	if ((pllnumber > 1) && nK) {
+		temp = (U32)(((((nK * 1000) / 65536) * __g_OSC_KHz) / nP) >> nS);
+	}
 
-    temp = (U32)((((( nM * __g_OSC_KHz)/nP)>>nS)*1000) + temp);
-    return temp;
+	temp = (U32)((((( nM * __g_OSC_KHz)/nP)>>nS)*1000) + temp);
+	return temp;
 }
 
 void	NX_CLKPWR_SetPLLDither ( U32 pllnumber, S32 K, U32 MFR, U32 MRR, U32 SEL_PF, CBOOL SSCG_EN  )
@@ -1464,7 +1464,7 @@ U32		NX_CLKPWR_GetSystemResetConfiguration( void )
 //------------------------------------------------------------------------------
 // CPU Power Management
 //------------------------------------------------------------------------------
-void	NX_CLKPWR_SetCPUPowerDown( U32 nCPU )
+void	NX_CLKPWR_SetCPUPowerOff( U32 nCPU )
 {
 	register U32 regvalue;
 
@@ -1475,6 +1475,15 @@ void	NX_CLKPWR_SetCPUPowerDown( U32 nCPU )
 	regvalue = 1 << nCPU;
 
 	WriteIO32(&__g_pRegister->CPUPOWERDOWNREQ, regvalue);
+}
+
+void	NX_CLKPWR_SetCPUPowerOff32( U32 CPUbits )
+{
+	NX_ASSERT( CPUbits	< 0x100 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	WriteIO32(&__g_pRegister->CPUPOWERDOWNREQ, CPUbits);
 }
 
 void	NX_CLKPWR_SetCPUPowerOn( U32 nCPU )
@@ -1488,6 +1497,15 @@ void	NX_CLKPWR_SetCPUPowerOn( U32 nCPU )
 	regvalue = 1 << nCPU;
 
 	WriteIO32(&__g_pRegister->CPUPOWERONREQ, regvalue);
+}
+
+void	NX_CLKPWR_SetCPUPowerOn32( U32 CPUbits )
+{
+	NX_ASSERT( CPUbits	< 0x100 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	WriteIO32(&__g_pRegister->CPUPOWERONREQ, CPUbits);
 }
 
 void	NX_CLKPWR_SetCPUResetMode( NX_CLKPWR_CPU_RESETMODE mode )
@@ -1513,20 +1531,7 @@ void	NX_CLKPWR_SetCPUWarmReset( U32 nCPU )
 	WriteIO32(&__g_pRegister->CPUWARMRESETREQ, regvalue);
 }
 
-CBOOL	NX_CLKPWR_GetCPUPowerStatus( U32 nCPU )
-{
-	register U32 regvalue;
-
-	NX_ASSERT( nCPU	< 8 );
-
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS) >> 8;
-
-	return ((regvalue & (1 << nCPU)) ? CFALSE : CTRUE );
-}
-
-CBOOL	NX_CLKPWR_GetCPUClockStatus( U32 nCPU )
+CBOOL	NX_CLKPWR_GetCPUPowerOnStatus( U32 nCPU )
 {
 	register U32 regvalue;
 
@@ -1536,7 +1541,55 @@ CBOOL	NX_CLKPWR_GetCPUClockStatus( U32 nCPU )
 
 	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
 
-	return ((regvalue & (1 << nCPU)) ? CTRUE : CFALSE );
+	return ((regvalue >> 8) & (1 << nCPU) ? CFALSE : CTRUE);
+}
+
+U32		NX_CLKPWR_GetCPUPowerOnStatus32( void )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
+
+	return ((~regvalue >> 8) & 0xFF);
+}
+
+CBOOL	NX_CLKPWR_GetCPUPowerOffStatus( U32 nCPU )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( nCPU	< 8 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
+
+	return ((regvalue >> 8) & (1 << nCPU) ? CTRUE : CFALSE);
+}
+
+U32		NX_CLKPWR_GetCPUPowerOffStatus32( void )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
+
+	return ((regvalue >> 8) & 0xFF);
+}
+
+U32		NX_CLKPWR_GetCPUClockOnStatus( void )
+{
+	register U32 regvalue;
+
+	NX_ASSERT( nCPU	< 8 );
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regvalue = ReadIO32(&__g_pRegister->CPUSTATUS);
+
+	return (regvalue & 0xFF);
 }
 
 //------------------------------------------------------------------------------

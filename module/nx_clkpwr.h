@@ -93,8 +93,8 @@ extern "C"
 		volatile U32 DVOREG[9];					///< 0x020 ~ 0x040 : Divider Setting Register
 		volatile U32 __Reserved2;				///< 0x044
 		volatile U32 PLLSETREG_SSCG[6];			///< 0x048 ~ 0x05C
-		volatile U8  __Reserved3[0x80-0x60];	///< 0x060 ~ 0x07C
-		volatile U8  __Reserved4[0x200-0x80];	// padding (0x80 ~ 0x1FF)
+		volatile U32 __reserved3[8];			///< 0x060 ~ 0x07C
+		volatile U8 __Reserved4[0x200-0x80];	// padding (0x80 ~ 0x1FF)
 		volatile U32 GPIOWAKEUPRISEENB;			///< 0x200 : GPIO Rising Edge Detect Enable Register
 		volatile U32 GPIOWAKEUPFALLENB;			///< 0x204 : GPIO Falling Edge Detect Enable Register
 		volatile U32 GPIORSTENB;				///< 0x208 : GPIO Reset Enable Register
@@ -165,6 +165,7 @@ extern "C"
 	/// @brief	CPU Reset mode
 	typedef enum
 	{
+		NX_CLKPWR_CPU_RESETMODE_NONE	= 0UL,		///< 
 		NX_CLKPWR_CPU_RESETMODE_SAFE	= 1UL,		///< Safe reset mode
 		NX_CLKPWR_CPU_RESETMODE_DIRECT	= 2UL,      ///< Direct reset mode
 
@@ -338,12 +339,17 @@ U32		NX_CLKPWR_GetSystemResetConfiguration( void );
 //------------------------------------------------------------------------------
 /// @name	CPU Power Management
 //@{
-void	NX_CLKPWR_SetCPUPowerDown( U32 nCPU );
+void	NX_CLKPWR_SetCPUPowerOff( U32 nCPU );
+void	NX_CLKPWR_SetCPUPowerOff32( U32 CPUbits );
 void	NX_CLKPWR_SetCPUPowerOn( U32 nCPU );
+void	NX_CLKPWR_SetCPUPowerOn32( U32 CPUbits );
 void	NX_CLKPWR_SetCPUResetMode( NX_CLKPWR_CPU_RESETMODE mode );
 void	NX_CLKPWR_SetCPUWarmReset( U32 nCPU );
-CBOOL	NX_CLKPWR_GetCPUPowerStatus( U32 nCPU );
-CBOOL	NX_CLKPWR_GetCPUClockStatus( U32 nCPU );
+CBOOL	NX_CLKPWR_GetCPUPowerOnStatus( U32 nCPU );
+U32		NX_CLKPWR_GetCPUPowerOnStatus32( void );
+CBOOL	NX_CLKPWR_GetCPUPowerOffStatus( U32 nCPU );
+U32		NX_CLKPWR_GetCPUPowerOffStatus32( void );
+U32		NX_CLKPWR_GetCPUClockOnStatus( void );
 //@}
 
 //------------------------------------------------------------------------------
