@@ -513,6 +513,8 @@ void NX_MLC_SetLayerAlpha256(U32 ModuleIndex, U32 Layer, U32 Alpha);
 
 CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex );
 
+
+
 #ifdef	__cplusplus
 }
 #endif

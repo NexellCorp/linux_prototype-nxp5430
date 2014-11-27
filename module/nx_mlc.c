@@ -3165,9 +3165,9 @@ void	NX_MLC_SetGammaTable_Poweroff( U32 ModuleIndex, CBOOL Enb )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 	if(Enb == CTRUE) {
-    	regvalue = pRegister->MLCGAMMACONT;
-    	regvalue = regvalue & 0xF3;
-    	WriteIO32(&pRegister->MLCGAMMACONT, regvalue);
+		regvalue = pRegister->MLCGAMMACONT;
+		regvalue = regvalue & 0xF3;
+		WriteIO32(&pRegister->MLCGAMMACONT, regvalue);
 	}
 }
 

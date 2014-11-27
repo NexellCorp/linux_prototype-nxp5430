@@ -406,11 +406,11 @@ void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb );
 void	NX_DISPLAYTOP_SetHDMIField(U32 Enable,			// Enable
 									U32 InitVal,		// Init Value
 									U32 VSyncToggle,	// VSync Toggle
-									U32 HSyncToggle,		// HSync Toggle
+									U32 HSyncToggle,	// HSync Toggle
 									U32 VSyncClr,
 									U32 HSyncClr,
 									U32 FieldUse,
-									U32 MUXSEL 	); // MUXSEL, 0 : Prim 1 : Second 
+									U32 MUXSEL );		// MUXSEL, 0 : Prim 1 : Second 
 
 //enum PrimPAD_MUX_Index{ // Primary TFT MUX
 //	PADMUX_PrimaryMLC = 0,
