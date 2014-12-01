@@ -1000,12 +1000,20 @@ void	NX_ALIVE_SetOutputEnable32( U32 value )
 */
 void  NX_ALIVE_SetOutputEnable32( U32 value )
 {
+	NX_ASSERT( CNULL != __g_pRegister );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, ~value );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0 );
+
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, value );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0 );
 }
 
 void  NX_ALIVE_SetInputEnable32( U32 value )
 {
+	NX_ASSERT( CNULL != __g_pRegister );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, ~value );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0 );
+
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, value );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0 );
 }
@@ -1025,7 +1033,6 @@ CBOOL   NX_ALIVE_GetOutputEnable( U32 BitNumber )
 {
 	//NX_ASSERT( 6 > BitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
-
 	return (CBOOL)((__g_pRegister->ALIVEGPIOPADOUTENBREADREG >> BitNumber) & 0x01);
 }
 
@@ -1087,6 +1094,9 @@ void    NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value )
 void    NX_ALIVE_SetOutputHigh32( U32 value32 )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, ~value32);
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
+
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, value32);
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
 }
@@ -1094,6 +1104,9 @@ void    NX_ALIVE_SetOutputHigh32( U32 value32 )
 void    NX_ALIVE_SetOutputLow32( U32 value32 )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, ~value32);
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
+
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, value32);
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
 }
