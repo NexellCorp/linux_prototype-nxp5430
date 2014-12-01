@@ -29,24 +29,24 @@
 #include "nx_clockcontrol.h"
 #include "nx_bit_accessor.h"
 
-#define ReadIO32(Addr)          (*(volatile unsigned int*)(Addr))
+#define ReadIO32(Addr)          (*(volatile unsigned int  *)(Addr))
 #define ReadIO16(Addr)          (*(volatile unsigned short*)(Addr))
-#define ReadIO8(Addr)           (*(volatile unsigned char*)(Addr))
+#define ReadIO8(Addr)           (*(volatile unsigned char *)(Addr))
 
-#define WriteIO32(Addr,Data)    (*(volatile unsigned int  *)(Addr))  =  ((unsigned int)(Data))
+#define WriteIO32(Addr,Data)    (*(volatile unsigned int  *)(Addr))  =  ((unsigned int  )(Data))
 #define WriteIO16(Addr,Data)    (*(volatile unsigned short*)(Addr))  =  ((unsigned short)(Data))
-#define WriteIO8(Addr,Data)     (*(volatile unsigned char *)(Addr))  =  ((unsigned char)(Data))
+#define WriteIO8(Addr,Data)     (*(volatile unsigned char *)(Addr))  =  ((unsigned char )(Data))
 
-#define SetIO32(Addr,Data)      (*(volatile unsigned int  *)(Addr)) |=  ((unsigned int)(Data))
+#define SetIO32(Addr,Data)      (*(volatile unsigned int  *)(Addr)) |=  ((unsigned int  )(Data))
 #define SetIO16(Addr,Data)      (*(volatile unsigned short*)(Addr)) |=  ((unsigned short)(Data))
-#define SetIO8(Addr,Data)       (*(volatile unsigned char *)(Addr)) |=  ((unsigned char)(Data))
+#define SetIO8(Addr,Data)       (*(volatile unsigned char *)(Addr)) |=  ((unsigned char )(Data))
 
-#define ClearIO32(Addr,Data)    (*(volatile unsigned int  *)(Addr)) &= ~((unsigned int)(Data))
+#define ClearIO32(Addr,Data)    (*(volatile unsigned int  *)(Addr)) &= ~((unsigned int  )(Data))
 #define ClearIO16(Addr,Data)    (*(volatile unsigned short*)(Addr)) &= ~((unsigned short)(Data))
-#define ClearIO8(Addr,Data)     (*(volatile unsigned char *)(Addr)) &= ~((unsigned char)(Data))
+#define ClearIO8(Addr,Data)     (*(volatile unsigned char *)(Addr)) &= ~((unsigned char )(Data))
 
 //@choiyk : 2012/07/20 :
-#define Devmodel_ReadIO32(Addr)         NX_SIMIO_TD_READ((volatile unsigned int*)(Addr))
+#define Devmodel_ReadIO32(Addr)         NX_SIMIO_TD_READ ((volatile unsigned int*)(Addr))
 #define Devmodel_WriteIO32(Addr,Data)   NX_SIMIO_TD_WRITE((volatile unsigned int*)(Addr), (unsigned int)(Data))
 
 //------------------------------------------------------------------------------

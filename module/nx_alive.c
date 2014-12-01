@@ -980,10 +980,12 @@ void	NX_ALIVE_SetOutputEnable( U32 BitNumber, CBOOL OutputEnb )
 	if( OutputEnb )
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, PADOUTENB_MASK);
+		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0);
 	}
 	else
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, PADOUTENB_MASK);
+		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0);
 	}
 }
 /*
@@ -998,9 +1000,16 @@ void	NX_ALIVE_SetOutputEnable32( U32 value )
 */
 void  NX_ALIVE_SetOutputEnable32( U32 value )
 {
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, ~value );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, value );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0 );
 }
+
+void  NX_ALIVE_SetInputEnable32( U32 value )
+{
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, value );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0 );
+}
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get setting value of Alive GPIO's output mode.
@@ -1012,7 +1021,7 @@ void  NX_ALIVE_SetOutputEnable32( U32 value )
  *				NX_ALIVE_SetVDDPWRON,		NX_ALIVE_GetVDDPWRON,
  *				NX_ALIVE_GetVDDPWRON_DDR
  */
-CBOOL	NX_ALIVE_GetOutputEnable( U32 BitNumber )
+CBOOL   NX_ALIVE_GetOutputEnable( U32 BitNumber )
 {
 	//NX_ASSERT( 6 > BitNumber );
 	NX_ASSERT( CNULL != __g_pRegister );
@@ -1020,10 +1029,24 @@ CBOOL	NX_ALIVE_GetOutputEnable( U32 BitNumber )
 	return (CBOOL)((__g_pRegister->ALIVEGPIOPADOUTENBREADREG >> BitNumber) & 0x01);
 }
 
-U32		NX_ALIVE_GetOutputEnable32 (void)
+U32     NX_ALIVE_GetOutputEnable32 (void)
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	return __g_pRegister->ALIVEGPIOPADOUTENBREADREG;
+	return __g_pRegister->ALIVEGPIOPADOUTENBREADREG & 0x3F;
+}
+
+CBOOL   NX_ALIVE_GetInputEnable( U32 BitNumber )
+{
+	//NX_ASSERT( 6 > BitNumber );
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	return (CBOOL)((__g_pRegister->ALIVEGPIOPADOUTENBREADREG >> BitNumber) & 0x01) ? CFALSE : CTRUE;
+}
+
+U32     NX_ALIVE_GetInputEnable32 (void)
+{
+	NX_ASSERT( CNULL != __g_pRegister );
+	return (~__g_pRegister->ALIVEGPIOPADOUTENBREADREG) & 0x3F;
 }
 
 //------------------------------------------------------------------------------
@@ -1039,7 +1062,7 @@ U32		NX_ALIVE_GetOutputEnable32 (void)
  *				NX_ALIVE_SetVDDPWRON,		NX_ALIVE_GetVDDPWRON,
  *				NX_ALIVE_GetVDDPWRON_DDR
  */
-void	NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value )
+void    NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value )
 {
 	register U32 PADOUT_MASK;
 
@@ -1052,21 +1075,28 @@ void	NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value )
 	if( Value )
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, PADOUT_MASK);
+		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
 	}
 	else
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, PADOUT_MASK);
+		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
 	}
 }
 
-void    NX_ALIVE_SetOutputValue32( U32 value32 )
+void    NX_ALIVE_SetOutputHigh32( U32 value32 )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, ~value32);
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, value32);
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
 }
 
-
+void    NX_ALIVE_SetOutputLow32( U32 value32 )
+{
+	NX_ASSERT( CNULL != __g_pRegister );
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, value32);
+	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
+}
 
 
 
@@ -1222,7 +1252,6 @@ U32  NX_ALIVE_GetWakeUpStatus( void )
    // volatile U32 WAKEUPSTATUS	    ;	// 0x70
     Status = __g_pRegister->WAKEUPSTATUS;
     return Status;
-
 }
 
 

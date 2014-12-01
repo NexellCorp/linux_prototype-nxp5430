@@ -239,6 +239,7 @@ CBOOL   NX_ALIVE_GetVDDPWRTOGGLE( void );
 //@{
 void    NX_ALIVE_SetOutputEnable( U32 BitNumber, CBOOL OutputEnb );
 CBOOL   NX_ALIVE_GetOutputEnable( U32 BitNumber );
+CBOOL   NX_ALIVE_GetInputEnable( U32 BitNumber );
 void    NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value );
 CBOOL   NX_ALIVE_GetOutputValue( U32 BitNumber );
 CBOOL   NX_ALIVE_GetInputValue( U32 BitNumber );
@@ -252,9 +253,13 @@ U32     NX_ALIVE_GetWakeUpStatus( void );
 void    NX_ALIVE_ClearWakeUpStatus( void );
 
 void    NX_ALIVE_SetOutputEnable32( U32 value32 );
+void    NX_ALIVE_SetInputEnable32( U32 value );
 U32     NX_ALIVE_GetOutputEnable32 (void);
+U32     NX_ALIVE_GetInputEnable32 (void);
 void    NX_ALIVE_SetPullUpEnable32( U32 value32 );
 void    NX_ALIVE_SetOutputValue32( U32 value32 );
+void    NX_ALIVE_SetOutputHigh32( U32 value32 );
+void    NX_ALIVE_SetOutputLow32( U32 value32 );
 U32     NX_ALIVE_GetOutputValue32( void );
 U32     NX_ALIVE_GetInputValue32( void );
 void    NX_ALIVE_SetDetectEnable32( U32 value32 );
