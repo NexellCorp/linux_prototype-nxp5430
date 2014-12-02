@@ -37,7 +37,7 @@ extern "C"
 		//@added by choiyk 2013/12/26
 		//NTSC encoder
 		//=============================
-		volatile U32 NTSC_STATA; 		 // 0h  0x00
+		volatile U32 NTSC_STATA;         // 0h  0x00
 		volatile U32 NTSC_ECMDA;         // 1h  0x04
 		volatile U32 NTSC_ECMDB;         // 2h  0x08
 		volatile U32 NTSC_GLK;           // 3h  0x0C
@@ -330,6 +330,8 @@ void	NX_DPC_GetVSyncOffset( U32 ModuleIndex, U32 *pVSSOffset, U32 *pVSEOffset, U
 U32 NX_DPC_EnablePAD_TFT ( U32 ModuleIndex, U32 ModeIndex );
 U32 NX_DPC_EnablePAD_i80 ( U32 ModuleIndex, U32 ModeIndex );
 
+
+//------------------------------------------------------------------------------
 /// @brief	Prototype 이식.
 //------------------------------------------------------------------------------
 typedef enum
@@ -379,6 +381,7 @@ typedef enum
     PADVCLK     = 0,    ///< Output pad clock vclk ( pixel clock )
     PADVCLK2    = 1,     ///< Output pad clock vclk*2 ( pixel clock*2 )
     PADVCLK3    = 2     ///< Output pad clock vclk*3 ( pixel clock*3 )
+	// 6x, 1x and div 2 with 6x (to make 3x clock)
 }OUTPADCLKSEL;
 
 typedef enum
@@ -452,12 +455,12 @@ void NX_DPC_SetEnable_WITH_INTERLACE
 
 void NX_DPC_SetEnable_WITH_INTERLACE
 (
-    U32 ModuleIndex,
+	U32 ModuleIndex,
 	CBOOL Enable,			///< [in] display controller enable
-	CBOOL RGBMode,          ///< [in] output format reb & ycbcr enable
+	CBOOL RGBMode,			///< [in] output format reb & ycbcr enable
 	CBOOL UseNTSCSync,		///< [in] use NTSC encoder sync
 	CBOOL UseAnalogOutput,	///< [in] use analog output(use DAC)
-	CBOOL SEAVEnable        ///< [in] Start of active and End of active Enable
+	CBOOL SEAVEnable		///< [in] Start of active and End of active Enable
 );
 
 void NX_DPC_SetOutVideoClkSelect
@@ -510,11 +513,11 @@ U32 NX_DPC_GetFieldFlag( U32 ModuleIndex );
 // set sync & regflush
 void NX_DPC_SetSync_V
 (
-    U32 ModuleIndex,
-    U32 AVHeight,
-    U32 VSW,                    ///< [in] Vertical sync width (unit:Line)
-    U32 VFP,                    ///< [in] Vertical front porch width (unit:Line)
-    U32 VBP                     ///< [in] Vertical back porch width (unit:Line)
+	U32 ModuleIndex,
+	U32 AVHeight,
+	U32 VSW,					///< [in] Vertical sync width (unit:Line)
+	U32 VFP,					///< [in] Vertical front porch width (unit:Line)
+	U32 VBP						///< [in] Vertical back porch width (unit:Line)
 );
 
 //@added choiyk 2013-01-28 오후 10:42:25
@@ -527,10 +530,10 @@ void NX_DPC_SetEncoderSHCPhaseControl	(U32 ModuleIndex, U32 ChromaParam);
 void NX_DPC_SetEncoderTimingConfigReg	(U32 ModuleIndex, U32 INCTL);
 void NX_DPC_SetEncoderDACOutputSelect	(U32 ModuleIndex,
 										 U8 DACSEL0,    U8 DACSEL1,    U8 DACSEL2,
-									     U8 DACSEL3,    U8 DACSEL4,    U8 DACSEL5  );
+										 U8 DACSEL3,    U8 DACSEL4,    U8 DACSEL5  );
 void NX_DPC_SetEncoderSyncLocation		(U32 ModuleIndex,
 										 U16 HSOE,    U16 HSOB,    U16 VSOB,
-									     U16 VSOE,    U8 VSOST,    CBOOL NOVRST );
+										 U16 VSOE,    U8 VSOST,    CBOOL NOVRST );
 void NX_DPC_SetEncoderDACPowerEnable	(U32 ModuleIndex, U8 DACPD);
 
 void	NX_DPC_SetYCOrder ( U32 ModuleIndex, NX_DPC_YCORDER ycorder );

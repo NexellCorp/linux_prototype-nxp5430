@@ -14,8 +14,8 @@
 //	History		:
 //------------------------------------------------------------------------------
 #include <nx_chip.h>
-#include "nx_USB20OTG.h"
-#include <string.h> // for memset
+#include "nx_usb20otg.h"
+#include <linux/string.h> // for memset
 
 static	NX_USB20OTG_RegisterSet *__g_pRegister[NUMBER_OF_USB20OTG_MODULE];
 static	NX_USB20OTG_APB_RegisterSet *__g_pApbRegister[0];

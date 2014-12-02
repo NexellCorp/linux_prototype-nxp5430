@@ -14,8 +14,8 @@
 //	History		:
 //------------------------------------------------------------------------------
 #include <nx_chip.h>
-#include "nx_USB20HOST.h"
-#include <string.h> // for memset
+#include "nx_usb20host.h"
+#include <linux/string.h> // for memset
 
 static	NX_USB20HOST_RegisterSet *__g_pRegister[0];
 static	NX_USB20HOST_OHCI_RegisterSet *__g_pOhciRegister[0];

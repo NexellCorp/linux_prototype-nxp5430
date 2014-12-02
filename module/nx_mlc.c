@@ -3165,9 +3165,9 @@ void	NX_MLC_SetGammaTable_Poweroff( U32 ModuleIndex, CBOOL Enb )
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
 	if(Enb == CTRUE) {
-    	regvalue = pRegister->MLCGAMMACONT;
-    	regvalue = regvalue & 0xF3;
-    	WriteIODW(&pRegister->MLCGAMMACONT, regvalue);
+		regvalue = pRegister->MLCGAMMACONT;
+		regvalue = regvalue & 0xF3;
+		WriteIO32(&pRegister->MLCGAMMACONT, regvalue);
 	}
 }
 
@@ -3449,7 +3449,7 @@ NX_MLC_SetVideoLayerControlParameter
     WriteIO32(&pRegister->MLCVIDEOLAYER.MLCTPCOLOR, regvalue );
 
     regvalue = (U32)((AlphaArgument<<28) | TransparencyColor);
-    WriteIODW(&pRegister->MLCVIDEOLAYER.MLCINVCOLOR, regvalue );
+    WriteIO32(&pRegister->MLCVIDEOLAYER.MLCINVCOLOR, regvalue );
 }
 
 
@@ -3642,10 +3642,10 @@ NX_MLC_SetVideoLayerFilterScale
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	U32 MLCHSCALE = ReadIODW(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
-	U32 MLCVSCALE = ReadIODW(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
-	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(MLCHSCALE | (HScale&0x00FFFFFF)));
-	WriteIODW(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(MLCVSCALE | (VScale&0x00FFFFFF)));
+	U32 MLCHSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
+	U32 MLCVSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
+	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(MLCHSCALE | (HScale&0x00FFFFFF)));
+	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(MLCVSCALE | (VScale&0x00FFFFFF)));
 }
 
 
