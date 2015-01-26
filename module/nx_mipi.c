@@ -14,9 +14,9 @@
 //	Author		:
 //	History		:
 //------------------------------------------------------------------------------
-#include "nx_chip.h"
+#include <nx_chip.h>
 #include "nx_mipi.h"
-
+#include <linux/string.h>
 
 static	NX_MIPI_RegisterSet *__g_pRegister[NUMBER_OF_MIPI_MODULE];
 
@@ -756,7 +756,7 @@ void  NX_MIPI_CSI_SetTimingControl( U32 ModuleIndex, int Channel, int T1, int T2
 }
 
 // Set virtual channel for data interleave
-void  NX_MIPI_CSI_SetInterleaveCahnnel( U32 ModuleIndex, int Channel, int InterleaveChannel )
+void  NX_MIPI_CSI_SetInterleaveChannel( U32 ModuleIndex, int Channel, int InterleaveChannel )
 {
 	register NX_MIPI_RegisterSet* pRegister;
 	register U32	regvalue;
