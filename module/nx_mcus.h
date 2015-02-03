@@ -34,41 +34,41 @@ struct	NX_MCUS_RegisterSet
 	volatile U32 MEMBW			;	///< 00h			: Memory Bus Width Register
 	volatile U32 MEMTIMEACS[2]	;	///< 04h, 08h		: Memory Timing for tACS Register
 	volatile U32 MEMTIMECOS[2]	;	///< 0Ch, 10h		: Memory Timing for tCOS Register
-	volatile U32 MEMTIMEACC[4]	;	///< 14h - 20h		: Memory Timing for tACC Register
-	volatile U32 MEMTIMESACC[4]	;	///< 24h - 30h		: Memory Timing for tSACC Register
-	volatile U32 MEMTIMEWACC[4]	;	///< 34h - 40h		: Memory Timing for tWACC Register
-	volatile U32 MEMTIMECOH[2]	;	///< 44h, 48h		: Memory Timing for tCOH Register
-	volatile U32 MEMTIMECAH[2]	;	///< 4Ch, 50h		: Memory Timing for tCAH Register
-	volatile U32 MEMBURST		;	///< 54h			: Memory Burst Control Register
-	volatile U32 __Reserved1[1]	;	///< 58h			: Reserved for future use
-	volatile U32 MEMWAIT		;	///< 5Ch			: Memory Wait Control Register
-	volatile U32 IDEDMATIMEOUT	;	///< 60h			: DMA Time-out Register
-	volatile U32 IDEDMACTRL		;	///< 64h			: DMA Control Register
-	volatile U32 IDEDMAPOL		;	///< 68h			: DMA Polarity Register
-	volatile U32 IDEDMATIME0	;	///< 6Ch			: DMA Timing 0 Register
-	volatile U32 IDEDMATIME1	;	///< 70h			: DMA Timing 1 Register
-	volatile U32 IDEDMATIME2	;	///< 74h			: DMA Timing 2 Register
-	volatile U32 IDEDMATIME3	;	///< 78h			: DMA Timing 3 Register
-	volatile U32 IDEDMARST		;	///< 7Ch			: DMA Reset Register
-	volatile U32 IDEDMATIME4	;	///< 80h			: DMA Timing 4 Register
-	volatile U32 __Reserved2[1]	;	///< 84h			: Reserved for future use.
-	volatile U32 NFCONTROL		;	///< 88h			: Nand Flash Control Register
-	volatile U32 NFECCCTRL		;	///< 8Ch			: Nand ECC Control Register
-	volatile U32 NFCNT			;	///< 90h			: Nand Flash Data Count Register
-	volatile U32 NFECCSTATUS	;	///< 94h			: Nand Flash ECC Status Register
-	volatile U32 NFTACS			;	///< 98h			: Nand Timing for tACS Register
-	volatile U32 NFTCOS			;	///< 9Ch			: Nand Timing for tCOS Register
-	volatile U32 NFTACC			;	///< A0h			: Nand Timing for tACC Register
-	volatile U32 __Reserved4	;	///< A4h			: Reserved for future use.
-	volatile U32 NFTOCH			;	///< A8h			: Nand Timing for tOCH Register
-	volatile U32 NFTCAH			;	///< ACh			: Nand Timing for tCAH Register
-	volatile U32 NFECC[27]		;	///< B0h ~ 118h	: Nand Flash ECC 0 ~ 6 Register
-	volatile U32 NFORGECC[27]	;	///< 11Ch ~ 184h	: Nand Flash Origin ECC 0 ~ 6 Register
-	volatile U32 NFSYNDROME[30]	;	///< 188h ~ 1FCh	: Nand Flash ECC Syndrome Value 0 ~ 7 Register
-	volatile U32 NFELP[30]		;	///< 200h ~ 274h	: Nand Flash ELP Value 0 ~ 11 Register
-	volatile U32 NFERRLOCATION[30];	///< 278h ~ 2ECh	: Nand Flash Error Location 0 ~ 11 Register
-	volatile U32 NFECCAUTOMODE	;	///< 2F0h			: Nand Flash ECC Status Register
-	volatile U32 WRNFSYNDROME[30];	///< 2F4h ~ 368h	: Nand Flash Error Location 0 ~ 11 Register
+	volatile U32 MEMTIMEACC[4]	;	///< 14h, 18h, 1Ch	: Memory Timing for tACC Register
+	volatile U32 MEMTIMESACC[4]	;	///< 20h, 24h, 28h	: Memory Timing for tSACC Register
+	volatile U32 MEMTIMEWACC[4]	;	///< 2Ch, 30h, 34h	: Memory Timing for tWACC Register
+	volatile U32 MEMTIMECOH[2]	;	///< 38h, 3Ch		: Memory Timing for tCOH Register
+	volatile U32 MEMTIMECAH[2]	;	///< 40h, 44h		: Memory Timing for tCAH Register
+	volatile U32 MEMBURST		;	///< 48h			: Memory Burst Control Register
+	volatile U32 __Reserved1[1]	;	///< 4Ch			: Reserved for future use
+	volatile U32 MEMWAIT		;	///< 50h			: Memory Wait Control Register
+	volatile U32 IDEDMATIMEOUT	;	///< 54h			: DMA Time-out Register
+	volatile U32 IDEDMACTRL		;	///< 58h			: DMA Control Register
+	volatile U32 IDEDMAPOL		;	///< 5Ch			: DMA Polarity Register
+	volatile U32 IDEDMATIME0	;	///< 60h			: DMA Timing 0 Register
+	volatile U32 IDEDMATIME1	;	///< 64h			: DMA Timing 1 Register
+	volatile U32 IDEDMATIME2	;	///< 68h			: DMA Timing 2 Register
+	volatile U32 IDEDMATIME3	;	///< 6Ch			: DMA Timing 3 Register
+	volatile U32 IDEDMARST		;	///< 70h			: DMA Reset Register
+	volatile U32 IDEDMATIME4	;	///< 74h			: DMA Timing 4 Register
+	volatile U32 __Reserved2[1]	;	///< 78h			: Reserved for future use.
+	volatile U32 NFCONTROL		;	///< 7Ch			: Nand Flash Control Register
+	volatile U32 NFECCCTRL		;	///<104h			: Nand ECC Control Register
+	volatile U32 NFCNT			;	///< B8h			: Nand Flash Data Count Register
+	volatile U32 NFECCSTATUS	;	///< BCh			: Nand Flash ECC Status Register
+	volatile U32 NFTACS			;	///< ECh			: Nand Timing for tACS Register
+	volatile U32 NFTCOS			;	///< F0h			: Nand Timing for tCOS Register
+	volatile U32 NFTACC			;	///< F4h			: Nand Timing for tACC Register
+	volatile U32 __Reserved4	;	///< F8h			: Reserved for future use.
+	volatile U32 NFTOCH			;	///< FCh			: Nand Timing for tOCH Register
+	volatile U32 NFTCAH			;	///<100h			: Nand Timing for tCAH Register
+	volatile U32 NFECC[27]		;	///< 80h ~ 98h		: Nand Flash ECC 0 ~ 6 Register
+	volatile U32 NFORGECC[27]	;	///< 9Ch ~ B4h		: Nand Flash Origin ECC 0 ~ 6 Register
+	volatile U32 NFSYNDROME[30]	;	///< C0h ~ DCh		: Nand Flash ECC Syndrome Value 0 ~ 7 Register
+	volatile U32 NFELP[30]		;	///<138h ~ 164h		: Nand Flash ELP Value 0 ~ 11 Register
+	volatile U32 NFERRLOCATION[30];	///<168h ~ 194h		: Nand Flash Error Location 0 ~ 11 Register
+	volatile U32 NFECCAUTOMODE	;	///< BCh			: Nand Flash ECC Status Register
+	volatile U32 WRNFSYNDROME[30];	///<168h ~ 194h		: Nand Flash Error Location 0 ~ 11 Register
 };
 
 struct	NX_MCUS_NAND_RegisterSet
@@ -199,9 +199,16 @@ CBOOL	NX_MCUS_GetInterruptEnable( S32 IntNum );
 CBOOL	NX_MCUS_GetInterruptPending( S32 IntNum );
 void	NX_MCUS_ClearInterruptPending( S32 IntNum );
 
+void	NX_MCUS_SetECCInterruptEnable( S32 IntNum, CBOOL Enable );
+CBOOL	NX_MCUS_GetECCInterruptEnable( S32 IntNum );
+CBOOL	NX_MCUS_GetECCInterruptPending( S32 IntNum );
+void	NX_MCUS_ClearECCInterruptPending( S32 IntNum );
+
 void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable );
+#if 0
 CBOOL	NX_MCUS_GetInterruptEnableAll( void );
 CBOOL	NX_MCUS_GetInterruptPendingAll( void );
+#endif
 void	NX_MCUS_ClearInterruptPendingAll( void );
 
 void	NX_MCUS_SetInterruptEnable32( U32 EnableFlag );
@@ -209,7 +216,13 @@ U32		NX_MCUS_GetInterruptEnable32( void );
 U32		NX_MCUS_GetInterruptPending32( void );
 void	NX_MCUS_ClearInterruptPending32( U32 PendingFlag );
 
+void	NX_MCUS_SetECCInterruptEnable32 ( U32 EnableFlag );
+U32		NX_MCUS_GetECCInterruptEnable32 ( void );
+U32		NX_MCUS_GetECCInterruptPending32( void );
+void	NX_MCUS_ClearECCInterruptPending32( U32 PendingFlag );
+
 S32		NX_MCUS_GetInterruptPendingNumber( void );	// -1 if None
+S32		NX_MCUS_GetECCInterruptPendingNumber( void );
 //@}
 
 //------------------------------------------------------------------------------
@@ -313,6 +326,7 @@ void	NX_MCUS_GetNFECCOddSyndrome16( U32* pSyndrome );
 void	NX_MCUS_GetNFECCOddSyndrome24( U32* pSyndrome );
 void	NX_MCUS_GetNFECCOddSyndrome40( U32* pSyndrome );
 void	NX_MCUS_GetNFECCOddSyndrome60( U32* pSyndrome );
+void    NX_MCUS_GetNFECCOddSyndrome( U32* pSyndrome, U32 eccbits );
 
 void	NX_MCUS_SetNumOfELP( U32 ELPNum );
 U32		NX_MCUS_GetNumOfELP( void );
@@ -329,6 +343,7 @@ void	NX_MCUS_SetELP16( U16 *pELP );
 void	NX_MCUS_SetELP24( U16 *pELP );
 void	NX_MCUS_SetELP40( U16 *pELP );
 void	NX_MCUS_SetELP60( U16 *pELP );
+void    NX_MCUS_SetELP( U16 *pELP, unsigned int elpbits );
 
 void	NX_MCUS_GetErrLoc4( U16 *pELoc );
 void	NX_MCUS_GetErrLoc8( U16 *pELoc );

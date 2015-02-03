@@ -246,6 +246,33 @@ void	NX_MCUS_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
+void	NX_MCUS_SetECCInterruptEnable( S32 IntNum, CBOOL Enable )
+{
+	const U32 IRQPEND_POS	= 14;
+	const U32 ECCRST_POS	= 11;
+	const U32 IRQENB_POS	= 7;
+	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+	const U32 ECCRST		= (1UL<<ECCRST_POS);
+	const U32 IRQENB		= (1UL<<IRQENB_POS);
+
+	register U32 regvalue;
+	register struct NX_MCUS_RegisterSet*	pRegister;
+
+	NX_ASSERT( 0 == IntNum );
+	NX_ASSERT( (0==Enable) || (1==Enable) );
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	pRegister = __g_pRegister;
+
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
+	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
+	regvalue |= (U32)Enable<<IRQENB_POS;
+
+	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
+
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
+}
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
@@ -274,6 +301,18 @@ CBOOL	NX_MCUS_GetInterruptEnable( S32 IntNum )
 	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
 }
 
+CBOOL	NX_MCUS_GetECCInterruptEnable( S32 IntNum )
+{
+	const U32 IRQENB_POS	= 7;
+	const U32 IRQENB_MASK	= (1UL<<IRQENB_POS);
+
+	NX_ASSERT( 0 == IntNum );
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
@@ -294,6 +333,17 @@ CBOOL	NX_MCUS_GetInterruptEnable( S32 IntNum )
 CBOOL	NX_MCUS_GetInterruptPending( S32 IntNum )
 {
 	const U32 IRQPEND_POS	= 15;
+	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
+
+	NX_ASSERT( 0 == IntNum );
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND_MASK) >> IRQPEND_POS );
+}
+
+CBOOL	NX_MCUS_GetECCInterruptPending( S32 IntNum )
+{
+	const U32 IRQPEND_POS	= 14;
 	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
 
 	NX_ASSERT( 0 == IntNum );
@@ -341,6 +391,30 @@ void	NX_MCUS_ClearInterruptPending( S32 IntNum )
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
+void	NX_MCUS_ClearECCInterruptPending( S32 IntNum )
+{
+	const U32 IRQPEND_POS	= 14;
+	const U32 ECCRST_POS	= 11;
+	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+	const U32 ECCRST		= (1UL<<ECCRST_POS);
+
+	register U32 regvalue;
+	register struct NX_MCUS_RegisterSet*	pRegister;
+
+	NX_ASSERT( 0 == IntNum );
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	pRegister = __g_pRegister;
+
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
+	regvalue &= ~(IRQPEND | ECCRST );
+	regvalue |= IRQPEND;
+	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
+
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set all interrupts to be enabled or disabled.
@@ -359,11 +433,16 @@ void	NX_MCUS_ClearInterruptPending( S32 IntNum )
 void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 {
 	const U32 IRQPEND_POS	= 15;
+	const U32 ECCIRQPEND_POS= 14;
 	const U32 ECCRST_POS	= 11;
 	const U32 IRQENB_POS	= 8;
+	const U32 ECCIRQENB_POS	= 7;
+
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
-	const U32 ECCRST		= (1UL<<ECCRST_POS);
+	const U32 ECCIRQPEND	= (1UL<<ECCIRQPEND_POS);
 	const U32 IRQENB		= (1UL<<IRQENB_POS);
+	const U32 ECCIRQENB		= (1UL<<ECCIRQENB_POS);
+	const U32 ECCRST		= (1UL<<ECCRST_POS);
 
 	register U32 regvalue;
 	register struct NX_MCUS_RegisterSet*	pRegister;
@@ -374,8 +453,8 @@ void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 	pRegister = __g_pRegister;
 
 	regvalue = ReadIO32(&pRegister->NFCONTROL);
-	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
-	regvalue |= ( (U32)Enable<<IRQENB_POS );
+	regvalue &= ~(IRQPEND | IRQENB | ECCIRQPEND | ECCIRQENB | ECCRST);
+	regvalue |= ( (U32)Enable<<IRQENB_POS | (U32)Enable<<ECCIRQENB_POS );
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
@@ -395,6 +474,7 @@ void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
  *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
  *				NX_MCUS_GetInterruptPendingNumber
  */
+#if 0
 CBOOL	NX_MCUS_GetInterruptEnableAll( void )
 {
 	const U32 IRQENB_POS	= 8;
@@ -404,6 +484,7 @@ CBOOL	NX_MCUS_GetInterruptEnableAll( void )
 
 	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
 }
+#endif
 
 //------------------------------------------------------------------------------
 /**
@@ -423,6 +504,7 @@ CBOOL	NX_MCUS_GetInterruptEnableAll( void )
  *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
  *				NX_MCUS_GetInterruptPendingNumber
  */
+#if 0
 CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 {
 	const U32 IRQPEND_POS	= 15;
@@ -441,6 +523,7 @@ CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 
 	return	(CBOOL)( intpend & intenb );
 }
+#endif
 
 //------------------------------------------------------------------------------
 /**
@@ -458,8 +541,11 @@ CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 void	NX_MCUS_ClearInterruptPendingAll( void )
 {
 	const U32 IRQPEND_POS	= 15;
+	const U32 ECCIRQPEND_POS= 14;
 	const U32 ECCRST_POS	= 11;
+
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+	const U32 ECCIRQPEND	= (1UL<<ECCIRQPEND_POS);
 	const U32 ECCRST		= (1UL<<ECCRST_POS);
 
 	register U32 regvalue;
@@ -470,8 +556,8 @@ void	NX_MCUS_ClearInterruptPendingAll( void )
 	pRegister = __g_pRegister;
 
 	regvalue = ReadIO32(&pRegister->NFCONTROL);
-	regvalue &= ~(IRQPEND | ECCRST );
-	regvalue |= IRQPEND;
+	regvalue &= ~(IRQPEND | ECCIRQPEND | ECCRST );
+	regvalue |= (IRQPEND | ECCIRQPEND);
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
@@ -518,6 +604,31 @@ void	NX_MCUS_SetInterruptEnable32 ( U32 EnableFlag )
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
+void	NX_MCUS_SetECCInterruptEnable32 ( U32 EnableFlag )
+{
+	const U32 IRQPEND_POS	= 14;
+	const U32 ECCRST_POS	= 11;
+	const U32 IRQENB_POS	= 7;
+	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+	const U32 ECCRST		= (1UL<<ECCRST_POS);
+	const U32 IRQENB		= (1UL<<IRQENB_POS);
+
+	register U32 regvalue;
+	register struct NX_MCUS_RegisterSet*	pRegister;
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	pRegister = __g_pRegister;
+
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
+	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
+	regvalue |= ( (U32)(EnableFlag & 1)<<IRQENB_POS );
+	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
+
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get an interrupt enable status.
@@ -543,6 +654,17 @@ U32	NX_MCUS_GetInterruptEnable32 ( void )
 	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB)>>IRQENB_POS;
 }
 
+U32	NX_MCUS_GetECCInterruptEnable32 ( void )
+{
+	const U32 IRQENB_POS	= 7;
+	const U32 IRQENB		= (1UL<<IRQENB_POS);
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB)>>IRQENB_POS;
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get an interrupt pending status.
@@ -561,6 +683,16 @@ U32	NX_MCUS_GetInterruptEnable32 ( void )
 U32	NX_MCUS_GetInterruptPending32 ( void )
 {
 	const U32 IRQPEND_POS	= 15;
+	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND)>>IRQPEND_POS;
+}
+
+U32	NX_MCUS_GetECCInterruptPending32 ( void )
+{
+	const U32 IRQPEND_POS	= 14;
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
 
 	NX_ASSERT( CNULL != __g_pRegister );
@@ -606,6 +738,29 @@ void	NX_MCUS_ClearInterruptPending32( U32 PendingFlag )
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
 }
 
+void	NX_MCUS_ClearECCInterruptPending32( U32 PendingFlag )
+{
+	const U32 IRQPEND_POS	= 14;
+	const U32 ECCRST_POS	= 11;
+	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
+	const U32 ECCRST		= (1UL<<ECCRST_POS);
+
+	register U32 regvalue;
+	register struct NX_MCUS_RegisterSet*	pRegister;
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	pRegister = __g_pRegister;
+
+	regvalue = ReadIO32(&pRegister->NFCONTROL);
+	regvalue &= ~(IRQPEND | ECCRST);
+	regvalue |= ( (U32)(PendingFlag & 1)<<IRQPEND_POS );
+	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
+
+	WriteIO32(&pRegister->NFCONTROL, regvalue);
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get an interrupt number which has the most prority of pended interrupts.
@@ -625,6 +780,28 @@ S32		NX_MCUS_GetInterruptPendingNumber( void )
 {
 	const U32 IRQPEND_POS	= 15;
 	const U32 IRQENB_POS	= 8;
+
+	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
+	const U32 IRQENB_MASK	= (1UL<<IRQENB_POS);
+
+	register U32 regval;
+
+	NX_ASSERT( CNULL != __g_pRegister );
+
+	regval = ReadIO32(&__g_pRegister->NFCONTROL);
+
+	if( (regval & IRQENB_MASK) && (regval & IRQPEND_MASK) )
+	{
+		return 0;
+	}
+
+	return -1;
+}
+
+S32		NX_MCUS_GetECCInterruptPendingNumber( void )
+{
+	const U32 IRQPEND_POS	= 14;
+	const U32 IRQENB_POS	= 7;
 
 	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
 	const U32 IRQENB_MASK	= (1UL<<IRQENB_POS);
@@ -2337,6 +2514,32 @@ void	NX_MCUS_GetNFECCOddSyndrome24( U32* pSyndrome )
 	pSyndrome[23] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 47 - NFSYNDROMEH[7][29:16]
 }
 
+void    NX_MCUS_GetNFECCOddSyndrome( U32* pSyndrome, U32 eccbits )
+{
+    const U32 BIT_SIZE  = 14;
+    const U32 BIT_POS   = 16;
+    const U32 BIT_MASK  = ((1UL<<BIT_SIZE)-1);
+
+    register volatile U32 *pReg;
+    //register volatile U32 *pReg, *pRegH;
+    register U32 regval;
+    int i = 0;
+
+    NX_ASSERT( CNULL != __g_pRegister );
+    NX_ASSERT( CNULL != pSyndrome );
+
+    pReg = &__g_pRegister->NFSYNDROME[0];
+    //pRegH = &__g_pRegister->NFSYNDROMEH[0];
+
+
+    for (i = 0; i < eccbits/2; i++)
+    {
+        regval = ReadIO32(&pReg[i]);
+        pSyndrome[i*2]   = (regval              & BIT_MASK);    // Syndrome 1 - NFSYNDROME[0][13: 0]
+        pSyndrome[i*2+1] = (regval >> BIT_POS)  & BIT_MASK;     // Syndrome 3 - NFSYNDROME[0][29:16]
+    }
+}
+
 void NX_MCUS_SetNumOfELP(U32 ELPNum)
 {
 	const U32 BIT_SIZE	= 7;
@@ -2346,7 +2549,7 @@ void NX_MCUS_SetNumOfELP(U32 ELPNum)
 	U32 DecMode;
 
 	NX_ASSERT( CNULL != __g_pRegister );
-	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum || 24 == ELPNum || 40 == ELPNum  );
+	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum || 24 == ELPNum || 40 == ELPNum || 60 == ELPNum );
 
 	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
@@ -2595,6 +2798,26 @@ void	NX_MCUS_SetELP24( U16 *pELP )
 			| (U32)(pELP[23] & BIT_MASK)<<BIT_POS;
 	WriteIO32(&__g_pRegister->NFELP[11], regval);
 }
+
+void    NX_MCUS_SetELP( U16 *pELP, unsigned int elpbits )
+{
+    const U32 BIT_SIZE  = 14;
+    const U32 BIT_POS   = 14;
+    const U32 BIT_MASK  = ((1UL<<BIT_SIZE)-1);
+    register U32 regval;
+    int i;
+
+    NX_ASSERT( CNULL != __g_pRegister );
+    NX_ASSERT( CNULL != pELP );
+
+    for (i = 0; i < elpbits/2; i++)
+    {
+        regval =  (U32)(pELP[i*2] & BIT_MASK)
+            | (U32)(pELP[i*2+1] & BIT_MASK)<<BIT_POS;
+        WriteIO32(&__g_pRegister->NFELP[i], regval);
+    }
+}
+
 void	NX_MCUS_GetErrLoc4( U16 *pELoc )
 {
 	const U32 BIT_SIZE	= 14;

@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------
 #include <nx_chip.h>
 #include "nx_ppm.h"
-#include <string.h> // for memset
+#include <linux/string.h> // for memset
 
 static	NX_PPM_RegisterSet *__g_pRegister[NUMBER_OF_PPM_MODULE];
 
