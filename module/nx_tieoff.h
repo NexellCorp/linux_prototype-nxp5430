@@ -440,6 +440,8 @@ extern "C"
 	#define TIEOFFINDEX_OF_Inst_ARMTOP_P1_CPU2PWRDOWNALL (1<<16) | 3453
 	#define TIEOFFINDEX_OF_Inst_ARMTOP_P1_CPU3PWRDOWNALL (1<<16) | 3454
 	#define TIEOFFINDEX_OF_Inst_ARMTOP_P1_CLAMPL2 (1<<16) | 3464
+	
+	#define TIEOFFINDEX_OF_MMC_8BIT (1<<16) | 5
 
 	CBOOL		NX_TIEOFF_Initialize(void);
 	U32			NX_TIEOFF_GetPhysicalAddress(void);
