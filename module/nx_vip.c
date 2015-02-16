@@ -1074,8 +1074,10 @@ NX_VIP_SetSync
 			temp |= (3<<11); // { VSYNCGENSOURCE(0:H-Sync 1:Video-clock),ExtVSyncMode (0:Sync 1:Blank)}
 			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIO32(&pRegister->VIP_VBEGIN, (U16)(HFP + HSW + HBP + 1));
-			WriteIO32(&pRegister->VIP_VEND, (U16)((HFP + HSW + HBP)*2 + 1));
+			/*WriteIO32(&pRegister->VIP_VBEGIN, (U16)(HFP + HSW + HBP + 1));*/
+			/*WriteIO32(&pRegister->VIP_VEND, (U16)((HFP + HSW + HBP)*2 + 1));*/
+            WriteIO32(&pRegister->VIP_VBEGIN, (U16)(VFP + 1));
+            WriteIO32(&pRegister->VIP_VEND, (U16)(VFP + VSW + 1));
 		}
 		if( 0!=HBP )
 		{
@@ -1092,8 +1094,10 @@ NX_VIP_SetSync
 			temp |= (1<<10);// ExtHSyncMode (0:Sync 1:Blank)
 			WriteIO32(&pRegister->VIP_SYNCCTRL, (U16)temp);
 
-			WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));
-			WriteIO32(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));
+			/*WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HFP - 7));*/
+			/*WriteIO32(&pRegister->VIP_HEND, (U16)(HFP + HSW - 7));*/
+			WriteIO32(&pRegister->VIP_HBEGIN, (U16)(HFP));
+			WriteIO32(&pRegister->VIP_HEND, (U16)(HFP + HSW));
 		}
 	}
 	else
