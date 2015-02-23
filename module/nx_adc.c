@@ -19,7 +19,7 @@
 static	struct
 {
 	struct NX_ADC_RegisterSet *pRegister;
-} __g_ModuleVariables[NUMBER_OF_SSP_MODULE] = { {CNULL,}, };
+} __g_ModuleVariables[NUMBER_OF_ADC_MODULE] = { {CNULL,}, };
 
 
 //------------------------------------------------------------------------------
