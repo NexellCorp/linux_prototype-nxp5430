@@ -54,11 +54,11 @@ extern "C" {
 #define NUMBER_OF_SPDIFTX_MODULE                            1
 #define NUMBER_OF_TIMER_MODULE                              1
 #define NUMBER_OF_PWM_MODULE                                1
-#define NUMBER_OF_CLKGEN_MODULE                             40
+#define NUMBER_OF_CLKGEN_MODULE                             41
 #define NUMBER_OF_WDT_MODULE                                1
 #define NUMBER_OF_MPEGTSI_MODULE                            1
 #define NUMBER_OF_DISPLAYTOP_MODULE                         1
-#define NUMBER_OF_VIP_MODULE                                2
+#define NUMBER_OF_VIP_MODULE                                3
 #define NUMBER_OF_MIPI_MODULE                               1
 #define NUMBER_OF_MALI400_MODULE                            1
 #define NUMBER_OF_ADC_MODULE                                1
