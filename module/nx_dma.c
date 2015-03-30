@@ -129,7 +129,7 @@ void    NX_DMA_SetLLIAddress( U32 LLIAddress, U32 LLISize )
     NX_ASSERT( CNULL != LLIAddress );
 
     NX_DMA_CreateLLI( LLIAddress, LLISize );
-    g_DMA_COMMANDBuffer = (U32*)NX_DMA_LLIuAlloc( LLI_BUFFERSIZE, 0x10 );
+    g_DMA_COMMANDBuffer = (U32)NX_DMA_LLIuAlloc( LLI_BUFFERSIZE, 0x10 );
 }
 
 U32     NX_DMA_GetLLIAddress( void )
@@ -138,22 +138,22 @@ U32     NX_DMA_GetLLIAddress( void )
 }
 
 //-----------------------------------------------------------------------------------------------
-static	CBOOL		__NX_DMA_State[NUMBER_OF_DMA_MODULE] = { CFALSE, };
+static  CBOOL       __NX_DMA_State[NUMBER_OF_DMA_MODULE] = { CFALSE, };
 
-int		NX_DMA_GetUnLockChannel( U32 PeriID ) 
+int     NX_DMA_GetUnLockChannel( U32 PeriID ) 
 {
-	U32 	ChannelIdx;
-	U32 	DMA_ModuleIndex;
-	
-	DMA_ModuleIndex = PeriID/16;
-	
-	for( ChannelIdx=0 ; ChannelIdx < NUMBER_OF_DMA_CHANNEL ; ChannelIdx++ ) 
-	{
-		if( __NX_DMA_State[ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL] == CFALSE )
-			return ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL;
-	}
-	
-	return -1;
+    U32 ChannelIdx;
+    U32 DMA_ModuleIndex;
+
+    DMA_ModuleIndex = PeriID/16;
+
+    for( ChannelIdx=0 ; ChannelIdx < NUMBER_OF_DMA_CHANNEL ; ChannelIdx++ ) 
+    {
+        if( __NX_DMA_State[ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL] == CFALSE )
+            return ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL;
+    }
+
+    return -1;
 }
 
 
@@ -175,7 +175,8 @@ CBOOL   NX_DMA_Initialize( void )
     //                  ?´ì•¼?œë‹¤ë©?bInit ê°’ì„ CFALSEë¡??˜ì •?´ì•¼?œë‹¤.
     static CBOOL bInit = CTRUE;
     //register struct NX_DMA_RegisterSet *pRegister;
-    U32 i	= 0;
+    U32 i   = 0;
+
     //NX_CONSOLE_Init();
 
     if( CFALSE == bInit )
@@ -221,8 +222,8 @@ U32     NX_DMA_GetPhysicalAddress( U32 ModuleIndex )
     const U32 PhysicalAddr[NUMBER_OF_DMA_MODULE] =
     {
         //PHY_BASEADDR_LIST( DMA )
-		PHY_BASEADDR_DMA0_MODULE,
-		PHY_BASEADDR_DMA1_MODULE,
+        PHY_BASEADDR_DMA0_MODULE,
+        PHY_BASEADDR_DMA1_MODULE,
     };
     NX_CASSERT( NUMBER_OF_DMA_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
@@ -461,6 +462,7 @@ CBOOL   NX_DMA_GetInterruptPending( U32 nChannel , U32 IntNum )
     U32         DMA_ModuleIndex = nChannel/8;
     U32         DMA_ChannelIndex = nChannel%8;
 
+    IntNum = IntNum;
     NX_ASSERT( CNULL != __g_ModuleVariables );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
     NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
@@ -493,8 +495,8 @@ void    NX_DMA_ClearInterruptPending( U32 nChannel, U32 IntNum )
     register struct NX_DMA_RegisterSet *pRegister;
     U32         DMA_ModuleIndex = nChannel/8;
     U32         DMA_ChannelIndex = nChannel%8;
-    //register U32 regvalue;
 
+    IntNum = IntNum;
     NX_ASSERT( CNULL != __g_ModuleVariables );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
     NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
@@ -675,7 +677,7 @@ void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_CMDSET *pCmdSet )
     U32 		Bytes 			 = ( (pCmdSet->SrcWidth << 4)/8);
 
     U32         DMA_ModuleIndex  = nChannel / 8;
-    U32         DMA_ChannelIndex = nChannel % 8; 
+    U32         DMA_ChannelIndex = nChannel % 8;
 
     //NX_ASSERT( 0 == (((U32)pCmdSet->SrcAddr) % 8) );
     //NX_ASSERT( 0 == (((U32)pCmdSet->DstAddr) % 8) );

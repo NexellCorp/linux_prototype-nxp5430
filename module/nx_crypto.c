@@ -15,7 +15,7 @@
 //------------------------------------------------------------------------------
 
 #include <nx_chip.h>
-#include "nx_CRYPTO.h"
+#include "nx_crypto.h"
 #include <string.h> // for memset
 
 static	NX_CRYPTO_RegisterSet *__g_pRegister[NUMBER_OF_CRYPTO_MODULE];
@@ -1187,7 +1187,7 @@ CBOOL NX_CRYPTO_GetIdleHASHCore( U32 ModuleIndex )
 CBOOL NX_CRYPTO_RegTest( U32 ModuleIndex )
 {
 	register NX_CRYPTO_RegisterSet* pRegister;
-	register U32 regvalue;
+
 	NX_ASSERT( NUMBER_OF_CRYPTO_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
 	pRegister = __g_pRegister[ModuleIndex];

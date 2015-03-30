@@ -400,7 +400,7 @@ void		NX_CLKGEN_SetInputInv( U32 ModuleIndex, U32 Index, CBOOL InClkInv )
 	ReadValue	|=	InClkInv << INCLKINV_POS;
 
 	WriteIO32(&__g_pRegister->CLKENB, ReadValue);
-	return CTRUE;
+
 }
 
 CBOOL		NX_CLKGEN_GetInputInv( U32 ModuleIndex, U32 Index )

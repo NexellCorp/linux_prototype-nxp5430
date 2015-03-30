@@ -129,21 +129,21 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
 {
     NX_ASSERT( CNULL != __g_pRegister );
 
-    /*
+#if 0
     //----------------------------------------------
     //  is this need?
     //----------------------------------------------
     //  __g_pRegister->MODE         = 0;
     //  __g_pRegister->INTENB       = 0;
     //  __g_pRegister->INTPEND      = 0x0F;
-    
+
     //  __g_pRegister->SRAMPORSLEEP = 0;
     //  __g_pRegister->TSPARA       = (( 18<<16) |  10);
     //  __g_pRegister->TMPARA       = (( 16<<16) |  8);
     //  __g_pRegister->TIPARA       = ((306<<16) |  50);
     //  __g_pRegister->TPARA        = ((466<<16) | 434);
     //  __g_pRegister->BLENDPARA    = 3;
-    
+
     //  __g_pRegister->SRCSIZE_Y    = 0;
     //  __g_pRegister->SRCADDRP_Y   = 0;
     //  __g_pRegister->SRCADDRC_Y   = 0;
@@ -153,7 +153,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     //  __g_pRegister->DESTADDRD_Y  = 0;
     //  __g_pRegister->DESTADDRF_Y  = 0;
     //  __g_pRegister->DESTSTRD_Y   = 0;
-    
+
     //  __g_pRegister->SRCSIZE_CB   = 0;
     //  __g_pRegister->SRCADDRC_CB  = 0;
     //  __g_pRegister->SRCSTRD_CB   = 0;
@@ -161,7 +161,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     //  __g_pRegister->DESTADDRD_CB = 0;
     //  __g_pRegister->DESTADDRF_CB = 0;
     //  __g_pRegister->DESTSTRD_CB  = 0;
-    
+
     //  __g_pRegister->SRCSIZE_CR   = 0;
     //  __g_pRegister->SRCADDRC_CR  = 0;
     //  __g_pRegister->SRCSTRD_CR   = 0;
@@ -210,7 +210,7 @@ CBOOL   NX_DEINTERLACE_OpenModule( void )
     WriteIO32(&__g_pRegister->DESTADDRD_CR, 0);
     WriteIO32(&__g_pRegister->DESTADDRF_CR, 0);
     WriteIO32(&__g_pRegister->DESTSTRD_CR, 0);
-    */
+#endif
 
     return CTRUE;
 }
@@ -654,7 +654,7 @@ U32         NX_DEINTERLACE_GetClockNumber( void )
 
 U32         NX_DEINTERLACE_GetResetNumber( void )
 {
-    const U32 ResetPortNumber[NUMBER_OF_DEINTERLACE_MODULE] = 
+    const U32 ResetPortNumber[NUMBER_OF_DEINTERLACE_MODULE] =
     {
         RESETINDEX_LIST( DEINTERLACE, i_nRST )
     };
@@ -1431,7 +1431,7 @@ void    NX_DEINTERLACE_DeinterlaceStart( void )
  *  @remarks    Deinterlace is stopped mandatorily by this function
  *  @see        NX_DEINTERLACE_DeinterlaceStart
  */
-/*
+#if 0
 void    NX_DEINTERLACE_DeinterlaceStop( void )
 {
     const   U32 STOP_MASK = ( 0x01 << 1 );
@@ -1446,7 +1446,7 @@ void    NX_DEINTERLACE_DeinterlaceStop( void )
     temp |= STOP_MASK;
     WriteIO32(&pRegister->MODE, temp);
 }
-*/
+#endif
 
 //------------------------------------------------------------------------------
 // Y Field Configuration Function
