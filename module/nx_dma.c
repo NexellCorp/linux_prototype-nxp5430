@@ -132,30 +132,13 @@ void    NX_DMA_SetLLIAddress( U32 LLIAddress, U32 LLISize )
     g_DMA_COMMANDBuffer = (U32)NX_DMA_LLIuAlloc( LLI_BUFFERSIZE, 0x10 );
 }
 
+
 U32     NX_DMA_GetLLIAddress( void )
 {
     return (U32) g_DMA_COMMANDBuffer;
 }
 
 //-----------------------------------------------------------------------------------------------
-static  CBOOL       __NX_DMA_State[NUMBER_OF_DMA_MODULE] = { CFALSE, };
-
-int     NX_DMA_GetUnLockChannel( U32 PeriID ) 
-{
-    U32 ChannelIdx;
-    U32 DMA_ModuleIndex;
-
-    DMA_ModuleIndex = PeriID/16;
-
-    for( ChannelIdx=0 ; ChannelIdx < NUMBER_OF_DMA_CHANNEL ; ChannelIdx++ ) 
-    {
-        if( __NX_DMA_State[ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL] == CFALSE )
-            return ChannelIdx+DMA_ModuleIndex*NUMBER_OF_DMA_CHANNEL;
-    }
-
-    return -1;
-}
-
 
 //
 //------------------------------------------------------------------------------
@@ -164,8 +147,8 @@ int     NX_DMA_GetUnLockChannel( U32 PeriID )
 
 /**
  *  @brief  Initialize of prototype enviroment & local variables.
- *  @return \b CTRUE    indicate that Initialize is successed.\n
- *          \b CFALSE   indicate that Initialize is failed.
+ *  @return CTRUE    indicate that Initialize is successed.
+ *               CFALSE   indicate that Initialize is failed.
  *  @see    NX_DMA_GetNumberOfModule
  */
 CBOOL   NX_DMA_Initialize( void )
@@ -175,7 +158,7 @@ CBOOL   NX_DMA_Initialize( void )
     //                  ?´ì•¼?œë‹¤ë©?bInit ê°’ì„ CFALSEë¡??˜ì •?´ì•¼?œë‹¤.
     static CBOOL bInit = CTRUE;
     //register struct NX_DMA_RegisterSet *pRegister;
-    U32 i   = 0;
+    U32 i;
 
     //NX_CONSOLE_Init();
 
@@ -219,11 +202,9 @@ U32     NX_DMA_GetNumberOfModule( void )
  */
 U32     NX_DMA_GetPhysicalAddress( U32 ModuleIndex )
 {
-    const U32 PhysicalAddr[NUMBER_OF_DMA_MODULE] =
+    const U32 PhysicalAddr[] =
     {
-        //PHY_BASEADDR_LIST( DMA )
-        PHY_BASEADDR_DMA0_MODULE,
-        PHY_BASEADDR_DMA1_MODULE,
+        PHY_BASEADDR_LIST( DMA )
     };
     NX_CASSERT( NUMBER_OF_DMA_MODULE == (sizeof(PhysicalAddr)/sizeof(PhysicalAddr[0])) );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
@@ -338,8 +319,8 @@ CBOOL   NX_DMA_CheckBusy( void )
     CheckValue = 0;
     for (i=0; i<NUMBER_OF_DMA_CHANNEL*NUMBER_OF_DMA_MODULE ; i++)   CheckValue |= NX_DMA_CheckRunning(i);
 
-    if (0 != CheckValue)    return CFALSE;
-    return CTRUE;
+    if (0 != CheckValue)    return CTRUE;
+    return CFALSE;
 }
 
 U32     NX_DMA_GetInterruptNumber( U32 nChannel )
@@ -458,7 +439,7 @@ CBOOL   NX_DMA_GetInterruptEnable( U32 nChannel, U32 IntNum )
 CBOOL   NX_DMA_GetInterruptPending( U32 nChannel , U32 IntNum )
 {
     register struct NX_DMA_RegisterSet *pRegister;
-
+    //register U32 regvalue;
     U32         DMA_ModuleIndex = nChannel/8;
     U32         DMA_ChannelIndex = nChannel%8;
 
@@ -921,12 +902,14 @@ void	NX_DMA_TransferMemToMem( U32 nChannel, const void* pSource, void* pDestinat
 
 	//NX_ASSERT( NUMBER_OF_DMA_CHANNEL > nChannel );
 	NX_ASSERT( CNULL != __g_ModuleVariables);
-	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+//	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+    NX_ASSERT( CNULL != g_DMA_COMMANDBuffer );
 	NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
 	NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
 
 	pRegister = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
-	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address+(CHANNELBUFFERSIZE*DMA_ChannelIndex);
+//	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address+(CHANNELBUFFERSIZE*DMA_ChannelIndex);
+    CmdBufferAddr = g_DMA_COMMANDBuffer + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
 
 	//MAXTransferSize = (16*1024)-4;
 	U32 MAXTransferSize;
@@ -1030,12 +1013,14 @@ void	NX_DMA_TransferMemToIO( U32 nChannel, const void* pSource, void* pDestinati
 	NX_ASSERT( 0 == (((U32)pDestination) % 2) );
 
 	NX_ASSERT( CNULL != __g_ModuleVariables);
-	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
-	NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
+//	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+    NX_ASSERT( CNULL != g_DMA_COMMANDBuffer );
+    NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
 	NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
 
 	pRegister = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
-	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+//	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+    CmdBufferAddr = g_DMA_COMMANDBuffer + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
 
 	//MAXTransferSize = (16*1024)-4;
 	U32 MAXTransferSize;
@@ -1127,12 +1112,14 @@ void	NX_DMA_TransferIOToMem( U32 nChannel, const void* pSource, U32 SourcePeriID
     //MES_REQUIRE ( 8 == SourceBitWidth || 16 == SourceBitWidth || 32 == SourceBitWidth );
 
 	NX_ASSERT( CNULL != __g_ModuleVariables);
-	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+//	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+    NX_ASSERT( CNULL != g_DMA_COMMANDBuffer );
 	NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
 	NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
 
 	pRegister = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
-	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+//	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+    CmdBufferAddr = g_DMA_COMMANDBuffer + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
 
 	//MAXTransferSize = (16*1024)-4;
 	U32 Bytes = SourceBitWidth/8;
@@ -1227,12 +1214,14 @@ void	NX_DMA_TransferMemToIO_Burst( U32 nChannel, const void* pSource, void* pDes
 
 	//NX_ASSERT( NUMBER_OF_DMA_CHANNEL > nChannel );
 	NX_ASSERT( CNULL != __g_ModuleVariables);
-	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+//	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+    NX_ASSERT( CNULL != g_DMA_COMMANDBuffer );
 	NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
 	NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
 
 	pRegister = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
-	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+//	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+    CmdBufferAddr = g_DMA_COMMANDBuffer + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
 
 	//MAXTransferSize = (16*1024)-4;
 	U32 MAXTransferSize;
@@ -1324,12 +1313,14 @@ void	NX_DMA_TransferIOToMem_Burst( U32 nChannel, const void* pSource, U32 Source
     //MES_REQUIRE ( 8 == SourceBitWidth || 16 == SourceBitWidth || 32 == SourceBitWidth );
 
 	NX_ASSERT( CNULL != __g_ModuleVariables);
-	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+//	NX_ASSERT( CNULL != g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address );
+    NX_ASSERT( CNULL != g_DMA_COMMANDBuffer );
 	NX_ASSERT( NUMBER_OF_DMA_MODULE > DMA_ModuleIndex );
 	NX_ASSERT( NUMBER_OF_DMA_CHANNEL > DMA_ChannelIndex );
 
 	pRegister = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
-	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+//	CmdBufferAddr = g_DMA_COMMANDBuffer[DMA_ModuleIndex].Address + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
+    CmdBufferAddr = g_DMA_COMMANDBuffer + (CHANNELBUFFERSIZE*DMA_ChannelIndex);
 
 	//MAXTransferSize = (16*1024)-4;
 	U32 Bytes = SourceBitWidth/8;
