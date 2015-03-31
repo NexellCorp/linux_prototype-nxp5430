@@ -207,11 +207,46 @@ U32		NX_DMA_GetInterruptPendingNumber( U32 nChannel );	// -1 if None
 //@}
 
 //------------------------------------------------------------------------------
-///	@name	DMA Configuration Function
+///	@name	Not Release(Prototype) DMA Configuration Function
 //@{
 void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
-CBOOL 	NX_DMA_Build_LLI( U32 nChannel, NX_DMA_CMDSET *pDMAConfig );
+void 	NX_DMA_Build_LLI2( U32 nChannel, NX_DMA_CMDSET *pDMAConfig );
 void    NX_DMA_Transfer( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
+//@}
+
+//------------------------------------------------------------------------------
+///	@name	DMA Configuration Function
+//@{
+void	NX_DMA_TransferMemToMem( U32 nChannel, const void* pSource, void* pDestination, U32 TransferSize );
+void	NX_DMA_TransferMemToIO( U32 nChannel,
+								const void* pSource,
+								void* pDestination,
+								U32 DestinationPeriID,
+								U32 DestinationBitWidth,
+								U32 TransferSize );
+void	NX_DMA_TransferIOToMem( U32 nChannel,
+								const void* pSource,
+								U32 SourcePeriID,
+								U32 SourceBitWidth,
+								void* pDestination,
+								U32 TransferSize );
+
+void	NX_DMA_TransferMemToIO_Burst( U32 nChannel,
+								const void* pSource,
+								void* pDestination,
+								U32 DestinationPeriID,
+								U32 DestinationBitWidth,
+								NX_DMA_BURST_SIZE DestinationBurstSize,
+								U32 TransferSize );
+void	NX_DMA_TransferIOToMem_Burst( U32 nChannel,
+								const void* pSource,
+								U32 SourcePeriID,
+								U32 SourceBitWidth,
+								NX_DMA_BURST_SIZE SourceBurstSize,
+								void* pDestination,
+								U32 TransferSize );
+CBOOL	NX_DMA_Build_LLI( U32 pSource, U32 pDestination, U32 ControlReg, U32 LLI_ADDR, U32 NextLLI);
+
 //@}
 
 //------------------------------------------------------------------------------
@@ -232,6 +267,9 @@ void    NX_DMA_SetLLIAddress( U32 LLIAddress, U32 LLISize );
 U32     NX_DMA_GetLLIAddress( void );
 void	NX_DMA_Stop ( U32 nChannel, CBOOL Enable );
 //@}
+
+void    NX_DMA_SetUnLockChannel( U32 PeriID ) ;
+int		NX_DMA_GetUnLockChannel( U32 PeriID ) ;
 
 //@}
 
