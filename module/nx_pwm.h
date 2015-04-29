@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 //  includes
 //------------------------------------------------------------------------------
-#include "nx_prototype.h"
+#include "../base/nx_prototype.h"
 
 #ifdef	__cplusplus
 extern "C"
@@ -65,7 +65,7 @@ struct NX_PWM_RegisterSet
 /// enum
 //------------------------------------------------------------------------------
 
-typedef enum 
+typedef enum
 {
 	NX_PWM_DIVIDSELECT_1	= 0UL,
 	NX_PWM_DIVIDSELECT_2	= 1UL,
@@ -76,7 +76,7 @@ typedef enum
 
 } NX_PWM_DIVIDSELECT;
 
-typedef enum 
+typedef enum
 {
 	NX_PWM_LOADMODE_ONESHOT		= 0UL,
 	NX_PWM_LOADMODE_AUTORELOAD	= 1UL

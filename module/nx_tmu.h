@@ -4,7 +4,7 @@
 //------------------------------------------------------------------------------
 //  includes
 //------------------------------------------------------------------------------
-#include "nx_prototype.h"
+#include "../base/nx_prototype.h"
 
 #ifdef	__cplusplus
 extern "C"
@@ -14,8 +14,8 @@ extern "C"
 /******************************************************************************/
 /******************** REGISTER BIT MASKS **************************************/
 /******************************************************************************/
- 
-/* For UCON_REG Register */ 
+
+/* For UCON_REG Register */
 //#define DISABLE_TRANSMIT		0x0
 //#define POLLING_MODE_TRANSMIT	0x1
 //#define DMA_MODE_TRANSMIT		0x2
@@ -30,20 +30,20 @@ struct NX_TMU_RegisterSet
 {
 
 	volatile U32	TRIMINFO           ;	// 0x00	// E-fuse infomation for trimming sensor data
-	volatile U32	RESERVED_0[3]      ;	// 0x04~0x0C 
+	volatile U32	RESERVED_0[3]      ;	// 0x04~0x0C
 	volatile U32	TRIMINFO_CONFIG    ;	// 0x10	// TrimInfo configure register (not used)
 	volatile U32	TRIMINFO_CONTROL   ;	// 0x14	// TrimInfo control register (not used)
-	volatile U32	RESERVED_1[2]      ;	// 0x18~0x1C 
+	volatile U32	RESERVED_1[2]      ;	// 0x18~0x1C
 	volatile U32	TMU_CONTROL        ;	// 0x20	// TMU control register
 	volatile U32	TMU_CONTROL1       ;	// 0x24	// TMU control register1
 	volatile U32	TMU_STATUS         ;	// 0x28	// TMU status register
 	volatile U32	SAMPLING_INTERVAL  ;	// 0x2C	// TMU sampling interval control between adjacent sampling points
 	volatile U32	COUNTER_VALUE0     ;	// 0x30	// Set time to control EN_TEMP_SEN_ON/OFF
 	volatile U32	COUNTER_VALUE1     ;	// 0x34	// Set time to control CLK_SENSE_ON/OFF
-	volatile U32	RESERVED_2[2]      ;	// 0x38~0x3C 
+	volatile U32	RESERVED_2[2]      ;	// 0x38~0x3C
 	volatile U32	CURRENT_TEMP0      ;	// 0x40	// Current temperature information for internal probe
 	volatile U32	CURRENT_TEMP1      ;	// 0x44	// Current temperature information for remote probe
-	volatile U32	RESERVED_3[2]      ;	// 0x48~0x4C 
+	volatile U32	RESERVED_3[2]      ;	// 0x48~0x4C
 	volatile U32	THRESHOLD_TEMP_RISE;	// 0x50	// Threshold for temperature rising
 	volatile U32	THRESHOLD_TEMP_FALL;	// 0x54	// Threshold for temperature falling
 	volatile U32	THRESHOLD_TQ       ;	// 0x58	// ???
@@ -71,23 +71,23 @@ struct NX_TMU_RegisterSet
 	volatile U32	P0_INTEN           ;	// 0xB0	// P0_Interrupt enable register
 	volatile U32	P0_INTSTAT         ;	// 0xB4	// P0_Interrupt status register
 	volatile U32	P0_INTCLEAR        ;	// 0xB8	// P0_Interrupt clear register
-	volatile U32	RESERVED_4         ;	// 0xBC 
+	volatile U32	RESERVED_4         ;	// 0xBC
 	volatile U32	P1_INTEN           ;	// 0xC0	// P1_Interrupt enable register
 	volatile U32	P1_INTSTAT         ;	// 0xC4	// P1_Interrupt status register
 	volatile U32	P1_INTCLEAR        ;	// 0xC8	// P1_Interrupt clear register
-	volatile U32	RESERVED_5         ;	// 0xCC 
+	volatile U32	RESERVED_5         ;	// 0xCC
 	volatile U32	P2_INTEN           ;	// 0xD0	// P2_Interrupt enable register
 	volatile U32	P2_INTSTAT         ;	// 0xD4	// P2_Interrupt status register
 	volatile U32	P2_INTCLEAR        ;	// 0xD8	// P2_Interrupt clear register
-	volatile U32	RESERVED_6         ;	// 0xDC 
+	volatile U32	RESERVED_6         ;	// 0xDC
 	volatile U32	P3_INTEN           ;	// 0xE0	// P3_Interrupt enable register
 	volatile U32	P3_INTSTAT         ;	// 0xE4	// P3_Interrupt status register
 	volatile U32	P3_INTCLEAR        ;	// 0xE8	// P3_Interrupt clear register
-	volatile U32	RESERVED_7         ;	// 0xEC 
+	volatile U32	RESERVED_7         ;	// 0xEC
 	volatile U32	P4_INTEN           ;	// 0xF0	// P4_Interrupt enable register
 	volatile U32	P4_INTSTAT         ;	// 0xF4	// P4_Interrupt status register
 	volatile U32	P4_INTCLEAR        ;	// 0xF8	// P4_Interrupt clear register
-	volatile U32	RESERVED_8         ;	// 0xFC 
+	volatile U32	RESERVED_8         ;	// 0xFC
 	volatile U32	EMUL_CON           ;	// 0x100// Emulation control register
 };
 
@@ -100,23 +100,24 @@ typedef enum
     NX_TMU_INT_FALLING1 = 20,
     NX_TMU_INT_FALLING2 = 24,
 
-} NX_TMU_INT;
+} NX_TMU_INT_MASK;
 
 typedef enum
 {
-    NX_TMU_TRIP_TEMP3_0   = 0,
-    NX_TMU_TRIP_TEMP7_4   = 1,
-    NX_TMU_TRIP_TEMP11_8  = 2,
-    NX_TMU_TRIP_TEMP15_12 = 3
-    
+    NX_TMU_TRIP_ONLYCURTEMP = 0,
+    NX_TMU_TRIP_TEMP3_0     = 4,
+    NX_TMU_TRIP_TEMP7_4     = 5,
+    NX_TMU_TRIP_TEMP11_8    = 6,
+    NX_TMU_TRIP_TEMP15_12   = 7
+
 } NX_TMU_TRIPMODE ;
-    
+
 
 //---------------- TRIMINFO enum ----------------//
 //typedef enum
 //{
-//	NX_TMU_TRIMINFO_85	= 0UL<<6, 
-//	NX_TMU_TRIMINFO_25	= 1UL<<6 
+//	NX_TMU_TRIMINFO_85	= 0UL<<6,
+//	NX_TMU_TRIMINFO_25	= 1UL<<6
 //};
 
 //------------------------------------------------------------------------------
@@ -147,10 +148,11 @@ CBOOL	NX_TMU_CanPowerDown( U32 ModuleIndex );
 ///	@name	Interrupt Interface
 //@{
 U32		NX_TMU_GetInterruptNumber( U32 ModuleIndex );
-//void  	NX_TMU_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable );
+void	NX_TMU_SetInterruptEnable		( U32 ModuleIndex, NX_TMU_INT_MASK IntNum, CBOOL Enable );
 //CBOOL 	NX_TMU_GetInterruptEnable( U32 ModuleIndex, U32 IntNum );
-CBOOL   NX_TMU_GetInterruptPending( U32 ModuleIndex, NX_TMU_INT IntNum );
-//void  	NX_TMU_ClearInterruptPending( U32 ModuleIndex, U32 IntNum );
+CBOOL   NX_TMU_GetInterruptPending( U32 ModuleIndex, NX_TMU_INT_MASK IntNum );
+void    NX_TMU_ClearInterruptPending( U32 ModuleIndex, NX_TMU_INT_MASK IntNum );
+
 void  	NX_TMU_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable );
 CBOOL 	NX_TMU_GetInterruptEnableAll( U32 ModuleIndex );
 CBOOL 	NX_TMU_GetInterruptPendingAll( U32 ModuleIndex );

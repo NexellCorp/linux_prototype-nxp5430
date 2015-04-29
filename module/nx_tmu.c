@@ -278,29 +278,28 @@ U32		NX_TMU_GetInterruptNumber( U32 ModuleIndex )
 	return	UartInterruptNumber[ModuleIndex];
 }
 
-//------------------------------------------------------------------------------
-/**
- *  @brief      Indicates whether a specified interrupt is pended or not
- *  @param[in]	ModuleIndex     A index of module.
- *  @param[in]	IntNum  Interrupt Number ( 0 ).
- *  @return   	CTRUE  indicates that Pending is seted.
- *             		CFALSE indicates that Pending is Not Seted.
- *  @remarks    TMU Module have one interrupt. So always IntNum set to 0.
-
- */
-CBOOL   NX_TMU_GetInterruptPending( U32 ModuleIndex, NX_TMU_INT IntNum )
+void	NX_TMU_SetInterruptEnable( U32 ModuleIndex, NX_TMU_INT_MASK IntNum, CBOOL Enable )
 {
-    const U32 PEND_MASK  = 1UL << IntNum;
+	register U32	regvalue;
 
-    register struct NX_TMU_RegisterSet* pRegister;
+	NX_ASSERT( NUMBER_OF_TMU_MODULE > ModuleIndex );
+	NX_ASSERT( (0==Enable) || (1==Enable) );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
-    NX_ASSERT( NUMBER_OF_TMU_MODULE > ModuleIndex );
-	
-	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-	NX_ASSERT( CNULL != pRegister );
+	regvalue = ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->P0_INTEN);
 
-    return  (CBOOL)( (ReadIO32(&pRegister->P0_INTSTAT) & PEND_MASK) >> IntNum );
+	if( CTRUE == Enable )
+	{
+		regvalue |= ( 1UL << IntNum );
+	}
+	else
+	{
+		regvalue &= ~( 1UL << IntNum );
+	}
+	//WriteIO32(&pRegister->P0_INTEN, regvalue);
+	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->P0_INTEN, regvalue);
 }
+
 
 void	NX_TMU_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
@@ -328,6 +327,30 @@ CBOOL	NX_TMU_GetInterruptEnableAll( U32 ModuleIndex )
 	return (U32)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->P0_INTEN));
 }
 
+//------------------------------------------------------------------------------
+/**
+ *  @brief      Indicates whether a specified interrupt is pended or not
+ *  @param[in]	ModuleIndex     A index of module.
+ *  @param[in]	IntNum  Interrupt Number ( 0 ).
+ *  @return   	CTRUE  indicates that Pending is seted.
+ *             		CFALSE indicates that Pending is Not Seted.
+ *  @remarks    TMU Module have one interrupt. So always IntNum set to 0.
+
+ */
+CBOOL   NX_TMU_GetInterruptPending( U32 ModuleIndex, NX_TMU_INT_MASK IntNum )
+{
+    const U32 PEND_MASK  = 1UL << IntNum;
+
+    register struct NX_TMU_RegisterSet* pRegister;
+
+    NX_ASSERT( NUMBER_OF_TMU_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+
+    return  (CBOOL)( (ReadIO32(&pRegister->P0_INTSTAT) & PEND_MASK) >> IntNum );
+}
+
 CBOOL	NX_TMU_GetInterruptPendingAll( U32 ModuleIndex )
 {
 	register U32    p0_regvalue;
@@ -345,6 +368,28 @@ CBOOL	NX_TMU_GetInterruptPendingAll( U32 ModuleIndex )
     
 	return (CBOOL)( (p0_regvalue || p1_regvalue) ? 1 : 0  );
 }
+
+void    NX_TMU_ClearInterruptPending( U32 ModuleIndex, NX_TMU_INT_MASK IntNum )
+{
+    const U32 INTC_MASK  = 1UL << IntNum;
+
+    register struct NX_I2C_RegisterSet* pRegister;
+    register U32 ReadValue;
+
+    IntNum = IntNum;
+    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
+	
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+	NX_ASSERT( CNULL != pRegister );
+    //NX_ASSERT( 0 == IntNum );
+
+    ReadValue   =   ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->P0_INTCLEAR);
+    ReadValue   &=  ~INTC_MASK;
+    ReadValue   |=  INTC_MASK;
+
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->P0_INTCLEAR, ReadValue);
+}
+
 
 void	NX_TMU_ClearInterruptPendingAll( U32 ModuleIndex )
 {
