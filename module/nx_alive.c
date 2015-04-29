@@ -980,12 +980,10 @@ void	NX_ALIVE_SetOutputEnable( U32 BitNumber, CBOOL OutputEnb )
 	if( OutputEnb )
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, PADOUTENB_MASK);
-		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0);
 	}
 	else
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, PADOUTENB_MASK);
-		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0);
 	}
 }
 /*
@@ -1002,20 +1000,14 @@ void  NX_ALIVE_SetOutputEnable32( U32 value )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, ~value );
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0 );
-
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, value );
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0 );
 }
 
 void  NX_ALIVE_SetInputEnable32( U32 value )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, ~value );
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBSETREG, 0 );
-
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, value );
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTENBRSTREG, 0 );
 }
 
 //------------------------------------------------------------------------------
@@ -1082,12 +1074,10 @@ void    NX_ALIVE_SetOutputValue( U32 BitNumber, CBOOL Value )
 	if( Value )
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, PADOUT_MASK);
-		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
 	}
 	else
 	{
 		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, PADOUT_MASK);
-		WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
 	}
 }
 
@@ -1095,20 +1085,14 @@ void    NX_ALIVE_SetOutputHigh32( U32 value32 )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, ~value32);
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
-
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, value32);
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
 }
 
 void    NX_ALIVE_SetOutputLow32( U32 value32 )
 {
 	NX_ASSERT( CNULL != __g_pRegister );
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, ~value32);
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTSETREG, 0);
-
 	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, value32);
-	WriteIO32(&__g_pRegister->ALIVEGPIOPADOUTRSTREG, 0);
 }
 
 
@@ -1261,8 +1245,8 @@ void  NX_ALIVE_SetCorePowerOffDelayTime( U32 Delay )
 U32  NX_ALIVE_GetWakeUpStatus( void )
 {
 	U32 Status;
-  //  volatile U32 CLEARWAKEUPSTATUS;	// 0x70
-   // volatile U32 WAKEUPSTATUS	    ;	// 0x70
+//    volatile U32 CLEARWAKEUPSTATUS;	// 0x70
+//    volatile U32 WAKEUPSTATUS	    ;	// 0x70
     Status = __g_pRegister->WAKEUPSTATUS;
     return Status;
 }
