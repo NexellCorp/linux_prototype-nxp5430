@@ -131,7 +131,7 @@ U32		NX_TMU_GetSizeOfRegisterSet( void )
  *				NX_TMU_OpenModule,			NX_TMU_CloseModule,
  *				NX_TMU_CheckBusy,			NX_TMU_CanPowerDown
  */
-void	NX_TMU_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_TMU_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_TMU_MODULE > ModuleIndex );
@@ -149,11 +149,11 @@ void	NX_TMU_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_TMU_OpenModule,			NX_TMU_CloseModule,
  *				NX_TMU_CheckBusy,			NX_TMU_CanPowerDown
  */
-U32		NX_TMU_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_TMU_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_TMU_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
