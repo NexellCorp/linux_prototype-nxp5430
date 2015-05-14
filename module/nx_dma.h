@@ -54,7 +54,7 @@ extern "C"
 	};
    //-------------------------------------------------------------------
 	typedef enum{
-		NX_DMA_DATAWIDTH_8_BIT		= 0,
+		NX_DMA_DATAWIDTH_8_BIT	= 0,
 		NX_DMA_DATAWIDTH_16_BIT	= 1,
 		NX_DMA_DATAWIDTH_32_BIT	= 2
 	}NX_DMA_DATAWIDTH;
@@ -63,11 +63,11 @@ extern "C"
 		NX_DMA_BURST_SIZE_1		= 0,
 		NX_DMA_BURST_SIZE_4		= 1,
 		NX_DMA_BURST_SIZE_8		= 2,
-		NX_DMA_BURST_SIZE_16		= 3,
-		NX_DMA_BURST_SIZE_32		= 4,
-		NX_DMA_BURST_SIZE_64		= 5,
-		NX_DMA_BURST_SIZE_128		= 6,
-		NX_DMA_BURST_SIZE_256		= 7
+		NX_DMA_BURST_SIZE_16	= 3,
+		NX_DMA_BURST_SIZE_32	= 4,
+		NX_DMA_BURST_SIZE_64	= 5,
+		NX_DMA_BURST_SIZE_128	= 6,
+		NX_DMA_BURST_SIZE_256	= 7
 	}NX_DMA_BURST_SIZE;
 
 
@@ -104,37 +104,11 @@ extern "C"
 	} NX_DMA_OPMODE ;
 
 	//-------------------------------------------------------------------
-	typedef struct NX_DMA_HwLLI
+	typedef struct NX_DMA_Infomration
 	{
-		unsigned int SrcAddr;
-		unsigned int DstAddr;
-		unsigned int LLIAddr;
-		unsigned int Control;
-	} NX_DMA_HWLLI;
-
-	typedef struct NX_DMA_LLINode
-	{
-		struct NX_DMA_LLINode *next;
-		struct NX_DMA_LLINode *prev;
-		unsigned int ptr;
-		unsigned int size;
-	} NX_DMA_LLINODE;
-
-	typedef struct NX_DMA_LLIList
-	{
-		NX_DMA_LLINODE* head;
-		NX_DMA_LLINODE* tail;
-		NX_DMA_LLINODE* cur;
-		unsigned int cnt;
-	} NX_DMA_LLILIST;
-
-	typedef NX_DMA_LLINODE *DMA_NODEPTR;
-
-	typedef struct NX_DMA_CmdSet
-	{
-		U32 				SrcAddr;
-		U32					DstAddr;
-
+		U32* 				SrcAddr;
+		U32*				DstAddr;
+        // Channel Control
 		U32					TxSize;
 		NX_DMA_BURST_SIZE	SrcBurstSize;
 		NX_DMA_BURST_SIZE	DstBurstSize;
@@ -144,23 +118,23 @@ extern "C"
 		CBOOL				DstAHBSel;
 		CBOOL				SrcAddrInc;		
 		CBOOL				DstAddrInc; 	
-
+        // Channel Configuration.
 		U32					SrcPeriID;
 		U32					DstPeriID;
 		NX_DMA_OPMODE		FlowCtrl;
 		CBOOL				IntITC;
 		CBOOL				IntIE;
 		CBOOL               fInfinite;
-
-		NX_DMA_HWLLI 		HwLLI;
-
+        // LLI Address
+		struct NX_DMALLI_RegisterSet* HwLLI;
+        
 		U32 				Control;
 		U32 				Configuration;
 
 		U32					OffsetPerTx;
 		U32					SizePerTx;
 		U32					BoffSetPerTx;
-	} NX_DMA_CMDSET;
+	} NX_DMA_INFO;
 
 	//-------------------------------------------------------------------
 
@@ -179,8 +153,8 @@ U32		NX_DMA_GetNumberOfChannel( void );
 
 U32		NX_DMA_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_DMA_GetSizeOfRegisterSet( void );
-void	NX_DMA_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
-U32*	NX_DMA_GetBaseAddress( U32 ModuleIndex );
+void	NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
+U32		NX_DMA_GetBaseAddress( U32 ModuleIndex );
 CBOOL	NX_DMA_OpenModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CloseModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CheckBusy( void );

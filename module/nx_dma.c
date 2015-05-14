@@ -119,7 +119,7 @@ U32     NX_DMA_GetSizeOfRegisterSet( void )
  *              NX_DMA_OpenModule,              NX_DMA_CloseModule,
  *              NX_DMA_CheckBusy,               NX_DMA_CanPowerDown
  */
-void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
@@ -135,11 +135,11 @@ void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *              NX_DMA_OpenModule,              NX_DMA_CloseModule,
  *              NX_DMA_CheckBusy,               NX_DMA_CanPowerDown
  */
-U32*     NX_DMA_GetBaseAddress( U32 ModuleIndex )
+U32     NX_DMA_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
 
-    return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+    return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 
