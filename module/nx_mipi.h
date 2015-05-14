@@ -156,7 +156,7 @@ void  NX_MIPI_CSI_SetInterleaveMode( U32 ModuleIndex, NX_MIPI_CSI_INTERLEAVE Int
 void  NX_MIPI_CSI_SetTimingControl( U32 ModuleIndex, int Channel, int T1, int T2, int T5 );
 
 // Set virtual channel for data interleave
-void  NX_MIPI_CSI_SetInterleaveChannel( U32 ModuleIndex, int Channel, int InterleaveChannel );
+void  NX_MIPI_CSI_SetInterleaveCahnnel( U32 ModuleIndex, int Channel, int InterleaveChannel );
 
 void  NX_MIPI_CSI_EnableDecompress  ( U32 ModuleIndex, CBOOL Enable );
 
@@ -457,8 +457,8 @@ CBOOL NX_MIPI_Initialize( void );
 U32   NX_MIPI_GetNumberOfModule( void );
 
 U32   NX_MIPI_GetSizeOfRegisterSet( void );
-void  NX_MIPI_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32   NX_MIPI_GetBaseAddress( U32 ModuleIndex );
+void  NX_MIPI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*  NX_MIPI_GetBaseAddress( U32 ModuleIndex );
 U32   NX_MIPI_GetPhysicalAddress ( U32 ModuleIndex );
 CBOOL NX_MIPI_OpenModule( U32 ModuleIndex );
 CBOOL NX_MIPI_CloseModule( U32 ModuleIndex );

@@ -98,7 +98,7 @@ U32     NX_I2C_GetSizeOfRegisterSet( void )
  *  @param[in]	BaseAddress Module's base address
  *  @return		None.
  */
-void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
@@ -112,11 +112,11 @@ void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *  @param[in]   ModuleIndex     A index of module.
  *  @return		Module's base address.
  */
-U32     NX_I2C_GetBaseAddress( U32 ModuleIndex )
+U32*    NX_I2C_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
 
-    return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+    return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
@@ -621,7 +621,7 @@ void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescale
 	
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-    NX_ASSERT( (16==PclkDivider) || (256==PclkDivider) );
+    NX_ASSERT( (16==PclkDivider) || (512==PclkDivider) );
     NX_ASSERT( 1 <= Prescaler && Prescaler <= 16 );
     NX_ASSERT( (16!=PclkDivider) || ( 2 <= Prescaler && Prescaler <= 16) );
 
@@ -629,7 +629,7 @@ void    NX_I2C_SetClockPrescaler( U32 ModuleIndex, U32 PclkDivider, U32 Prescale
     {
         SetPclkDivider = 0;
     }
-    else if( 256 == PclkDivider )
+    else if( 512 == PclkDivider )
     {
         SetPclkDivider = 1;
     }
@@ -670,7 +670,7 @@ void    NX_I2C_GetClockPrescaler( U32 ModuleIndex, U32* pPclkDivider, U32* pPres
 
     if( ReadValue & CLKSRC_MASK )
     {
-        if(CNULL != pPclkDivider) { *pPclkDivider = 256; }
+        if(CNULL != pPclkDivider) { *pPclkDivider = 512; }
     }
     else
     {

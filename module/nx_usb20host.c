@@ -17,7 +17,7 @@
 #include "nx_usb20host.h"
 #include <linux/string.h> // for memset
 
-static	NX_USB20HOST_RegisterSet *__g_pRegister[0];
+static	NX_USB20HOST_RegisterSet *__g_pRegister[NUMBER_OF_USB20HOST_MODULE];
 static	NX_USB20HOST_OHCI_RegisterSet *__g_pOhciRegister[0];
 static	NX_USB20HOST_APB_RegisterSet *__g_pApbRegister[0];
 
@@ -37,10 +37,14 @@ static	NX_USB20HOST_APB_RegisterSet *__g_pApbRegister[0];
 CBOOL	NX_USB20HOST_Initialize( void )
 {
 	static CBOOL bInit = CFALSE;
+    int i;
 
 	if( CFALSE == bInit )
 	{
-		memset( __g_pRegister, 0, sizeof(__g_pRegister) );
+        for(i = 0; i < NUMBER_OF_USB20HOST_MODULE; i++ )
+        {
+		    __g_pRegister[i] = CNULL;
+        }
 		bInit = CTRUE;
 	}
 
@@ -75,7 +79,7 @@ U32		NX_USB20HOST_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     //NX_ASSERT( NUMBER_OF_USB20HOST_MODULE > ModuleIndex );
@@ -89,10 +93,10 @@ void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_USB20HOST_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_USB20HOST_GetBaseAddress( U32 ModuleIndex )
 {
     //NX_ASSERT( NUMBER_OF_USB20HOST_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

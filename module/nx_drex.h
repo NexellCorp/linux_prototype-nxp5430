@@ -267,8 +267,8 @@ U32		NX_DREXSDRAM_GetNumberOfModule( void );
 //@{
 U32		NX_DREXSDRAM_GetPhysicalAddress( void );
 U32		NX_DREXSDRAM_GetSizeOfRegisterSet( void );
-void	NX_DREXSDRAM_SetBaseAddress( U32 BaseAddress );
-U32		NX_DREXSDRAM_GetBaseAddress( void );
+void	NX_DREXSDRAM_SetBaseAddress( U32* BaseAddress );
+U32*	NX_DREXSDRAM_GetBaseAddress( void );
 CBOOL	NX_DREXSDRAM_OpenModule( void );
 CBOOL	NX_DREXSDRAM_CloseModule( void );
 CBOOL	NX_DREXSDRAM_CheckBusy( void );

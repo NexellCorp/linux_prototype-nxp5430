@@ -87,7 +87,7 @@ U32		NX_VIP_GetSizeOfRegisterSet( void )
  *				NX_VIP_OpenModule,				NX_VIP_CloseModule,
  *				NX_VIP_CheckBusy,
  */
-void	NX_VIP_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_VIP_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
@@ -103,10 +103,10 @@ void	NX_VIP_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_VIP_OpenModule,				NX_VIP_CloseModule,
  *				NX_VIP_CheckBusy,
  */
-U32		NX_VIP_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_VIP_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_VIP_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

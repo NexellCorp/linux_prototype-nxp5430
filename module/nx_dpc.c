@@ -112,7 +112,7 @@ U32		NX_DPC_GetSizeOfRegisterSet( void )
  *				NX_DPC_OpenModule,			NX_DPC_CloseModule,
  *				NX_DPC_CheckBusy,			NX_DPC_CanPowerDown
  */
-void	NX_DPC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_DPC_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
@@ -130,11 +130,11 @@ void	NX_DPC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_DPC_OpenModule,			NX_DPC_CloseModule,
  *				NX_DPC_CheckBusy,			NX_DPC_CanPowerDown
  */
-U32		NX_DPC_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_DPC_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

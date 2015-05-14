@@ -101,7 +101,7 @@ U32		NX_CAN_GetSizeOfRegisterSet( void )
  *				NX_CAN_OpenModule,				NX_CAN_CloseModule,
  *				NX_CAN_CheckBusy,
  */
-void	NX_CAN_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_CAN_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
@@ -117,10 +117,10 @@ void	NX_CAN_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_CAN_OpenModule,				NX_CAN_CloseModule,
  *				NX_CAN_CheckBusy,
  */
-U32		NX_CAN_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_CAN_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

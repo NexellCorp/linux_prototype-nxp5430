@@ -135,8 +135,8 @@ U32		NX_TMU_GetPhysicalAddress( U32 ModuleIndex );
 //U32		NX_TMU_GetResetNumber( U32 ModuleIndex, U32 ChannelIndex );
 U32		NX_TMU_GetNumberOfReset( void );
 U32		NX_TMU_GetSizeOfRegisterSet( void );
-void	NX_TMU_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32		NX_TMU_GetBaseAddress( U32 ModuleIndex );
+void	NX_TMU_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*	NX_TMU_GetBaseAddress( U32 ModuleIndex );
 CBOOL	NX_TMU_OpenModule( U32 ModuleIndex );
 CBOOL	NX_TMU_CloseModule( U32 ModuleIndex );
 CBOOL	NX_TMU_CheckBusy( U32 ModuleIndex );
@@ -192,6 +192,14 @@ U32     NX_TMU_GetThresholdLevelFalling3	( U32 ModuleIndex );
 
 void	NX_TMU_SetTmuTripMode	( U32 ModuleIndex, NX_TMU_TRIPMODE TripMode );	// TMU_CONTROL[15:13]
 void	NX_TMU_SetTmuTripEn		( U32 ModuleIndex, U32 value );	// TMU_CONTROL[12]
+
+void	NX_TMU_SetBufSlopeSel		( U32 ModuleIndex, U32 value );
+U32     NX_TMU_GetBufSlopeSel	    ( U32 ModuleIndex )	;
+
+void	NX_TMU_SetVRefVBESel		( U32 ModuleIndex, U32 value );
+U32     NX_TMU_GetVRefVBESel	    ( U32 ModuleIndex );
+
+
 
 void	NX_TMU_SetTmuStart		( U32 ModuleIndex, CBOOL value );	// TMU_CONTROL[0]
 

@@ -95,7 +95,7 @@ U32		NX_WDT_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_WDT_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_WDT_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
@@ -109,11 +109,11 @@ void	NX_WDT_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-U32		NX_WDT_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_WDT_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

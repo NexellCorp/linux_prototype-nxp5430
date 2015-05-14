@@ -72,6 +72,8 @@ U32		NX_GIC400_GetPhysicalAddress( void )
  */
 U32		NX_GIC400_GetSizeOfRegisterSet( void )
 {
+	NX_ASSERT((sizeof(struct NX_GIC400_RegisterSet) & 0xFFF) == 0);
+
 	return sizeof( struct NX_GIC400_RegisterSet );
 }
 
@@ -81,7 +83,7 @@ U32		NX_GIC400_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_GIC400_SetBaseAddress( U32 BaseAddress )
+void	NX_GIC400_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -93,9 +95,9 @@ void	NX_GIC400_SetBaseAddress( U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_GIC400_GetBaseAddress( void )
+U32*	NX_GIC400_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

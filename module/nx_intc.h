@@ -50,6 +50,13 @@ extern "C"
 		volatile U32 SWINTCLEAR;
 		volatile U32 PROENBALE;	// protection enable bit
 		volatile U32 PRIORIT;	// protection enable bit
+		volatile U8  _Reserved0[0x100-0x2C];	// 0x028~0x0FF;
+		volatile U32 VECTORADDR[32];			// 0x100~0x17C
+		volatile U8  _Reserved1[0x200-0x180];	// 0x180~0x1FF
+		volatile U32 VECTORPRI[32];				// 0x200~0x27C
+		volatile U8  _Reserved2[0xF00-0x280];	// 0x280~0xEFF
+		volatile U32 CURRENTVECTOR;				// 0xF00
+		volatile U8  _Reserved3[0x1000-0xF04];	// 0xF04~0xFFF		
 	};
 
 	/// @brief	interrupt mode.
@@ -74,8 +81,8 @@ U32		NX_INTC_GetNumberOfModule( void );
 
 U32		NX_INTC_GetPhysicalAddress( void );
 U32		NX_INTC_GetSizeOfRegisterSet( void );
-void	NX_INTC_SetBaseAddress( U32 BaseAddress );
-U32		NX_INTC_GetBaseAddress( void );
+void	NX_INTC_SetBaseAddress( U32* BaseAddress );
+U32*	NX_INTC_GetBaseAddress( void );
 CBOOL	NX_INTC_OpenModule( void );
 CBOOL	NX_INTC_CloseModule( void );
 CBOOL	NX_INTC_CheckBusy( void );

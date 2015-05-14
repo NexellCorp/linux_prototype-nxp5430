@@ -98,7 +98,7 @@ U32		NX_PDM_GetSizeOfRegisterSet( void )
  *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
  *				NX_PDM_CheckBusy,
  */
-void	NX_PDM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_PDM_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
@@ -114,10 +114,10 @@ void	NX_PDM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
  *				NX_PDM_CheckBusy,
  */
-U32		NX_PDM_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_PDM_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

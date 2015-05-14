@@ -14,8 +14,6 @@ extern "C"
 //@{
 	#define NUMBER_OF_DMA_CHANNEL	8
 	#define NX_DMA_NUM_OF_INT 2 // @todo ??
-	#define	LLI_BUFFERADDR		(0x45000000)
-	#define	LLI_BUFFERSIZE		(0x1000000 )
 
 	#define NX_DEBUGLOG 1
 
@@ -181,8 +179,8 @@ U32		NX_DMA_GetNumberOfChannel( void );
 
 U32		NX_DMA_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_DMA_GetSizeOfRegisterSet( void );
-void	NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32		NX_DMA_GetBaseAddress( U32 ModuleIndex );
+void	NX_DMA_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*	NX_DMA_GetBaseAddress( U32 ModuleIndex );
 CBOOL	NX_DMA_OpenModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CloseModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CheckBusy( void );
@@ -209,44 +207,9 @@ U32		NX_DMA_GetInterruptPendingNumber( U32 nChannel );	// -1 if None
 //------------------------------------------------------------------------------
 ///	@name	Not Release(Prototype) DMA Configuration Function
 //@{
-void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
-void 	NX_DMA_Build_LLI2( U32 nChannel, NX_DMA_CMDSET *pDMAConfig );
-void    NX_DMA_Transfer( U32 nChannel, NX_DMA_CMDSET *pCmdSet );
-//@}
-
-//------------------------------------------------------------------------------
-///	@name	DMA Configuration Function
-//@{
-void	NX_DMA_TransferMemToMem( U32 nChannel, const void* pSource, void* pDestination, U32 TransferSize );
-void	NX_DMA_TransferMemToIO( U32 nChannel,
-								const void* pSource,
-								void* pDestination,
-								U32 DestinationPeriID,
-								U32 DestinationBitWidth,
-								U32 TransferSize );
-void	NX_DMA_TransferIOToMem( U32 nChannel,
-								const void* pSource,
-								U32 SourcePeriID,
-								U32 SourceBitWidth,
-								void* pDestination,
-								U32 TransferSize );
-
-void	NX_DMA_TransferMemToIO_Burst( U32 nChannel,
-								const void* pSource,
-								void* pDestination,
-								U32 DestinationPeriID,
-								U32 DestinationBitWidth,
-								NX_DMA_BURST_SIZE DestinationBurstSize,
-								U32 TransferSize );
-void	NX_DMA_TransferIOToMem_Burst( U32 nChannel,
-								const void* pSource,
-								U32 SourcePeriID,
-								U32 SourceBitWidth,
-								NX_DMA_BURST_SIZE SourceBurstSize,
-								void* pDestination,
-								U32 TransferSize );
-CBOOL	NX_DMA_Build_LLI( U32 pSource, U32 pDestination, U32 ControlReg, U32 LLI_ADDR, U32 NextLLI);
-
+void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_INFO *pInfoSet );
+void* 	NX_DMA_Build_LLI( U32 nChannel, NX_DMA_INFO *pInfoSet );
+void    NX_DMA_Transfer( U32 nChannel, NX_DMA_INFO *pInfoSet );
 //@}
 
 //------------------------------------------------------------------------------

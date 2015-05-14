@@ -120,7 +120,7 @@ U32		NX_DISPLAYTOP_GetSizeOfRegisterSet( void )
  *				NX_DISPLAYTOP_OpenModule,				NX_DISPLAYTOP_CloseModule,
  *				NX_DISPLAYTOP_CheckBusy,				NX_DISPLAYTOP_CanPowerDown
  */
-void	NX_DISPLAYTOP_SetBaseAddress( U32 BaseAddress )
+void	NX_DISPLAYTOP_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	__g_ModuleVariables.pRegister = (struct NX_DISPLAYTOP_RegisterSet *)BaseAddress;
@@ -136,11 +136,10 @@ void	NX_DISPLAYTOP_SetBaseAddress( U32 BaseAddress )
  *				NX_DISPLAYTOP_OpenModule,				NX_DISPLAYTOP_CloseModule,
  *				NX_DISPLAYTOP_CheckBusy,				NX_DISPLAYTOP_CanPowerDown
  */
-U32		NX_DISPLAYTOP_GetBaseAddress( void )
+U32*	NX_DISPLAYTOP_GetBaseAddress( void )
 {
 
-
-	return (U32)__g_ModuleVariables.pRegister;
+	return (U32*)__g_ModuleVariables.pRegister;
 }
 
 

@@ -115,7 +115,7 @@ U32		NX_MCUS_GetSizeOfRegisterSet( void )
  *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
  *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
-void	NX_MCUS_SetBaseAddress( U32 BaseAddress )
+void	NX_MCUS_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	__g_pRegister = (struct NX_MCUS_RegisterSet *)BaseAddress;
@@ -130,9 +130,9 @@ void	NX_MCUS_SetBaseAddress( U32 BaseAddress )
  *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
  *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
-U32		NX_MCUS_GetBaseAddress( void )
+U32*	NX_MCUS_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

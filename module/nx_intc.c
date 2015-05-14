@@ -100,7 +100,7 @@ U32		NX_INTC_GetSizeOfRegisterSet( void )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-void	NX_INTC_SetBaseAddress( U32 BaseAddress )
+void	NX_INTC_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -116,9 +116,9 @@ void	NX_INTC_SetBaseAddress( U32 BaseAddress )
  *				NX_INTC_OpenModule,				NX_INTC_CloseModule,
  *				NX_INTC_CheckBusy,				NX_INTC_CanPowerDown
  */
-U32		NX_INTC_GetBaseAddress( void )
+U32*	NX_INTC_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 

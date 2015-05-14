@@ -94,7 +94,7 @@ U32		NX_ALIVE_GetSizeOfRegisterSet( void )
  *				NX_ALIVE_OpenModule,			NX_ALIVE_CloseModule,
  *				NX_ALIVE_CheckBusy,				NX_ALIVE_CanPowerDown
  */
-void	NX_ALIVE_SetBaseAddress( U32 BaseAddress )
+void	NX_ALIVE_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -110,9 +110,9 @@ void	NX_ALIVE_SetBaseAddress( U32 BaseAddress )
  *				NX_ALIVE_OpenModule,			NX_ALIVE_CloseModule,
  *				NX_ALIVE_CheckBusy,				NX_ALIVE_CanPowerDown
  */
-U32		NX_ALIVE_GetBaseAddress( void )
+U32*		NX_ALIVE_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

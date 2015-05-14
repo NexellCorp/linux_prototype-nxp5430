@@ -56,16 +56,16 @@ U32		NX_MPEGTSI_GetSizeOfRegisterSet( void )
 	return sizeof( struct NX_MPEGTSI_RegisterSet );
 }
 
-void	NX_MPEGTSI_SetBaseAddress( U32 BaseAddress )
+void	NX_MPEGTSI_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
 	__g_ModuleVariables.pRegister = (struct NX_MPEGTSI_RegisterSet *) BaseAddress;
 }
 
-U32		NX_MPEGTSI_GetBaseAddress( void )
+U32*	NX_MPEGTSI_GetBaseAddress( void )
 {
-	return (U32)__g_ModuleVariables.pRegister;
+	return (U32*)__g_ModuleVariables.pRegister;
 }
 
 CBOOL	NX_MPEGTSI_OpenModule( void )

@@ -182,8 +182,8 @@ U32		NX_MCUS_GetNumberOfModule( void );
 //@{
 U32		NX_MCUS_GetPhysicalAddress( void );
 U32		NX_MCUS_GetSizeOfRegisterSet( void );
-void	NX_MCUS_SetBaseAddress( U32 BaseAddress );
-U32		NX_MCUS_GetBaseAddress( void );
+void	NX_MCUS_SetBaseAddress( U32* BaseAddress );
+U32*	NX_MCUS_GetBaseAddress( void );
 CBOOL	NX_MCUS_OpenModule( void );
 CBOOL	NX_MCUS_CloseModule( void );
 CBOOL	NX_MCUS_CheckBusy( void );

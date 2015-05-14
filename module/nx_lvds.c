@@ -111,7 +111,7 @@ U32		NX_LVDS_GetSizeOfRegisterSet( void )
  *				NX_LVDS_OpenModule,				NX_LVDS_CloseModule,
  *				NX_LVDS_CheckBusy,
  */
-void	NX_LVDS_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_LVDS_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_LVDS_MODULE > ModuleIndex );
@@ -127,10 +127,10 @@ void	NX_LVDS_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_LVDS_OpenModule,				NX_LVDS_CloseModule,
  *				NX_LVDS_CheckBusy,
  */
-U32		NX_LVDS_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_LVDS_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_LVDS_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

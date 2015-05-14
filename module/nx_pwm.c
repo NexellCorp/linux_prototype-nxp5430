@@ -98,7 +98,7 @@ U32		NX_PWM_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_PWM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_PWM_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != BaseAddress );
@@ -112,11 +112,11 @@ void	NX_PWM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-U32		NX_PWM_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_PWM_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_PWM_MODULE > ModuleIndex );
 
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------
@@ -859,7 +859,7 @@ NX_PWM_LOADMODE	NX_PWM_GetShotMode(U32 Channel)
  *	@param[in]	Channel		An index of timer channel ( 0 ~ x ).
  *	@return		None.
  */
-void	NX_PWM_UpdateCounter(U32 Channel)
+void	NX_PWM_SetUpdateCounter(U32 Channel)
 {
 	register struct NX_PWM_RegisterSet	*pRegister;
 	register U32 modulechannel, regvalue, updatedonevalue;
@@ -887,6 +887,29 @@ void	NX_PWM_UpdateCounter(U32 Channel)
 	WriteIO32(&pRegister->TCON, regvalue);
 	WriteIO32(&pRegister->TCON, updatedonevalue);
 }
+
+U32 	NX_PWM_GetUpdateCounter(U32 Channel)
+{
+	register struct NX_PWM_RegisterSet	*pRegister;
+	register U32 modulechannel, regvalue, updatedonevalue;
+
+	NX_ASSERT( NUMBER_OF_PWM_MODULE > Channel/NX_PWM_CHANNEL );
+	modulechannel = Channel%NX_PWM_CHANNEL;
+
+	pRegister	=	__g_pRegister[Channel/NX_PWM_CHANNEL];
+
+	NX_ASSERT( CNULL != pRegister );
+
+	regvalue = ReadIO32(&pRegister->TCON);
+	updatedonevalue = regvalue;
+	if(modulechannel == 0)
+		return (regvalue & (1UL<<1));
+	
+	else
+		return (regvalue &= 1<<(4*(modulechannel+1)+1));
+
+}
+
 
 //------------------------------------------------------------------------------
 /**

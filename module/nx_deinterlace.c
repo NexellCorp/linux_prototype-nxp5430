@@ -94,7 +94,7 @@ U32     NX_DEINTERLACE_GetSizeOfRegisterSet( void )
  *              NX_DEINTERLACE_OpenModule,          NX_DEINTERLACE_CloseModule,
  *              NX_DEINTERLACE_CheckBusy,           NX_DEINTERLACE_CanPowerDown
  */
-void    NX_DEINTERLACE_SetBaseAddress( U32 BaseAddress )
+void    NX_DEINTERLACE_SetBaseAddress( U32* BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
 
@@ -110,9 +110,9 @@ void    NX_DEINTERLACE_SetBaseAddress( U32 BaseAddress )
  *              NX_DEINTERLACE_OpenModule,          NX_DEINTERLACE_CloseModule,
  *              NX_DEINTERLACE_CheckBusy,           NX_DEINTERLACE_CanPowerDown
  */
-U32     NX_DEINTERLACE_GetBaseAddress( void )
+U32*    NX_DEINTERLACE_GetBaseAddress( void )
 {
-    return (U32)__g_pRegister;
+    return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

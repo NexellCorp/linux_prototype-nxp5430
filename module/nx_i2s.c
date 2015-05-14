@@ -96,7 +96,7 @@ U32		NX_I2S_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_I2S_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_I2S_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
@@ -109,11 +109,11 @@ void	NX_I2S_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_I2S_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_I2S_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_I2S_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

@@ -79,28 +79,16 @@ U32		NX_ECID_GetSizeOfRegisterSet( void )
 	return sizeof( struct NX_ECID_RegisterSet );
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Set a base address of register set.
- *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ). 
- *	@param[in]	BaseAddress 	Module's base address
- *	@return		None.
- */
-void	NX_ECID_SetBaseAddress( U32 BaseAddress )
+void	NX_ECID_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
 	__g_ModuleVariables.pRegister = (struct NX_ECID_RegisterSet *) BaseAddress;
 }
 
-//------------------------------------------------------------------------------
-/**
- *	@brief		Get a base address of register set
- *	@return		Module's base address.
- */
-U32		NX_ECID_GetBaseAddress( void )
+U32*	NX_ECID_GetBaseAddress( void )
 {
-	return (U32)__g_ModuleVariables.pRegister;
+	return (U32*)__g_ModuleVariables.pRegister;
 }
 
 //------------------------------------------------------------------------------

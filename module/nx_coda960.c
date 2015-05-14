@@ -100,7 +100,7 @@ return sizeof( *__g_pRegister );
  *				NX_CODA960_OpenModule,				NX_CODA960_CloseModule,
  *				NX_CODA960_CheckBusy,
  */
-void	NX_CODA960_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_CODA960_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_CODA960_MODULE > ModuleIndex );
@@ -116,10 +116,10 @@ void	NX_CODA960_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_CODA960_OpenModule,				NX_CODA960_CloseModule,
  *				NX_CODA960_CheckBusy,
  */
-U32		NX_CODA960_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_CODA960_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_CODA960_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

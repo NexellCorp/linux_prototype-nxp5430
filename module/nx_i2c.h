@@ -75,8 +75,8 @@ U32     NX_I2C_GetNumberOfModule( void );
 //@{
 U32     NX_I2C_GetPhysicalAddress( U32 ModuleIndex );
 U32     NX_I2C_GetSizeOfRegisterSet( void );
-void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32     NX_I2C_GetBaseAddress( U32 ModuleIndex );
+void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*    NX_I2C_GetBaseAddress( U32 ModuleIndex );
 CBOOL   NX_I2C_OpenModule( U32 ModuleIndex );
 CBOOL   NX_I2C_CloseModule( U32 ModuleIndex );
 CBOOL   NX_I2C_CheckBusy( U32 ModuleIndex );

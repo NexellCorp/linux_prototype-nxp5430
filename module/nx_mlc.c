@@ -111,7 +111,7 @@ U32		NX_MLC_GetSizeOfRegisterSet( void )
  *				NX_MLC_OpenModule,			NX_MLC_CloseModule,
  *				NX_MLC_CheckBusy,			NX_MLC_CanPowerDown
  */
-void	NX_MLC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_MLC_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != BaseAddress );
@@ -129,11 +129,11 @@ void	NX_MLC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_MLC_OpenModule,			NX_MLC_CloseModule,
  *				NX_MLC_CheckBusy,			NX_MLC_CanPowerDown
  */
-U32		NX_MLC_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_MLC_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

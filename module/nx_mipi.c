@@ -14,7 +14,7 @@
 //	Author		:
 //	History		:
 //------------------------------------------------------------------------------
-#include <nx_chip.h>
+#include "nx_chip.h"
 #include "nx_mipi.h"
 #include <linux/string.h>
 
@@ -116,7 +116,7 @@ U32		NX_MIPI_GetSizeOfRegisterSet( void )
  *				NX_MIPI_OpenModule,				NX_MIPI_CloseModule,
  *				NX_MIPI_CheckBusy,
  */
-void	NX_MIPI_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_MIPI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_MIPI_MODULE > ModuleIndex );
@@ -132,10 +132,10 @@ void	NX_MIPI_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_MIPI_OpenModule,				NX_MIPI_CloseModule,
  *				NX_MIPI_CheckBusy,
  */
-U32		NX_MIPI_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_MIPI_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_MIPI_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

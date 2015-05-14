@@ -127,7 +127,7 @@ U32		NX_HDMI_GetSizeOfRegisterSet( void )
  *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
  *				NX_HDMI_CheckBusy,
  */
-void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
@@ -143,10 +143,10 @@ void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
  *				NX_HDMI_CheckBusy,
  */
-U32		NX_HDMI_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_HDMI_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
-	return (U32)HDMI_BaseAddr;
+	return (U32*)HDMI_BaseAddr;
 }
 
 //------------------------------------------------------------------------------

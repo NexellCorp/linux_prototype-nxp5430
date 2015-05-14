@@ -100,7 +100,7 @@ U32		NX_SSP_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress 	Module's base address
  *	@return		None.
  */
-void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 
 	NX_ASSERT( CNULL != BaseAddress );
@@ -114,11 +114,11 @@ void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_SSP_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_SSP_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 

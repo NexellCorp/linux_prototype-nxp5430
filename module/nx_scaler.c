@@ -110,7 +110,7 @@ U32     NX_SCALER_GetSizeOfRegisterSet( void )
  *              NX_SCALER_OpenModule,           NX_SCALER_CloseModule,
  *              NX_SCALER_CheckBusy,            NX_SCALER_CanPowerDown
  */
-void    NX_SCALER_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void    NX_SCALER_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_SCALER_MODULE > ModuleIndex );
@@ -127,11 +127,11 @@ void    NX_SCALER_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *              NX_SCALER_OpenModule,           NX_SCALER_CloseModule,
  *              NX_SCALER_CheckBusy,            NX_SCALER_CanPowerDown
  */
-U32     NX_SCALER_GetBaseAddress( U32 ModuleIndex )
+U32*    NX_SCALER_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_SCALER_MODULE > ModuleIndex );
 
-    return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+    return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

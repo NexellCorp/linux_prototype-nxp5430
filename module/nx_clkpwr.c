@@ -100,7 +100,7 @@ U32		NX_CLKPWR_GetSizeOfRegisterSet( void )
  *				NX_CLKPWR_OpenModule,				NX_CLKPWR_CloseModule,
  *				NX_CLKPWR_CheckBusy,				NX_CLKPWR_CanPowerDown
  */
-void	NX_CLKPWR_SetBaseAddress( U32 BaseAddress )
+void	NX_CLKPWR_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -130,9 +130,9 @@ void	NX_CLKPWR_SetOSCFreq( U32 FreqKHz )
  *				NX_CLKPWR_OpenModule,				NX_CLKPWR_CloseModule,
  *				NX_CLKPWR_CheckBusy,				NX_CLKPWR_CanPowerDown
  */
-U32		NX_CLKPWR_GetBaseAddress( void )
+U32*	NX_CLKPWR_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

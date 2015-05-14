@@ -39,8 +39,8 @@ CBOOL		NX_CLKGEN_Initialize( void );
 U32			NX_CLKGEN_GetNumberOfModule( void );
 U32 		NX_CLKGEN_GetPhysicalAddress( U32 ModuleIndex );
 U32			NX_CLKGEN_GetSizeOfRegisterSet( void );
-void		NX_CLKGEN_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32			NX_CLKGEN_GetBaseAddress( U32 ModuleIndex );
+void		NX_CLKGEN_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*		NX_CLKGEN_GetBaseAddress( U32 ModuleIndex );
 
 void		NX_CLKGEN_SetClockBClkMode( U32 ModuleIndex, NX_BCLKMODE mode );
 NX_BCLKMODE	NX_CLKGEN_GetClockBClkMode( U32 ModuleIndex );

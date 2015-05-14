@@ -58,8 +58,8 @@ CBOOL NX_PDM_Initialize( void );
 U32   NX_PDM_GetNumberOfModule( void );
 
 U32   NX_PDM_GetSizeOfRegisterSet( void );
-void  NX_PDM_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32   NX_PDM_GetBaseAddress( U32 ModuleIndex );
+void  NX_PDM_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*  NX_PDM_GetBaseAddress( U32 ModuleIndex );
 U32   NX_PDM_GetPhysicalAddress ( U32 ModuleIndex );
 CBOOL NX_PDM_OpenModule( U32 ModuleIndex );
 CBOOL NX_PDM_CloseModule( U32 ModuleIndex );

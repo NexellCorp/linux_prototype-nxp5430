@@ -97,7 +97,7 @@ U32		NX_CRYPTO_GetSizeOfRegisterSet( void )
  *				NX_CRYPTO_OpenModule,				NX_CRYPTO_CloseModule,
  *				NX_CRYPTO_CheckBusy,
  */
-void	NX_CRYPTO_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_CRYPTO_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_CRYPTO_MODULE > ModuleIndex );
@@ -113,10 +113,10 @@ void	NX_CRYPTO_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_CRYPTO_OpenModule,				NX_CRYPTO_CloseModule,
  *				NX_CRYPTO_CheckBusy,
  */
-U32		NX_CRYPTO_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_CRYPTO_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_CRYPTO_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

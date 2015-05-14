@@ -133,7 +133,7 @@ U32		NX_AC97_GetSizeOfRegisterSet( void )
  *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
  *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
-void	NX_AC97_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_AC97_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
@@ -151,11 +151,11 @@ void	NX_AC97_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
  *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
-U32		NX_AC97_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_AC97_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------

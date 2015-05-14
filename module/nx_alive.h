@@ -182,8 +182,8 @@ U32     NX_ALIVE_GetNumberOfModule( void );
 //@{
 U32     NX_ALIVE_GetPhysicalAddress( void );
 U32     NX_ALIVE_GetSizeOfRegisterSet( void );
-void    NX_ALIVE_SetBaseAddress( U32 BaseAddress );
-U32     NX_ALIVE_GetBaseAddress( void );
+void    NX_ALIVE_SetBaseAddress( U32* BaseAddress );
+U32*    NX_ALIVE_GetBaseAddress( void );
 CBOOL   NX_ALIVE_OpenModule( void );
 CBOOL   NX_ALIVE_CloseModule( void );
 CBOOL   NX_ALIVE_CheckBusy( void );

@@ -117,7 +117,7 @@ U32		NX_UART_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_UART_CHANNEL > ModuleIndex );
@@ -131,11 +131,11 @@ void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-U32		NX_UART_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_UART_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_UART_CHANNEL > ModuleIndex );
 
-	return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
@@ -706,7 +706,7 @@ NX_UART_DATA_BIT	NX_UART_GetDataWidth( U32 ModuleIndex )
  * 	@param[in] DataWidth ( 00:5bit, 01:6bit, 10:7bit, 11:8bit )
  *	@return		None
  */
-void	NX_UART_SetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY Parity,	U32 DataWidth,	U32 StopBit )
+void	NX_UART_SetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY Parity,	NX_UART_DATA_BIT DataWidth,	NX_UART_STOP_BIT StopBit )
 {
 	const U32 PARITYMODE_BITPOS		= 3;
 	const U32 STOPBIT_BITPOS		= 2;
@@ -742,7 +742,7 @@ void	NX_UART_SetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY Parity,	U32 
  * 	@param[in] Word Length ( 00:5bit, 01:6bit, 10:7bit, 11:8bit )
  *	@return		None
  */
-void	NX_UART_GetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY* pParity, U32* pDataWidth, U32* pStopBit )
+void	NX_UART_GetFrameConfiguration( U32 ModuleIndex, NX_UART_PARITY* pParity, NX_UART_DATA_BIT* pDataWidth, NX_UART_STOP_BIT* pStopBit )
 {
 	const U32 PARITYMODE_BITPOS 	= 3;
 	const U32 STOPBIT_BITPOS		= 2;
@@ -1299,7 +1299,7 @@ void	NX_UART_SetTransmitMode( U32 ModuleIndex, NX_UART_OPMODE mode )
  *	@param[in]	ModuleIndex 	An index of module ( 0 ~ x ).
  *	@return		Mode (0: Disable, 1: UART, 2: DMA)
  */
-U8	NX_UART_GetTransmitMode( U32 ModuleIndex )
+NX_UART_OPMODE	NX_UART_GetTransmitMode( U32 ModuleIndex )
 {
 	const 	 U32 TRMODE_BITPOS	= 2;
 	const 	 U32 TRMODE_MASK	= (3<<TRMODE_BITPOS);
@@ -1320,7 +1320,7 @@ U8	NX_UART_GetTransmitMode( U32 ModuleIndex )
  *   @param[in] 	Mode (0: Disable, 1: UART, 2: DMA)
  *	@return		None
  */
-void	NX_UART_SetRecieveMode( U32 ModuleIndex, U8 mode )
+void	NX_UART_SetRecieveMode( U32 ModuleIndex, NX_UART_OPMODE mode )
 {
 	const 	 U32 RCMODE_BITPOS	= 0;
 	const 	 U32 RCMODE_MASK	= (3<<RCMODE_BITPOS);
@@ -1343,7 +1343,7 @@ void	NX_UART_SetRecieveMode( U32 ModuleIndex, U8 mode )
  *	@param[in]	ModuleIndex 	An index of module ( 0 ~ x ).
  *	@return		Mode (0: Disable, 1: UART, 2: DMA)
  */
-U8		NX_UART_GetRecieveMode( U32 ModuleIndex )
+NX_UART_OPMODE		NX_UART_GetRecieveMode( U32 ModuleIndex )
 {
 	const	 U32 RCMODE_BITPOS	= 0;
 	const	 U32 RCMODE_MASK	= (3<<RCMODE_BITPOS);

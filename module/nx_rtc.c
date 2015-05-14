@@ -84,7 +84,7 @@ U32		NX_RTC_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_RTC_SetBaseAddress( U32 BaseAddress )
+void	NX_RTC_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	__g_pRegister = ( struct NX_RTC_RegisterSet *)BaseAddress;
@@ -95,9 +95,9 @@ void	NX_RTC_SetBaseAddress( U32 BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_RTC_GetBaseAddress( void )
+U32*	NX_RTC_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------

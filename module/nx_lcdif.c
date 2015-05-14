@@ -35,8 +35,8 @@ static	NX_LCDINTERFACE_RegisterSet *__g_pRegister[NUMBER_OF_LCDINTERFACE_MODULE]
 
 U32   NX_LCDINTERFACE_GetNumberOfModule( void );
 U32   NX_LCDINTERFACE_GetSizeOfRegisterSet( void );
-void  NX_LCDINTERFACE_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32   NX_LCDINTERFACE_GetBaseAddress( U32 ModuleIndex );
+void  NX_LCDINTERFACE_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
+U32*  NX_LCDINTERFACE_GetBaseAddress( U32 ModuleIndex );
 U32   NX_LCDINTERFACE_GetPhysicalAddress ( U32 ModuleIndex );
 CBOOL NX_LCDINTERFACE_OpenModule( U32 ModuleIndex );
 CBOOL NX_LCDINTERFACE_CloseModule( U32 ModuleIndex );
@@ -102,7 +102,7 @@ U32		NX_LCDINTERFACE_GetSizeOfRegisterSet( void )
  *				NX_LCDINTERFACE_OpenModule,				NX_LCDINTERFACE_CloseModule,
  *				NX_LCDINTERFACE_CheckBusy,
  */
-void	NX_LCDINTERFACE_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_LCDINTERFACE_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -120,11 +120,11 @@ void	NX_LCDINTERFACE_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_LCDINTERFACE_OpenModule,				NX_LCDINTERFACE_CloseModule,
  *				NX_LCDINTERFACE_CheckBusy,
  */
-U32		NX_LCDINTERFACE_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_LCDINTERFACE_GetBaseAddress( U32 ModuleIndex )
 {
 
     NX_ASSERT( NUMBER_OF_LCDINTERFACE_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 

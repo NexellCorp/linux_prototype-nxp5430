@@ -46,16 +46,16 @@ U32	 NX_RSTCON_GetSizeOfRegisterSet( void )
 	return sizeof(struct NX_RSTCON_RegisterSet);
 }
 
-void NX_RSTCON_SetBaseAddress( U32 BaseAddress )
+void NX_RSTCON_SetBaseAddress( U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
 	__g_pRegister = (struct NX_RSTCON_RegisterSet *)BaseAddress;
 }
 
-U32	 NX_RSTCON_GetBaseAddress( void )
+U32* NX_RSTCON_GetBaseAddress( void )
 {
-	return (U32)__g_pRegister;
+	return (U32*)__g_pRegister;
 }
 
 void	NX_RSTCON_SetRST(U32 RSTIndex, RSTCON STATUS)

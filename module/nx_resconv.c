@@ -110,7 +110,7 @@ U32		NX_RESCONV_GetSizeOfRegisterSet( void )
  *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
  *				NX_RESCONV_CheckBusy,
  */
-void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
@@ -126,10 +126,10 @@ void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
  *				NX_RESCONV_CheckBusy,
  */
-U32		NX_RESCONV_GetBaseAddress( U32 ModuleIndex )
+U32*	NX_RESCONV_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------

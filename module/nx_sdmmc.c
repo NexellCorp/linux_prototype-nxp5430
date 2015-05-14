@@ -131,7 +131,7 @@ U32     NX_SDMMC_GetSizeOfRegisterSet( void )
  *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
  */
-void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != BaseAddress );
@@ -149,11 +149,11 @@ void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
  */
-U32     NX_SDMMC_GetBaseAddress( U32 ModuleIndex )
+U32*    NX_SDMMC_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
 
-    return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+    return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
