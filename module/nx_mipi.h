@@ -156,7 +156,7 @@ void  NX_MIPI_CSI_SetInterleaveMode( U32 ModuleIndex, NX_MIPI_CSI_INTERLEAVE Int
 void  NX_MIPI_CSI_SetTimingControl( U32 ModuleIndex, int Channel, int T1, int T2, int T5 );
 
 // Set virtual channel for data interleave
-void  NX_MIPI_CSI_SetInterleaveChannnel( U32 ModuleIndex, int Channel, int InterleaveChannel );
+void  NX_MIPI_CSI_SetInterleaveChannel( U32 ModuleIndex, int Channel, int InterleaveChannel );
 
 void  NX_MIPI_CSI_EnableDecompress  ( U32 ModuleIndex, CBOOL Enable );
 
