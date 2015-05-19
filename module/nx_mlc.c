@@ -3636,14 +3636,16 @@ NX_MLC_SetVideoLayerFilterScale
 )
 {
 	register struct NX_MLC_RegisterSet* pRegister;
+	U32 MLCHSCALE;
+	U32 MLCVSCALE;
 
 	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
-	U32 MLCHSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
-	U32 MLCVSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
+	MLCHSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
+	MLCVSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
 	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(MLCHSCALE | (HScale&0x00FFFFFF)));
 	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(MLCVSCALE | (VScale&0x00FFFFFF)));
 }

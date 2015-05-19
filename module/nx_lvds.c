@@ -25,13 +25,13 @@
 #ifndef NX_CONSOLE_Printf
 #define	NX_CONSOLE_Printf printf
 #endif
-#ifndef pow
-static inline unsigned int pow(int a, int b) // a^b
+#ifndef __pow
+static inline unsigned int __pow(int a, int b) // a^b
 {
 	if (b == 0)
 		return 1;
 	else
-		return a * pow(a, b - 1);
+		return a * __pow(a, b - 1);
 }
 #endif
 
@@ -287,21 +287,21 @@ CBOOL NX_LVDS_InitRegTest( U32 ModuleIndex )
 	}
 
 	//@added choiyk 2012-12-17 ¿ÀÀü 11:21:54
-	WriteIO32(&pRegister->LVDSLOC0, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC0, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC0);
 	if( regvalue != 0x3fffffff )
 	{
 		fail = 1; //return CFALSE;
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC0 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
-	WriteIO32(&pRegister->LVDSLOC1, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC1, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC1);
 	if( regvalue != 0x3fffffff  )
 	{
 		fail = 1; //return CFALSE;
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC1 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
-	WriteIO32(&pRegister->LVDSLOC2, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC2, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC2);
 	if( regvalue != 0x3fffffff  )
 	{
@@ -309,28 +309,28 @@ CBOOL NX_LVDS_InitRegTest( U32 ModuleIndex )
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC2 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
 
-	WriteIO32(&pRegister->LVDSLOC3, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC3, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC3);
 	if( regvalue != 0x3fffffff  )
 	{
 		fail = 1; //return CFALSE;
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC3 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
-	WriteIO32(&pRegister->LVDSLOC4, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC4, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC4);
 	if( regvalue != 0x3fffffff  )
 	{
 		fail = 1; //return CFALSE;
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC4 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
-	WriteIO32(&pRegister->LVDSLOC5, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC5, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC5);
 	if( regvalue != 0x3fffffff  )
 	{
 		fail = 1; //return CFALSE;
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC5 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
-	WriteIO32(&pRegister->LVDSLOC6, (pow(2,30)-1)  );
+	WriteIO32(&pRegister->LVDSLOC6, (__pow(2,30)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOC6);
 	if( regvalue != 0x3fffffff )
 	{
@@ -338,12 +338,12 @@ CBOOL NX_LVDS_InitRegTest( U32 ModuleIndex )
 		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOC6 regvalue = %x, Golden ( %x )", regvalue, 0x3fffffff );
 	}
 
-	WriteIO32(&pRegister->LVDSLOCMASK0, (pow(2,32)-1)  );
+	WriteIO32(&pRegister->LVDSLOCMASK0, (__pow(2,32)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOCMASK0);
-	if( regvalue != (pow(2,32)-1) )
+	if( regvalue != (__pow(2,32)-1) )
 	{
 		fail = 1; //return CFALSE;
-		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOCMASK0 regvalue = %x, Golden ( %x )", regvalue, (pow(2,32)-1));
+		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOCMASK0 regvalue = %x, Golden ( %x )", regvalue, (__pow(2,32)-1));
 	}
 	WriteIO32(&pRegister->LVDSLOCMASK1, 7 );
 	regvalue = ReadIO32(&pRegister->LVDSLOCMASK1);
@@ -353,12 +353,12 @@ CBOOL NX_LVDS_InitRegTest( U32 ModuleIndex )
 		NX_CONSOLE_Printf("\n[DEBUG] regvalue = %x, Golden ( %x )", regvalue, 7 );
 	}
 
-	WriteIO32(&pRegister->LVDSLOCPOL0, (pow(2,32)-1)  );
+	WriteIO32(&pRegister->LVDSLOCPOL0, (__pow(2,32)-1)  );
 	regvalue = ReadIO32(&pRegister->LVDSLOCPOL0);
-	if( regvalue != (pow(2,32)-1) )
+	if( regvalue != (__pow(2,32)-1) )
 	{
 		fail = 1; //return CFALSE;
-		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOCPOL0 regvalue = %x, Golden ( %x )", regvalue, (pow(2,32)-1));
+		NX_CONSOLE_Printf("\n[DEBUG] LVDSLOCPOL0 regvalue = %x, Golden ( %x )", regvalue, (__pow(2,32)-1));
 	}
 	WriteIO32(&pRegister->LVDSLOCPOL1, 7 );
 	regvalue = ReadIO32(&pRegister->LVDSLOCPOL1);

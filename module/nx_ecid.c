@@ -689,8 +689,8 @@ void NX_ECID_SetBONDINGID
     CBOOL set_cs, CBOOL set_sigdev, CBOOL set_fset, CBOOL set_prchg
 )
 {
-    NX_ASSERT( CNULL != __g_ModuleVariables.pRegister );
     register U32 Enable;
+    NX_ASSERT( CNULL != __g_ModuleVariables.pRegister );
     Enable = (U32)( (set_cs<<6) | (set_sigdev<<5) | (set_fset<<4) | (set_prchg<<3) );
     WriteIO32(&__g_ModuleVariables.pRegister->EC[0], (U32)(Enable&0x0078));
 }

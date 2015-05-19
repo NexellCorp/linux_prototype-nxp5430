@@ -2275,7 +2275,6 @@ void NX_DPC_SetSync
 {
 
 	U32 regvalue;
-	U32 regvalue1;
 
 	register struct NX_DPC_RegisterSet* pRegister;
 	//@modified choiyk 2013-01-03 ¿ÀÈÄ 2:04:04
@@ -2830,7 +2829,6 @@ void	NX_DPC_SetYCOrder ( U32 ModuleIndex, NX_DPC_YCORDER ycorder )
 void	NX_DPC_SetLumaGain ( U32 ModuleIndex, U32 LumaGain )
 {
 	register struct NX_DPC_RegisterSet*	pRegister;
-	U32 temp;
 
 	NX_ASSERT( NUMBER_OF_DPC_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
