@@ -117,7 +117,7 @@ U32		NX_UART_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void	NX_UART_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_UART_CHANNEL > ModuleIndex );
@@ -131,11 +131,11 @@ void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-U32*	NX_UART_GetBaseAddress( U32 ModuleIndex )
+void*	NX_UART_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_UART_CHANNEL > ModuleIndex );
 
-	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
@@ -315,13 +315,13 @@ CBOOL NX_UART_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 /**
  *	@brief		Indicates current setting value of interrupt pending bit.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		Current setting value of pending bit. \r\n
- *				"1" means pend bit is occured. \r\n
- *				"0" means pend bitis NOT occured. \r\n
- *				- Return Value[0] : Rx pending state. \r\n
- *				- Return Value[1] : Error pending state. \r\n
- *				- Return Value[2] : Tx pending state. \r\n
- *				- Return Value[3] : Modem pending state. \r\n
+ *	@return		Current setting value of pending bit. 
+ *				"1" means pend bit is occured.
+ *				"0" means pend bitis NOT occured. 
+ *				- Return Value[0] : Rx pending state. 
+ *				- Return Value[1] : Error pending state. 
+ *				- Return Value[2] : Tx pending state. 
+ *				- Return Value[3] : Modem pending state. 
  */
 U32		NX_UART_GetInterruptPending32( U32 ModuleIndex )
 {
@@ -385,7 +385,7 @@ void	NX_UART_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
 /**
  *	@brief		Set all interrupts to be enables or disables.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	Enable	CTRUE	indicates that Set to all interrupt enable. \r\n
+ *	@param[in]	Enable	CTRUE	indicates that Set to all interrupt enable. 
  *						CFALSE	indicates that Set to all interrupt disable.
  *	@return		None.
  */
@@ -410,7 +410,7 @@ void	NX_UART_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		CTRUE			indicates that At least one( or more ) interrupt is enabled. \r\n
+ *	@return		CTRUE			indicates that At least one( or more ) interrupt is enabled. 
  *				CFALSE			indicates that All interrupt is disabled.
  */
 void	NX_UART_ClearInterruptPendingAll( U32 ModuleIndex )
@@ -2160,7 +2160,7 @@ void	NX_UART_SetBRD( U32 ModuleIndex, U16 BRD )
 {
 	NX_ASSERT( NUMBER_OF_UART_CHANNEL > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-	NX_ASSERT( 0xFFFF >= BRD );
+	NX_ASSERT( 0xFFFF > BRD );
 
 	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->BRDR, BRD);
 }

@@ -41,7 +41,9 @@ U32 NX_TIEOFF_GetPhysicalAddress( void )
 	return (U32)PhysicalAddr[0];
 }
 
-void	NX_TIEOFF_SetBaseAddress( U32* BaseAddress )
+
+void	NX_TIEOFF_SetBaseAddress( void* BaseAddress )
+
 {
 	NX_ASSERT( CNULL != BaseAddress );
 

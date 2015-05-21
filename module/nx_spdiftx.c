@@ -95,7 +95,7 @@ U32		NX_SPDIFTX_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_SPDIFTX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void	NX_SPDIFTX_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
@@ -109,11 +109,11 @@ void	NX_SPDIFTX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-U32*	NX_SPDIFTX_GetBaseAddress( U32 ModuleIndex )
+void*	NX_SPDIFTX_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_SPDIFTX_MODULE > ModuleIndex );
 
-	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
@@ -156,8 +156,8 @@ CBOOL	NX_SPDIFTX_OpenModule( U32 ModuleIndex )
 /**
  *	@brief		Deinitialize selected module to the proper stage.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Deinitialize is successed. 
- *				\b CFALSE	indicates that Deinitialize is failed.
+ *	@return		 CTRUE	indicates that Deinitialize is successed. 
+ *				 CFALSE	indicates that Deinitialize is failed.
  */
 CBOOL	NX_SPDIFTX_CloseModule( U32 ModuleIndex )
 {
@@ -232,7 +232,7 @@ U32 NX_SPDIFTX_GetNumberOfReset()
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's clock index.
- *	@return		Module's clock index.\n
+ *	@return		Module's clock index.
  *				It is equal to CLOCKINDEX_OF_SPDIFTX?_MODULE in <nx_chip.h>.
  */
 U32 NX_SPDIFTX_GetClockNumber ( U32 ModuleIndex )
@@ -250,7 +250,7 @@ U32 NX_SPDIFTX_GetClockNumber ( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.\n
+ *	@return		Module's reset index.
  *				It is equal to RESETINDEX_OF_SPDIFTX?_MODULE_i_nRST in <nx_chip.h>.
  */
 U32 NX_SPDIFTX_GetResetNumber (U32 ModuleIndex, U32 ChannelIndex)

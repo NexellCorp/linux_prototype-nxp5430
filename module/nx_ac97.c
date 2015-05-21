@@ -9,7 +9,7 @@
 //	FOR A PARTICULAR PURPOSE.
 //
 //	Module		: AC97
-//	File		: nx_ac97.c
+//	File		       : nx_ac97.c
 //	Description	:
 //	Author		: Jonghyuk Park(charles@nexell.co.kr)
 //	History		: 20120802 first implementation
@@ -28,8 +28,8 @@ static	struct
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicates that Initialize is successed.\r\n
- *			\b CFALSE indicates that Initialize is failed.\r\n
+ *	@return  CTRUE	indicates that Initialize is successed.
+ *			CFALSE indicates that Initialize is failed.
  *	@see	NX_AC97_GetNumberOfModule
  */
 CBOOL	NX_AC97_Initialize( void )
@@ -68,10 +68,6 @@ U32		NX_AC97_GetNumberOfModule( void )
  *	@brief		Get module's physical address.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's physical address
- *	@see		NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
 U32		NX_AC97_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -112,10 +108,6 @@ U32 NX_AC97_GetNumberOfReset()
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_AC97_GetPhysicalAddress,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
 U32		NX_AC97_GetSizeOfRegisterSet( void )
 {
@@ -128,12 +120,8 @@ U32		NX_AC97_GetSizeOfRegisterSet( void )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
-void	NX_AC97_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void	NX_AC97_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
@@ -146,28 +134,20 @@ void	NX_AC97_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
  */
-U32*	NX_AC97_GetBaseAddress( U32 ModuleIndex )
+void*	NX_AC97_GetBaseAddress( U32 ModuleIndex )
 {
 	NX_ASSERT( NUMBER_OF_AC97_MODULE > ModuleIndex );
 
-	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+	return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Initialize is successed. \r\n
- *				\b CFALSE	indicates that Initialize is failed.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
+ *	@return		 CTRUE	indicates that Initialize is successed. 
+ *				 CFALSE	indicates that Initialize is failed.
  */
 CBOOL	NX_AC97_OpenModule( U32 ModuleIndex )
 {
@@ -195,12 +175,8 @@ CBOOL	NX_AC97_OpenModule( U32 ModuleIndex )
 /**
  *	@brief		Deinitialize selected module to the proper stage.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Deinitialize is successed. \r\n
- *				\b CFALSE	indicates that Deinitialize is failed.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,
- *				NX_AC97_CheckBusy,			NX_AC97_CanPowerDown
+ *	@return		 CTRUE	indicates that Deinitialize is successed. 
+ *				 CFALSE	indicates that Deinitialize is failed.
  */
 CBOOL	NX_AC97_CloseModule( U32 ModuleIndex )
 {
@@ -228,12 +204,8 @@ CBOOL	NX_AC97_CloseModule( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Module is Busy. \r\n
- *				\b CFALSE	indicates that Module is NOT Busy.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CanPowerDown
+ *	@return		 CTRUE	indicates that Module is Busy. 
+ *				 CFALSE	indicates that Module is NOT Busy.
  */
 CBOOL	NX_AC97_CheckBusy( U32 ModuleIndex )
 {
@@ -246,12 +218,8 @@ CBOOL	NX_AC97_CheckBusy( U32 ModuleIndex )
 /**
  *	@brief		Indicaes whether the selected modules is ready to enter power-down stage
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that Ready to enter power-down stage. \r\n
- *				\b CFALSE	indicates that This module can't enter to power-down stage.
- *	@see		NX_AC97_GetPhysicalAddress,	NX_AC97_GetSizeOfRegisterSet,
- *				NX_AC97_SetBaseAddress,		NX_AC97_GetBaseAddress,
- *				NX_AC97_OpenModule,			NX_AC97_CloseModule,
- *				NX_AC97_CheckBusy
+ *	@return		 CTRUE	indicates that Ready to enter power-down stage. 
+ *				 CFALSE	indicates that This module can't enter to power-down stage.
  */
 CBOOL	NX_AC97_CanPowerDown( U32 ModuleIndex )
 {
@@ -267,11 +235,6 @@ CBOOL	NX_AC97_CanPowerDown( U32 ModuleIndex )
  *	@brief		Get a interrupt number for interrupt controller.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Interrupt number
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 U32		NX_AC97_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -290,14 +253,9 @@ U32		NX_AC97_GetInterruptNumber( U32 ModuleIndex )
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	IntNum	Interrupt Number.
- *	@param[in]	Enable	\b CTRUE	indicates that Interrupt Enable. \r\n
- *						\b CFALSE	indicates that Interrupt Disable.
+ *	@param[in]	Enable	 CTRUE	indicates that Interrupt Enable. 
+ *						 CFALSE	indicates that Interrupt Disable.
  *	@return		None.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 void	NX_AC97_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 {
@@ -327,13 +285,8 @@ void	NX_AC97_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Interrupt is enabled. \r\n
- *				\b CFALSE	indicates that Interrupt is disabled.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that Interrupt is enabled. 
+ *				 CFALSE	indicates that Interrupt is disabled.
  */
 CBOOL	NX_AC97_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 {
@@ -351,13 +304,8 @@ CBOOL	NX_AC97_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that Pending is seted. \r\n
- *				\b CFALSE	indicates that Pending is Not Seted.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that Pending is seted. 
+ *				 CFALSE	indicates that Pending is Not Seted.
  */
 CBOOL	NX_AC97_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
@@ -376,11 +324,6 @@ CBOOL	NX_AC97_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ 5 ).
  *	@param[in]	IntNum	Interrupt number.
  *	@return		None.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 void	NX_AC97_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 {
@@ -402,14 +345,9 @@ void	NX_AC97_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 /**
  *	@brief		Set all interrupts to be enables or disables.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@param[in]	Enable	\b CTRUE	indicates that Set to all interrupt enable. \r\n
- *						\b CFALSE	indicates that Set to all interrupt disable.
+ *	@param[in]	Enable	 CTRUE	indicates that Set to all interrupt enable. 
+ *						 CFALSE	indicates that Set to all interrupt disable.
  *	@return		None.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 void	NX_AC97_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
@@ -436,13 +374,8 @@ void	NX_AC97_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) interrupt is enabled. \r\n
- *				\b CFALSE	indicates that All interrupt is disabled.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that At least one( or more ) interrupt is enabled. 
+ *				 CFALSE	indicates that All interrupt is disabled.
  */
 CBOOL	NX_AC97_GetInterruptEnableAll( U32 ModuleIndex )
 {
@@ -464,13 +397,8 @@ CBOOL	NX_AC97_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
- *	@return		\b CTRUE	indicates that At least one( or more ) pending is seted. \r\n
- *				\b CFALSE	indicates that All pending is NOT seted.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that At least one( or more ) pending is seted. 
+ *				 CFALSE	indicates that All pending is NOT seted.
  */
 CBOOL	NX_AC97_GetInterruptPendingAll( U32 ModuleIndex )
 {
@@ -493,11 +421,6 @@ CBOOL	NX_AC97_GetInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		None.
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 void	NX_AC97_ClearInterruptPendingAll( U32 ModuleIndex )
 {
@@ -519,11 +442,6 @@ void	NX_AC97_ClearInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Get a interrupt number which has the most prority of pended interrupts
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Pending Number( If all pending is not set then return -1 ).
- *	@see		NX_AC97_GetInterruptNumber,
- *				NX_AC97_GetInterruptEnable,			NX_AC97_GetInterruptPending,
- *				NX_AC97_ClearInterruptPending,		NX_AC97_SetInterruptEnableAll,
- *				NX_AC97_GetInterruptEnableAll,		NX_AC97_GetInterruptPendingAll,
- *				NX_AC97_ClearInterruptPendingAll,	NX_AC97_GetInterruptPendingNumber
  */
 U32		NX_AC97_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 {

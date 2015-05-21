@@ -1225,7 +1225,7 @@ return sizeof( *__g_pRegister );
  *              NX_DWC_GMAC_OpenModule,             NX_DWC_GMAC_CloseModule,
  *              NX_DWC_GMAC_CheckBusy,
  */
-void    NX_DWC_GMAC_SetBaseAddress( U32 ModuleIndex, U32 ChannelIndex, U32 BaseAddress )
+void    NX_DWC_GMAC_SetBaseAddress( U32 ModuleIndex, U32 ChannelIndex, U32* BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_DWC_GMAC_MODULE > ModuleIndex );

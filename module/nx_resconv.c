@@ -52,8 +52,8 @@ U32   NX_RESCONV_GetTEMP( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.
+ *	@return  CTRUE	indicate that Initialize is successed.
+ *			 CFALSE	indicate that Initialize is failed.
  *	@see	NX_RESCONV_GetNumberOfModule
  */
 CBOOL	NX_RESCONV_Initialize( void )
@@ -77,7 +77,7 @@ CBOOL	NX_RESCONV_Initialize( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get number of modules in the chip.
- *	@return		Module's number. \n
+ *	@return		Module's number. 
  *				It is equal to NUMBER_OF_RESCONV_MODULE in <nx_chip.h>.
  *	@see		NX_RESCONV_Initialize
  */
@@ -90,10 +90,6 @@ U32		NX_RESCONV_GetNumberOfModule( void )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_RESCONV_GetPhysicalAddress,
- *				NX_RESCONV_SetBaseAddress,			NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
- *				NX_RESCONV_CheckBusy,
  */
 U32		NX_RESCONV_GetSizeOfRegisterSet( void )
 {
@@ -105,12 +101,9 @@ U32		NX_RESCONV_GetSizeOfRegisterSet( void )
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_RESCONV_GetPhysicalAddress,		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
- *				NX_RESCONV_CheckBusy,
  */
-void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+
+void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
@@ -121,26 +114,18 @@ void	NX_RESCONV_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 /**
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
- *	@see		NX_RESCONV_GetPhysicalAddress,		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_SetBaseAddress,
- *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
- *				NX_RESCONV_CheckBusy,
  */
-U32*	NX_RESCONV_GetBaseAddress( U32 ModuleIndex )
+void*	NX_RESCONV_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_RESCONV_MODULE > ModuleIndex );
-	return (U32*)__g_pRegister[ModuleIndex];
+	return (void*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's physical address.
- *	@return		Module's physical address. \n
+ *	@return		Module's physical address. 
  *				It is equal to PHY_BASEADDR_RESCONV?_MODULE in <nx_chip.h>.
- *	@see		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_SetBaseAddress,			NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
- *				NX_RESCONV_CheckBusy,
  */
 U32		NX_RESCONV_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -157,12 +142,8 @@ U32		NX_RESCONV_GetPhysicalAddress( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
- *	@see		NX_RESCONV_GetPhysicalAddress,		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_SetBaseAddress,			NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_CloseModule,
- *				NX_RESCONV_CheckBusy,
+ *	@return		 CTRUE	indicate that Initialize is successed. 
+ *				 CFALSE	indicate that Initialize is failed.
  */
 CBOOL	NX_RESCONV_OpenModule( U32 ModuleIndex )
 {
@@ -175,12 +156,8 @@ CBOOL	NX_RESCONV_OpenModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
- *	@see		NX_RESCONV_GetPhysicalAddress,		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_SetBaseAddress,			NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_OpenModule,
- *				NX_RESCONV_CheckBusy,
+ *	@return		 CTRUE	indicate that Deinitialize is successed. 
+ *				 CFALSE	indicate that Deinitialize is failed.
  */
 CBOOL	NX_RESCONV_CloseModule( U32 ModuleIndex )
 {
@@ -193,11 +170,8 @@ CBOOL	NX_RESCONV_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
- *	@see		NX_RESCONV_GetPhysicalAddress,		NX_RESCONV_GetSizeOfRegisterSet,
- *				NX_RESCONV_SetBaseAddress,			NX_RESCONV_GetBaseAddress,
- *				NX_RESCONV_OpenModule,				NX_RESCONV_CloseModule,
+ *	@return		 CTRUE	indicate that Module is Busy. 
+ *				 CFALSE	indicate that Module is NOT Busy.
  */
 CBOOL	NX_RESCONV_CheckBusy( U32 ModuleIndex )
 {
@@ -213,14 +187,8 @@ CBOOL	NX_RESCONV_CheckBusy( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's clock index.
- *	@return		Module's clock index.\n
+ *	@return		Module's clock index.
  *				It is equal to CLOCKINDEX_OF_RESCONV?_MODULE in <nx_chip.h>.
- *	@see		NX_CLKGEN_SetClockDivisorEnable,
- *				NX_CLKGEN_GetClockDivisorEnable,
- *				NX_CLKGEN_SetClockSource,
- *				NX_CLKGEN_GetClockSource,
- *				NX_CLKGEN_SetClockDivisor,
- *				NX_CLKGEN_GetClockDivisor
  */
 /*
 U32 NX_RESCONV_GetClockNumber ( U32 ModuleIndex )
@@ -238,11 +206,8 @@ U32 NX_RESCONV_GetClockNumber ( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.\n
+ *	@return		Module's reset index.
  *				It is equal to RESETINDEX_OF_RESCONV?_MODULE_i_nRST in <nx_chip.h>.
- *	@see		NX_RSTCON_Enter,
- *				NX_RSTCON_Leave,
- *				NX_RSTCON_GetStatus
  */
 /*
 U32 NX_RESCONV_GetResetNumber ( U32 ModuleIndex )
@@ -263,17 +228,8 @@ U32 NX_RESCONV_GetResetNumber ( U32 ModuleIndex )
 /**
  *	@brief		Get a interrupt number for the interrupt controller.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		A interrupt number.\n
+ *	@return		A interrupt number.
  *				It is equal to INTNUM_OF_RESCONV?_MODULE in <nx_chip.h>.
- *	@see		NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
  */
 U32 	NX_RESCONV_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -290,20 +246,11 @@ U32 	NX_RESCONV_GetInterruptNumber( U32 ModuleIndex )
 /**
  *	@brief		Set a specified interrupt to be enabled or disabled.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	IntNum	a interrupt Number .\n
+ *	@param[in]	IntNum	a interrupt Number .
  *						refer to NX_RESCONV_INTCH_xxx in <nx_resconv.h>
- *	@param[in]	Enable	\b Set as CTRUE to enable a specified interrupt. \r\n
- *						\b Set as CFALSE to disable a specified interrupt.
+ *	@param[in]	Enable	 Set as CTRUE to enable a specified interrupt. 
+ *						 Set as CFALSE to disable a specified interrupt.
  *	@return		None.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
  */
 void	NX_RESCONV_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 {
@@ -327,19 +274,10 @@ void	NX_RESCONV_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	IntNum	a interrupt Number.\n
+ *	@param[in]	IntNum	a interrupt Number.
  *						refer to NX_RESCONV_INTCH_xxx in <nx_resconv.h>
- *	@return		\b CTRUE	indicates that a specified interrupt is enabled. \r\n
- *				\b CFALSE	indicates that a specified interrupt is disabled.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that a specified interrupt is enabled. 
+ *				 CFALSE	indicates that a specified interrupt is disabled.
 
  */
 CBOOL	NX_RESCONV_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
@@ -353,19 +291,10 @@ CBOOL	NX_RESCONV_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	IntNum	a interrupt Number.\n
+ *	@param[in]	IntNum	a interrupt Number.
  *						refer to NX_RESCONV_INTCH_xxx in <nx_resconv.h>
- *	@return		\b CTRUE	indicates that a specified interrupt is pended. \r\n
- *				\b CFALSE	indicates that a specified interrupt is not pended.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that a specified interrupt is pended. 
+ *				 CFALSE	indicates that a specified interrupt is not pended.
 
  */
 CBOOL	NX_RESCONV_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
@@ -385,18 +314,9 @@ CBOOL	NX_RESCONV_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
 /**
  *	@brief		Clear a pending state of specified interrupt.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	IntNum	a interrupt number.\n
+ *	@param[in]	IntNum	a interrupt number.
  *						refer to NX_RESCONV_INTCH_xxx in <nx_resconv.h>
  *	@return		None.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
 
  */
 void	NX_RESCONV_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
@@ -412,18 +332,9 @@ void	NX_RESCONV_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
 /**
  *	@brief		Set all interrupts to be enabled or disabled.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	Enable	\b Set as CTRUE to enable all interrupts. \r\n
- *						\b Set as CFALSE to disable all interrupts.
+ *	@param[in]	Enable	 Set as CTRUE to enable all interrupts. 
+ *						 Set as CFALSE to disable all interrupts.
  *	@return		None.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
 
  */
 void	NX_RESCONV_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
@@ -445,17 +356,8 @@ void	NX_RESCONV_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 /**
  *	@brief		Indicates whether some of interrupts are enabled or not.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	indicates that one or more interrupts are enabled. \r\n
- *				\b CFALSE	indicates that all interrupts are disabled.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that one or more interrupts are enabled. 
+ *				 CFALSE	indicates that all interrupts are disabled.
 
  */
 CBOOL	NX_RESCONV_GetInterruptEnableAll( U32 ModuleIndex )
@@ -469,17 +371,8 @@ CBOOL	NX_RESCONV_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	indicates that one or more interrupts are pended. \r\n
- *				\b CFALSE	indicates that no interrupt is pended.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_ClearInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that one or more interrupts are pended. 
+ *				 CFALSE	indicates that no interrupt is pended.
 
  */
 CBOOL	NX_RESCONV_GetInterruptPendingAll( U32 ModuleIndex )
@@ -499,15 +392,6 @@ CBOOL	NX_RESCONV_GetInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		None.
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_GetInterruptPendingNumber
 
  */
 void	NX_RESCONV_ClearInterruptPendingAll( U32 ModuleIndex )
@@ -523,17 +407,8 @@ void	NX_RESCONV_ClearInterruptPendingAll( U32 ModuleIndex )
 /**
  *	@brief		Get a interrupt number which has the most prority of pended interrupts.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		a interrupt number. A value of '-1' means that no interrupt is pended.\n
+ *	@return		a interrupt number. A value of '-1' means that no interrupt is pended.
  *				refer to NX_RESCONV_INTCH_xxx in <nx_resconv.h>
- *	@see		NX_RESCONV_GetInterruptNumber,
- *				NX_RESCONV_SetInterruptEnable,
- *				NX_RESCONV_GetInterruptEnable,
- *				NX_RESCONV_GetInterruptPending,
- *				NX_RESCONV_ClearInterruptPending,
- *				NX_RESCONV_SetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptEnableAll,
- *				NX_RESCONV_GetInterruptPendingAll,
- *				NX_RESCONV_ClearInterruptPendingAll
 
  */
 S32		NX_RESCONV_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None

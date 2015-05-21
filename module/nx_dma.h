@@ -15,8 +15,6 @@ extern "C"
 	#define NUMBER_OF_DMA_CHANNEL	8
 	#define NX_DMA_NUM_OF_INT 2 // @todo ??
 
-	#define NX_DEBUGLOG 1
-
 	/// @brief	DMA Module's Register List
 	struct	NX_DMALLI_RegisterSet
 	{
@@ -153,8 +151,8 @@ U32		NX_DMA_GetNumberOfChannel( void );
 
 U32		NX_DMA_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_DMA_GetSizeOfRegisterSet( void );
-void	NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32		NX_DMA_GetBaseAddress( U32 ModuleIndex );
+void	NX_DMA_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
+void*	NX_DMA_GetBaseAddress( U32 ModuleIndex );
 CBOOL	NX_DMA_OpenModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CloseModule( U32 ModuleIndex );
 CBOOL	NX_DMA_CheckBusy( void );
@@ -204,9 +202,6 @@ void    NX_DMA_SetLLIAddress( U32 LLIAddress, U32 LLISize );
 U32     NX_DMA_GetLLIAddress( void );
 void	NX_DMA_Stop ( U32 nChannel, CBOOL Enable );
 //@}
-
-void    NX_DMA_SetUnLockChannel( U32 PeriID ) ;
-int		NX_DMA_GetUnLockChannel( U32 PeriID ) ;
 
 //@}
 

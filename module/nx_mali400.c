@@ -48,8 +48,8 @@ U32   NX_MALI400_GetTEMP( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.
+ *	@return  CTRUE	indicate that Initialize is successed.
+ *			 CFALSE	indicate that Initialize is failed.
  *	@see	NX_MALI400_GetNumberOfModule
  */
 CBOOL	NX_MALI400_Initialize( void )
@@ -68,7 +68,7 @@ CBOOL	NX_MALI400_Initialize( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get number of modules in the chip.
- *	@return		Module's number. \n
+ *	@return		Module's number. 
  *				It is equal to NUMBER_OF_MALI400_MODULE in <nx_chip.h>.
  *	@see		NX_MALI400_Initialize
  */
@@ -80,11 +80,7 @@ U32		NX_MALI400_GetNumberOfModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get a size, in byte, of register set.
- *	@return		Size of module's register set.
- *	@see		NX_MALI400_GetPhysicalAddress,
- *				NX_MALI400_SetBaseAddress,			NX_MALI400_GetBaseAddress,
- *				NX_MALI400_OpenModule,				NX_MALI400_CloseModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		Size of module's register set.			
  */
 U32		NX_MALI400_GetSizeOfRegisterSet( void )
 {
@@ -95,13 +91,10 @@ return sizeof( *__g_pRegister );
 /**
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
- *	@return		None.
- *	@see		NX_MALI400_GetPhysicalAddress,		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_GetBaseAddress,
- *				NX_MALI400_OpenModule,				NX_MALI400_CloseModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		None.				
  */
-void	NX_MALI400_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+
+void	NX_MALI400_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_MALI400_MODULE > ModuleIndex );
@@ -111,27 +104,22 @@ void	NX_MALI400_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get a base address of register set
- *	@return		Module's base address.
- *	@see		NX_MALI400_GetPhysicalAddress,		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_SetBaseAddress,
- *				NX_MALI400_OpenModule,				NX_MALI400_CloseModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		Module's base address.				
  */
-U32*	NX_MALI400_GetBaseAddress( U32 ModuleIndex )
+
+void*	NX_MALI400_GetBaseAddress( U32 ModuleIndex )
 {
     NX_ASSERT( NUMBER_OF_MALI400_MODULE > ModuleIndex );
-	return (U32*)__g_pRegister[ModuleIndex];	
+
+	return (void*)__g_pRegister[ModuleIndex];	
+
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's physical address.
- *	@return		Module's physical address. \n
- *				It is equal to PHY_BASEADDR_MALI400?_MODULE in <nx_chip.h>.
- *	@see		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_SetBaseAddress,			NX_MALI400_GetBaseAddress,
- *				NX_MALI400_OpenModule,				NX_MALI400_CloseModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		Module's physical address. 
+ *				It is equal to PHY_BASEADDR_MALI400?_MODULE in <nx_chip.h>.				
  */
 U32		NX_MALI400_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -147,12 +135,8 @@ U32		NX_MALI400_GetPhysicalAddress( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
- *	@see		NX_MALI400_GetPhysicalAddress,		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_SetBaseAddress,			NX_MALI400_GetBaseAddress,
- *				NX_MALI400_CloseModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		 CTRUE	indicate that Initialize is successed. 
+ *				 CFALSE	indicate that Initialize is failed.				
  */
 CBOOL	NX_MALI400_OpenModule( U32 ModuleIndex )
 {
@@ -189,12 +173,8 @@ CBOOL	NX_MALI400_OpenModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
- *	@see		NX_MALI400_GetPhysicalAddress,		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_SetBaseAddress,			NX_MALI400_GetBaseAddress,
- *				NX_MALI400_OpenModule,
- *				NX_MALI400_CheckBusy,				
+ *	@return		 CTRUE	indicate that Deinitialize is successed. 
+ *				 CFALSE	indicate that Deinitialize is failed.				
  */
 CBOOL	NX_MALI400_CloseModule( U32 ModuleIndex )
 {
@@ -227,11 +207,8 @@ CBOOL	NX_MALI400_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
- *	@see		NX_MALI400_GetPhysicalAddress,		NX_MALI400_GetSizeOfRegisterSet,
- *				NX_MALI400_SetBaseAddress,			NX_MALI400_GetBaseAddress,
- *				NX_MALI400_OpenModule,				NX_MALI400_CloseModule,
+ *	@return		 CTRUE	indicate that Module is Busy. 
+ *				 CFALSE	indicate that Module is NOT Busy.
  */
 CBOOL	NX_MALI400_CheckBusy( U32 ModuleIndex )
 {
@@ -247,14 +224,8 @@ CBOOL	NX_MALI400_CheckBusy( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's clock index.
- *	@return		Module's clock index.\n
+ *	@return		Module's clock index.
  *				It is equal to CLOCKINDEX_OF_MALI400?_MODULE in <nx_chip.h>.
- *	@see		NX_CLKGEN_SetClockDivisorEnable,
- *				NX_CLKGEN_GetClockDivisorEnable,
- *				NX_CLKGEN_SetClockSource,
- *				NX_CLKGEN_GetClockSource,
- *				NX_CLKGEN_SetClockDivisor,
- *				NX_CLKGEN_GetClockDivisor
  */
 U32 NX_MALI400_GetClockNumber ( U32 ModuleIndex )
 {
@@ -270,11 +241,8 @@ U32 NX_MALI400_GetClockNumber ( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.\n
+ *	@return		Module's reset index.
  *				It is equal to RESETINDEX_OF_MALI400?_MODULE_i_nRST in <nx_chip.h>.
- *	@see		NX_RSTCON_Enter,
- *				NX_RSTCON_Leave,
- *				NX_RSTCON_GetStatus
  */
 U32 NX_MALI400_GetResetNumber ( U32 ModuleIndex )
 {
@@ -294,17 +262,8 @@ U32 NX_MALI400_GetResetNumber ( U32 ModuleIndex )
 /**
  *	@brief		Get a interrupt number for the interrupt controller.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		A interrupt number.\n
+ *	@return		A interrupt number.
  *				It is equal to INTNUM_OF_MALI400?_MODULE in <nx_chip.h>.
- *	@see		NX_MALI400_SetInterruptEnable,
- *				NX_MALI400_GetInterruptEnable,
- *				NX_MALI400_GetInterruptPending,
- *				NX_MALI400_ClearInterruptPending,
- *				NX_MALI400_SetInterruptEnableAll,
- *				NX_MALI400_GetInterruptEnableAll,	
- *				NX_MALI400_GetInterruptPendingAll,
- *				NX_MALI400_ClearInterruptPendingAll,
- *				NX_MALI400_GetInterruptPendingNumber
  */
 U32 	NX_MALI400_GetInterruptNumber( U32 ModuleIndex )
 {

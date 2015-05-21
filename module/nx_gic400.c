@@ -83,7 +83,8 @@ U32		NX_GIC400_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_GIC400_SetBaseAddress( U32* BaseAddress )
+
+void	NX_GIC400_SetBaseAddress( void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -95,9 +96,10 @@ void	NX_GIC400_SetBaseAddress( U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32*	NX_GIC400_GetBaseAddress( void )
+
+void*	NX_GIC400_GetBaseAddress( void )
 {
-	return (U32*)__g_pRegister;
+	return (void*)__g_pRegister;
 }
 
 //------------------------------------------------------------------------------
