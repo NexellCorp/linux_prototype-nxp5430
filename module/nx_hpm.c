@@ -72,7 +72,7 @@ U32		NX_HPM_GetPhysicalAddress( void )
  */
 U32		NX_HPM_GetSizeOfRegisterSet( void )
 {
-	return sizeof( struct NX_HPM_RegisterSet) * NUMBER_OF_HPM_MODULE;
+	return sizeof( struct NX_HPM_RegisterSet) * NUMBER_OF_HPM_MODULE);
 }
 
 //------------------------------------------------------------------------------
@@ -81,7 +81,11 @@ U32		NX_HPM_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
+<<<<<<< .mine
+void	NX_HPM_SetBaseAddress( void* BaseAddress )
+=======
 void	NX_HPM_SetBaseAddress( U32* BaseAddress )
+>>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
 
@@ -93,9 +97,17 @@ void	NX_HPM_SetBaseAddress( U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
+<<<<<<< .mine
+void*	NX_HPM_GetBaseAddress( void )
+=======
 U32*	NX_HPM_GetBaseAddress( void )
+>>>>>>> .r453
 {
+<<<<<<< .mine
+	return (void*)__g_pRegister;
+=======
 	return (U32*)__g_pRegister;
+>>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------

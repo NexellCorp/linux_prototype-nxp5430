@@ -31,7 +31,7 @@ static struct
 //------------------------------------------------------------------------------
 /**
  *  @brief      Initialize prototype environment and local variables.
- *  @return     CTRUE indicates success.\r\n
+ *  @return     CTRUE indicates success.
  *              CFALSE indicates failure.
  *  @remark     You have to call this function before using other functions.
  *  @see        NX_SDMMC_GetNumberOfModule
@@ -73,10 +73,13 @@ U32     NX_SDMMC_GetNumberOfModule( void )
  *  @brief      Get a physical address of mudule.
  *  @param[in]  none.
  *  @return     a physical address of module.
+<<<<<<< .mine
+=======
  *  @see        NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
 U32     NX_SDMMC_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -94,10 +97,13 @@ U32     NX_SDMMC_GetPhysicalAddress( U32 ModuleIndex )
 /**
  *  @brief      Get a size, in bytes, of register set.
  *  @return     Byte size of module's register set.
+<<<<<<< .mine
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
 U32     NX_SDMMC_GetSizeOfRegisterSet( void )
 {
@@ -110,10 +116,10 @@ U32     NX_SDMMC_GetSizeOfRegisterSet( void )
  *  @param[in]  BaseAddress Module's base address
  *  @return     None.
  *  @remark     You have to call this function before using NX_SDMMC_OpenModule(),
- *              NX_SDMMC_CloseModule(), NX_SDMMC_CheckBusy(), NX_SDMMC_CanPowerDown(),
+ *              SDMMC_CloseModule(), NX_SDMMC_CheckBusy(), NX_SDMMC_CanPowerDown(),
  *              Interrupt Interfaces, DMA Interfaces, Clock Control Interfaces,
- *              and Module Specific Functions.\r\n
- *              You can use this function with:\r\n
+ *              and Module Specific Functions.
+ *              You can use this function with:
  *              - virtual address system such as WinCE or Linux.
  *  @code
  *      U32 PhyAddr, VirAddr;
@@ -126,12 +132,19 @@ U32     NX_SDMMC_GetSizeOfRegisterSet( void )
  *      NX_SDMMC_SetBaseAddress( index, NX_SDMMC_GetPhysicalAddress( index ) );
  *  @endcode
  *
+<<<<<<< .mine
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
+<<<<<<< .mine
+void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
+=======
 void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+>>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != BaseAddress );
@@ -144,31 +157,48 @@ void    NX_SDMMC_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *  @brief      Get a base address of register set
  *  @param[in]  none.
  *  @return     Module's base address.
+<<<<<<< .mine
+
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
+<<<<<<< .mine
+void*    NX_SDMMC_GetBaseAddress( U32 ModuleIndex )
+=======
 U32*    NX_SDMMC_GetBaseAddress( U32 ModuleIndex )
+>>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
 
+<<<<<<< .mine
+    return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
+=======
     return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+>>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Initialize selected modules with default value.
  *  @param[in]  none.
- *  @return     CTRUE indicates success.\r\n
+ *  @return     CTRUE indicates success.
  *              CFALSE indicates failure.
  *  @remark     This function makes a module is initialized by default value.
  *              Thererfore after calling this function, some registers may be
  *              modified to default state. If you don't want to change any
  *              setting of registers, you can skip to call this function. But
  *              you have to call this function at least once to use these
- *              prototype functions after Power-On-Reset or NX_SDMMC_CloseModule().\r\n
+<<<<<<< .mine
+ *              prototype functions after Power-On-Reset or SDMMC_CloseModule().
+ *              IMPORTANT : you have to enable a PCLK before calling this function.
+=======
+ *              prototype functions after Power-On-Reset or SDMMC_CloseModule().\r\n
  *              \b IMPORTANT : you have to enable a PCLK before calling this function.
+>>>>>>> .r453
  *  @code
  *      // Initialize the clock generator
  *      NX_SDMMC_SetClockPClkMode( index, NX_PCLKMODE_ALWAYS );
@@ -182,12 +212,16 @@ U32*    NX_SDMMC_GetBaseAddress( U32 ModuleIndex )
  *      // Do something
  *      // ......
  *
- *      NX_SDMMC_CloseModule( index );
+ *      SDMMC_CloseModule( index );
  *  @endcode
+<<<<<<< .mine
+
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_CloseModule,
+ *              SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
 CBOOL   NX_SDMMC_OpenModule( U32 ModuleIndex )
 {
@@ -210,14 +244,14 @@ CBOOL   NX_SDMMC_OpenModule( U32 ModuleIndex )
 /**
  *  @brief      De-initialize selected module to the proper stage.
  *  @param[in]  none.
- *  @return     CTRUE indicates success.\r\n
+ *  @return     CTRUE indicates success.
  *              CFALSE indicates failure.
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
  *              NX_SDMMC_OpenModule,
  *              NX_SDMMC_CheckBusy,             NX_SDMMC_CanPowerDown
  */
-CBOOL   NX_SDMMC_CloseModule( U32 ModuleIndex )
+CBOOL   SDMMC_CloseModule( U32 ModuleIndex )
 {
     const U32 INT_ENA = 1UL<<4;
     register U32 SetValue;
@@ -238,13 +272,16 @@ CBOOL   NX_SDMMC_CloseModule( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether the selected modules is busy or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates the selected module is busy.\r\n
+ *  @return     CTRUE   indicates the selected module is busy.
  *              CFALSE  indicates the selected module is idle.
  *  @remark     If the command FSM state of SDMMC is idle, it returns CFALSE.
+<<<<<<< .mine
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CanPowerDown
+>>>>>>> .r453
  */
 CBOOL   NX_SDMMC_CheckBusy( U32 ModuleIndex )
 {
@@ -260,13 +297,16 @@ CBOOL   NX_SDMMC_CheckBusy( U32 ModuleIndex )
 /**
  *  @brief      Indicaes whether the selected modules is ready to enter power-down stage.
  *  @param[in]  none.
- *  @return     CTRUE indicates the selected module is ready to enter power-down stage.\r\n
+ *  @return     CTRUE indicates the selected module is ready to enter power-down stage.
  *              CFALSE indicates the selected module is busy and not ready to enter power-down stage.
  *  @remark     If the command FSM state of SDMMC is idle, it returns CTRUE.
+<<<<<<< .mine
+=======
  *  @see        NX_SDMMC_GetPhysicalAddress,    NX_SDMMC_GetSizeOfRegisterSet,
  *              NX_SDMMC_SetBaseAddress,        NX_SDMMC_GetBaseAddress,
- *              NX_SDMMC_OpenModule,            NX_SDMMC_CloseModule,
+ *              NX_SDMMC_OpenModule,            SDMMC_CloseModule,
  *              NX_SDMMC_CheckBusy
+>>>>>>> .r453
  */
 CBOOL   NX_SDMMC_CanPowerDown( U32 ModuleIndex )
 {
@@ -288,13 +328,6 @@ CBOOL   NX_SDMMC_CanPowerDown( U32 ModuleIndex )
  *  @return     An interrupt number.
  *  @remark     Return value can be used for the interrupt controller module's
  *              functions.
- *  @see        NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,        NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 S32     NX_SDMMC_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -309,17 +342,9 @@ S32     NX_SDMMC_GetInterruptNumber( U32 ModuleIndex )
 /**
  *  @brief      Set a specified interrupt to be enabled or disabled.
  *  @param[in]  IntNum          Specifies an interrupt number which is one of @ref NX_SDMMC_INT enum.
- *  @param[in]  Enable          Set it as CTRUE to enable an interrupt specified by @a IntNum. \r\n
+ *  @param[in]  Enable          Set it as CTRUE to enable an interrupt specified by @a IntNum. 
  *                              Set it as CFALSE to diable an interrupt specified by @a IntNum.
  *  @return     None.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,
- *              NX_SDMMC_GetInterruptEnable,        NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 void    NX_SDMMC_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 {
@@ -344,16 +369,8 @@ void    NX_SDMMC_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
 /**
  *  @brief      Indicates whether a specified interrupt is enabled or disabled.
  *  @param[in]  IntNum          Specifies an interrupt number which is one of @ref NX_SDMMC_INT enum.
- *  @return     CTRUE   indicates an interrupt specified by @a IntNum is enabled.\r\n
+ *  @return     CTRUE   indicates an interrupt specified by @a IntNum is enabled.
  *              CFALSE  indicates an interrupt specified by @a IntNum is disabled.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,        NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 CBOOL   NX_SDMMC_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 {
@@ -368,19 +385,11 @@ CBOOL   NX_SDMMC_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 /**
  *  @brief      Indicates whether a specified interrupt is pended or not.
  *  @param[in]  IntNum          Specifies an interrupt number which is one of @ref NX_SDMMC_INT enum.
- *  @return     CTRUE   indicates an interrupt specified by @a IntNum is pended.\r\n
+ *  @return     CTRUE   indicates an interrupt specified by @a IntNum is pended.
  *              CFALSE  indicates an interrupt specified by @a IntNum is not pended.
  *  @remark     The interrupt pending status are logged regardless of interrupt
  *              enable status. Therefore the return value can be CTRUE even
  *              though the specified interrupt has been disabled.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,        NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 CBOOL   NX_SDMMC_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
@@ -396,14 +405,6 @@ CBOOL   NX_SDMMC_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
  *  @brief      Clear a pending state of specified interrupt.
  *  @param[in]  IntNum          Specifies an interrupt number which is one of @ref NX_SDMMC_INT enum.
  *  @return     None.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,        NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,        NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 void    NX_SDMMC_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
@@ -417,16 +418,9 @@ void    NX_SDMMC_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Set all interrupts to be enabled or disabled.
- *  @param[in]  bEnb            Set it as CTRUE to enable all interrupts. \r\n
+ *  @param[in]  bEnb            Set it as CTRUE to enable all interrupts. 
  *                              Set it as CFALSE to disable all interrupts.
  *  @return     None.
- *  @see        NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 void    NX_SDMMC_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 {
@@ -445,15 +439,8 @@ void    NX_SDMMC_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
 /**
  *  @brief      Indicates whether some of interrupts are enabled or not.
  *  @param[in]  none.
- *  @return     CTURE   indicates there's interrupts which are enabled.\r\n
+ *  @return     CTURE   indicates there's interrupts which are enabled.
  *              CFALSE  indicates there's no interrupt which are enabled.
- *  @see        NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 CBOOL   NX_SDMMC_GetInterruptEnableAll( U32 ModuleIndex )
 {
@@ -470,19 +457,12 @@ CBOOL   NX_SDMMC_GetInterruptEnableAll( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether some of unmasked interrupts are pended or not.
  *  @param[in]  none.
- *  @return     CTURE   indicates there's unmasked interrupts which are pended.\r\n
+ *  @return     CTURE   indicates there's unmasked interrupts which are pended.
  *              CFALSE  indicates there's no unmasked interrupt which are pended.
  *  @remark     Since this function doesn't consider about pending status of
  *              interrupts which are disabled, the return value can be CFALSE
  *              even though some interrupts are pended unless a relevant
  *              interrupt is enabled.
- *  @see        NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 CBOOL   NX_SDMMC_GetInterruptPendingAll( U32 ModuleIndex )
 {
@@ -500,13 +480,6 @@ CBOOL   NX_SDMMC_GetInterruptPendingAll( U32 ModuleIndex )
  *  @brief      Clear pending state of all interrupts.
  *  @param[in]  none.
  *  @return     None.
- *  @see        NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 void    NX_SDMMC_ClearInterruptPendingAll( U32 ModuleIndex )
 {
@@ -523,14 +496,6 @@ void    NX_SDMMC_ClearInterruptPendingAll( U32 ModuleIndex )
  *  @return     an interrupt number which has the most priority of pended and
  *              unmasked interrupts. This value is one of @ref NX_SDMMC_INT enum.
  *              If there's no interrupt which is pended and unmasked, it returns -1.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 S32     NX_SDMMC_GetInterruptPendingNumber( U32 ModuleIndex )
 {
@@ -565,14 +530,6 @@ S32     NX_SDMMC_GetInterruptPendingNumber( U32 ModuleIndex )
  *                              Value of 0 masks interrupt and value of 1 enables
  *                              interrupt. EnableFlag[16:1] are only valid.
  *  @return     None.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *                                                  NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 void    NX_SDMMC_SetInterruptEnable32 ( U32 ModuleIndex, U32 EnableFlag )
 {
@@ -589,14 +546,6 @@ void    NX_SDMMC_SetInterruptEnable32 ( U32 ModuleIndex, U32 EnableFlag )
  *  @return     An interrupt enable status that each bit represents current
  *              interrupt enable status - Value of 0 indicates relevant interrupt
  *              is masked and value of 1 indicates relevant interrupt is enabled.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,     NX_SDMMC_ClearInterruptPending32
  */
 U32 NX_SDMMC_GetInterruptEnable32 ( U32 ModuleIndex )
 {
@@ -613,14 +562,6 @@ U32 NX_SDMMC_GetInterruptEnable32 ( U32 ModuleIndex )
  *  @return     An interrupt pending status that each bit represents current
  *              interrupt pending status - Value of 0 indicates relevant interrupt
  *              is not pended and value of 1 indicates relevant interrupt is pended.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *                                                  NX_SDMMC_ClearInterruptPending32
  */
 U32 NX_SDMMC_GetInterruptPending32 ( U32 ModuleIndex )
 {
@@ -637,14 +578,6 @@ U32 NX_SDMMC_GetInterruptPending32 ( U32 ModuleIndex )
  *                              interrupt pending status cleared only if
  *                              corresponding bit in PendingFlag is set.
  *  @return     None.
- *  @see        NX_SDMMC_INT,
- *              NX_SDMMC_GetInterruptNumber,            NX_SDMMC_SetInterruptEnable,
- *              NX_SDMMC_GetInterruptEnable,            NX_SDMMC_GetInterruptPending,
- *              NX_SDMMC_ClearInterruptPending,     NX_SDMMC_SetInterruptEnableAll,
- *              NX_SDMMC_GetInterruptEnableAll,     NX_SDMMC_GetInterruptPendingAll,
- *              NX_SDMMC_ClearInterruptPendingAll,  NX_SDMMC_GetInterruptPendingNumber,
- *              NX_SDMMC_SetInterruptEnable32,      NX_SDMMC_GetInterruptEnable32,
- *              NX_SDMMC_GetInterruptPending32,
  */
 void    NX_SDMMC_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
 {
@@ -664,7 +597,6 @@ void    NX_SDMMC_ClearInterruptPending32( U32 ModuleIndex, U32 PendingFlag )
  *  @param[in]  ModuleIndex     A index of module.
  *  @return     Current clock number
  *  @remarks
- *  @see        NX_SDMMC_GetResetNumber
  */
 U32     NX_SDMMC_GetClockNumber( U32 ModuleIndex )
 {
@@ -685,7 +617,6 @@ U32     NX_SDMMC_GetClockNumber( U32 ModuleIndex )
  *  @param[in]  ModuleIndex     A index of module.
  *  @return     Current reset number
  *  @remarks
- *  @see        NX_SDMMC_GetClockNumber
  */
 U32     NX_SDMMC_GetResetNumber( U32 ModuleIndex )
 {
@@ -710,9 +641,9 @@ void    NX_SDMMC_SetPowerEnable( U32 ModuleIndex, U32 PowerIndex, CBOOL Enable )
     register struct NX_SDMMC_RegisterSet *pRegister;
 
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
-    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	NX_ASSERT( CNULL != pRegister );
 
     SetValue  = ReadIO32(&pRegister->PWREN);
     SetValue &= ~(1<<PowerIndex);
@@ -728,11 +659,6 @@ CBOOL   NX_SDMMC_GetPowerEnable( U32 ModuleIndex, U32 PowerIndex )
 
     return (CBOOL)(((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->PWREN))>>PowerIndex) & 0x1 );
 }
-
-
-
-
-
 
 /**
  *  @brief      Abort Read Data for SDIO suspend sequence.
@@ -787,7 +713,7 @@ void    NX_SDMMC_SendIRQResponse( U32 ModuleIndex )
 /**
  *  @brief      Assert or clear Read Wait signal to SDIO card.
  *  @param[in]  none.
- *  @param[in]  bAssert         Set it as CTRUE to assert Read-Wait signal to SD card.\r\n
+ *  @param[in]  bAssert         Set it as CTRUE to assert Read-Wait signal to SD card.
  *                              Set it as CFALSE to clear Read-Wait signal to SD card.
  *  @return     None.
  *  @remark     Read-Wait is used with only the SDIO card and can temporarily
@@ -820,16 +746,12 @@ void    NX_SDMMC_SetReadWait( U32 ModuleIndex, CBOOL bAssert )
  *  @return     None.
  *  @remark     Reset the DMA interface abruptly terminates any DMA transer in
  *              progress. After calling NX_SDMMC_ResetDMA(), you have to wait
- *              until the DMA interface is in normal state.\n
+ *              until the DMA interface is in normal state.
  *              The example for this is as following.
  *  @code
  *      NX_SDMMC_ResetDMA( index );             // Reset the DMA interface.
  *      while( NX_SDMMC_IsResetDMA( index ) );  // Wait until the DMA reset is completed.
  *  @endcode
- *  @see        NX_SDMMC_SetDMAMode,
- *                                          NX_SDMMC_IsResetDMA,
- *              NX_SDMMC_ResetFIFO,         NX_SDMMC_IsResetFIFO,
- *              NX_SDMMC_ResetController,   NX_SDMMC_IsResetController
  */
 void    NX_SDMMC_ResetDMAC( U32 ModuleIndex )
 {
@@ -854,7 +776,7 @@ void    NX_SDMMC_ResetDMAC( U32 ModuleIndex )
 /**
  *  @brief      Enable/Disable DMA transfer mode.
  *  @param[in]  none.
- *  @param[in]  Enable          Set it as CTRUE to enable DMA transfer mode.\r\n
+ *  @param[in]  Enable          Set it as CTRUE to enable DMA transfer mode.
  *                              Set it as CFALSE to disable DMA transfer mode.
  *  @return     None.
  *  @see        NX_SDMMC_ResetDMA,  NX_SDMMC_IsResetDMA
@@ -899,9 +821,8 @@ void NX_SDMMC_SetUseInternalDMAC( U32 ModuleIndex, CBOOL Enable )
 /**
  *  @brief      Get a DMA request signal state.
  *  @param[in]  none.
- *  @return     CTRUE   indicates a DMA request signal is asserted.\r\n
+ *  @return     CTRUE   indicates a DMA request signal is asserted.
  *              CFALSE  indicates a DAM request signal is cleared.
- *  @see        NX_SDMMC_IsDMAAck,  NX_SDMMC_SetDMAMode
  */
 CBOOL   NX_SDMMC_IsDMAReq( U32 ModuleIndex )
 {
@@ -918,9 +839,8 @@ CBOOL   NX_SDMMC_IsDMAReq( U32 ModuleIndex )
 /**
  *  @brief      Get a DMA acknowledge signal state.
  *  @param[in]  none.
- *  @return     CTRUE   indicates a DMA acknowledge signal is asserted.\r\n
+ *  @return     CTRUE   indicates a DMA acknowledge signal is asserted.
  *              CFALSE  indicates a DAM acknowledge signal is cleared.
- *  @see        NX_SDMMC_IsDMAReq,  NX_SDMMC_SetDMAMode
  */
 CBOOL   NX_SDMMC_IsDMAAck( U32 ModuleIndex )
 {
@@ -933,24 +853,33 @@ CBOOL   NX_SDMMC_IsDMAAck( U32 ModuleIndex )
     return (CBOOL)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->STATUS) & DMAACK_MASK) >> DMAACK_POS);
 }
 
+CBOOL   NX_SDMMC_IsResetDMAC( U32 ModuleIndex )
+{
+    const U32 DMARST_POS   = 2;
+    const U32 DMARST_MASK  = 1UL<<DMARST_POS;
+
+    NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    return (CBOOL)(ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CTRL) & DMARST_MASK)>>DMARST_POS;
+}
+
+
 //------------------------------------------------------------------------------
 /**
  *  @brief      Reset the FIFO.
  *  @param[in]  none.
  *  @return     None.
- *  @remark     Resets the FIFO pointers and counters of the FIFO.\r\n
+ *  @remark     Resets the FIFO pointers and counters of the FIFO.
  *              If any of the previous data commands do not properly terminate,
  *              the the user should the FIFO reset in order to remove any
- *              residual data, if any, in the FIFO.\r\n
+ *              residual data, if any, in the FIFO.
  *              After calling NX_SDMMC_ResetFIFO(), you have to wait until the
  *              FIFO reset is completed. The example for this is as following.
  *  @code
  *      NX_SDMMC_ResetFIFO( index );                    // Reest the FIFO.
  *      while( NX_SDMMC_IsResetFIFO( index ) );     // Wait until the FIFO reset is completed.
  *  @endcode
- *  @see        NX_SDMMC_ResetDMA,          NX_SDMMC_IsResetDMA,
-                                            NX_SDMMC_IsResetFIFO,
-                NX_SDMMC_ResetController,   NX_SDMMC_IsResetController
  */
 void    NX_SDMMC_ResetFIFO( U32 ModuleIndex )
 {
@@ -975,11 +904,8 @@ void    NX_SDMMC_ResetFIFO( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether the FIFO is in reset or normal state.
  *  @param[in]  none.
- *  @return     CTRUE   indicates reset of the FIFO is in pregress.\r\n
+ *  @return     CTRUE   indicates reset of the FIFO is in pregress.
  *              CFALSE  indicates the FIFO is in normal state.
- *  @see        NX_SDMMC_ResetDMA,          NX_SDMMC_IsResetDMA,
-                NX_SDMMC_ResetFIFO,
-                NX_SDMMC_ResetController,   NX_SDMMC_IsResetController
  */
 CBOOL   NX_SDMMC_IsResetFIFO( U32 ModuleIndex )
 {
@@ -1008,9 +934,6 @@ CBOOL   NX_SDMMC_IsResetFIFO( U32 ModuleIndex )
  *      NX_SDMMC_ResetController( index );              // Reest the controller.
  *      while( NX_SDMMC_IsResetController( index ) );   // Wait until the controller reset is completed.
  *  @endcode
- *  @see        NX_SDMMC_ResetDMA,          NX_SDMMC_IsResetDMA,
- *              NX_SDMMC_ResetFIFO,         NX_SDMMC_IsResetFIFO,
- *                                          NX_SDMMC_IsResetController
  */
 void    NX_SDMMC_ResetController( U32 ModuleIndex )
 {
@@ -1035,11 +958,8 @@ void    NX_SDMMC_ResetController( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether the controller is in reset or normal state.
  *  @param[in]  none.
- *  @return     CTRUE   indicates reset of the controller is in pregress.\r\n
+ *  @return     CTRUE   indicates reset of the controller is in pregress.
  *              CFALSE  indicates the controller is in normal state.
- *  @see        NX_SDMMC_ResetDMA,          NX_SDMMC_IsResetDMA,
- *              NX_SDMMC_ResetFIFO,         NX_SDMMC_IsResetFIFO,
- *              NX_SDMMC_ResetController
  */
 CBOOL   NX_SDMMC_IsResetController( U32 ModuleIndex )
 {
@@ -1055,7 +975,7 @@ CBOOL   NX_SDMMC_IsResetController( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Set a divider value for an output clock.
- *  @param[in]  divider         a divider value to generate SDCLK, 1 ~ 510.\r\n
+ *  @param[in]  divider         a divider value to generate SDCLK, 1 ~ 510.
  *                              It must be 1 or a even number between 2 and 510.
  *  @return     None.
  *  @remark     a clock divider is used to select a freqeuncy of SDCLK.
@@ -1074,9 +994,9 @@ CBOOL   NX_SDMMC_IsResetController( U32 ModuleIndex )
  *  @endcode
  *  @remark     The result of this function will be applied to the SDMMC module
  *              after calling function NX_SDMMC_SetCommand() with
- *              NX_SDMMC_CMDFLAG_UPDATECLKONLY flag.\r\n\r\n
+ *              NX_SDMMC_CMDFLAG_UPDATECLKONLY flag.
  *              The user should not modify clock settings while a command is
- *              being executed.\r\n
+ *              being executed.
  *              The following shows how to update clock settings.
  *  @code
  *      // 1. Confirm that no card is engaged in any transaction.
@@ -1120,10 +1040,26 @@ CBOOL   NX_SDMMC_IsResetController( U32 ModuleIndex )
  *          goto repeat_7;
  *      }
  *  @endcode
- *  @see        NX_SDMMC_SetLowPowerClockMode,  NX_SDMMC_GetLowPowerClockMode,
- *                                              NX_SDMMC_GetOutputClockEnable,
- *              NX_SDMMC_SetOutputClockDivider, NX_SDMMC_GetOutputClockDivider
  */
+
+void    NX_SDMMC_SetClockSource( U32 ModuleIndex, NX_SDMMC_CLOCK_SOURCE ClkSrc )
+{
+    NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+	NX_ASSERT( 3 >= ClkSrc );
+
+    WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKSRC, ClkSrc );  
+}
+
+NX_SDMMC_CLOCK_SOURCE    NX_SDMMC_GetClockSource( U32 ModuleIndex )
+{
+    NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
+    NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+    return (NX_SDMMC_CLOCK_SOURCE)((ReadIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CLKSRC) >> 0) & 0x3);  
+}
+
+
 void    NX_SDMMC_SetOutputClockDivider( U32 ModuleIndex, U32 divider )
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
@@ -1159,13 +1095,13 @@ U32     NX_SDMMC_GetOutputClockDivider( U32 ModuleIndex )
 /**
  *  @brief      Set the Low-Power-Clock mode to be enabled or disabled.
  *  @param[in]  none.
- *  @param[in]  Enable          Set it as CTRUE to enable the Low-Power-Clock mode.\r\n
+ *  @param[in]  Enable          Set it as CTRUE to enable the Low-Power-Clock mode.
  *                              Set it as CFALSE to disable the Low-Power-Clock mode.
  *  @return     None.
  *  @remark     The Low-Power-Clock mode means it stops the output clock when
  *              card in IDLE (should be normally set to only MMC and SD memory
  *              card; for SDIO cards, if interrupts must be detected, the output
- *              clock should not be stopped).\r\n
+ *              clock should not be stopped).
  *              The result of this function will be applied to the SDMMC module
  *              after calling function NX_SDMMC_SetCommand() with
  *              NX_SDMMC_CMDFLAG_UPDATECLKONLY flag.
@@ -1194,7 +1130,7 @@ void    NX_SDMMC_SetLowPowerClockMode( U32 ModuleIndex, CBOOL Enable )
 /**
  *  @brief      Indicates whether the Low-Power-Clock mode is enabled or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates the Low-Power-Clock mode is enabled.\r\n
+ *  @return     CTRUE   indicates the Low-Power-Clock mode is enabled.
  *              CFALSE  indicates the Low-Power-Clock mode is disabled.
  *  @see        NX_SDMMC_SetLowPowerClockMode,
  *              NX_SDMMC_SetOutputClockEnable,  NX_SDMMC_GetOutputClockEnable,
@@ -1214,7 +1150,7 @@ CBOOL   NX_SDMMC_GetLowPowerClockMode( U32 ModuleIndex )
 /**
  *  @brief      Set an output clock (SDCLK) to be enabled or disabled.
  *  @param[in]  none.
- *  @param[in]  Enable          Set it as CTRUE to enable an output clock (SDCLK).\r\n
+ *  @param[in]  Enable          Set it as CTRUE to enable an output clock (SDCLK).
  *                              Set it as CFALSE to disable an output clock (SDCLK).
  *  @return     None.
  *  @remark     The result of this function will be applied to the SDMMC module
@@ -1245,7 +1181,7 @@ void    NX_SDMMC_SetOutputClockEnable( U32 ModuleIndex, CBOOL Enable )
 /**
  *  @brief      Indicates whether an output clock (SDCLK) is enabled or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates an output clock is enabled.\r\n
+ *  @return     CTRUE   indicates an output clock is enabled.
  *              CFALSE  indicates an output clock is disabled.
  *  @see        NX_SDMMC_SetLowPowerClockMode,  NX_SDMMC_GetLowPowerClockMode,
  *              NX_SDMMC_SetOutputClockEnable,
@@ -1265,7 +1201,7 @@ CBOOL   NX_SDMMC_GetOutputClockEnable( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether an output clock (SDCLK) is enabled or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates an output clock is enabled.\r\n
+ *  @return     CTRUE   indicates an output clock is enabled.
  *              CFALSE  indicates an output clock is disabled.
  *  @see        NX_SDMMC_SetLowPowerClockMode,  NX_SDMMC_GetLowPowerClockMode,
  *              NX_SDMMC_SetOutputClockEnable,
@@ -1346,7 +1282,7 @@ void    NX_SDMMC_SetDriveClockDelay( U32 ModuleIndex, U32 Delay )
 
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-    NX_ASSERT(( Delay >= 0 ) && ( Delay <= 255 ));
+    NX_ASSERT( Delay <= 255 );
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -1376,7 +1312,7 @@ void    NX_SDMMC_SetSampleClockDelay( U32 ModuleIndex, U32 Delay )
 
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-    NX_ASSERT(( Delay >= 0 ) && ( Delay <= 255 ));
+    NX_ASSERT( Delay <= 255 );
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -1401,11 +1337,8 @@ U32     NX_SDMMC_GetSampleClockDelay( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether an output clock (SDCLK) is enabled or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates an output clock is enabled.\r\n
+ *  @return     CTRUE   indicates an output clock is enabled.
  *              CFALSE  indicates an output clock is disabled.
- *  @see        NX_SDMMC_SetLowPowerClockMode,  NX_SDMMC_GetLowPowerClockMode,
- *              NX_SDMMC_SetOutputClockEnable,
- *              NX_SDMMC_SetOutputClockDivider, NX_SDMMC_GetOutputClockDivider
  */
 
 //------------------------------------------------------------------------------
@@ -1426,14 +1359,12 @@ U32     NX_SDMMC_GetSampleClockDelay( U32 ModuleIndex )
  *                  or if the card clock is stopped and the FIFO remains empty for
  *                  data timeout clocks, then a data-starvation error is signaled
  *                  to the host and the SDMMC module continues to wait for data in
- *                  the FIFO.\r\n
+ *                  the FIFO.
  *                  During a read data transmission and when the FIFO becomes full,
  *                  the card clock is stopped. If the FIFO remains full for data
  *                  timeout clocks, a data starvation error is signaled to the host
  *                  and the SDMMC module continues to wait for the FIFO to start to
  *                  empty.
- *  @see                                        NX_SDMMC_GetDataTimeOut,
- *              NX_SDMMC_SetResponseTimeOut,    NX_SDMMC_GetResponseTimeOut
  */
 void    NX_SDMMC_SetDataTimeOut( U32 ModuleIndex, U32 dwTimeOut )
 {
@@ -1459,8 +1390,6 @@ void    NX_SDMMC_SetDataTimeOut( U32 ModuleIndex, U32 dwTimeOut )
  *  @brief      Get a period for data timeout.
  *  @param[in]  none.
  *  @return     a number of data timeout clocks in SDCLKs.
- *  @see        NX_SDMMC_SetDataTimeOut,
- *              NX_SDMMC_SetResponseTimeOut,    NX_SDMMC_GetResponseTimeOut
  */
 U32     NX_SDMMC_GetDataTimeOut( U32 ModuleIndex )
 {
@@ -1479,15 +1408,13 @@ U32     NX_SDMMC_GetDataTimeOut( U32 ModuleIndex )
  *  @param[in]  none.
  *  @param[in]  dwTimeOut       a timeout period in SDCLKs, 0 ~ 255.
  *  @return     None.
- *  @remark     This value is used for Response Timeout.\r\n
+ *  @remark     This value is used for Response Timeout.
  *              If a response is expected for the command after the command is
  *              sent out, the SDMMC module receives a 48-bit or
  *              136-bit response and sends it to the host. If the start bit of
  *              the card response is not received within the number of response
  *              timeout clocks, then the SDMMC module signals response timeout
  *              error and command done to the host.
- *  @see        NX_SDMMC_SetDataTimeOut,        NX_SDMMC_GetDataTimeOut,
- *                                              NX_SDMMC_GetResponseTimeOut
  */
 void    NX_SDMMC_SetResponseTimeOut( U32 ModuleIndex, U32 dwTimeOut )
 {
@@ -1513,8 +1440,6 @@ void    NX_SDMMC_SetResponseTimeOut( U32 ModuleIndex, U32 dwTimeOut )
  *  @brief      Get a period for response timeout.
  *  @param[in]  none.
  *  @return     a number of response timeout clocks in SDCLKs.
- *  @see        NX_SDMMC_SetDataTimeOut,        NX_SDMMC_GetDataTimeOut,
- *              NX_SDMMC_SetResponseTimeOut
  */
 U32     NX_SDMMC_GetResponseTimeOut( U32 ModuleIndex )
 {
@@ -1535,9 +1460,8 @@ U32     NX_SDMMC_GetResponseTimeOut( U32 ModuleIndex )
  *  @remark     1-bit width is standard bus mode and SDMMC uses only SDDAT[0]
  *              for data transfer. 4-bit width is wide bus mode and SDMMC uses
  *              SDDAT[3:0] for data transfer.
- *  @see        NX_SDMMC_GetDataBusWidth
  */
-// @Todo - 8bit data width 지원 시 수정해야 함
+
 void    NX_SDMMC_SetDataBusWidth( U32 ModuleIndex, U32 width )
 {
     NX_ASSERT( (1==width) || (4==width) );
@@ -1552,9 +1476,8 @@ void    NX_SDMMC_SetDataBusWidth( U32 ModuleIndex, U32 width )
  *  @brief      Get a data bus width.
  *  @param[in]  none.
  *  @return     a data bus width.
- *  @see        NX_SDMMC_SetDataBusWidth
  */
-// @Todo - 8bit data width 지원 시 수정해야 함
+
 U32     NX_SDMMC_GetDataBusWidth( U32 ModuleIndex )
 {
     const U32 WIDTH = 1UL<<0;
@@ -1572,8 +1495,6 @@ U32     NX_SDMMC_GetDataBusWidth( U32 ModuleIndex )
  *  @return     None.
  *  @remark     The Block size is normally set to 512 for MMC/SD module data
  *              transactions. The value is specified in the card's CSD.
- *  @see                                NX_SDMMC_GetBlockSize,
- *              NX_SDMMC_SetByteCount,  NX_SDMMC_GetByteCount
  */
 void    NX_SDMMC_SetBlockSize( U32 ModuleIndex, U32 SizeInByte )
 {
@@ -1589,8 +1510,6 @@ void    NX_SDMMC_SetBlockSize( U32 ModuleIndex, U32 SizeInByte )
  *  @brief      Get the block size for block data transfer.
  *  @param[in]  none.
  *  @return     Indicates the number of bytes in a block.
- *  @see        NX_SDMMC_SetBlockSize,
- *              NX_SDMMC_SetByteCount,  NX_SDMMC_GetByteCount
  */
 U32     NX_SDMMC_GetBlockSize( U32 ModuleIndex )
 {
@@ -1610,8 +1529,6 @@ U32     NX_SDMMC_GetBlockSize( U32 ModuleIndex )
  *              transfers, the data size should be set to 0. When the data size
  *              is set to 0, it is responsibility of host to explicitly send
  *              stop/abort command to terminate data transfer.
- *  @see        NX_SDMMC_SetBlockSize,  NX_SDMMC_GetBlockSize,
- *                                      NX_SDMMC_GetByteCount
  */
 void    NX_SDMMC_SetByteCount( U32 ModuleIndex, U32 SizeInByte )
 {
@@ -1626,8 +1543,7 @@ void    NX_SDMMC_SetByteCount( U32 ModuleIndex, U32 SizeInByte )
  *  @brief      Get the data size to be transferred.
  *  @param[in]  none.
  *  @return     Indicates the number of bytes to be transferred.
- *  @see        NX_SDMMC_SetBlockSize,  NX_SDMMC_GetBlockSize,
- *              NX_SDMMC_SetByteCount
+
  */
 U32     NX_SDMMC_GetByteCount( U32 ModuleIndex )
 {
@@ -1642,7 +1558,6 @@ U32     NX_SDMMC_GetByteCount( U32 ModuleIndex )
  *  @brief      Set a command argument to be passed to the card..
  *  @param[in]  argument        Specifies a command argument.
  *  @return     None.
- *  @see        NX_SDMMC_SetCommand
  */
 void    NX_SDMMC_SetCommandArgument( U32 ModuleIndex, U32 argument )
 {
@@ -1672,15 +1587,13 @@ void    NX_SDMMC_SetCommandArgument( U32 ModuleIndex, U32 argument )
  *      NX_SDMMC_SetCommand( index, cmd, flag | NX_SDMMC_CMDFLAG_STARTCMD );
  *      while( NX_SDMMC_IsCommandBusy( index ) );
  *  @endcode
- *  @see        NX_SDMMC_CMDFLAG, NX_SDMMC_StartCommand, NX_SDMMC_IsCommandBusy
- *              NX_SDMMC_SetCommandArgument
  */
 void    NX_SDMMC_SetCommand( U32 ModuleIndex, U32 Cmd, U32 flag )
 {
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-    NX_ASSERT( 64 > Cmd );
-    NX_ASSERT( (0==flag) || (64 < flag) );
+    //NX_ASSERT( 64 > Cmd );
+    //NX_ASSERT( (0==flag) || (64 < flag) );
 
     WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->CMD, Cmd | flag);
 }
@@ -1716,12 +1629,12 @@ void    NX_SDMMC_StartCommand( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether a new command is taken by the SDMMC or not.
  *  @param[in]  none.
- *  @return     CTRUE indicates a command loading is in progress.\r\n
+ *  @return     CTRUE indicates a command loading is in progress.
  *              CFALSE indicates a command is taken by the SDMMC module.
  *  @remark     While a command loading is in progress, The user should not
  *              modify of SDMMC module's settings. If the user try to modify any
  *              of settings while a command loading is in progress, then the
- *              modification is ignored and the SDMMC module generates a HLE.\r\n
+ *              modification is ignored and the SDMMC module generates a HLE.
  *              The following happens when the command is loaded into the SDMMC:
  *              - The SDMMC module accepts the command for execution, unless one
  *                  command is in progress, at which point the SDMMC module can
@@ -1747,8 +1660,6 @@ CBOOL   NX_SDMMC_IsCommandBusy( U32 ModuleIndex )
  *  @brief      Get a short response.
  *  @param[in]  none.
  *  @return     A 32-bit short response which represents card status or some argument.
- *  @see                                        NX_SDMMC_GetLongResponse,
- *              NX_SDMMC_GetAutoStopResponse,   NX_SDMMC_GetResponseIndex
  */
 U32     NX_SDMMC_GetShortResponse( U32 ModuleIndex )
 {
@@ -1765,8 +1676,6 @@ U32     NX_SDMMC_GetShortResponse( U32 ModuleIndex )
  *  @param[out] pLongResponse   Specifies a pointer to 4 x 32bit memory that receives a 128-bit
  *                              long response including CIS/CSD, CRC7 and End bit.
  *  @return     None.
- *  @see        NX_SDMMC_GetShortResponse,
- *              NX_SDMMC_GetAutoStopResponse,   NX_SDMMC_GetResponseIndex
  */
 void    NX_SDMMC_GetLongResponse( U32 ModuleIndex, U32 *pLongResponse )
 {
@@ -1800,9 +1709,6 @@ void    NX_SDMMC_GetLongResponse( U32 ModuleIndex, U32 *pLongResponse )
  *  @return     A 32-bit short response for auto-stop command.
  *  @remark     When the SDMMC module sends auto-stop comamnd(NX_SDMMC_CMDFLAG_SENDAUTOSTOP),
  *              then the user retrieves a response for auto-stop command by this function.
- *  @see        NX_SDMMC_CMDFLAG_SENDAUTOSTOP,
- *              NX_SDMMC_GetShortResponse,      NX_SDMMC_GetLongResponse,
- *                                              NX_SDMMC_GetResponseIndex
  */
 U32     NX_SDMMC_GetAutoStopResponse( U32 ModuleIndex )
 {
@@ -1817,8 +1723,6 @@ U32     NX_SDMMC_GetAutoStopResponse( U32 ModuleIndex )
  *  @brief      Get an index of previous response.
  *  @param[in]  none.
  *  @return     An index of previous response including any auto-stop sent by the SDMMC module.
- *  @see        NX_SDMMC_GetShortResponse,      NX_SDMMC_GetLongResponse,
- *              NX_SDMMC_GetAutoStopResponse,
  */
 U32     NX_SDMMC_GetResponseIndex( U32 ModuleIndex )
 {
@@ -1842,21 +1746,16 @@ U32     NX_SDMMC_GetResponseIndex( U32 ModuleIndex )
  *  @remark     When FIFO data count reaches greater than FIFO RX threshold
  *              watermark level, DMA/FIFO request is raised. During end of
  *              packet, request is generated regardless of threshold programming
- *              in order to complete any remaining data.\r\n
+ *              in order to complete any remaining data.
  *              In non-DMA mode, when receiver FIFO threshold (RXDR) interrupt
  *              is enabled, then interrupt is generated instead of DMA request.
  *              During end of packet, interrupt is not generated if threshold
  *              programming is larger than any remaining data. It is responsibility
  *              of host to read remaining bytes on seeing Data Transfer Done
- *              interrupt.\r\n
+ *              interrupt.
  *              In DMA mode, at end of packet, even if remaining bytes are less
  *              than threshold, DMA request does single transfers to flush out
  *              any remaining bytes before Data Transfer Done interrupt is set.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,         NX_SDMMC_IsFIFORxThreshold,
- *                                                  NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,        NX_SDMMC_GetFIFOTxThreshold
  */
 void    NX_SDMMC_SetFIFORxThreshold( U32 ModuleIndex, U32 Threshold )
 {
@@ -1882,11 +1781,6 @@ void    NX_SDMMC_SetFIFORxThreshold( U32 ModuleIndex, U32 Threshold )
  *  @brief      Get a FIFO threshold watermark level when receiving data from card.
  *  @param[in]  none.
  *  @return     A FIFO threshold watermark level, in 32-bits, when receiving data from card.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,         NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,        NX_SDMMC_GetFIFOTxThreshold
  */
 U32     NX_SDMMC_GetFIFORxThreshold( U32 ModuleIndex )
 {
@@ -1911,18 +1805,13 @@ U32     NX_SDMMC_GetFIFORxThreshold( U32 ModuleIndex )
  *  @remark     When FIFO data count is less than or equal to FIFO TX threshold
  *              watermark level, DMA/FIFO request is raised. If Interrupt is
  *              enabled, then interrupt occurs. During end of packet, request or
- *              interrupt is generated, regardless of threshold programming.\r\n
+ *              interrupt is generated, regardless of threshold programming.
  *              In non-DMA mode, when transmit FIFO threshold (TXDR) interrupt
  *              is enabled, then interrupt is generated instead of DMA request.
  *              During end of packet, on last interrupt, host is responsible for
  *              filling FIFO with only required remaining bytes (not before FIFO
  *              is full or after SDMMC module completes data transfers, because
  *              FIFO may not be empty).
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,         NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,        NX_SDMMC_GetFIFORxThreshold,
- *                                                  NX_SDMMC_GetFIFOTxThreshold
  */
 void    NX_SDMMC_SetFIFOTxThreshold( U32 ModuleIndex, U32 Threshold )
 {
@@ -1948,11 +1837,6 @@ void    NX_SDMMC_SetFIFOTxThreshold( U32 ModuleIndex, U32 Threshold )
  *  @brief      Get a FIFO threshold watermark level when transmitting data from card.
  *  @param[in]  none.
  *  @return     A FIFO threshold watermark level, in 32-bits, when transmitting data from card.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,         NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,        NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold
  */
 U32     NX_SDMMC_GetFIFOTxThreshold( U32 ModuleIndex )
 {
@@ -1970,15 +1854,11 @@ U32     NX_SDMMC_GetFIFOTxThreshold( U32 ModuleIndex )
  *  @brief      Get a number of filled locations in FIFO.
  *  @param[in]  none.
  *  @return     A number of filled locations, in 32-bits, in FIFO.
- *  @see        NX_SDMMC_IsFIFOFull,            NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,     NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,    NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,    NX_SDMMC_GetFIFOTxThreshold
  */
 U32     NX_SDMMC_GetFIFOCount( U32 ModuleIndex )
 {
     const U32 FIFOCOUNT_POS     = 17;
-    const U32 FIFOCOUNT_MASK    = 0x1FUL << FIFOCOUNT_POS;
+    const U32 FIFOCOUNT_MASK    = 0x1FFFUL << FIFOCOUNT_POS;
 
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
@@ -1990,13 +1870,8 @@ U32     NX_SDMMC_GetFIFOCount( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether FIFO is full or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates FIFO is full.\r\n
+ *  @return     CTRUE   indicates FIFO is full.
  *              CFALSE  indicates FIFO is not full.
- *  @see        NX_SDMMC_GetFIFOCount,
- *                                              NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,     NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,    NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,    NX_SDMMC_GetFIFOTxThreshold
  */
 CBOOL   NX_SDMMC_IsFIFOFull( U32 ModuleIndex )
 {
@@ -2013,13 +1888,8 @@ CBOOL   NX_SDMMC_IsFIFOFull( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether FIFO is empty or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates FIFO is empty.\r\n
+ *  @return     CTRUE   indicates FIFO is empty.
  *              CFALSE  indicates FIFO is not empty.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,
- *              NX_SDMMC_IsFIFOTxThreshold,     NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,    NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,    NX_SDMMC_GetFIFOTxThreshold
  */
 CBOOL   NX_SDMMC_IsFIFOEmpty( U32 ModuleIndex )
 {
@@ -2036,15 +1906,10 @@ CBOOL   NX_SDMMC_IsFIFOEmpty( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether FIFO reached transmit watermark level.
  *  @param[in]  none.
- *  @return     CTRUE   indicates FIFO reached trassmit watermark level.\r\n
+ *  @return     CTRUE   indicates FIFO reached trassmit watermark level.
  *              CFALSE  indicates FIFO does not reach transmit watermark level.
  *  @remark     Recommend to use NX_SDMMC_GetInterruptPending( NX_SDMMC_INT_TXDR )
  *              instead of this function.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *                                                  NX_SDMMC_IsFIFORxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,        NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,        NX_SDMMC_GetFIFOTxThreshold
  */
 CBOOL   NX_SDMMC_IsFIFOTxThreshold( U32 ModuleIndex )
 {
@@ -2061,15 +1926,10 @@ CBOOL   NX_SDMMC_IsFIFOTxThreshold( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether FIFO reached receive watermark level.
  *  @param[in]  none.
- *  @return     CTRUE   indicates FIFO reached receive watermark level.\r\n
+ *  @return     CTRUE   indicates FIFO reached receive watermark level.
  *              CFALSE  indicates FIFO does not reach receive watermark level.
  *  @remark     Recommend to use NX_SDMMC_GetInterruptPending( NX_SDMMC_INT_RXDR )
  *              instead of this function.
- *  @see        NX_SDMMC_GetFIFOCount,
- *              NX_SDMMC_IsFIFOFull,                NX_SDMMC_IsFIFOEmpty,
- *              NX_SDMMC_IsFIFOTxThreshold,
- *              NX_SDMMC_SetFIFORxThreshold,        NX_SDMMC_GetFIFORxThreshold,
- *              NX_SDMMC_SetFIFOTxThreshold,        NX_SDMMC_GetFIFOTxThreshold
  */
 CBOOL   NX_SDMMC_IsFIFORxThreshold( U32 ModuleIndex )
 {
@@ -2087,7 +1947,6 @@ CBOOL   NX_SDMMC_IsFIFORxThreshold( U32 ModuleIndex )
  *  @brief      Get a number of bytes transferred by the SDMMC module to card.
  *  @param[in]  none.
  *  @return     A number of bytes transferred by the SDMMC module to card.
- *  @see        NX_SDMMC_GetFIFOTransferSize
  */
 U32     NX_SDMMC_GetDataTransferSize( U32 ModuleIndex )
 {
@@ -2102,7 +1961,6 @@ U32     NX_SDMMC_GetDataTransferSize( U32 ModuleIndex )
  *  @brief      Get a number of bytes transferred between Host/DMA and FIFO.
  *  @param[in]  none.
  *  @return     A number of bytes transferred   between Host/DMA and FIFO.
- *  @see        NX_SDMMC_GetDataTransferSize
  */
 U32     NX_SDMMC_GetFIFOTransferSize( U32 ModuleIndex )
 {
@@ -2121,9 +1979,6 @@ U32     NX_SDMMC_GetFIFOTransferSize( U32 ModuleIndex )
  *              you have to check a FIFO count before using this function.
  *              If you tried to push data when FIFO is full, @ref NX_SDMMC_INT_FRUN
  *              is issued by the SDMMC module.
- *  @see                                NX_SDMMC_GetData,
- *              NX_SDMMC_SetData32,     NX_SDMMC_GetData32,
- *              NX_SDMMC_GetDataPointer
  */
 void    NX_SDMMC_SetData( U32 ModuleIndex, U32 dwData )
 {
@@ -2141,10 +1996,6 @@ void    NX_SDMMC_SetData( U32 ModuleIndex, U32 dwData )
  *  @remark     This function doesn't check an availablility of FIFO. Therefore
  *              you have to check a FIFO count before using this function.
  *              If you tried to read data when FIFO was empty, @ref NX_SDMMC_INT_FRUN
- *              is issued by the SDMMC module.
- *  @see        NX_SDMMC_SetData,
- *              NX_SDMMC_SetData32,     NX_SDMMC_GetData32,
- *              NX_SDMMC_GetDataPointer
  */
 U32     NX_SDMMC_GetData( U32 ModuleIndex )
 {
@@ -2164,9 +2015,6 @@ U32     NX_SDMMC_GetData( U32 ModuleIndex )
  *              you have to check a FIFO count before using this function.
  *              If you tried to push data when FIFO is full, @ref NX_SDMMC_INT_FRUN
  *              is issued by the SDMMC module.
- *  @see        NX_SDMMC_SetData,       NX_SDMMC_GetData,
- *                                      NX_SDMMC_GetData32,
- *              NX_SDMMC_GetDataPointer
  */
 void    NX_SDMMC_SetData32( U32 ModuleIndex, const U32 *pdwData )
 {
@@ -2203,9 +2051,6 @@ void    NX_SDMMC_SetData32( U32 ModuleIndex, const U32 *pdwData )
  *              you have to check a FIFO count before using this function.
  *              If you tried to read data when FIFO was empty, @ref NX_SDMMC_INT_FRUN
  *              is issued by the SDMMC module.
- *  @see        NX_SDMMC_SetData,       NX_SDMMC_GetData,
- *              NX_SDMMC_SetData32,
- *              NX_SDMMC_GetDataPointer
  */
 void    NX_SDMMC_GetData32( U32 ModuleIndex, U32 *pdwData )
 {
@@ -2237,15 +2082,13 @@ void    NX_SDMMC_GetData32( U32 ModuleIndex, U32 *pdwData )
  *  @param[in]  none.
  *  @return     a 32-bit data pointer.
  *  @remark     You have only to aceess this pointer by 32-bit mode and do not
- *              increase or decrease this pointer.\r\n
+ *              increase or decrease this pointer.
  *              The example for this is as following.
  *  @code
  *      volatile U32 *pData = NX_SDMMC_GetDataPointer( index );
  *      *pData = dwData;    // Push a 32-bit data to FIFO.
  *      dwData = *pData;    // Pop a 32-bit data from FIFO.
  *  @endcode
- *  @see        NX_SDMMC_SetData,   NX_SDMMC_GetData,
- *              NX_SDMMC_SetData32, NX_SDMMC_GetData32
  */
 volatile U32*   NX_SDMMC_GetDataPointer( U32 ModuleIndex )
 {
@@ -2448,7 +2291,7 @@ void NX_SDMMC_SetDescSkipLen( U32 ModuleIndex, U32 uLength )
 
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
-    NX_ASSERT( (0 <= uLength) && (0x1FUL >= uLength) );
+    NX_ASSERT( 0x1FUL >= uLength );
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -2539,7 +2382,7 @@ void    NX_SDMMC_SetCardVoltage( U32 ModuleIndex, U32 VolBase, U32 VolOffset )
     NX_ASSERT( NUMBER_OF_SDMMC_MODULE > ModuleIndex );
     NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
     NX_ASSERT( 0 == VolBase || 1== VolBase);
-    NX_ASSERT( 0 <= VolOffset && 0xF>= VolOffset);
+    NX_ASSERT( 0xF>= VolOffset );
 
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 
@@ -2562,7 +2405,7 @@ U32     NX_SDMMC_GetCardVoltage( U32 ModuleIndex, U32 VolBase )
 /**
  *  @brief      Indicates whether a data transfer is busy or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates a data transfer is busy.\r\n
+ *  @return     CTRUE   indicates a data transfer is busy.
  *              CFALSE  indicates a data transfer is not busy.
  *  @see
  */
@@ -2581,7 +2424,7 @@ CBOOL   NX_SDMMC_IsDataTransferBusy( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether a card data is busy or not.
  *  @param[in]  none.
- *  @return     CTRUE   indicates a card data is busy.\r\n
+ *  @return     CTRUE   indicates a card data is busy.
  *              CFALSE  indicates a card data is not busy.
  *  @remark     The return value is an inverted state of SDDAT[0].
  *  @see        NX_SDMMC_IsCardPresent
@@ -2601,12 +2444,12 @@ CBOOL   NX_SDMMC_IsCardDataBusy( U32 ModuleIndex )
 /**
  *  @brief      Indicates whether a card is present or not.
  *  @param[in]  none.
- *  @return     CTRUE indicates a card is present.\r\n
+ *  @return     CTRUE indicates a card is present.
  *              CFALSE indicates a card is not present.
- *  @remark     The return value is a state of SDDAT[3] pin.\r\n
+ *  @remark     The return value is a state of SDDAT[3] pin.
  *              SDDAT[3] pin can be used to detect card presence if it is pulled
  *              low by external H/W circuit. When there's no card on the bus,
- *              SDDAT[3] shows a low voltage level.\r\n
+ *              SDDAT[3] shows a low voltage level.
  *              There's a 50 KOhm pull-up resistor on SDDAT[3] in the card.
  *              Therefore SDDAT[3] pin pulls the bus line high when any card is
  *              inserted on the bus. This pull-up in the card should be

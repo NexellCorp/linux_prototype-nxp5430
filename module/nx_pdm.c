@@ -16,11 +16,8 @@
 
 #include <nx_chip.h>
 #include "nx_pdm.h"
-#include <linux/string.h> // for memset
 
-volatile static	NX_PDM_RegisterSet *__g_pRegister[NUMBER_OF_PDM_MODULE];
-
-
+static struct NX_PDM_RegisterSet *__g_pRegister[NUMBER_OF_PDM_MODULE];
 //------------------------------------------------------------------------------
 //
 //	PDM Interface
@@ -45,8 +42,8 @@ U32 NX_PDM_GetClockNumber (U32 ModuleIndex)
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.
+ *	@return  CTRUE	indicate that Initialize is successed.
+ *			 CFALSE	indicate that Initialize is failed.
  *	@see	NX_PDM_GetNumberOfModule
  */
 CBOOL	NX_PDM_Initialize( void )
@@ -55,7 +52,7 @@ CBOOL	NX_PDM_Initialize( void )
 
 	if( CFALSE == bInit )
 	{
-		memset( __g_pRegister, 0, sizeof(__g_pRegister) );
+//		memset( __g_pRegister, 0, sizeof(__g_pRegister) );
 		bInit = CTRUE;
 	}
 
@@ -65,9 +62,8 @@ CBOOL	NX_PDM_Initialize( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get number of modules in the chip.
- *	@return		Module's number. \n
+ *	@return		Module's number. 
  *				It is equal to NUMBER_OF_PDM_MODULE in <nx_chip.h>.
- *	@see		NX_PDM_Initialize
  */
 U32		NX_PDM_GetNumberOfModule( void )
 {
@@ -78,14 +74,10 @@ U32		NX_PDM_GetNumberOfModule( void )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_PDM_GetPhysicalAddress,
- *				NX_PDM_SetBaseAddress,			NX_PDM_GetBaseAddress,
- *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
- *				NX_PDM_CheckBusy,
  */
 U32		NX_PDM_GetSizeOfRegisterSet( void )
 {
-	return sizeof( NX_PDM_RegisterSet );
+	return sizeof( struct NX_PDM_RegisterSet );
 }
 
 //------------------------------------------------------------------------------
@@ -93,42 +85,42 @@ U32		NX_PDM_GetSizeOfRegisterSet( void )
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_PDM_GetPhysicalAddress,		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_GetBaseAddress,
- *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
- *				NX_PDM_CheckBusy,
  */
+<<<<<<< .mine
+void	NX_PDM_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
+=======
 void	NX_PDM_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+>>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
-	__g_pRegister[ModuleIndex] = (NX_PDM_RegisterSet *)BaseAddress;
+	__g_pRegister[ModuleIndex] = (struct NX_PDM_RegisterSet *)BaseAddress;
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
- *	@see		NX_PDM_GetPhysicalAddress,		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_SetBaseAddress,
- *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
- *				NX_PDM_CheckBusy,
  */
+<<<<<<< .mine
+void*	NX_PDM_GetBaseAddress( U32 ModuleIndex )
+=======
 U32*	NX_PDM_GetBaseAddress( U32 ModuleIndex )
+>>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
+<<<<<<< .mine
+	return (void*)__g_pRegister[ModuleIndex];
+=======
 	return (U32*)__g_pRegister[ModuleIndex];
+>>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's physical address.
- *	@return		Module's physical address. \n
+ *	@return		Module's physical address. 
  *				It is equal to PHY_BASEADDR_PDM?_MODULE in <nx_chip.h>.
- *	@see		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_SetBaseAddress,			NX_PDM_GetBaseAddress,
- *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
- *				NX_PDM_CheckBusy,
  */
 U32		NX_PDM_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -144,12 +136,8 @@ U32		NX_PDM_GetPhysicalAddress( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
- *	@see		NX_PDM_GetPhysicalAddress,		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_SetBaseAddress,			NX_PDM_GetBaseAddress,
- *				NX_PDM_CloseModule,
- *				NX_PDM_CheckBusy,
+ *	@return		 CTRUE	indicate that Initialize is successed. 
+ *				 CFALSE	indicate that Initialize is failed.
  */
 CBOOL	NX_PDM_OpenModule( U32 ModuleIndex )
 {
@@ -162,12 +150,8 @@ CBOOL	NX_PDM_OpenModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
- *	@see		NX_PDM_GetPhysicalAddress,		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_SetBaseAddress,			NX_PDM_GetBaseAddress,
- *				NX_PDM_OpenModule,
- *				NX_PDM_CheckBusy,
+ *	@return		 CTRUE	indicate that Deinitialize is successed. 
+ *				 CFALSE	indicate that Deinitialize is failed.
  */
 CBOOL	NX_PDM_CloseModule( U32 ModuleIndex )
 {
@@ -180,11 +164,8 @@ CBOOL	NX_PDM_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
- *	@see		NX_PDM_GetPhysicalAddress,		NX_PDM_GetSizeOfRegisterSet,
- *				NX_PDM_SetBaseAddress,			NX_PDM_GetBaseAddress,
- *				NX_PDM_OpenModule,				NX_PDM_CloseModule,
+ *	@return		 CTRUE	indicate that Module is Busy. 
+ *				 CFALSE	indicate that Module is NOT Busy.
  */
 // No CheckBusy
 //CBOOL	NX_PDM_CheckBusy( U32 ModuleIndex )
@@ -198,11 +179,8 @@ CBOOL	NX_PDM_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.\n
+ *	@return		Module's reset index.
  *				It is equal to RESETINDEX_OF_PDM?_MODULE_i_nRST in <nx_chip.h>.
- *	@see		NX_RSTCON_Enter,
- *				NX_RSTCON_Leave,
- *				NX_RSTCON_GetStatus
  */
 U32 NX_PDM_GetResetNumber ( U32 ModuleIndex )
 {
@@ -222,17 +200,8 @@ U32 NX_PDM_GetResetNumber ( U32 ModuleIndex )
 /**
  *	@brief		Get a interrupt number for the interrupt controller.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		A interrupt number.\n
+ *	@return		A interrupt number.
  *				It is equal to INTNUM_OF_PDM?_MODULE in <nx_chip.h>.
- *	@see		NX_PDM_SetInterruptEnable,
- *				NX_PDM_GetInterruptEnable,
- *				NX_PDM_GetInterruptPending,
- *				NX_PDM_ClearInterruptPending,
- *				NX_PDM_SetInterruptEnableAll,
- *				NX_PDM_GetInterruptEnableAll,
- *				NX_PDM_GetInterruptPendingAll,
- *				NX_PDM_ClearInterruptPendingAll,
- *				NX_PDM_GetInterruptPendingNumber
  */
 U32 	NX_PDM_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -248,17 +217,14 @@ U32 	NX_PDM_GetInterruptNumber( U32 ModuleIndex )
  *	@brief		Set a specified interrupt Mode
  *              Mode means IRQ Count Number.
  *	@param[in]	ModuleIndex		an index of module.
- *	@param[in]	Mode	\b Set as 8~1  to enable a interrupt. \r\n
- *						\b Set as 0    to disable a interrupt.
+ *	@param[in]	Mode	 Set as 8~1  to enable a interrupt. 
+ *						 Set as 0    to disable a interrupt.
  *								  9~   dont's work
  *	@return		None.
- *	@see		NX_PDM_GetInterruptNumber,
- *				NX_PDM_GetInterruptPendingAll,
- *				NX_PDM_GetInterruptPendingNumber
  */
 void	NX_PDM_SetInterruptMode( U32 ModuleIndex, U32 Mode )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -266,7 +232,9 @@ void	NX_PDM_SetInterruptMode( U32 ModuleIndex, U32 Mode )
 
 	NX_ASSERT( Mode <= 8 && Mode >= 0 );
 
-	regvalue = Mode;
+    regvalue = ReadIO32(&pRegister->PDM_IRQCTRL);
+
+	regvalue |= ((Mode << 0) & 0x1F);
 	WriteIO32(&pRegister->PDM_IRQCTRL, regvalue);
 }
 
@@ -274,29 +242,21 @@ void	NX_PDM_SetInterruptMode( U32 ModuleIndex, U32 Mode )
 /**
  *	@brief		Indicates whether some of interrupts are pended or not.
  *	@param[in]	ModuleIndex		an index of module.
- *	@return		\b CTRUE	indicates that one or more interrupts are pended. \r\n
- *				\b CFALSE	indicates that no interrupt is pended.
- *	@see		NX_PDM_GetInterruptNumber,
- *				NX_PDM_SetInterruptEnable,
- *				NX_PDM_GetInterruptEnable,
- *				NX_PDM_GetInterruptPending,
- *				NX_PDM_ClearInterruptPending,
- *				NX_PDM_SetInterruptEnableAll,
- *				NX_PDM_GetInterruptEnableAll,
- *				NX_PDM_ClearInterruptPendingAll,
- *				NX_PDM_GetInterruptPendingNumber
+ *	@return		 CTRUE	indicates that one or more interrupts are pended. 
+ *				 CFALSE	indicates that no interrupt is pended.
 
  */
 CBOOL	NX_PDM_GetInterruptPendingAll( U32 ModuleIndex )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
-	register U32	regvalue;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
+	register U32	                    regvalue;
+    
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( CNULL != pRegister );
 
-
 	regvalue  = ReadIO32(&pRegister->PDM_IRQCTRL);
+    
 	if( (regvalue >> 6) && 0x01 )   return CTRUE;
 	else 							return CFALSE;
 }
@@ -306,20 +266,11 @@ CBOOL	NX_PDM_GetInterruptPendingAll( U32 ModuleIndex )
  *	@brief		Clear pending state of all interrupts.
  *	@param[in]	ModuleIndex		an index of module.
  *	@return		None.
- *	@see		NX_PDM_GetInterruptNumber,
- *				NX_PDM_SetInterruptEnable,
- *				NX_PDM_GetInterruptEnable,
- *				NX_PDM_GetInterruptPending,
- *				NX_PDM_ClearInterruptPending,
- *				NX_PDM_SetInterruptEnableAll,
- *				NX_PDM_GetInterruptEnableAll,
- *				NX_PDM_GetInterruptPendingAll,
- *				NX_PDM_GetInterruptPendingNumber
 
  */
 void	NX_PDM_ClearInterruptPendingAll( U32 ModuleIndex )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -329,7 +280,6 @@ void	NX_PDM_ClearInterruptPendingAll( U32 ModuleIndex )
 	regvalue  = regvalue | (1<<5);
 	WriteIO32(&pRegister->PDM_IRQCTRL, regvalue);	// just write operation make pending clear
 }
-
 
 
 //------------------------------------------------------------------------------
@@ -356,6 +306,7 @@ U32 NX_PDM_GetDMANumber ( U32 ModuleIndex )
 
 U32 NX_PDM_GetDMABusWidth( U32 ModuleIndex )
 {
+    ModuleIndex = ModuleIndex;
 	return 32; // 32 bit
 }
 
@@ -365,7 +316,7 @@ U32 NX_PDM_GetDMABusWidth( U32 ModuleIndex )
 //@{
 void NX_PDM_InitSet( U32 ModuleIndex, U32 Enb )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -386,7 +337,7 @@ void NX_PDM_InitSet( U32 ModuleIndex, U32 Enb )
 // 따라서 아래와 같이 Masking을 해주도록 한다.
 void NX_PDM_SetGain0( U32 ModuleIndex, S16 Gainx4, S16 Gainx2 )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -399,7 +350,7 @@ void NX_PDM_SetGain0( U32 ModuleIndex, S16 Gainx4, S16 Gainx2 )
 
 void NX_PDM_SetGain1( U32 ModuleIndex, S16 GainxMinus4, S16 GainxMinus2 )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -411,7 +362,7 @@ void NX_PDM_SetGain1( U32 ModuleIndex, S16 GainxMinus4, S16 GainxMinus2 )
 
 void NX_PDM_SetCoeff( U32 ModuleIndex, S16 Coeff1, S16 Coeff0 )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -423,7 +374,7 @@ void NX_PDM_SetCoeff( U32 ModuleIndex, S16 Coeff1, S16 Coeff0 )
 
 void NX_PDM_SetOverSample( U32 ModuleIndex, U32 OverSample )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -439,7 +390,7 @@ void NX_PDM_SetOverSample( U32 ModuleIndex, U32 OverSample )
 
 void NX_PDM_SetStrobeShift( U32 ModuleIndex, U32 StrobeShift )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -455,7 +406,7 @@ void NX_PDM_SetStrobeShift( U32 ModuleIndex, U32 StrobeShift )
 
 void NX_PDM_DMAMode( U32 ModuleIndex, U32 DMAMode )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -472,7 +423,7 @@ void NX_PDM_DMAMode( U32 ModuleIndex, U32 DMAMode )
 
 void NX_PDM_StartEnable( U32 ModuleIndex, CBOOL Enb )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -492,7 +443,7 @@ void NX_PDM_StartEnable( U32 ModuleIndex, CBOOL Enb )
 
 void NX_PDM_SetShiftPerPixel( U32 ModuleIndex, U32 NUM )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -507,7 +458,7 @@ void NX_PDM_SetShiftPerPixel( U32 ModuleIndex, U32 NUM )
 
 void NX_PDM_SetNumOfClock( U32 ModuleIndex, U32 NUM )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -522,7 +473,7 @@ void NX_PDM_SetNumOfClock( U32 ModuleIndex, U32 NUM )
 
 void NX_PDM_SetSamplePosition( U32 ModuleIndex, U32 NUM )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -539,7 +490,7 @@ void NX_PDM_SetSamplePosition( U32 ModuleIndex, U32 NUM )
 //@}
 void NX_PDM_SetCTRL1( U32 ModuleIndex, U32 Shift, U32 Numof, U32 Sample )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -550,7 +501,7 @@ void NX_PDM_SetCTRL1( U32 ModuleIndex, U32 Shift, U32 Numof, U32 Sample )
 
 }
 
-
+#if 0
 //====================
 // PDM RegTest Function
 // 자체적으로 R/W를 하면서 확인한다.
@@ -570,7 +521,7 @@ CBOOL NX_PDM_CheckReg( U32 Addr, U32 initvalue, U32 writevalue, char *RegName);
 
 CBOOL NX_PDM_RegTest( U32 ModuleIndex )
 {
-	volatile register NX_PDM_RegisterSet* pRegister = 0;
+	register struct NX_PDM_RegisterSet* pRegister = 0;
 	register U32	regvalue;
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 	pRegister = __g_pRegister[ModuleIndex];
@@ -667,5 +618,4 @@ CBOOL NX_PDM_CheckReg( U32 Addr, U32 initvalue, U32 writevalue, char *RegName)
 
 	return Result;
 }
-
-
+#endif

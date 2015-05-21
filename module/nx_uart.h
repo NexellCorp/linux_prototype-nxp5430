@@ -176,8 +176,13 @@ U32		NX_UART_GetPhysicalAddress( U32 ModuleIndex );
 //U32		NX_UART_GetResetNumber( U32 ModuleIndex, U32 ChannelIndex );
 U32		NX_UART_GetNumberOfReset( void );
 U32		NX_UART_GetSizeOfRegisterSet( void );
+<<<<<<< .mine
+void	NX_UART_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
+void*	NX_UART_GetBaseAddress( U32 ModuleIndex );
+=======
 void	NX_UART_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*	NX_UART_GetBaseAddress( U32 ModuleIndex );
+>>>>>>> .r453
 CBOOL	NX_UART_OpenModule( U32 ModuleIndex );
 CBOOL	NX_UART_CloseModule( U32 ModuleIndex );
 CBOOL	NX_UART_CheckBusy( U32 ModuleIndex );

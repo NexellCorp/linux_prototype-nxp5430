@@ -14,8 +14,6 @@
 //  History     :
 //                  2007/04/03  first
 //------------------------------------------------------------------------------
-#include <stdlib.h>
-#include <pyrope_framework.h>
 #include "nx_chip.h"
 #include "nx_dma.h"
 
@@ -32,8 +30,13 @@ static	struct
 
 /**
  *  @brief  Initialize of prototype enviroment & local variables.
+<<<<<<< .mine
+ *  @return CTRUE    indicate that Initialize is successed.
+ *          CFALSE   indicate that Initialize is failed.
+=======
  *  @return CTRUE    indicate that Initialize is successed.
  *               CFALSE   indicate that Initialize is failed.
+>>>>>>> .r453
  *  @see    NX_DMA_GetNumberOfModule
  */
 CBOOL   NX_DMA_Initialize( void )
@@ -43,9 +46,13 @@ CBOOL   NX_DMA_Initialize( void )
     //                  ?´ì•¼?œë‹¤ë©?bInit ê°’ì„ CFALSEë¡??˜ì •?´ì•¼?œë‹¤.
     static CBOOL bInit = CTRUE;
     //register struct NX_DMA_RegisterSet *pRegister;
+<<<<<<< .mine
+    U32 i;
+=======
     U32 i;
 
     //NX_CONSOLE_Init();
+>>>>>>> .r453
 
     if( CFALSE == bInit )
     {
@@ -119,7 +126,11 @@ U32     NX_DMA_GetSizeOfRegisterSet( void )
  *              NX_DMA_OpenModule,              NX_DMA_CloseModule,
  *              NX_DMA_CheckBusy,               NX_DMA_CanPowerDown
  */
-void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
+<<<<<<< .mine
+void    NX_DMA_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
+=======
+void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+>>>>>>> .r453
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
@@ -135,19 +146,26 @@ void    NX_DMA_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress )
  *              NX_DMA_OpenModule,              NX_DMA_CloseModule,
  *              NX_DMA_CheckBusy,               NX_DMA_CanPowerDown
  */
-U32     NX_DMA_GetBaseAddress( U32 ModuleIndex )
+<<<<<<< .mine
+void*    NX_DMA_GetBaseAddress( U32 ModuleIndex )
+=======
+U32*     NX_DMA_GetBaseAddress( U32 ModuleIndex )
+>>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_DMA_MODULE > ModuleIndex );
 
-    return (U32)__g_ModuleVariables[ModuleIndex].pRegister;
+<<<<<<< .mine
+    return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
+=======
+    return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+>>>>>>> .r453
 }
-
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Initialize selected modules with default value.
- *  @return     \b CTRUE    indicate that Initialize is successed. \n
- *              \b CFALSE   indicate that Initialize is failed.
+ *  @return     CTRUE    indicate that Initialize is successed. \n
+ *              CFALSE   indicate that Initialize is failed.
  *  @see        NX_DMA_GetPhysicalAddress,      NX_DMA_GetSizeOfRegisterSet,
  *              NX_DMA_SetBaseAddress,          NX_DMA_GetBaseAddress,
  *                                              NX_DMA_CloseModule,
@@ -158,14 +176,15 @@ CBOOL   NX_DMA_OpenModule(U32 ModuleIndex)
     register struct NX_DMA_RegisterSet *pRegister;
     pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
     WriteIO32(&pRegister->Configuration, 0x1);
+	
     return CTRUE;
 }
 
 //------------------------------------------------------------------------------
 /**
  *  @brief      Deinitialize selected module to the proper stage.
- *  @return     \b CTRUE    indicate that Deinitialize is successed. \n
- *              \b CFALSE   indicate that Deinitialize is failed.
+ *  @return     CTRUE    indicate that Deinitialize is successed. \n
+ *              CFALSE   indicate that Deinitialize is failed.
  *  @see        NX_DMA_GetPhysicalAddress,      NX_DMA_GetSizeOfRegisterSet,
  *              NX_DMA_SetBaseAddress,          NX_DMA_GetBaseAddress,
  *              NX_DMA_OpenModule,
@@ -179,7 +198,8 @@ CBOOL   NX_DMA_CloseModule( U32 ModuleIndex )
     WriteIO32(&pRegister->Configuration, 0x0);
     NX_DMA_ClearInterruptPendingAll();
 
-    for (i=0; i<NUMBER_OF_DMA_CHANNEL ; i++)    NX_DMA_Stop(i+(ModuleIndex*8), CTRUE);
+    for (i=0; i<NUMBER_OF_DMA_CHANNEL ; i++)    
+		NX_DMA_Stop(i+(ModuleIndex*8), CTRUE);
 
     return CTRUE;
 }
@@ -187,8 +207,8 @@ CBOOL   NX_DMA_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether the selected modules is busy or not.
- *  @return     \b CTRUE    indicate that Module is Busy. \n
- *              \b CFALSE   indicate that Module is NOT Busy.
+ *  @return     CTRUE    indicate that Module is Busy. \n
+ *              CFALSE   indicate that Module is NOT Busy.
  *  @see        NX_DMA_GetPhysicalAddress,      NX_DMA_GetSizeOfRegisterSet,
  *              NX_DMA_SetBaseAddress,          NX_DMA_GetBaseAddress,
  *              NX_DMA_OpenModule,              NX_DMA_CloseModule,
@@ -200,10 +220,16 @@ CBOOL   NX_DMA_CheckBusy( void )
     U32 CheckValue;
 
     CheckValue = 0;
-    for (i=0; i<NUMBER_OF_DMA_CHANNEL*NUMBER_OF_DMA_MODULE ; i++)   CheckValue |= NX_DMA_CheckRunning(i);
+    for (i=0; i<NUMBER_OF_DMA_CHANNEL*NUMBER_OF_DMA_MODULE ; i++)   
+		CheckValue |= NX_DMA_CheckRunning(i);
 
+<<<<<<< .mine
+    if (0 != CheckValue)    return CTRUE;
+    	return CFALSE;
+=======
     if (0 != CheckValue)    return CTRUE;
     return CFALSE;
+>>>>>>> .r453
 }
 
 U32     NX_DMA_GetInterruptNumber( U32 nChannel )
@@ -225,8 +251,8 @@ U32     NX_DMA_GetInterruptNumber( U32 nChannel )
 /**
  *  @brief      Set a specified interrupt to be enable or disable.
  *  @param[in]  IntNum  Interrupt Number .
- *  @param[in]  Enable  \b CTRUE    indicate that Interrupt Enable. \n
- *                      \b CFALSE   indicate that Interrupt Disable.
+ *  @param[in]  Enable  CTRUE    indicate that Interrupt Enable. \n
+ *                      CFALSE   indicate that Interrupt Disable.
  *  @return     None.
  *  @see                                            NX_DMA_GetInterruptEnable,
  *              NX_DMA_GetInterruptPending,
@@ -268,8 +294,8 @@ void    NX_DMA_SetInterruptEnable( U32 nChannel, U32 IntNum, CBOOL Enable )
 /**
  *  @brief      Indicates whether a specified interrupt is enabled or disabled.
  *  @param[in]  IntNum  Interrupt Number.
- *  @return     \b CTRUE    indicate that Interrupt is enabled. \n
- *              \b CFALSE   indicate that Interrupt is disabled.
+ *  @return     CTRUE    indicate that Interrupt is enabled. 
+ *              CFALSE   indicate that Interrupt is disabled.
  *  @see        NX_DMA_SetInterruptEnable,
  *              NX_DMA_SetInterruptEnable64,        NX_DMA_GetInterruptEnable64,
  *              NX_DMA_GetInterruptPending,     NX_DMA_GetInterruptPending64,
@@ -304,13 +330,12 @@ CBOOL   NX_DMA_GetInterruptEnable( U32 nChannel, U32 IntNum )
     return CTRUE;
 }
 
-
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether a specified interrupt is pended or not
  *  @param[in]  IntNum  Interrupt Number.
- *  @return     \b CTRUE    indicate that Pending is seted. \n
- *              \b CFALSE   indicate that Pending is Not Seted.
+ *  @return     CTRUE    indicate that Pending is seted. \n
+ *              CFALSE   indicate that Pending is Not Seted.
  *  @see        NX_DMA_SetInterruptEnable,          NX_DMA_GetInterruptEnable,
  *              NX_DMA_SetInterruptEnable64,        NX_DMA_GetInterruptEnable64,
  *                                                  NX_DMA_GetInterruptPending64,
@@ -374,8 +399,8 @@ void    NX_DMA_ClearInterruptPending( U32 nChannel, U32 IntNum )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Set all interrupts to be enables or disables.
- *  @param[in]  Enable  \b CTRUE    indicate that Set to all interrupt enable. \n
- *                      \b CFALSE   indicate that Set to all interrupt disable.
+ *  @param[in]  Enable  CTRUE    indicate that Set to all interrupt enable. \n
+ *                      CFALSE   indicate that Set to all interrupt disable.
  *  @return     None.
  *  @see        NX_DMA_SetInterruptEnable,          NX_DMA_GetInterruptEnable,
  *              NX_DMA_SetInterruptEnable64,        NX_DMA_GetInterruptEnable64,
@@ -419,8 +444,8 @@ void    NX_DMA_SetInterruptEnableAll( CBOOL Enable )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether some of interrupts are enable or not.
- *  @return     \b CTRUE    indicate that At least one( or more ) interrupt is enabled. \n
- *              \b CFALSE   indicate that All interrupt is disabled.
+ *  @return     CTRUE    indicate that At least one( or more ) interrupt is enabled. \n
+ *              CFALSE   indicate that All interrupt is disabled.
  *  @see        NX_DMA_SetInterruptEnable,          NX_DMA_GetInterruptEnable,
  *              NX_DMA_SetInterruptEnable64,        NX_DMA_GetInterruptEnable64,
  *              NX_DMA_GetInterruptPending,     NX_DMA_GetInterruptPending64,
@@ -437,8 +462,8 @@ CBOOL   NX_DMA_GetInterruptEnableAll( void )
 //------------------------------------------------------------------------------
 /**
  *  @brief      Indicates whether some of interrupts are pended or not.
- *  @return     \b CTRUE    indicate that At least one( or more ) pending is seted. \n
- *              \b CFALSE   indicate that All pending is NOT seted.
+ *  @return     CTRUE    indicate that At least one( or more ) pending is seted. \n
+ *              CFALSE   indicate that All pending is NOT seted.
  *  @see        NX_DMA_SetInterruptEnable,          NX_DMA_GetInterruptEnable,
  *              NX_DMA_SetInterruptEnable64,        NX_DMA_GetInterruptEnable64,
  *              NX_DMA_GetInterruptPending,     NX_DMA_GetInterruptPending64,
@@ -537,10 +562,16 @@ void    NX_DMA_SetControl( U32 nChannel, NX_DMA_INFO* pInfoSet )
     register    U32 regvalue     	= 0;
 	U32 		Number_of_LLI;
 
+<<<<<<< .mine
+    U32         CurTransferCount  	= 0;
+    U32         TransferSize        = pInfoSet->TxSize;
+    U32			MaxTransferSize  	= 0;
+=======
 	U32			TransferCount	 	= 0;
     U32         CurTransferCount  	= 0;
     U32         TransferSize        = pInfoSet->TxSize;
     U32			MaxTransferSize  	= 0;
+>>>>>>> .r453
 
     U32 		Byte 			 	= ( (pInfoSet->SrcWidth << 4)/8);
 
@@ -553,10 +584,13 @@ void    NX_DMA_SetControl( U32 nChannel, NX_DMA_INFO* pInfoSet )
 
     pRegister  = __g_ModuleVariables[DMA_ModuleIndex].pRegister;
 
+<<<<<<< .mine
+	MaxTransferSize = ( Byte* 1*1024)-Byte;    
+=======
 	MaxTransferSize = ( Byte* 1*1024)-Byte;
+>>>>>>> .r453
 
-    TransferCount  	= ( pInfoSet->TxSize/Byte );    
-
+<<<<<<< .mine
 	Number_of_LLI = TransferSize/(MaxTransferSize+Byte);    
 	if ( Number_of_LLI > 0 )	
     { 
@@ -568,10 +602,45 @@ void    NX_DMA_SetControl( U32 nChannel, NX_DMA_INFO* pInfoSet )
         CurTransferCount = TransferSize/Byte;
         pInfoSet->TxSize -= TransferSize;
 	}
+=======
+    TransferCount  	= ( pInfoSet->TxSize/Byte );    
+>>>>>>> .r453
 
+<<<<<<< .mine
 	pRegister->Channel[DMA_ChannelIndex].SGLLI.SRCADDR = (U32)(pInfoSet->SrcAddr);
 	pRegister->Channel[DMA_ChannelIndex].SGLLI.DSTADDR = (U32)(pInfoSet->DstAddr);
+=======
+	Number_of_LLI = TransferSize/(MaxTransferSize+Byte);    
+	if ( Number_of_LLI > 0 )	
+    { 
+        CurTransferCount = MaxTransferSize/Byte;
+        pInfoSet->TxSize -= MaxTransferSize;
+	}
+	else
+	{
+        CurTransferCount = TransferSize/Byte;
+        pInfoSet->TxSize -= TransferSize;
+	}
+>>>>>>> .r453
 
+<<<<<<< .mine
+    regvalue  = pRegister->Channel[DMA_ChannelIndex].SGLLI.Control;
+=======
+	pRegister->Channel[DMA_ChannelIndex].SGLLI.SRCADDR = (U32)(pInfoSet->SrcAddr);
+	pRegister->Channel[DMA_ChannelIndex].SGLLI.DSTADDR = (U32)(pInfoSet->DstAddr);
+>>>>>>> .r453
+
+<<<<<<< .mine
+    regvalue |= (U32)( ( CurTransferCount       << 0  ) // Transfer size
+                     | ( pInfoSet->SrcBurstSize << 12 ) // SBSize (source burst size)
+                     | ( pInfoSet->DstBurstSize << 15 ) // DBSize (destination burst size)
+                     | ( pInfoSet->SrcWidth     << 18 ) // SWidth (source transfer width)
+                     | ( pInfoSet->DstWidth     << 21 ) // DWidth (destination transffer width)
+                     | ( pInfoSet->SrcAHBSel    << 24 ) // Source AHB Master x Select
+                     | ( pInfoSet->DstAHBSel    << 25 ) // Destination AHB Master x Select
+                     | ( pInfoSet->SrcAddrInc   << 26 ) // SI (source increment)
+                     | ( pInfoSet->DstAddrInc   << 27 ) // DI (destination increment) 
+=======
     regvalue  = pRegister->Channel[DMA_ChannelIndex].SGLLI.Control;
 
     regvalue |= (U32)( ( CurTransferCount       << 0  ) // Transfer size
@@ -583,6 +652,7 @@ void    NX_DMA_SetControl( U32 nChannel, NX_DMA_INFO* pInfoSet )
                      | ( pInfoSet->DstAHBSel    << 25 ) // Destination AHB Master x Select
                      | ( pInfoSet->SrcAddrInc   << 26 ) // SI (source increment)
                      | ( pInfoSet->DstAddrInc   << 27 ) // DI (destination increment) 
+>>>>>>> .r453
                      | ( 1UL   << 31 )
                      );
 
@@ -655,9 +725,12 @@ void    NX_DMA_SetAttribute( U32 nChannel, NX_DMA_INFO* pInfoSet )
 {
     register    struct NX_DMA_RegisterSet *pRegister;
 
+<<<<<<< .mine
+=======
     U32         TransferSize     = pInfoSet->TxSize;
     U32 		Byte 			 = ( (pInfoSet->SrcWidth << 4)/8 );
 
+>>>>>>> .r453
     U32         DMA_ModuleIndex  = nChannel / 8;
     U32         DMA_ChannelIndex = nChannel % 8;
 
@@ -688,9 +761,14 @@ void*     NX_DMA_Build_LLI( U32 nChannel, NX_DMA_INFO* pInfoSet )
 
     U32			Number_of_LLI    				= 0;
 
+<<<<<<< .mine
+    struct NX_DMALLI_RegisterSet*	pLLI_Addr 	= 0;
+    U32			LLI_BUFF 	     				= 0;    
+=======
     struct NX_DMALLI_RegisterSet*	pLLI_Addr 	= 0;
     U32			LLI_BUFF 	     				= 0;    
 	U32			LLI_Count		 				= 0;
+>>>>>>> .r453
 
     U32         DMA_ModuleIndex  = nChannel / 8;
     U32         DMA_ChannelIndex = nChannel % 8;
@@ -708,6 +786,78 @@ void*     NX_DMA_Build_LLI( U32 nChannel, NX_DMA_INFO* pInfoSet )
 
 	MaxTransferSize = ( Byte* 1*1024)-Byte;
 
+<<<<<<< .mine
+    if( TransferSize > MaxTransferSize )
+    {   
+        if( pInfoSet->SrcAddrInc == CTRUE )
+            SrcAddr += MaxTransferSize;
+        if( pInfoSet->DstAddrInc == CTRUE )
+            DstAddr += MaxTransferSize;      	
+		
+        regvalue     = pRegister->Channel[DMA_ChannelIndex].SGLLI.Control;
+	#if NX_DMA_DEBUG
+		NX_MSG("----------------------------\r\n");
+		NX_MSG("pInfoSet+SrcAddr: %8X(%8X) \r\n", (pInfoSet->SrcAddr), &(pInfoSet->SrcAddr) );
+		NX_MSG("pInfoSet+DstAddr: %8X(%8X) \r\n", (pInfoSet->DstAddr), &(pInfoSet->DstAddr) );
+		NX_MSG("pInfoSet+HwLLI	: %8X(%8X) \r\n", (pInfoSet->HwLLI	), &(pInfoSet->HwLLI  ) );
+		NX_MSG("pInfoSet+Control: %8X(%8X) \r\n", (pInfoSet->Control), &(pInfoSet->Control) );
+		NX_MSG("----------------------------\r\n");
+	#endif
+        while(1)
+        {
+            // LLI Count Calcurate.    
+            Number_of_LLI    = (TransferSize)/((MaxTransferSize+Byte));
+            // Current Transfer Size Calcurate.
+            if( 0 != Number_of_LLI )    CurTransferCount = MaxTransferSize/Byte;
+            else                        CurTransferCount = TransferSize/Byte;
+
+            // Sub TransferSize            
+            TransferSize =  TransferSize-MaxTransferSize;
+
+            if(0 == Number_of_LLI) regvalue |= (1UL<<31);           
+            regvalue = (regvalue & (~0xFFF)) | (CurTransferCount);
+            
+            if( 0 != Number_of_LLI )
+            {
+                pLLI_Addr->SRCADDR = ((U32)SrcAddr);
+                pLLI_Addr->DSTADDR = ((U32)DstAddr);
+                pLLI_Addr->LLI     = (pLLI_Addr + 0x1);
+                pLLI_Addr->Control = (regvalue);
+            }
+            else
+            {
+                pLLI_Addr->SRCADDR = ((U32)SrcAddr);
+                pLLI_Addr->DSTADDR = ((U32)DstAddr);
+                pLLI_Addr->LLI     = 0;
+                pLLI_Addr->Control = (regvalue);
+                break;
+            }
+        #if NX_DMA_DEBUG
+            NX_MSG("Number of LLI : %d    \r\n", Number_of_LLI );
+            NX_MSG("----------------------------\r\n");
+            NX_MSG("LLIADDR+0x0: %8X(%8X) \r\n", (pLLI_Addr->SRCADDR), &(pLLI_Addr->SRCADDR) );
+            NX_MSG("LLIADDR+0x4: %8X(%8X) \r\n", (pLLI_Addr->DSTADDR), &(pLLI_Addr->DSTADDR) );
+            NX_MSG("LLIADDR+0x8: %8X(%8X) \r\n", (pLLI_Addr->LLI    ), &(pLLI_Addr->LLI    ) );
+            NX_MSG("LLIADDR+0xC: %8X(%8X) \r\n", (pLLI_Addr->Control), &(pLLI_Addr->Control) );
+            NX_MSG("----------------------------\r\n");
+            NX_MSG("Control Register: %8x \r\n", regvalue );
+            NX_MSG("----------------------------\r\n");
+        #endif        
+
+            if( pInfoSet->SrcAddrInc == CTRUE )
+                SrcAddr += MaxTransferSize;
+            if( pInfoSet->DstAddrInc == CTRUE )
+                DstAddr += MaxTransferSize;            
+            pLLI_Addr += 1;
+        }
+        pRegister->Channel[DMA_ChannelIndex].SGLLI.LLI = (U32)(LLI_BUFF & (~0x3));
+    } 
+    
+    regvalue = pRegister->Configuration;
+    pRegister->Configuration = (regvalue & ~0x1) | 0x1;						// DMA Controller Enable
+
+    return (void*)pLLI_Addr;
+=======
     if( TransferSize > MaxTransferSize )
     {   
         if( pInfoSet->SrcAddrInc == CTRUE )
@@ -778,6 +928,7 @@ void*     NX_DMA_Build_LLI( U32 nChannel, NX_DMA_INFO* pInfoSet )
     pRegister->Configuration = (regvalue & ~0x1) | 0x1;						// DMA Controller Enable
 
     return (void*)pLLI_Addr;
+>>>>>>> .r453
 }
 
 void    NX_DMA_Transfer( U32 nChannel, NX_DMA_INFO *pInfoSet )
@@ -846,8 +997,8 @@ void    NX_DMA_Run( U32 nChannel )
 /**
  *  @brief      Check whether DMA transfer is running or not.
  *  @param[in]  ModuleIndex     an index of module.
- *  @return     \b CTURE    indicates DMA transfer is running.\n
- *              \b CFALSE   indicates DMA transfer is idle.
+ *  @return     CTURE    indicates DMA transfer is running.\n
+ *              CFALSE   indicates DMA transfer is idle.
  *  @see    NX_DMA_SetCommandBufferMode,    NX_DMA_GetCommandBufferMode,
  *          NX_DMA_Run,
  *          NX_DMA_Stop,                    NX_DMA_CommandBufferFlush,
@@ -875,8 +1026,8 @@ U32 NX_DMA_CheckRunning ( U32 nChannel )
 /**
  *  @brief      Stop/Cancel DMA Transfer.
  *  @param[in]  ModuleIndex     an index of module.
- *  @param      Enable      \b CTRUE    indicate that DMA Stop is Enable. \n
- *                          \b CFALSE   indicate that DMA Stop is Disable.
+ *  @param      Enable      CTRUE    indicate that DMA Stop is Enable. \n
+ *                          CFALSE   indicate that DMA Stop is Disable.
  *  @return     None.
  *  @remark     If DMA running write back mode, then user have to clear command buffer.\n
  *              Also, user should check command buffer flush is completed or not.\n \n

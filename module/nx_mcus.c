@@ -41,8 +41,8 @@ static inline U32	__NX_MCUS_NFCONTROL_RESET_BIT(register U32 regvalue)
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return \b CTRUE	indicate that Initialize is successed.\n
- *			\b CFALSE	indicate that Initialize is failed.\n
+ *	@return CTRUE	indicate that Initialize is successed.
+ *			CFALSE	indicate that Initialize is failed.
  *	@see	NX_MCUS_GetNumberOfModule
  */
 CBOOL	NX_MCUS_Initialize( void )
@@ -62,7 +62,6 @@ CBOOL	NX_MCUS_Initialize( void )
 /**
  *	@brief		Get number of modules in the chip.
  *	@return		Module's number.
- *	@see		NX_MCUS_Initialize
  */
 U32		NX_MCUS_GetNumberOfModule( void )
 {
@@ -76,10 +75,6 @@ U32		NX_MCUS_GetNumberOfModule( void )
 /**
  *	@brief		Get module's physical address.
  *	@return		Module's physical address
- *	@see		NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_SetBaseAddress,		NX_MCUS_GetBaseAddress,
- *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
 U32		NX_MCUS_GetPhysicalAddress( void )
 {
@@ -95,10 +90,6 @@ U32		NX_MCUS_GetPhysicalAddress( void )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
- *	@see		NX_MCUS_GetPhysicalAddress,
- *				NX_MCUS_SetBaseAddress,		NX_MCUS_GetBaseAddress,
- *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
 U32		NX_MCUS_GetSizeOfRegisterSet( void )
 {
@@ -110,12 +101,12 @@ U32		NX_MCUS_GetSizeOfRegisterSet( void )
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
- *	@see		NX_MCUS_GetPhysicalAddress,	NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_GetBaseAddress,
- *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
+<<<<<<< .mine
+void	NX_MCUS_SetBaseAddress( void* BaseAddress )
+=======
 void	NX_MCUS_SetBaseAddress( U32* BaseAddress )
+>>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	__g_pRegister = (struct NX_MCUS_RegisterSet *)BaseAddress;
@@ -125,25 +116,25 @@ void	NX_MCUS_SetBaseAddress( U32* BaseAddress )
 /**
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
- *	@see		NX_MCUS_GetPhysicalAddress,	NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_SetBaseAddress,
- *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
  */
+<<<<<<< .mine
+void*	NX_MCUS_GetBaseAddress( void )
+=======
 U32*	NX_MCUS_GetBaseAddress( void )
+>>>>>>> .r453
 {
+<<<<<<< .mine
+	return (void*)__g_pRegister;
+=======
 	return (U32*)__g_pRegister;
+>>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicate that Initialize is successed. \n
- *				\b CFALSE	indicate that Initialize is failed.
- *	@see		NX_MCUS_GetPhysicalAddress,	NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_SetBaseAddress,		NX_MCUS_GetBaseAddress,
- *				NX_MCUS_CloseModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
+ *	@return		CTRUE	indicate that Initialize is successed. 
+ *				CFALSE	indicate that Initialize is failed.
  */
 CBOOL	NX_MCUS_OpenModule( void )
 {
@@ -153,12 +144,8 @@ CBOOL	NX_MCUS_OpenModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
- *				\b CFALSE	indicate that Deinitialize is failed.
- *	@see		NX_MCUS_GetPhysicalAddress,	NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_SetBaseAddress,		NX_MCUS_GetBaseAddress,
- *				NX_MCUS_OpenModule,
- *				NX_MCUS_CheckBusy,			NX_MCUS_CanPowerDown
+ *	@return		CTRUE	indicate that Deinitialize is successed. 
+ *				CFALSE	indicate that Deinitialize is failed.
  */
 CBOOL	NX_MCUS_CloseModule( void )
 {
@@ -168,12 +155,8 @@ CBOOL	NX_MCUS_CloseModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicate that Module is Busy. \n
- *				\b CFALSE	indicate that Module is NOT Busy.
- *	@see		NX_MCUS_GetPhysicalAddress,	NX_MCUS_GetSizeOfRegisterSet,
- *				NX_MCUS_SetBaseAddress,		NX_MCUS_GetBaseAddress,
- *				NX_MCUS_OpenModule,			NX_MCUS_CloseModule,
- *				NX_MCUS_CanPowerDown
+ *	@return		CTRUE	indicate that Module is Busy. 
+ *				CFALSE	indicate that Module is NOT Busy.
  */
 CBOOL	NX_MCUS_CheckBusy( void )
 {
@@ -187,14 +170,6 @@ CBOOL	NX_MCUS_CheckBusy( void )
 /**
  *	@brief		Get a interrupt number for interrupt controller.
  *	@return		Interrupt number
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 S32		NX_MCUS_GetInterruptNumber( void )
 {
@@ -205,19 +180,11 @@ S32		NX_MCUS_GetInterruptNumber( void )
 /**
  *	@brief		Set a specified interrupt to be enable or disable.
  *	@param[in]	IntNum	Interrupt Number .
- *	@param[in]	Enable	\b CTRUE	indicate that Interrupt Enable. \n
- *						\b CFALSE	indicate that Interrupt Disable.
+ *	@param[in]	Enable	CTRUE	indicate that Interrupt Enable. 
+ *						CFALSE	indicate that Interrupt Disable.
  *	@return		None.
  *	@remarks	MCUS has one interrupt source, therefore you have to set @a IntNum
  *				as '0' only.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32 	,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_SetInterruptEnable( S32 IntNum, CBOOL Enable )
 {
@@ -277,18 +244,10 @@ void	NX_MCUS_SetECCInterruptEnable( S32 IntNum, CBOOL Enable )
 /**
  *	@brief		Indicates whether a specified interrupt is enabled or disabled.
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that specified interrupt is enabled. \n
- *				\b CFALSE indicates that specified interrupt is disabled.
+ *	@return		CTRUE	indicates that specified interrupt is enabled. 
+ *				CFALSE indicates that specified interrupt is disabled.
  *	@remarks	MCUS has one interrupt source, therefore you have to set @a IntNum
  *				as '0' only.
- *	@see		NX_MCUS_INT					,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending	,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32 ,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 CBOOL	NX_MCUS_GetInterruptEnable( S32 IntNum )
 {
@@ -317,33 +276,14 @@ CBOOL	NX_MCUS_GetECCInterruptEnable( S32 IntNum )
 /**
  *	@brief		Indicates whether a specified interrupt is pended or not
  *	@param[in]	IntNum	Interrupt Number.
- *	@return		\b CTRUE	indicates that specified interrupr is pended. \n
- *				\b CFALSE indicates that specified interrupt is not pended.
+ *	@return		CTRUE	indicates that specified interrupr is pended. 
+ *				CFALSE indicates that specified interrupt is not pended.
  *	@remarks	MCUS has one interrupt source, therefore you have to set @a IntNum
  *				as '0' only.
- *	@see		NX_MCUS_INT					,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending	,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32 ,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 CBOOL	NX_MCUS_GetInterruptPending( S32 IntNum )
 {
 	const U32 IRQPEND_POS	= 15;
-	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
-
-	NX_ASSERT( 0 == IntNum );
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND_MASK) >> IRQPEND_POS );
-}
-
-CBOOL	NX_MCUS_GetECCInterruptPending( S32 IntNum )
-{
-	const U32 IRQPEND_POS	= 14;
 	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
 
 	NX_ASSERT( 0 == IntNum );
@@ -359,14 +299,6 @@ CBOOL	NX_MCUS_GetECCInterruptPending( S32 IntNum )
  *	@return		None.
  *	@remarks	MCUS has one interrupt source, therefore you have to set @a IntNum
  *				as '0' only.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_ClearInterruptPending( S32 IntNum )
 {
@@ -418,31 +350,18 @@ void	NX_MCUS_ClearECCInterruptPending( S32 IntNum )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set all interrupts to be enabled or disabled.
- *	@param[in]	Enable	Set this as CTURE to enable all interrupts. \n
+ *	@param[in]	Enable	Set this as CTURE to enable all interrupts. 
  *						Set this as CFALSE to disable all interrupts.
  *	@return		None.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 {
 	const U32 IRQPEND_POS	= 15;
-	const U32 ECCIRQPEND_POS= 14;
 	const U32 ECCRST_POS	= 11;
 	const U32 IRQENB_POS	= 8;
-	const U32 ECCIRQENB_POS	= 7;
-
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
-	const U32 ECCIRQPEND	= (1UL<<ECCIRQPEND_POS);
-	const U32 IRQENB		= (1UL<<IRQENB_POS);
-	const U32 ECCIRQENB		= (1UL<<ECCIRQENB_POS);
 	const U32 ECCRST		= (1UL<<ECCRST_POS);
+	const U32 IRQENB		= (1UL<<IRQENB_POS);
 
 	register U32 regvalue;
 	register struct NX_MCUS_RegisterSet*	pRegister;
@@ -453,8 +372,8 @@ void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 	pRegister = __g_pRegister;
 
 	regvalue = ReadIO32(&pRegister->NFCONTROL);
-	regvalue &= ~(IRQPEND | IRQENB | ECCIRQPEND | ECCIRQENB | ECCRST);
-	regvalue |= ( (U32)Enable<<IRQENB_POS | (U32)Enable<<ECCIRQENB_POS );
+	regvalue &= ~(IRQPEND | ECCRST | IRQENB);
+	regvalue |= ( (U32)Enable<<IRQENB_POS );
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
@@ -463,18 +382,9 @@ void	NX_MCUS_SetInterruptEnableAll( CBOOL Enable )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of interrupts are enable or not.
- *	@return		\b CTRUE	indicates that one or more interrupts are enabled. \n
- *				\b CFALSE	indicates that all interrupts are disabled.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
+ *	@return		CTRUE	indicates that one or more interrupts are enabled. 
+ *				CFALSE	indicates that all interrupts are disabled.
  */
-#if 0
 CBOOL	NX_MCUS_GetInterruptEnableAll( void )
 {
 	const U32 IRQENB_POS	= 8;
@@ -484,27 +394,17 @@ CBOOL	NX_MCUS_GetInterruptEnableAll( void )
 
 	return	(CBOOL)( (ReadIO32(&__g_pRegister->NFCONTROL) & IRQENB_MASK) >> IRQENB_POS );
 }
-#endif
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether some of unmasked interrupts are pended or not.
- *	@return		CTURE indicates there's unmasked interrupts which are pended.\n
+ *	@return		CTURE indicates there's unmasked interrupts which are pended.
  *				CFALSE indicates there's no unmasked interrupt which are pended.
  *	@remark		Since this function doesn't consider about pending status of
  *				interrupts which are disabled, the return value can be CFALSE
  *				even though some interrupts are pended unless a relevant
  *				interrupt is enabled.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
-#if 0
 CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 {
 	const U32 IRQPEND_POS	= 15;
@@ -523,29 +423,17 @@ CBOOL	NX_MCUS_GetInterruptPendingAll( void )
 
 	return	(CBOOL)( intpend & intenb );
 }
-#endif
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Clear pending state of all interrupts.
  *	@return		None.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_ClearInterruptPendingAll( void )
 {
 	const U32 IRQPEND_POS	= 15;
-	const U32 ECCIRQPEND_POS= 14;
 	const U32 ECCRST_POS	= 11;
-
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
-	const U32 ECCIRQPEND	= (1UL<<ECCIRQPEND_POS);
 	const U32 ECCRST		= (1UL<<ECCRST_POS);
 
 	register U32 regvalue;
@@ -556,8 +444,8 @@ void	NX_MCUS_ClearInterruptPendingAll( void )
 	pRegister = __g_pRegister;
 
 	regvalue = ReadIO32(&pRegister->NFCONTROL);
-	regvalue &= ~(IRQPEND | ECCIRQPEND | ECCRST );
-	regvalue |= (IRQPEND | ECCIRQPEND);
+	regvalue &= ~(IRQPEND | ECCRST );
+	regvalue |= IRQPEND;
 	regvalue  = __NX_MCUS_NFCONTROL_RESET_BIT(regvalue);
 
 	WriteIO32(&pRegister->NFCONTROL, regvalue);
@@ -571,14 +459,6 @@ void	NX_MCUS_ClearInterruptPendingAll( void )
  *								Value of 0 masks interrupt and value of 1 enables
  *								interrupt. EnableFlag[0] are only valid.
  *	@return		None.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_SetInterruptEnable32 ( U32 EnableFlag )
 {
@@ -635,14 +515,6 @@ void	NX_MCUS_SetECCInterruptEnable32 ( U32 EnableFlag )
  *	@return		An interrupt enable status that each bit represents current
  *				interrupt enable status - Value of 0 indicates relevant interrupt
  *				is masked and value of 1 indicates relevant interrupt is enabled.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 U32	NX_MCUS_GetInterruptEnable32 ( void )
 {
@@ -671,28 +543,10 @@ U32	NX_MCUS_GetECCInterruptEnable32 ( void )
  *	@return		An interrupt pending status that each bit represents current
  *				interrupt pending status - Value of 0 indicates relevant interrupt
  *				is not pended and value of 1 indicates relevant interrupt is pended.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 U32	NX_MCUS_GetInterruptPending32 ( void )
 {
 	const U32 IRQPEND_POS	= 15;
-	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
-
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	return (ReadIO32(&__g_pRegister->NFCONTROL) & IRQPEND)>>IRQPEND_POS;
-}
-
-U32	NX_MCUS_GetECCInterruptPending32 ( void )
-{
-	const U32 IRQPEND_POS	= 14;
 	const U32 IRQPEND		= (1UL<<IRQPEND_POS);
 
 	NX_ASSERT( CNULL != __g_pRegister );
@@ -707,14 +561,6 @@ U32	NX_MCUS_GetECCInterruptPending32 ( void )
  *								interrupt pending status cleared only if
  *								corresponding bit in PendingFlag is set.
  *	@return		None.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 void	NX_MCUS_ClearInterruptPending32( U32 PendingFlag )
 {
@@ -767,41 +613,11 @@ void	NX_MCUS_ClearECCInterruptPending32( U32 PendingFlag )
  *	@return		an interrupt number which has the most priority of pended and
  *				unmasked interrupts.
  *				If there's no interrupt which is pended and unmasked, it returns -1.
- *	@see		NX_MCUS_INT						,	NX_MCUS_GetInterruptNumber			,
- *				NX_MCUS_SetInterruptEnable		,	NX_MCUS_GetInterruptEnable			,
- *				NX_MCUS_GetInterruptPending		,	NX_MCUS_ClearInterruptPending		,
- *				NX_MCUS_SetInterruptEnableAll	,	NX_MCUS_GetInterruptEnableAll		,
- *				NX_MCUS_GetInterruptPendingAll	,	NX_MCUS_ClearInterruptPendingAll	,
- *				NX_MCUS_SetInterruptEnable32	,	NX_SDHC_GetInterruptEnable32		,
- *				NX_MCUS_GetInterruptPending32	,	NX_MCUS_ClearInterruptPending32		,
- *				NX_MCUS_GetInterruptPendingNumber
  */
 S32		NX_MCUS_GetInterruptPendingNumber( void )
 {
 	const U32 IRQPEND_POS	= 15;
 	const U32 IRQENB_POS	= 8;
-
-	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
-	const U32 IRQENB_MASK	= (1UL<<IRQENB_POS);
-
-	register U32 regval;
-
-	NX_ASSERT( CNULL != __g_pRegister );
-
-	regval = ReadIO32(&__g_pRegister->NFCONTROL);
-
-	if( (regval & IRQENB_MASK) && (regval & IRQPEND_MASK) )
-	{
-		return 0;
-	}
-
-	return -1;
-}
-
-S32		NX_MCUS_GetECCInterruptPendingNumber( void )
-{
-	const U32 IRQPEND_POS	= 14;
-	const U32 IRQENB_POS	= 7;
 
 	const U32 IRQPEND_MASK	= (1UL<<IRQPEND_POS);
 	const U32 IRQENB_MASK	= (1UL<<IRQENB_POS);
@@ -828,16 +644,13 @@ S32		NX_MCUS_GetECCInterruptPendingNumber( void )
  *	@brief		Get the static bus index of internal SRAM.
  *	@return		the static bus index of internal SRAM which is one of @ref NX_MCUS_SBUSID enum.
  *	@remark		The internal SRAM has different static bus index according to
- *				the external configuration - CfgBootMode.\n
+ *				the external configuration - CfgBootMode.
  *				For NANDBOOT or UARTBOOT, the internal SRAM must be at static
- *				bus 0 to be mapped at 0x0 of memory address.\n
+ *				bus 0 to be mapped at 0x0 of memory address.
  *				For booting of ROM or NOR flash memory, static bus 0 should be
  *				used for these memory. therefore the internal SRAM must be
  *				other static bus except static bus 0 - static bus 6 is used for
  *				the internal SRAM.
- *	@see		NX_MCUS_SBUSID,
- *				NX_MCUS_GetISRAMCS,			NX_MCUS_GetIROMCS,
- *				NX_MCUS_SetStaticBUSConfig,	NX_MCUS_GetStaticBUSConfig
  */
 NX_MCUS_SBUSID		NX_MCUS_GetISRAMCS( void )
 {
@@ -853,15 +666,12 @@ NX_MCUS_SBUSID		NX_MCUS_GetISRAMCS( void )
  *	@brief		Get the static bus index of internal ROM.
  *	@return		the static bus index of internal ROM which is one of @ref NX_MCUS_SBUSID enum.
  *	@remark		The internal ROM has different static bus index according to
- *				the external configuration - CfgBootMode.\n
+ *				the external configuration - CfgBootMode.
  *				For iROMBOOT, the internal ROM must be at static bus 0 to be
- *				mapped at 0x0 of memory address.\n
+ *				mapped at 0x0 of memory address.
  *				For other boot mode, static bus 0 should be used for other
  *				memory. therefore the internal ROM must be other static bus
  *				except static bus 0 - static bus 7 is used for the internal ROM.
- *	@see		NX_MCUS_SBUSID,
- *				NX_MCUS_GetISRAMCS,			NX_MCUS_GetIROMCS,
- *				NX_MCUS_SetStaticBUSConfig,	NX_MCUS_GetStaticBUSConfig
  */
 NX_MCUS_SBUSID		NX_MCUS_GetIROMCS( void )
 {
@@ -876,18 +686,17 @@ NX_MCUS_SBUSID		NX_MCUS_GetIROMCS( void )
 /**
  *	@brief		Set static BUS configration.
  *	@param[in]	Id			Static BUS ID which is one of @ref NX_MCUS_SBUSID enum.
- *	@param[in]	BitWidth	BUS bit width. ( it must be 8 or 16 ). \n This argument is only valid in case of Static #0 ~ #7.
+ *	@param[in]	BitWidth	BUS bit width. ( it must be 8 or 16 ).  This argument is only valid in case of Static #0 ~ #7.
  *	@param[in]	tACS		address setup time before nCS, 0 ~ 15 for Static #0 ~ #7 and NAND, 1 ~ 16 for IDE.
  *	@param[in]	tCAH		address hold time after nCS, 0 ~ 15 for Static #0 ~ #7 and NAND, 1 ~ 16 for IDE.
  *	@param[in]	tCOS		chip select setup time before nOE, 0 ~ 15 for Static #0 ~ #7 and NAND, 1 ~ 16 for IDE.
  *	@param[in]	tCOH		chip select hold time after nOE, 0 ~ 15 for Static #0 ~ #7 and NAND, 1 ~ 16 for IDE.
  *	@param[in]	tACC		data access time, 1 ~ 256 for Static #0 ~ #7, NAND and IDE.
- *	@param[in]	tSACC		data access time in burst access for Static #0 ~ #7, 1 ~ 256.\nwait access time for IDE, 1 ~ 256.
- *	@param[in]	WaitMode	Wait control \n This argument is only valid in case of Static #0 ~ #7 and IDE.
- *	@param[in]	BurstRead	Burst mode control in reading.\n This argument is only valid in case of Static #0 ~ #7.
- *	@param[in]	BurstWrite	Burst mode control in writing.\n This argument is only valid in case of Static #0 ~ #7.
+ *	@param[in]	tSACC		data access time in burst access for Static #0 ~ #7, 1 ~ 256.wait access time for IDE, 1 ~ 256.
+ *	@param[in]	WaitMode	Wait control  This argument is only valid in case of Static #0 ~ #7 and IDE.
+ *	@param[in]	BurstRead	Burst mode control in reading. This argument is only valid in case of Static #0 ~ #7.
+ *	@param[in]	BurstWrite	Burst mode control in writing. This argument is only valid in case of Static #0 ~ #7.
  *	@return		None.
- *	@see		NX_MCUS_GetStaticBUSConfig
  */
 void	NX_MCUS_SetStaticBUSConfig
 (
@@ -1039,19 +848,18 @@ void	NX_MCUS_SetStaticBUSConfig
 /**
  *	@brief		Get static BUS configration.
  *	@param[in]	Id			Static BUS ID which is one of @ref NX_MCUS_SBUSID enum.
- *	@param[out] pBitWidth	BUS bit width.\n This argument is only valid for Static #0 ~ #7.
+ *	@param[out] pBitWidth	BUS bit width. This argument is only valid for Static #0 ~ #7.
  *	@param[out] ptACS		address setup time before nCS
  *	@param[out] ptCAH		address hold time after nCS
  *	@param[out] ptCOS		chip select setup time before nOE
  *	@param[out] ptCOH		chip select hold time after nOE
  *	@param[out] ptACC		data access time
- *	@param[out] ptSACC		data access time in burst access for Static #0 ~ #7.\nwait access time for IDE.
- *	@param[out] pWaitMode	wait control. \n This argument is only valid for Static #0 ~ #7 and IDE.
- *	@param[out] pBurstRead	Burst mode control in reading.\n This argument is only valid for Static #0 ~ #7.
- *	@param[out] pBurstWrite Burst mode control in writing.\n This argument is only valid for Static #0 ~ #7.
+ *	@param[out] ptSACC		data access time in burst access for Static #0 ~ #7.wait access time for IDE.
+ *	@param[out] pWaitMode	wait control.  This argument is only valid for Static #0 ~ #7 and IDE.
+ *	@param[out] pBurstRead	Burst mode control in reading. This argument is only valid for Static #0 ~ #7.
+ *	@param[out] pBurstWrite Burst mode control in writing. This argument is only valid for Static #0 ~ #7.
  *	@return		None.
  *	@remark		Arguments which does not required can be CNULL.
- *	@see		NX_MCUS_SetStaticBUSConfig
  */
 void	NX_MCUS_GetStaticBUSConfig
 (
@@ -1186,9 +994,6 @@ void	NX_MCUS_SetNANDBUSConfig
 
 	//--------------------------------------------------------------------------
 	pRegister	=	__g_pRegister;
-
-
-
 	//--------------------------------------------------------------------------
 	// Set timing for tACS, tCAH, tCOS, tOCH.
 	// 0 : 1 cycle, 1 : 2 cycle, 2 : 3 cycle, ......, 15 : 0 cycle
@@ -1285,12 +1090,6 @@ void	NX_MCUS_GetNANDBUSConfig
  *	@return		None.
  *	@remark		It can also be set NFTYPE by external pin configuration(CfgNFType)
  *				for NAND Booting.
- *	@see		NX_MCUS_NFTYPE,
- *				NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 void	NX_MCUS_SetNFType ( NX_MCUS_NFTYPE type )
 {
@@ -1318,12 +1117,6 @@ void	NX_MCUS_SetNFType ( NX_MCUS_NFTYPE type )
  *	@return		the current setting for NAND Flash Address Type.
  *	@remark		It can also be set NFTYPE by external pin configuration(CfgNFType)
  *				for NAND Booting.
- *	@see		NX_MCUS_NFTYPE,
- *				NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 NX_MCUS_NFTYPE	NX_MCUS_GetNFType ( void )
 {
@@ -1342,11 +1135,6 @@ NX_MCUS_NFTYPE	NX_MCUS_GetNFType ( void )
  *	@param[in]	bEnb	Set this as CTRUE to enable the NAND Booting.
  *	@return		None.
  *	@remark		It can also be enabled by external pin configuration(CfgNFBoot).
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 void	NX_MCUS_SetNFEXChannelEnable( CBOOL bEnb )
 {
@@ -1372,14 +1160,9 @@ void	NX_MCUS_SetNFEXChannelEnable( CBOOL bEnb )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the NAND Flash Booting is enabled or not.
- *	@return		CTRUE indicates the NAND Flash Booting is enabled.\n
+ *	@return		CTRUE indicates the NAND Flash Booting is enabled.
  *				CFALSE indicates the NAND Flash Booting is disabled.
  *	@remark		It can also be enabled by external pin configuration(CfgNFBoot).
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 CBOOL	NX_MCUS_GetNFEXChannelEnable ( void )
 {
@@ -1397,11 +1180,6 @@ CBOOL	NX_MCUS_GetNFEXChannelEnable ( void )
  *	@brief		Set the NAND Flash bank number to access.
  *	@param[in]	Bank	Specifies the NAND Flash bank number to access, 0 ~ 3.
  *	@return		None.
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 void	NX_MCUS_SetNFBank( U32 Bank )
 {
@@ -1427,11 +1205,6 @@ void	NX_MCUS_SetNFBank( U32 Bank )
 /**
  *	@brief		Get the current NAND Flash bank number.
  *	@return		The current NAND Flash bank number.
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 U32		NX_MCUS_GetNFBank ( void )
 {
@@ -1447,7 +1220,7 @@ U32		NX_MCUS_GetNFBank ( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Set the external nCS signal of NAND flash to assert or negate.
- *	@param[in]	bEnb	Set this as CTRUE to assert nCS signal for current bank.\n
+ *	@param[in]	bEnb	Set this as CTRUE to assert nCS signal for current bank.
  *						Set this as CFALSE to negate nCS signal for current bank.
  *	@return		None.
  *	@remark		You have to set @a bEnb as CTRUE to control the external NAND flash
@@ -1456,11 +1229,6 @@ U32		NX_MCUS_GetNFBank ( void )
  *				set @a bEnb as CFALSE to negate the chip select signal of the NAND
  *				flash memory chip to reduce a power cunsumption if it doesn't need
  *				to access anymore.
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 void	NX_MCUS_SetNFCSEnable( CBOOL bEnb )
 {
@@ -1486,13 +1254,8 @@ void	NX_MCUS_SetNFCSEnable( CBOOL bEnb )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the external nCS signal of NAND flash is asserted or not.
- *	@return		CTRUE indicates the external nCS signal is asserted.\n
+ *	@return		CTRUE indicates the external nCS signal is asserted.
  *				CFALSE indicates the external nCS signal is negated.
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 CBOOL	NX_MCUS_GetNFCSEnable ( void )
 {
@@ -1508,17 +1271,12 @@ CBOOL	NX_MCUS_GetNFCSEnable ( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether NAND Flash is ready or not.
- *	@return		CTRUE indicates NAND Flash is ready.\n
+ *	@return		CTRUE indicates NAND Flash is ready.
  *				CFALSE indicates NAND Flash is busy.
  *	@remark		There's a external pin, RnB, indicates the status of NAND Flash
  *				operation. When low, it indicates that a program, erase or random
  *				read operation is in progress and returns to high state upon
  *				completion. This function returns the state of RnB pin.
- *	@see		NX_MCUS_SetNFType,				NX_MCUS_GetNFType,
- *				NX_MCUS_SetNFBootEnable,		NX_MCUS_GetNFBootEnable,
- *				NX_MCUS_SetNFBank,				NX_MCUS_GetNFBank,
- *				NX_MCUS_SetNFCSEnable,			NX_MCUS_GetNFCSEnable,
- *				NX_MCUS_IsNFReady
  */
 CBOOL	NX_MCUS_IsNFReady ( void )
 {
@@ -1534,21 +1292,14 @@ CBOOL	NX_MCUS_IsNFReady ( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Determines whether the auto reset of the H/W ECC block to enable or disable.
- *	@param[in]	bEnb	Set this as CTRUE to reset the H/W ECC block automaically.\n
+ *	@param[in]	bEnb	Set this as CTRUE to reset the H/W ECC block automaically.
  *						Set this as CFALSE to reset the H/W ECC block manually.
  *	@return		None.
  *	@remark		You can all this function with CTRUE argument to reset the H/W
- *				ECC block automatically by CLE or ALE.\n
+ *				ECC block automatically by CLE or ALE.
  *				If you want to reset the H/W ECC block only by call
  *				NX_MCUS_ResetNFECCBlock(), you should call this function with
  *				CFALSE argument.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetAutoResetEnable( CBOOL bEnb )
 {
@@ -1574,15 +1325,8 @@ void	NX_MCUS_SetAutoResetEnable( CBOOL bEnb )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the auto reset of the H/W ECC block is enabled or not.
- *	@return		CTRUE indicates the auto reset is enabled.\n
+ *	@return		CTRUE indicates the auto reset is enabled.
  *				CFALSE indicates the auto reset is diabled.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16
  */
 CBOOL	NX_MCUS_GetAutoResetEnable( void )
 {
@@ -1599,13 +1343,6 @@ CBOOL	NX_MCUS_GetAutoResetEnable( void )
 /**
  *	@brief		Reset the Hardware ECC block.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_ResetNFECCBlock( void )
 {
@@ -1629,13 +1366,6 @@ void	NX_MCUS_ResetNFECCBlock( void )
  *	@brief		Set the H/W ECC mode.
  *	@param[in]	bits	Specifies the number of ECC mode in bits - 4, 8, 16 or 24.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetECCMode( NX_MCUS_ECCMODE EccMode )
 {
@@ -1660,13 +1390,6 @@ void	NX_MCUS_SetECCMode( NX_MCUS_ECCMODE EccMode )
 /**
  *	@brief		Get the H/W ECC mode.
  *	@return		the number of ECC mode in bits.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 U32		NX_MCUS_GetECCMode( void )
 {
@@ -1684,13 +1407,6 @@ U32		NX_MCUS_GetECCMode( void )
 /**
  *	@brief		Get NAND flash write data size in bytes.
  *	@return		NAND flash write data size in bytes.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 U32		NX_MCUS_GetNFWriteDataCount( void )
 {
@@ -1707,13 +1423,6 @@ U32		NX_MCUS_GetNFWriteDataCount( void )
 /**
  *	@brief		Get NAND flash read data size in bytes.
  *	@return		NAND flash read data size in bytes.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 U32		NX_MCUS_GetNFReadDataCount( void )
 {
@@ -1729,17 +1438,10 @@ U32		NX_MCUS_GetNFReadDataCount( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether there's an error on read data or not.
- *	@return		CTRUE indicates there's an error on read data.\n
+ *	@return		CTRUE indicates there's an error on read data.
  *				CFALSE indicates there's no error on read data.
  *	@remark		After you read 512 bytes on NAND flash memory, you can check the
  *				result of H/W ECC decoding block whether there's an error on read data.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 CBOOL	NX_MCUS_IsNFError( void )
 {
@@ -1755,17 +1457,10 @@ CBOOL	NX_MCUS_IsNFError( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether H/W ECC decoding has been finished or not.
- *	@return		CTRUE indicates H/W ECC decoding has been finished.\n
+ *	@return		CTRUE indicates H/W ECC decoding has been finished.
  *				CFALSE indicates H/W ECC decoding is busy.
  *	@remark		H/W ECC decoding has been finished after 51 BCLKs from reading
  *				512 bytes on NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 CBOOL	NX_MCUS_IsNFReadEnd( void )
 {
@@ -1781,17 +1476,10 @@ CBOOL	NX_MCUS_IsNFReadEnd( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether H/W ECC encoding has been finished or not.
- *	@return		CTRUE indicates H/W ECC encoding has been finished.\n
+ *	@return		CTRUE indicates H/W ECC encoding has been finished.
  *				CFALSE indicates H/W ECC encoding is busy.
  *	@remark		H/W ECC encoding has been finished after writing 512 bytes on
  *				NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 CBOOL	NX_MCUS_IsNFWriteEnd( void )
 {
@@ -1907,13 +1595,6 @@ void	NX_MCUS_RunECCEncDec( void )
  *	@brief		Get ECC parity code generated by H/W ECC encoding block for 4-bit ECC Mode.
  *	@param[out] pECC	a pointer to store ECC parity code which is 52 bits.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECC4( U32* pECC )
 {
@@ -1935,13 +1616,6 @@ void	NX_MCUS_GetNFECC4( U32* pECC )
  *	@brief		Get ECC parity code generated by H/W ECC encoding block for 8-bit ECC Mode.
  *	@param[out] pECC	a pointer to store ECC parity code which is 104 bits.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECC8( U32* pECC )
 {
@@ -1984,13 +1658,6 @@ void	NX_MCUS_GetNFECC12( U32* pECC )
  *	@brief		Get ECC parity code generated by H/W ECC encoding block for 16-bit ECC Mode.
  *	@param[out] pECC	a pointer to store ECC parity code which is 208 bits.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECC16( U32* pECC )
 {
@@ -2019,13 +1686,6 @@ void	NX_MCUS_GetNFECC16( U32* pECC )
  *	@brief		Get ECC parity code generated by H/W ECC encoding block for 24-bit ECC Mode.
  *	@param[out] pECC	a pointer to store ECC parity code which is 336 bits.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECC24( U32* pECC )
 {
@@ -2063,13 +1723,6 @@ void	NX_MCUS_GetNFECC24( U32* pECC )
  *	@remark		ECC parity code which is set by this function is used for generating
  *				syndrome data on H/W ECC decoding block when you read 512 bytes on
  *				NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetNFOriginECC4( U32 *pECC )
 {
@@ -2093,13 +1746,6 @@ void	NX_MCUS_SetNFOriginECC4( U32 *pECC )
  *	@remark		ECC parity code which is set by this function is used for generating
  *				syndrome data on H/W ECC decoding block when you read 512 bytes on
  *				NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetNFOriginECC8( U32 *pECC )
 {
@@ -2142,13 +1788,6 @@ void	NX_MCUS_SetNFOriginECC12( U32 *pECC )
  *	@remark		ECC parity code which is set by this function is used for generating
  *				syndrome data on H/W ECC decoding block when you read 512 bytes on
  *				NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetNFOriginECC16( U32 *pECC )
 {
@@ -2177,13 +1816,6 @@ void	NX_MCUS_SetNFOriginECC16( U32 *pECC )
  *	@remark		ECC parity code which is set by this function is used for generating
  *				syndrome data on H/W ECC decoding block when you read 1024 bytes on
  *				NAND flash memory.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_SetNFOriginECC24( U32 *pECC )
 {
@@ -2250,13 +1882,6 @@ void	NX_MCUS_SetNFOriginECC60( U32 *pECC )
  *	@brief		Get odd syndromes from H/W ECC decoding for 4-bit ECC mode.
  *	@param[out] pSyndrome	a pointer to store 4 odd syndromes.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECCOddSyndrome4( U32* pSyndrome )
 {
@@ -2286,13 +1911,6 @@ void	NX_MCUS_GetNFECCOddSyndrome4( U32* pSyndrome )
  *	@brief		Get odd syndromes from H/W ECC decoding for 8-bit ECC mode.
  *	@param[out] pSyndrome	a pointer to store 8 odd syndromes.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECCOddSyndrome8( U32* pSyndrome )
 {
@@ -2329,13 +1947,6 @@ void	NX_MCUS_GetNFECCOddSyndrome8( U32* pSyndrome )
  *	@brief		Get odd syndromes from H/W ECC decoding for 12-bit ECC mode.
  *	@param[out] pSyndrome	a pointer to store 12 odd syndromes.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECCOddSyndrome12( U32* pSyndrome )
 {
@@ -2381,13 +1992,6 @@ void	NX_MCUS_GetNFECCOddSyndrome12( U32* pSyndrome )
  *	@brief		Get odd syndromes from H/W ECC decoding for 16-bit ECC mode.
  *	@param[out] pSyndrome	a pointer to store 16 odd syndromes.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECCOddSyndrome16( U32* pSyndrome )
 {
@@ -2441,13 +2045,6 @@ void	NX_MCUS_GetNFECCOddSyndrome16( U32* pSyndrome )
  *	@brief		Get odd syndromes from H/W ECC decoding for 24-bit ECC mode.
  *	@param[out] pSyndrome	a pointer to store 24 odd syndromes.
  *	@return		None.
- *	@see		NX_MCUS_ResetNFECCBlock,		NX_MCUS_SetAutoResetEnable,		NX_MCUS_GetAutoResetEnable,
- *				NX_MCUS_SetECCMode,				NX_MCUS_GetECCMode,
- *				NX_MCUS_GetNFWriteDataCount,	NX_MCUS_GetNFReadDataCount,
- *				NX_MCUS_IsNFError,				NX_MCUS_IsNFReadEnd,			NX_MCUS_IsNFWriteEnd,
- *				NX_MCUS_GetNFECC4,				NX_MCUS_GetNFECC8,				NX_MCUS_GetNFECC16,				NX_MCUS_GetNFECC24,
- *				NX_MCUS_SetNFOriginECC4,		NX_MCUS_SetNFOriginECC8,		NX_MCUS_SetNFOriginECC16,		NX_MCUS_SetNFOriginECC24,
- *				NX_MCUS_GetNFECCOddSyndrome4,	NX_MCUS_GetNFECCOddSyndrome8,	NX_MCUS_GetNFECCOddSyndrome16,	NX_MCUS_GetNFECCOddSyndrome24
  */
 void	NX_MCUS_GetNFECCOddSyndrome24( U32* pSyndrome )
 {
@@ -2514,32 +2111,6 @@ void	NX_MCUS_GetNFECCOddSyndrome24( U32* pSyndrome )
 	pSyndrome[23] = (regval >> BIT_POS)	& BIT_MASK;		// Syndrome 47 - NFSYNDROMEH[7][29:16]
 }
 
-void    NX_MCUS_GetNFECCOddSyndrome( U32* pSyndrome, U32 eccbits )
-{
-    const U32 BIT_SIZE  = 14;
-    const U32 BIT_POS   = 16;
-    const U32 BIT_MASK  = ((1UL<<BIT_SIZE)-1);
-
-    register volatile U32 *pReg;
-    //register volatile U32 *pReg, *pRegH;
-    register U32 regval;
-    int i = 0;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-    NX_ASSERT( CNULL != pSyndrome );
-
-    pReg = &__g_pRegister->NFSYNDROME[0];
-    //pRegH = &__g_pRegister->NFSYNDROMEH[0];
-
-
-    for (i = 0; i < eccbits/2; i++)
-    {
-        regval = ReadIO32(&pReg[i]);
-        pSyndrome[i*2]   = (regval              & BIT_MASK);    // Syndrome 1 - NFSYNDROME[0][13: 0]
-        pSyndrome[i*2+1] = (regval >> BIT_POS)  & BIT_MASK;     // Syndrome 3 - NFSYNDROME[0][29:16]
-    }
-}
-
 void NX_MCUS_SetNumOfELP(U32 ELPNum)
 {
 	const U32 BIT_SIZE	= 7;
@@ -2549,7 +2120,8 @@ void NX_MCUS_SetNumOfELP(U32 ELPNum)
 	U32 DecMode;
 
 	NX_ASSERT( CNULL != __g_pRegister );
-	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum || 24 == ELPNum || 40 == ELPNum || 60 == ELPNum );
+	NX_ASSERT( 4 == ELPNum || 8 == ELPNum || 12 == ELPNum || 16 == ELPNum 
+        || 24 == ELPNum || 40 == ELPNum || 60 == ELPNum );
 
 	regval = ReadIO32(&__g_pRegister->NFECCCTRL);
 	DecMode = (regval&0x10000000)>>2;
@@ -2798,26 +2370,6 @@ void	NX_MCUS_SetELP24( U16 *pELP )
 			| (U32)(pELP[23] & BIT_MASK)<<BIT_POS;
 	WriteIO32(&__g_pRegister->NFELP[11], regval);
 }
-
-void    NX_MCUS_SetELP( U16 *pELP, unsigned int elpbits )
-{
-    const U32 BIT_SIZE  = 14;
-    const U32 BIT_POS   = 14;
-    const U32 BIT_MASK  = ((1UL<<BIT_SIZE)-1);
-    register U32 regval;
-    int i;
-
-    NX_ASSERT( CNULL != __g_pRegister );
-    NX_ASSERT( CNULL != pELP );
-
-    for (i = 0; i < elpbits/2; i++)
-    {
-        regval =  (U32)(pELP[i*2] & BIT_MASK)
-            | (U32)(pELP[i*2+1] & BIT_MASK)<<BIT_POS;
-        WriteIO32(&__g_pRegister->NFELP[i], regval);
-    }
-}
-
 void	NX_MCUS_GetErrLoc4( U16 *pELoc )
 {
 	const U32 BIT_SIZE	= 14;

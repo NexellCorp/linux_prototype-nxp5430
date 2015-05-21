@@ -100,7 +100,11 @@ U32		NX_SSP_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress 	Module's base address
  *	@return		None.
  */
+<<<<<<< .mine
+void	NX_SSP_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
+=======
 void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+>>>>>>> .r453
 {
 
 	NX_ASSERT( CNULL != BaseAddress );
@@ -114,11 +118,19 @@ void	NX_SSP_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
+<<<<<<< .mine
+void*	NX_SSP_GetBaseAddress( U32 ModuleIndex )
+=======
 U32*	NX_SSP_GetBaseAddress( U32 ModuleIndex )
+>>>>>>> .r453
 {
 	NX_ASSERT( NUMBER_OF_SSP_MODULE > ModuleIndex );
 
+<<<<<<< .mine
+	return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
+=======
 	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
+>>>>>>> .r453
 }
 
 
@@ -588,7 +600,6 @@ U32		NX_SSP_GetDMABusWidth( U32 ModuleIndex )
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT(DSS != 3);
 
 	DSS = (U32)((ReadIO32(&pRegister->MODE_CFG)>>17) & 0x03);
 
