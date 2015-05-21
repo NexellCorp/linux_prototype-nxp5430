@@ -456,7 +456,9 @@ extern "C"
 
 // HDMI는 각 비트별로.. 8비트까지 사용한다.
 // PHY는 (1MB+2KB ~ 1MB+4KB)
-#define HDMI_PHY_OFFSET 0x400 // [19:10] == 0x01
+//#define HDMI_PHY_OFFSET 0x400 // [19:10] == 0x01
+#define HDMI_PHY_OFFSET \
+        (PHY_BASEADDR_HDMI_PHY_MODULE - PHY_BASEADDR_HDMI_MODULE)
 
 #define  HDMI_PHY_REG00 (OTHER_ADDR_OFFSET + HDMI_PHY_OFFSET + 0x00000000)  // 0x01
 #define  HDMI_PHY_Reg04 (OTHER_ADDR_OFFSET + HDMI_PHY_OFFSET + 0x00000004)  //  1  0  0  1  0  0  0  1      Reserved     Reserved  CLK_SEL[1]  CLK_SEL[0]   Reserved    Reserved     Reserved    Reserved
@@ -557,13 +559,8 @@ CBOOL NX_HDMI_Initialize( void );
 U32   NX_HDMI_GetNumberOfModule( void );
 
 U32   NX_HDMI_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void  NX_HDMI_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*  NX_HDMI_GetBaseAddress( U32 ModuleIndex );
-=======
 void  NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*  NX_HDMI_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 U32   NX_HDMI_GetPhysicalAddress ( U32 ModuleIndex );
 CBOOL NX_HDMI_OpenModule( U32 ModuleIndex );
 CBOOL NX_HDMI_CloseModule( U32 ModuleIndex );

@@ -130,13 +130,8 @@ U32		NX_SPDIFRX_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_SPDIFRX_GetResetNumber( U32 ModuleIndex, U32 ChannelIndex );
 U32		NX_SPDIFRX_GetNumberOfReset( void );
 U32		NX_SPDIFRX_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void	NX_SPDIFRX_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*	NX_SPDIFRX_GetBaseAddress( U32 ModuleIndex );
-=======
 void	NX_SPDIFRX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*	NX_SPDIFRX_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 CBOOL	NX_SPDIFRX_OpenModule( U32 ModuleIndex );
 CBOOL	NX_SPDIFRX_CloseModule( U32 ModuleIndex );
 CBOOL	NX_SPDIFRX_CheckBusy( U32 ModuleIndex );

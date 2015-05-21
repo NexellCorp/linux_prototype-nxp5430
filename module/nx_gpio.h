@@ -39,11 +39,11 @@ extern "C"
 		volatile U32 GPIOxINTENB;		///< 0x10	: Interrupt Enable Register
 		volatile U32 GPIOxDET;			///< 0x14	: Event Detect Register
 		volatile U32 GPIOxPAD;			///< 0x18	: PAD Status Register
-		volatile U32 GPIOxPUENB;		///< 0x1C	: Pull Up Enable Register
+		volatile U32 __Reserved0;		///< 0x1C	:
 		volatile U32 GPIOxALTFN[2];		///< 0x20	: Alternate Function Select Register
 		volatile U32 GPIOxDETMODEEX;    ///< 0x28   : Event Detect Mode extended Register
 
-		volatile U32 __Reserved[4];		///< 0x2B	:
+		volatile U32 __Reserved1[4];	///< 0x2B	:
 		volatile U32 GPIOxDETENB;		///< 0x3C	: IntPend Detect Enable Register
 
 		volatile U32 GPIOx_SLEW;					///< 0x40	: Slew Register
@@ -58,7 +58,7 @@ extern "C"
 		volatile U32 GPIOx_PULLENB_DISABLE_DEFAULT; ///< 0x64	: Pull Enable/Disable selection On/Off Register
 		volatile U32 GPIOx_InputMuxSelect0;			///< 0x68
 		volatile U32 GPIOx_InputMuxSelect1;			///< 0x6C
-		U8 __Reserved1[0x1000-0x70];
+		U8 __Reserved2[0x1000-0x70];
 	};
 
 	///@brief	GPIO Interrupts for interrupt interface
@@ -117,7 +117,7 @@ extern "C"
 		NX_GPIO_PADFUNC_2			= 2UL,			///< Alternate function 2
 		NX_GPIO_PADFUNC_3			= 3UL			///< Alternate function 3
 
-	} NX_GPIO_PADFUNC ;
+	}NX_GPIO_PADFUNC ;
 
 	typedef enum
 	{
@@ -130,11 +130,10 @@ extern "C"
 
 	typedef enum
 	{
-		NX_GPIO_PADPULL_DN			= 0UL,
-		NX_GPIO_PADPULL_UP			= 1UL,
-		NX_GPIO_PADPULL_OFF			= 2UL
-	}NX_GPIO_PADPULL;
-
+		NX_GPIO_PULL_DOWN		= 0UL,
+		NX_GPIO_PULL_UP			= 1UL,
+		NX_GPIO_PULL_OFF		= 2UL				// Add
+	}NX_GPIO_PULL;
 //------------------------------------------------------------------------------
 /// @name	Module Interface
 //@{
@@ -147,13 +146,8 @@ U32		NX_GPIO_GetNumberOfModule( void );
 //@{
 U32		NX_GPIO_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_GPIO_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void	NX_GPIO_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*	NX_GPIO_GetBaseAddress( U32 ModuleIndex );
-=======
 void	NX_GPIO_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*	NX_GPIO_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 CBOOL	NX_GPIO_OpenModule( U32 ModuleIndex );
 CBOOL	NX_GPIO_CloseModule( U32 ModuleIndex );
 CBOOL	NX_GPIO_CheckBusy( U32 ModuleIndex );
@@ -210,23 +204,12 @@ NX_GPIO_PADFUNC	NX_GPIO_GetPadFunction( U32 ModuleIndex, U32 BitNumber );
 //@{
 void	NX_GPIO_SetSlew	( U32 ModuleIndex, U32 BitNumber, CBOOL Enable );
 CBOOL	NX_GPIO_GetSlew	( U32 ModuleIndex, U32 BitNumber );
-void	NX_GPIO_SetSlewDisableDefault	( U32 ModuleIndex, U32 BitNumber, CBOOL Enable );
-
 void	NX_GPIO_SetSlew32	( U32 ModuleIndex, U32 Value );
 U32		NX_GPIO_GetSlew32	( U32 ModuleIndex );
 void	NX_GPIO_SetDriveStrength(U32 ModuleIndex, U32 BitNumber, NX_GPIO_DRVSTRENGTH drvstrength);
 NX_GPIO_DRVSTRENGTH		NX_GPIO_GetDriveStrength(U32 ModuleIndex, U32 BitNumber);
-<<<<<<< .mine
-void	NX_GPIO_SetDriveStrengthDisableDefault	( U32 ModuleIndex, U32 BitNumber, CBOOL Enable );
-
-void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PADPULL PullSel );
-NX_GPIO_PADPULL	NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
-=======
-void	NX_GPIO_SetDriveStrengthDisableDefault	( U32 ModuleIndex, U32 BitNumber, CBOOL Enable );
-
 void	NX_GPIO_SetPullEnable	( U32 ModuleIndex, U32 BitNumber, NX_GPIO_PULL PullSel );
 NX_GPIO_PULL	NX_GPIO_GetPullEnable	( U32 ModuleIndex, U32 BitNumber );
->>>>>>> .r453
 void	NX_GPIO_SetPullEnable32	( U32 ModuleIndex, U32 PullEnb, U32 PullSel );
 void	NX_GPIO_GetPullEnable32	( U32 ModuleIndex, U32* PullEnb, U32* PullSel );
 

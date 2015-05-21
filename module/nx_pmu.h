@@ -62,13 +62,8 @@ U32		NX_PMU_GetNumberOfModule( void );
 //@{
 U32		NX_PMU_GetPhysicalAddress( void );
 U32		NX_PMU_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void	NX_PMU_SetBaseAddress( void* BaseAddress );
-void*	NX_PMU_GetBaseAddress( void );
-=======
 void	NX_PMU_SetBaseAddress( U32* BaseAddress );
 U32*	NX_PMU_GetBaseAddress( void );
->>>>>>> .r453
 CBOOL	NX_PMU_OpenModule( void );
 CBOOL	NX_PMU_CloseModule( void );
 CBOOL	NX_PMU_CheckBusy( void );

@@ -20,7 +20,7 @@
 //------------------------------------------------------------------------------
 //  includes
 //------------------------------------------------------------------------------
-#include "nx_prototype.h"
+#include "../base/nx_prototype.h"
 
 #ifdef	__cplusplus
 extern "C"
@@ -130,13 +130,8 @@ U32		NX_SPDIFTX_GetNumberOfModule( void );
 //@{
 U32		NX_SPDIFTX_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_SPDIFTX_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void	NX_SPDIFTX_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*	NX_SPDIFTX_GetBaseAddress( U32 ModuleIndex );
-=======
 void	NX_SPDIFTX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*	NX_SPDIFTX_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 CBOOL	NX_SPDIFTX_OpenModule( U32 ModuleIndex );
 CBOOL	NX_SPDIFTX_CloseModule( U32 ModuleIndex );
 CBOOL	NX_SPDIFTX_CheckBusy( U32 ModuleIndex );

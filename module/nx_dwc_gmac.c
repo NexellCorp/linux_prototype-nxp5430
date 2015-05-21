@@ -410,7 +410,7 @@ void    NX_DWC_GMAC_DMA_INIT_RX_DESC(volatile EMAC_DMA_DESC_T *p, void *buffer, 
     p->des1.rx.disable_ic = 1;
     p->des1.rx.end_ring = end_ring;
     p->des2 = buffer;
-    p->des3 = NULL;
+    p->des3 = 0;
 }
 
 void    NX_DWC_GMAC_DMA_START_RX(U32 ModuleIndex)
@@ -1225,7 +1225,7 @@ return sizeof( *__g_pRegister );
  *              NX_DWC_GMAC_OpenModule,             NX_DWC_GMAC_CloseModule,
  *              NX_DWC_GMAC_CheckBusy,
  */
-void    NX_DWC_GMAC_SetBaseAddress( U32 ModuleIndex, U32 ChannelIndex, U32* BaseAddress )
+void    NX_DWC_GMAC_SetBaseAddress( U32 ModuleIndex, U32 ChannelIndex, U32 BaseAddress )
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_DWC_GMAC_MODULE > ModuleIndex );

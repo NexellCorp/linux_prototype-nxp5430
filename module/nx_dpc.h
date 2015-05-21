@@ -540,9 +540,30 @@ void	NX_DPC_SetYCOrder ( U32 ModuleIndex, NX_DPC_YCORDER ycorder );
 void	NX_DPC_SetLumaGain ( U32 ModuleIndex, U32 LumaGain );
 
 
+//--------------------------------------------------------------------------
+///	@name	Internal Video encoder operations
+//--------------------------------------------------------------------------
+//@{
+void    NX_DPC_SetSecondaryDPCSync( U32 ModuleIndex, CBOOL bEnb );
+CBOOL   NX_DPC_GetSecondaryDPCSync( U32 ModuleIndex );
 
+void	NX_DPC_SetENCEnable( U32 ModuleIndex, CBOOL bEnb );
+CBOOL	NX_DPC_GetENCEnable( U32 ModuleIndex );
+void	NX_DPC_SetVideoEncoderPowerDown( U32 ModuleIndex, CBOOL bEnb );
+CBOOL	NX_DPC_GetVideoEncoderPowerDown( U32 ModuleIndex );
 
+void	NX_DPC_SetVideoEncoderMode( U32 ModuleIndex, NX_DPC_VBS vbs, CBOOL bPedestal );
+void	NX_DPC_SetVideoEncoderSCHLockControl( U32 ModuleIndex, CBOOL bFreeRun );
+CBOOL	NX_DPC_GetVideoEncoderSCHLockControl( U32 ModuleIndex );
 
+void	NX_DPC_SetVideoEncoderBandwidth( U32 ModuleIndex, NX_DPC_BANDWIDTH Luma, NX_DPC_BANDWIDTH Chroma );
+void	NX_DPC_GetVideoEncoderBandwidth( U32 ModuleIndex, NX_DPC_BANDWIDTH *pLuma, NX_DPC_BANDWIDTH *pChroma );
+void	NX_DPC_SetVideoEncoderColorControl( U32 ModuleIndex, S8 SCH, S8 HUE, S8 SAT, S8 CRT, S8 BRT );              
+void	NX_DPC_GetVideoEncoderColorControl( U32 ModuleIndex, S8 *pSCH, S8 *pHUE, S8 *pSAT, S8 *pCRT, S8 *pBRT );    
+void	NX_DPC_SetVideoEncoderFSCAdjust( U32 ModuleIndex, S16 adjust );
+U16		NX_DPC_GetVideoEncoderFSCAdjust( U32 ModuleIndex );
+void	NX_DPC_SetVideoEncoderTiming( U32 ModuleIndex, U32 HSOS, U32 HSOE, U32 VSOS, U32 VSOE );
+void	NX_DPC_GetVideoEncoderTiming( U32 ModuleIndex, U32 *pHSOS, U32 *pHSOE, U32 *pVSOS, U32 *pVSOE );
 
 
 

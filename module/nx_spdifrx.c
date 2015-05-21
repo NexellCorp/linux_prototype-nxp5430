@@ -120,11 +120,7 @@ U32		NX_SPDIFRX_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-<<<<<<< .mine
-void	NX_SPDIFRX_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
-=======
 void	NX_SPDIFRX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
->>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
@@ -138,19 +134,11 @@ void	NX_SPDIFRX_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@param[in]	ModuleIndex		An index of module ( 0 ~ x ).
  *	@return		Module's base address.
  */
-<<<<<<< .mine
-void*	NX_SPDIFRX_GetBaseAddress( U32 ModuleIndex )
-=======
 U32*	NX_SPDIFRX_GetBaseAddress( U32 ModuleIndex )
->>>>>>> .r453
 {
 	NX_ASSERT( NUMBER_OF_SPDIFRX_MODULE > ModuleIndex );
 
-<<<<<<< .mine
-	return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
-=======
 	return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
->>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------

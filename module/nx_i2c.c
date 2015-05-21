@@ -98,11 +98,7 @@ U32     NX_I2C_GetSizeOfRegisterSet( void )
  *  @param[in]	BaseAddress Module's base address
  *  @return		None.
  */
-<<<<<<< .mine
-void    NX_I2C_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
-=======
 void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
->>>>>>> .r453
 {
     NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
@@ -116,19 +112,11 @@ void    NX_I2C_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *  @param[in]   ModuleIndex     A index of module.
  *  @return		Module's base address.
  */
-<<<<<<< .mine
-void*    NX_I2C_GetBaseAddress( U32 ModuleIndex )
-=======
 U32*    NX_I2C_GetBaseAddress( U32 ModuleIndex )
->>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
 
-<<<<<<< .mine
-    return (void*)__g_ModuleVariables[ModuleIndex].pRegister;
-=======
     return (U32*)__g_ModuleVariables[ModuleIndex].pRegister;
->>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
@@ -222,7 +210,6 @@ void    NX_I2C_SetInterruptEnable( U32 ModuleIndex, S32 IntNum, CBOOL Enable )
     register struct NX_I2C_RegisterSet* pRegister;
     register U32 ReadValue;
 
-    IntNum = IntNum;
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
     //NX_ASSERT( 0 == IntNum );
     NX_ASSERT( (0==Enable) || (1==Enable) );
@@ -254,7 +241,6 @@ CBOOL   NX_I2C_GetInterruptEnable( U32 ModuleIndex, S32 IntNum )
 
 	register struct NX_I2C_RegisterSet* pRegister;
 
-    IntNum = IntNum;
 	NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
 	
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
@@ -335,7 +321,6 @@ CBOOL   NX_I2C_GetInterruptPending( U32 ModuleIndex, S32 IntNum )
 
     register struct NX_I2C_RegisterSet* pRegister;
 
-    IntNum = IntNum;
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
 	
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
@@ -380,13 +365,14 @@ U32     NX_I2C_GetInterruptPending32( U32 ModuleIndex )
  */
 void    NX_I2C_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
 {
-    const U32 INTC_POS   = 4;
+    const U32 PEND_POS   = 4;
+    const U32 INTC_POS   = 8;
+    const U32 PEND_MASK  = 1UL << PEND_POS;
     const U32 INTC_MASK  = 1UL << INTC_POS;
 
     register struct NX_I2C_RegisterSet* pRegister;
     register U32 ReadValue;
 
-    IntNum = IntNum;
     NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
 	
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
@@ -394,7 +380,7 @@ void    NX_I2C_ClearInterruptPending( U32 ModuleIndex, S32 IntNum )
     //NX_ASSERT( 0 == IntNum );
 
     ReadValue   =   ReadIO32(&pRegister->ICCR);
-    ReadValue   &=  ~INTC_MASK;
+    ReadValue   &=  ~PEND_MASK;
     ReadValue   |=  INTC_MASK;
 
     WriteIO32(&pRegister->ICCR, ReadValue);
@@ -743,7 +729,7 @@ U32    NX_I2C_GetSlaveAddress( U32 ModuleIndex )
  * @brief      	Set Ack Generation Enable or Diable
  * @param[in] 	ModuleIndex      A index of module.
  * @param[in] 	bAckGen CTRUE indicates that Ack Generate.
- *                       		 CFALSE indicates that Ack Not Generation.
+ *                       		CFALSE indicates that Ack Not Generation.
  * @return     	None.
  * @remarks 	Use only for receiver mode.
  */
@@ -822,27 +808,6 @@ void        NX_I2C_ControlMode ( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode, NX_I
 
     WriteIO32(&pRegister->ICSR , ( ReadValue | (TxRxMode<<TX_RX_POS) | (Signal<<ST_BUSY_POS) | TXRX_ENB_MASK ));
 }
-
-void        NX_I2C_SetTXRXEnable( U32 ModuleIndex, NX_I2C_TXRXMODE TxRxMode )
-{
-    const U32   TX_RX_POS       =   6;
-    const U32   TXRX_ENB_MASK   =   1UL << 4;
-    register struct NX_I2C_RegisterSet*    pRegister;
-    register U32    ReadValue;
-
-    NX_ASSERT( NUMBER_OF_I2C_MODULE > ModuleIndex );
-    NX_ASSERT( 4 > TxRxMode );
-    pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-    NX_ASSERT( CNULL != pRegister );
-
-    ReadValue = ReadIO32(&pRegister->ICSR);
-    ReadValue &= ~TXRX_ENB_MASK;
-    ReadValue |= (U32)TxRxMode << TX_RX_POS;
-    
-    WriteIO32(&pRegister->ICSR , ReadValue);
-
-}
-
 
 //------------------------------------------------------------------------------
 /**

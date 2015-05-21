@@ -457,11 +457,7 @@ extern "C"
 
 	CBOOL		NX_TIEOFF_Initialize(void);
 	U32			NX_TIEOFF_GetPhysicalAddress(void);
-<<<<<<< .mine
-	void		NX_TIEOFF_SetBaseAddress( void* BaseAddress );
-=======
 	void		NX_TIEOFF_SetBaseAddress( U32* BaseAddress );
->>>>>>> .r453
 
 	void		NX_TIEOFF_Set(U32 tieoff_index, U32 tieoff_value);
 	U32			NX_TIEOFF_Get(U32 tieoff_index);

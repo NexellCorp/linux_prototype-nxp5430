@@ -88,13 +88,8 @@ U32     NX_SCALER_GetNumberOfModule( void );
 //@{
 U32     NX_SCALER_GetPhysicalAddress( U32 ModuleIndex );
 U32     NX_SCALER_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void    NX_SCALER_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*    NX_SCALER_GetBaseAddress( U32 ModuleIndex );
-=======
 void    NX_SCALER_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*    NX_SCALER_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 CBOOL   NX_SCALER_OpenModule( U32 ModuleIndex );
 CBOOL   NX_SCALER_CloseModule( U32 ModuleIndex );
 CBOOL   NX_SCALER_CheckBusy( U32 ModuleIndex );

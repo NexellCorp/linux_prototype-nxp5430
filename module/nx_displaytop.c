@@ -413,3 +413,19 @@ void	NX_DISPLAYTOP_SetLCDIF_i80Enb( CBOOL Enb )
 }
 
 
+//enum PrimPAD_MUX_Index{ // Primary TFT MUX
+//	PADMUX_PrimaryMLC = 0,
+//	PADMUX_PrimaryMPU = 1,
+//	PADMUX_SecondaryMLC = 2,
+//	PADMUX_ResolutionConv = 3,
+//};
+//enum PADCLK_Config {
+//	PADCLK_CLK = 0,
+//	PADCLK_InvCLK = 1,
+//	PADCLK_ReservedCLK = 2,
+//	PADCLK_ReservedInvCLK = 3,
+//	PADCLK_CLK_div2_0   = 4,
+//	PADCLK_CLK_div2_90  = 5,
+//	PADCLK_CLK_div2_180 = 6,
+//	PADCLK_CLK_div2_270 = 7,
+//};

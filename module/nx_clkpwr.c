@@ -1583,7 +1583,7 @@ U32		NX_CLKPWR_GetCPUClockOnStatus( void )
 {
 	register U32 regvalue;
 
-//	NX_ASSERT( nCPU	< 8 );
+	NX_ASSERT( nCPU	< 8 );
 
 	NX_ASSERT( CNULL != __g_pRegister );
 

@@ -15,6 +15,7 @@
 //------------------------------------------------------------------------------
 #include <nx_chip.h>
 #include "nx_usb20otg.h"
+#include <linux/string.h> // for memset
 
 static	NX_USB20OTG_RegisterSet *__g_pRegister[NUMBER_OF_USB20OTG_MODULE];
 static	NX_USB20OTG_APB_RegisterSet *__g_pApbRegister[0];
@@ -84,11 +85,7 @@ U32 		NX_USB20OTG_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-<<<<<<< .mine
-void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, void* BaseAddress )
-=======
 void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, U32* BaseAddress )
->>>>>>> .r453
 {
     if( ModuleIndex == 0 ) { __g_pRegister[0] = (NX_USB20OTG_RegisterSet *)BaseAddress; }
     if( ModuleIndex == 1 ) { __g_pApbRegister[0] = (NX_USB20OTG_APB_RegisterSet *)BaseAddress; }
@@ -99,19 +96,10 @@ void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-<<<<<<< .mine
-void*    NX_USB20OTG_GetBaseAddress( U32 ModuleIndex )
-=======
 U32*    NX_USB20OTG_GetBaseAddress(U32 ModuleIndex )
->>>>>>> .r453
 {
-<<<<<<< .mine
-    if( ModuleIndex == 0 ) { return (void*)__g_pRegister[0];	 }
-    if( ModuleIndex == 1 ) { return (void*)__g_pApbRegister[0];	 }
-=======
     if( ModuleIndex == 0 ) { return (U32*)__g_pRegister[0];	 }
     if( ModuleIndex == 1 ) { return (U32*)__g_pApbRegister[0];	 }
->>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
@@ -120,7 +108,7 @@ U32*    NX_USB20OTG_GetBaseAddress(U32 ModuleIndex )
  *	@return		Module's physical address. \n
  *				It is equal to PHY_BASEADDR_USB20OTG?_MODULE in <nx_chip.h>.
  */
-U32 	NX_USB20OTG_GetPhysicalAddress( U32 ModuleIndex  )
+U32 		NX_USB20OTG_GetPhysicalAddress( U32 ModuleIndex  )
 {
     if( ModuleIndex == 0 ) { return PHY_BASEADDR_WITH_CHANNEL_LIST( USB20OTG, AHBS0 ); }
     if( ModuleIndex == 1 ) { return PHY_BASEADDR_WITH_CHANNEL_LIST( USB20OTG, APB ); }

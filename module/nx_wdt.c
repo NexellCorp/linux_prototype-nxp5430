@@ -28,8 +28,9 @@ static	struct
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return  CTRUE	indicates that Initialize is successed.
- *			 CFALSE indicates that Initialize is failed.
+ *	@return \b CTRUE	indicates that Initialize is successed.\r\n
+ *			\b CFALSE indicates that Initialize is failed.\r\n
+ *	@see	NX_WDT_GetNumberOfModule
  */
 CBOOL	NX_WDT_Initialize( void )
 {
@@ -258,13 +259,13 @@ void	NX_WDT_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 	NX_ASSERT( NUMBER_OF_WDT_MODULE > ModuleIndex );
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
+	NX_ASSERT( 7 > IntNum );
+	NX_ASSERT( (0==Enable) || (1==Enable) );
 
-	NX_ASSERT( ( CFALSE == Enable) || ( CTRUE == Enable) );
-  
 	ReadValue	=	ReadIO32(&pRegister->WTCON) & ~PEND_MASK;
 
-	ReadValue	&=	(U32)(~(1UL << (PEND_POS)));
-	ReadValue	|=	(U32)Enable << (PEND_POS) ;
+	ReadValue	&=	(U32)(~(1UL << (IntNum+PEND_POS)));
+	ReadValue	|=	(U32)Enable << (IntNum+PEND_POS) ;
 
 	WriteIO32(&pRegister->WTCON, ReadValue);
 }
@@ -330,7 +331,7 @@ void	NX_WDT_SetPrescaler( U32 ModuleIndex, U8 Prescaler )
 	
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0xFF <= Prescaler );
+	NX_ASSERT( 0xFF >= Prescaler );
 
 	regvalue 	 = ReadIO32(&pRegister->WTCON);
 	regvalue	&= ~PRE_MASK;
@@ -514,7 +515,7 @@ void	NX_WDT_SetReloadCount( U32 ModuleIndex, U16 ReloadData )
 	
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0xFFFF >= ReloadData );
+	NX_ASSERT( 0xFFFF > ReloadData );
 
 	regvalue 	 = ReadIO32(&pRegister->WTDAT);
 	regvalue	&= ~RE_DATA_MASK;
@@ -558,7 +559,7 @@ void	NX_WDT_SetCurrentCount( U32 ModuleIndex, U16 CurData )
 	
 	pRegister	=	__g_ModuleVariables[ModuleIndex].pRegister;
 	NX_ASSERT( CNULL != pRegister );
-	NX_ASSERT( 0xFFFF >= CurData );
+	NX_ASSERT( 0xFFFF > CurData );
 
 	regvalue 	 = ReadIO32(&pRegister->WTCNT);
 	regvalue	&= ~CUR_DATA_MASK;

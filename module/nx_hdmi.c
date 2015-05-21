@@ -75,8 +75,9 @@ void NX_HDMI_SetReg( U32 ModuleIndex, U32 Offset, U32 regvalue )
 //------------------------------------------------------------------------------
 /**
  *	@brief	Initialize of prototype enviroment & local variables.
- *	@return CTRUE	indicate that Initialize is successed.
- *			CFALSE	indicate that Initialize is failed.
+ *	@return \b CTRUE	indicate that Initialize is successed.\n
+ *			\b CFALSE	indicate that Initialize is failed.
+ *	@see	NX_HDMI_GetNumberOfModule
  */
 CBOOL	NX_HDMI_Initialize( void )
 {
@@ -93,8 +94,9 @@ CBOOL	NX_HDMI_Initialize( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get number of modules in the chip.
- *	@return		Module's number. 
+ *	@return		Module's number. \n
  *				It is equal to NUMBER_OF_HDMI_MODULE in <nx_chip.h>.
+ *	@see		NX_HDMI_Initialize
  */
 U32		NX_HDMI_GetNumberOfModule( void )
 {
@@ -105,6 +107,10 @@ U32		NX_HDMI_GetNumberOfModule( void )
 /**
  *	@brief		Get a size, in byte, of register set.
  *	@return		Size of module's register set.
+ *	@see		NX_HDMI_GetPhysicalAddress,
+ *				NX_HDMI_SetBaseAddress,			NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
+ *				NX_HDMI_CheckBusy,
  */
 U32		NX_HDMI_GetSizeOfRegisterSet( void )
 {
@@ -116,12 +122,12 @@ U32		NX_HDMI_GetSizeOfRegisterSet( void )
  *	@brief		Set a base address of register set.
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
+ *	@see		NX_HDMI_GetPhysicalAddress,		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
+ *				NX_HDMI_CheckBusy,
  */
-<<<<<<< .mine
-void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
-=======
 void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
->>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
@@ -132,26 +138,26 @@ void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
 /**
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
+ *	@see		NX_HDMI_GetPhysicalAddress,		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_SetBaseAddress,
+ *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
+ *				NX_HDMI_CheckBusy,
  */
-<<<<<<< .mine
-void*	NX_HDMI_GetBaseAddress( U32 ModuleIndex )
-=======
 U32*	NX_HDMI_GetBaseAddress( U32 ModuleIndex )
->>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
-<<<<<<< .mine
-	return (void*)HDMI_BaseAddr;
-=======
 	return (U32*)HDMI_BaseAddr;
->>>>>>> .r453
 }
 
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's physical address.
- *	@return		Module's physical address. 
+ *	@return		Module's physical address. \n
  *				It is equal to PHY_BASEADDR_HDMI?_MODULE in <nx_chip.h>.
+ *	@see		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_SetBaseAddress,			NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
+ *				NX_HDMI_CheckBusy,
  */
 U32		NX_HDMI_GetPhysicalAddress( U32 ModuleIndex )
 {
@@ -167,8 +173,12 @@ U32		NX_HDMI_GetPhysicalAddress( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		CTRUE	indicate that Initialize is successed. 
- *				CFALSE	indicate that Initialize is failed.,
+ *	@return		\b CTRUE	indicate that Initialize is successed. \n
+ *				\b CFALSE	indicate that Initialize is failed.
+ *	@see		NX_HDMI_GetPhysicalAddress,		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_SetBaseAddress,			NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_CloseModule,
+ *				NX_HDMI_CheckBusy,
  */
 CBOOL	NX_HDMI_OpenModule( U32 ModuleIndex )
 {
@@ -181,8 +191,12 @@ CBOOL	NX_HDMI_OpenModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		CTRUE	indicate that Deinitialize is successed. 
- *				CFALSE	indicate that Deinitialize is failed.
+ *	@return		\b CTRUE	indicate that Deinitialize is successed. \n
+ *				\b CFALSE	indicate that Deinitialize is failed.
+ *	@see		NX_HDMI_GetPhysicalAddress,		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_SetBaseAddress,			NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_OpenModule,
+ *				NX_HDMI_CheckBusy,
  */
 CBOOL	NX_HDMI_CloseModule( U32 ModuleIndex )
 {
@@ -195,8 +209,11 @@ CBOOL	NX_HDMI_CloseModule( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		CTRUE	indicate that Module is Busy. 
- *				CFALSE	indicate that Module is NOT Busy.
+ *	@return		\b CTRUE	indicate that Module is Busy. \n
+ *				\b CFALSE	indicate that Module is NOT Busy.
+ *	@see		NX_HDMI_GetPhysicalAddress,		NX_HDMI_GetSizeOfRegisterSet,
+ *				NX_HDMI_SetBaseAddress,			NX_HDMI_GetBaseAddress,
+ *				NX_HDMI_OpenModule,				NX_HDMI_CloseModule,
  */
 CBOOL	NX_HDMI_CheckBusy( U32 ModuleIndex )
 {
@@ -211,8 +228,11 @@ CBOOL	NX_HDMI_CheckBusy( U32 ModuleIndex )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Get module's reset index.
- *	@return		Module's reset index.
+ *	@return		Module's reset index.\n
  *				It is equal to RESETINDEX_OF_HDMI?_MODULE_i_nRST in <nx_chip.h>.
+ *	@see		NX_RSTCON_Enter,
+ *				NX_RSTCON_Leave,
+ *				NX_RSTCON_GetStatus
  */
 U32 NX_HDMI_GetResetNumber ( U32 ModuleIndex, U32 ChannelNumber )
 {
@@ -237,8 +257,17 @@ U32 NX_HDMI_GetResetNumber ( U32 ModuleIndex, U32 ChannelNumber )
 ///**
 // *	@brief		Get a interrupt number for the interrupt controller.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@return		A interrupt number.
+// *	@return		A interrupt number.\n
 // *				It is equal to INTNUM_OF_HDMI?_MODULE in <nx_chip.h>.
+// *	@see		NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 // */
 U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 {
@@ -254,11 +283,20 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Set a specified interrupt to be enabled or disabled.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@param[in]	IntNum	a interrupt Number .
+// *	@param[in]	IntNum	a interrupt Number .\n
 // *						refer to NX_HDMI_INTCH_xxx in <nx_hdmi.h>
-// *	@param[in]	Enable	Set as CTRUE to enable a specified interrupt. 
-// *						Set as CFALSE to disable a specified interrupt.
+// *	@param[in]	Enable	\b Set as CTRUE to enable a specified interrupt. \r\n
+// *						\b Set as CFALSE to disable a specified interrupt.
 // *	@return		None.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 // */
 //void	NX_HDMI_SetInterruptEnable( U32 ModuleIndex, U32 IntNum, CBOOL Enable )
 //{
@@ -282,10 +320,19 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Indicates whether a specified interrupt is enabled or disabled.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@param[in]	IntNum	a interrupt Number.
+// *	@param[in]	IntNum	a interrupt Number.\n
 // *						refer to NX_HDMI_INTCH_xxx in <nx_hdmi.h>
-// *	@return		CTRUE	indicates that a specified interrupt is enabled. 
-// *				CFALSE	indicates that a specified interrupt is disabled.
+// *	@return		\b CTRUE	indicates that a specified interrupt is enabled. \r\n
+// *				\b CFALSE	indicates that a specified interrupt is disabled.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //CBOOL	NX_HDMI_GetInterruptEnable( U32 ModuleIndex, U32 IntNum )
@@ -299,10 +346,19 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Indicates whether a specified interrupt is pended or not
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@param[in]	IntNum	a interrupt Number.
+// *	@param[in]	IntNum	a interrupt Number.\n
 // *						refer to NX_HDMI_INTCH_xxx in <nx_hdmi.h>
-// *	@return		CTRUE	indicates that a specified interrupt is pended. 
-// *				CFALSE	indicates that a specified interrupt is not pended.
+// *	@return		\b CTRUE	indicates that a specified interrupt is pended. \r\n
+// *				\b CFALSE	indicates that a specified interrupt is not pended.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //CBOOL	NX_HDMI_GetInterruptPending( U32 ModuleIndex, U32 IntNum )
@@ -321,9 +377,18 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Clear a pending state of specified interrupt.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@param[in]	IntNum	a interrupt number.
+// *	@param[in]	IntNum	a interrupt number.\n
 // *						refer to NX_HDMI_INTCH_xxx in <nx_hdmi.h>
 // *	@return		None.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //void	NX_HDMI_ClearInterruptPending( U32 ModuleIndex, U32 IntNum )
@@ -339,9 +404,18 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Set all interrupts to be enabled or disabled.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@param[in]	Enable	Set as CTRUE to enable all interrupts. 
-// *						Set as CFALSE to disable all interrupts.
+// *	@param[in]	Enable	\b Set as CTRUE to enable all interrupts. \r\n
+// *						\b Set as CFALSE to disable all interrupts.
 // *	@return		None.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //void	NX_HDMI_SetInterruptEnableAll( U32 ModuleIndex, CBOOL Enable )
@@ -363,8 +437,17 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Indicates whether some of interrupts are enabled or not.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@return		CTRUE	indicates that one or more interrupts are enabled. 
-// *				CFALSE	indicates that all interrupts are disabled.
+// *	@return		\b CTRUE	indicates that one or more interrupts are enabled. \r\n
+// *				\b CFALSE	indicates that all interrupts are disabled.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //CBOOL	NX_HDMI_GetInterruptEnableAll( U32 ModuleIndex )
@@ -378,8 +461,17 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Indicates whether some of interrupts are pended or not.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@return		CTRUE	indicates that one or more interrupts are pended. 
-// *				CFALSE	indicates that no interrupt is pended.
+// *	@return		\b CTRUE	indicates that one or more interrupts are pended. \r\n
+// *				\b CFALSE	indicates that no interrupt is pended.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_ClearInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //CBOOL	NX_HDMI_GetInterruptPendingAll( U32 ModuleIndex )
@@ -399,6 +491,15 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 // *	@brief		Clear pending state of all interrupts.
 // *	@param[in]	ModuleIndex		an index of module.
 // *	@return		None.
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_GetInterruptPendingNumber
 //
 // */
 //void	NX_HDMI_ClearInterruptPendingAll( U32 ModuleIndex )
@@ -414,8 +515,17 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 ///**
 // *	@brief		Get a interrupt number which has the most prority of pended interrupts.
 // *	@param[in]	ModuleIndex		an index of module.
-// *	@return		a interrupt number. A value of '-1' means that no interrupt is pended.
+// *	@return		a interrupt number. A value of '-1' means that no interrupt is pended.\n
 // *				refer to NX_HDMI_INTCH_xxx in <nx_hdmi.h>
+// *	@see		NX_HDMI_GetInterruptNumber,
+// *				NX_HDMI_SetInterruptEnable,
+// *				NX_HDMI_GetInterruptEnable,
+// *				NX_HDMI_GetInterruptPending,
+// *				NX_HDMI_ClearInterruptPending,
+// *				NX_HDMI_SetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptEnableAll,
+// *				NX_HDMI_GetInterruptPendingAll,
+// *				NX_HDMI_ClearInterruptPendingAll
 //
 // */
 //S32		NX_HDMI_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
@@ -447,7 +557,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 // Init Reg Test
 //-------------
 #ifdef NX_HDMI_PHY_INIT_REG_TEST
-#define NX_HDMI_CheckInitReg_MACRO( OFFSET_DEF, INIT_VALUE ) if( INIT_VALUE != (regvalue = NX_HDMI_GetReg( ModuleIndex, OFFSET_DEF                 ) )) {IsFail+=1;NX_CONSOLE_Printf("[DEBUG] Wrong Init Value ( %x ) = %x(Golden : %x)", OFFSET_DEF, regvalue, INIT_VALUE); }TotalCount+=1;
+#define NX_HDMI_CheckInitReg_MACRO( OFFSET_DEF, INIT_VALUE ) if( INIT_VALUE != (regvalue = NX_HDMI_GetReg( ModuleIndex, OFFSET_DEF                 ) )) {IsFail+=1;NX_CONSOLE_Printf("\n[DEBUG] Wrong Init Value ( %x ) = %x(Golden : %x)", OFFSET_DEF, regvalue, INIT_VALUE); }TotalCount+=1;
 
 CBOOL NX_HDMI_PHY_InitRegTest( U32 ModuleIndex )
 {
@@ -496,7 +606,7 @@ CBOOL NX_HDMI_PHY_InitRegTest( U32 ModuleIndex )
 
 	if( IsFail > 0 )
 		{
-			NX_CONSOLE_Printf("[DEBUG] HDMI PHY Reset Value Check. IsFail Count = %d, Total Count = %d", IsFail, TotalCount );
+			NX_CONSOLE_Printf("\n[DEBUG] HDMI PHY Reset Value Check. IsFail Count = %d, Total Count = %d\n", IsFail, TotalCount );
 			return CFALSE;
 		}
 	else

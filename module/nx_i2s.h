@@ -119,13 +119,8 @@ U32		NX_I2S_GetNumberOfModule( void );
 //@{
 U32		NX_I2S_GetPhysicalAddress( U32 ModuleIndex );
 U32		NX_I2S_GetSizeOfRegisterSet( void );
-<<<<<<< .mine
-void	NX_I2S_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
-void*	NX_I2S_GetBaseAddress( U32 ModuleIndex );
-=======
 void	NX_I2S_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress );
 U32*	NX_I2S_GetBaseAddress( U32 ModuleIndex );
->>>>>>> .r453
 CBOOL	NX_I2S_OpenModule( U32 ModuleIndex );
 CBOOL	NX_I2S_CloseModule( U32 ModuleIndex );
 CBOOL	NX_I2S_CheckBusy( U32 ModuleIndex );

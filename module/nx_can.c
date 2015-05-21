@@ -101,11 +101,7 @@ U32		NX_CAN_GetSizeOfRegisterSet( void )
  *				NX_CAN_OpenModule,				NX_CAN_CloseModule,
  *				NX_CAN_CheckBusy,
  */
-<<<<<<< .mine
-void	NX_CAN_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
-=======
 void	NX_CAN_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
->>>>>>> .r453
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
@@ -121,14 +117,10 @@ void	NX_CAN_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *				NX_CAN_OpenModule,				NX_CAN_CloseModule,
  *				NX_CAN_CheckBusy,
  */
-<<<<<<< .mine
-void*	NX_CAN_GetBaseAddress( U32 ModuleIndex )
-=======
 U32*	NX_CAN_GetBaseAddress( U32 ModuleIndex )
->>>>>>> .r453
 {
     NX_ASSERT( NUMBER_OF_CAN_MODULE > ModuleIndex );
-	return (void*)__g_pRegister[ModuleIndex];
+	return (U32*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------
@@ -558,8 +550,6 @@ S32		NX_CAN_GetInterruptPendingNumber( U32 ModuleIndex )	// -1 if None
 	return -1;
 }
 
-
-#ifdef SOC_TEST
 void    NX_CAN_REG_RD_TEST ( U32 ModuleIndex )
 {
     int i;
@@ -1023,4 +1013,4 @@ U32 NX_CAN_GetDMANumber ( U32 ModuleIndex , U32 ChannelIndex )
 	//// ...
 	return 1;
 }
-#endif
+

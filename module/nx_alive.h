@@ -180,16 +180,6 @@ U32     NX_ALIVE_GetNumberOfModule( void );
 //------------------------------------------------------------------------------
 /// @name   Basic Interface
 //@{
-<<<<<<< .mine
-U32		NX_ALIVE_GetPhysicalAddress( void );
-U32		NX_ALIVE_GetSizeOfRegisterSet( void );
-void	NX_ALIVE_SetBaseAddress( void* BaseAddress );
-void*	NX_ALIVE_GetBaseAddress( void );
-CBOOL	NX_ALIVE_OpenModule( void );
-CBOOL	NX_ALIVE_CloseModule( void );
-CBOOL	NX_ALIVE_CheckBusy( void );
-CBOOL	NX_ALIVE_CanPowerDown( void );
-=======
 U32     NX_ALIVE_GetPhysicalAddress( void );
 U32     NX_ALIVE_GetSizeOfRegisterSet( void );
 void    NX_ALIVE_SetBaseAddress( U32* BaseAddress );
@@ -198,7 +188,6 @@ CBOOL   NX_ALIVE_OpenModule( void );
 CBOOL   NX_ALIVE_CloseModule( void );
 CBOOL   NX_ALIVE_CheckBusy( void );
 CBOOL   NX_ALIVE_CanPowerDown( void );
->>>>>>> .r453
 //@}
 
 //------------------------------------------------------------------------------
