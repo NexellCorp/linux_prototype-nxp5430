@@ -94,7 +94,7 @@ U32     NX_MPEGTSI_GetDMABusWidth( void );
 /// @name   Internal DMA Interface
 //@{
 void    NX_MPEGTSI_SetIDMAEnable( U32 ChannelIndex, CBOOL Enable );
-U32     NX_MPEGTSI_GetIDMAEnable( void );
+CBOOL   NX_MPEGTSI_GetIDMAEnable( U32 ChannelIndex );
 void    NX_MPEGTSI_RunIDMA( U32 ChannelIndex );
 void    NX_MPEGTSI_StopIDMA( U32 ChannelIndex );
 void    NX_MPEGTSI_SetIDMABaseAddr( U32 ChannelIndex, U32 BaseAddr );
