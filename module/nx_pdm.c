@@ -285,7 +285,7 @@ U32 NX_PDM_GetDMANumber ( U32 ModuleIndex )
 {
 	const U32 DMANumber[NUMBER_OF_PDM_MODULE] =
 	{
-	    { DMAINDEX_LIST( PDM ) },  // DMAINDEX_OF_PDM?_MODULE
+	     DMAINDEX_LIST( PDM )   // DMAINDEX_OF_PDM?_MODULE
 	};
 	NX_ASSERT( NUMBER_OF_PDM_MODULE > ModuleIndex );
 

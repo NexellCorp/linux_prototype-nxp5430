@@ -356,7 +356,7 @@ void    NX_TMU_ClearInterruptPending( U32 ModuleIndex, NX_TMU_INT_MASK IntNum )
 {
     const U32 INTC_MASK  = 1UL << IntNum;
 
-    register struct NX_I2C_RegisterSet* pRegister;
+    register struct NX_TMU_RegisterSet* pRegister;
     register U32 ReadValue;
 
     IntNum = IntNum;

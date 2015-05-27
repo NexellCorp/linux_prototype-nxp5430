@@ -93,8 +93,8 @@ U32		NX_TIMER_GetNumberOfChannel( void );
 U32		NX_TIMER_GetPhysicalAddress( U32 ModuleIndex );
 
 U32		NX_TIMER_GetSizeOfRegisterSet( void );
-void	NX_TIMER_SetBaseAddress( U32 ModuleIndex, U32 BaseAddress );
-U32		NX_TIMER_GetBaseAddress( U32 ModuleIndex );
+void	NX_TIMER_SetBaseAddress( U32 ModuleIndex, void* BaseAddress );
+void*	NX_TIMER_GetBaseAddress( U32 ModuleIndex );
 CBOOL	NX_TIMER_OpenModule( U32 ModuleIndex );
 CBOOL	NX_TIMER_CloseModule( U32 ModuleIndex );
 CBOOL	NX_TIMER_CheckBusy( U32 ModuleIndex );

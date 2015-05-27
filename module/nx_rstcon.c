@@ -22,7 +22,6 @@ static struct NX_RSTCON_RegisterSet *__g_pRegister;
 CBOOL	NX_RSTCON_Initialize( void )
 {
 	static CBOOL bInit = CFALSE;
-	U32 i;
 
 	if( CFALSE == bInit )
 	{
