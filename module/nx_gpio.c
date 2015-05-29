@@ -998,7 +998,7 @@ CBOOL	NX_GPIO_GetInputValue		( U32 ModuleIndex, U32 BitNumber )
 
 	NX_ASSERT( CNULL != pRegister );
 
-	WriteIO32(&__g_ModuleVariables[ModuleIndex].pRegister->GPIOx_PULLSEL, Value );
+	return NX_GPIO_GetBit( ReadIO32(&pRegister->GPIOxPAD), BitNumber );
 }
 
 //------------------------------------------------------------------------------
