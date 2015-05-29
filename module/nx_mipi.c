@@ -825,19 +825,21 @@ U32   NX_MIPI_CSI_GetVersion ( U32 ModuleIndex )
 void  NX_MIPI_CSI_GetCurrentState( U32 ModuleIndex, int Channel, int* pWidth, int* pHeight, int* pT1, int* pT2, int* pT5, NX_MIPI_CSI_FORMAT* pFormat, int* pInterleaveChannel )
 {
 	register NX_MIPI_RegisterSet* pRegister;
-	register U32	regvalue;
-	register U32	regvalue2;
+	register U32	regvalue		= 0;
+	register U32	regvalue2		= 0;
+	
 	NX_ASSERT( NUMBER_OF_MIPI_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_pRegister[ModuleIndex] );
+	
 	pRegister = __g_pRegister[ModuleIndex];
 	NX_ASSERT( NX_MIPI_NUMBEROF_CSI_CHANNELS > Channel );
 	switch( Channel )
 	{
-	case 0: WRITEREG( CSIS_CONTROL, 1<<16, 1<<16); while( pRegister->CSIS_CONTROL & (1<<16) ){} regvalue = pRegister->CSIS_CONFIG_CH0; regvalue2 = pRegister->CSIS_RESOL_CH0; break;
-	case 1: WRITEREG( CSIS_CONTROL, 1<<17, 1<<17); while( pRegister->CSIS_CONTROL & (1<<17) ){} regvalue = pRegister->CSIS_CONFIG_CH1; regvalue2 = pRegister->CSIS_RESOL_CH1; break;
-	case 2: WRITEREG( CSIS_CONTROL, 1<<18, 1<<18); while( pRegister->CSIS_CONTROL & (1<<18) ){} regvalue = pRegister->CSIS_CONFIG_CH2; regvalue2 = pRegister->CSIS_RESOL_CH2; break;
-	case 3: WRITEREG( CSIS_CONTROL, 1<<19, 1<<19); while( pRegister->CSIS_CONTROL & (1<<19) ){} regvalue = pRegister->CSIS_CONFIG_CH3; regvalue2 = pRegister->CSIS_RESOL_CH3; break;
-	default: NX_ASSERT( !"Never get here" ); break;
+		case 0: WRITEREG( CSIS_CONTROL, 1<<16, 1<<16); while( pRegister->CSIS_CONTROL & (1<<16) ){} regvalue = pRegister->CSIS_CONFIG_CH0; regvalue2 = pRegister->CSIS_RESOL_CH0; break;
+		case 1: WRITEREG( CSIS_CONTROL, 1<<17, 1<<17); while( pRegister->CSIS_CONTROL & (1<<17) ){} regvalue = pRegister->CSIS_CONFIG_CH1; regvalue2 = pRegister->CSIS_RESOL_CH1; break;
+		case 2: WRITEREG( CSIS_CONTROL, 1<<18, 1<<18); while( pRegister->CSIS_CONTROL & (1<<18) ){} regvalue = pRegister->CSIS_CONFIG_CH2; regvalue2 = pRegister->CSIS_RESOL_CH2; break;
+		case 3: WRITEREG( CSIS_CONTROL, 1<<19, 1<<19); while( pRegister->CSIS_CONTROL & (1<<19) ){} regvalue = pRegister->CSIS_CONFIG_CH3; regvalue2 = pRegister->CSIS_RESOL_CH3; break;
+		default: NX_ASSERT( !"Never get here" ); break;
 	}
 
 	if( pWidth             ){ *pWidth             = (((regvalue2)>>16) & 0xFFFF); }

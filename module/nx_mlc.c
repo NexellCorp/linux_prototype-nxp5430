@@ -1100,8 +1100,12 @@ void	NX_MLC_SetColorInversion( U32 ModuleIndex, U32 layer, CBOOL bEnb, U32 color
  */
 U32		NX_MLC_GetExtendedColor( U32 ModuleIndex, U32 color, NX_MLC_RGBFMT format )
 {
-	U32 rgb[3];
-	int	bw[3], bp[3], blank, fill, i;
+	U32 rgb[3] = { 0, };
+	U32	bw[3]  = { 0, };
+	U32 bp[3]  = { 0, };
+	U32 blank  = 0, 
+	U32 fill   = 0;
+	U32 i	   = 0;
 
 	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
 	NX_ASSERT( 0 == (format & 0x0000FFFFUL) );
@@ -3107,24 +3111,22 @@ NX_MLC_SetVideoLayerCoordinate
 // 로 들어왔을 것이니.. 이를 계산할때는
 // VideoLayerWith * 2048 / (Right - Left + 1)
 // 위와 같이 해주어야 하는것 아닌가?
-//----------------------
-void
-NX_MLC_SetVideoLayerFilterScale
-(
-    U32 ModuleIndex,
-    U32 HScale,   ///< [in] Video Layer HScale
-    U32 VScale    ///< [in] Video Layer VScale
-)
+//---------------------
+						///< [in] Video Layer HScale ///< [in] Video Layer VScale
+void NX_MLC_SetVideoLayerFilterScale( U32 ModuleIndex, U32 HScale, U32 VScale )
 {
 	register struct NX_MLC_RegisterSet* pRegister;
 
+	U32 MLCHSCALE 		= 0;
+	U32 MLCVSCALE		= 0;
+	
 	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
 
 	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
-
-	U32 MLCHSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
-	U32 MLCVSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
+	MLCHSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE) & (~0x00FFFFFF);
+	MLCVSCALE = ReadIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE) & (~0x00FFFFFF);
+	
 	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCHSCALE,(U32)(MLCHSCALE | (HScale&0x00FFFFFF)));
 	WriteIO32(&pRegister ->  MLCVIDEOLAYER.MLCVSCALE,(U32)(MLCVSCALE | (VScale&0x00FFFFFF)));
 }

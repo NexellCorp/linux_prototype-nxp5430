@@ -932,7 +932,9 @@ NX_TIMER_LOADMODE	NX_TIMER_GetShotMode(U32 Channel)
 void	NX_TIMER_UpdateCounter(U32 Channel )
 {
 	register struct NX_TIMER_RegisterSet	*pRegister;
-	register U32 modulechannel, regvalue, updatedonevalue;
+	register U32 modulechannel 		= 0;
+	register U32 regvalue	   		= 0;
+	register U32 updatedonevalue 	= 0;
 
 	NX_ASSERT( NUMBER_OF_TIMER_MODULE > Channel/NUMBER_OF_TIMER_CHANNEL );
 	modulechannel = Channel%NUMBER_OF_TIMER_CHANNEL;
