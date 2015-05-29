@@ -1103,7 +1103,7 @@ U32		NX_MLC_GetExtendedColor( U32 ModuleIndex, U32 color, NX_MLC_RGBFMT format )
 	U32 rgb[3] = { 0, };
 	U32	bw[3]  = { 0, };
 	U32 bp[3]  = { 0, };
-	U32 blank  = 0, 
+	U32 blank  = 0; 
 	U32 fill   = 0;
 	U32 i	   = 0;
 
