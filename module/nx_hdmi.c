@@ -438,7 +438,7 @@ U32 	NX_HDMI_GetInterruptNumber( U32 ModuleIndex )
 // Init Reg Test
 //-------------
 #ifdef NX_HDMI_PHY_INIT_REG_TEST
-#define NX_HDMI_CheckInitReg_MACRO( OFFSET_DEF, INIT_VALUE ) if( INIT_VALUE != (regvalue = NX_HDMI_GetReg( ModuleIndex, OFFSET_DEF                 ) )) {IsFail+=1;NX_CONSOLE_Printf("[DEBUG] Wrong Init Value ( %x ) = %x(Golden : %x)", OFFSET_DEF, regvalue, INIT_VALUE); }TotalCount+=1;
+#define NX_HDMI_CheckInitReg_MACRO( OFFSET_DEF, INIT_VALUE ) if( INIT_VALUE != (regvalue = NX_HDMI_GetReg( ModuleIndex, OFFSET_DEF                 ) )) {IsFail+=1;NX_CONSOLE_Printf("\n[DEBUG] Wrong Init Value ( %x ) = %x(Golden : %x)", OFFSET_DEF, regvalue, INIT_VALUE); }TotalCount+=1;
 
 CBOOL NX_HDMI_PHY_InitRegTest( U32 ModuleIndex )
 {
@@ -487,7 +487,7 @@ CBOOL NX_HDMI_PHY_InitRegTest( U32 ModuleIndex )
 
 	if( IsFail > 0 )
 		{
-			NX_CONSOLE_Printf("[DEBUG] HDMI PHY Reset Value Check. IsFail Count = %d, Total Count = %d", IsFail, TotalCount );
+			NX_CONSOLE_Printf("\n[DEBUG] HDMI PHY Reset Value Check. IsFail Count = %d, Total Count = %d\n", IsFail, TotalCount );
 			return CFALSE;
 		}
 	else
