@@ -56,7 +56,7 @@ U32			NX_CLKGEN_GetSizeOfRegisterSet( void )
 	return sizeof(struct NX_CLKGEN_RegisterSet);
 }
 
-void		NX_CLKGEN_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void		NX_CLKGEN_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
     NX_ASSERT( NUMBER_OF_CLKGEN_MODULE > ModuleIndex );
 	NX_ASSERT( CNULL != BaseAddress );

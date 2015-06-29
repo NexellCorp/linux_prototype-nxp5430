@@ -105,8 +105,8 @@ void*	NX_GIC400_GetBaseAddress( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Initialize selected modules with default value.
- *	@return		\b CTRUE	indicates that Initialize is succeeded. \n
- *				\b CFALSE	indicates that Initialize is failed.
+ *	@return		 CTRUE	indicates that Initialize is succeeded. 
+ *				 CFALSE	indicates that Initialize is failed.
  */
 CBOOL	NX_GIC400_OpenModule( void )
 {
@@ -116,8 +116,8 @@ CBOOL	NX_GIC400_OpenModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Deinitialize selected module to the proper stage.
- *	@return		\b CTRUE	indicates that Deinitialize is succeeded. \n
- *				\b CFALSE	indicates that Deinitialize is failed.
+ *	@return		 CTRUE	indicates that Deinitialize is succeeded. 
+ *				 CFALSE	indicates that Deinitialize is failed.
  */
 CBOOL	NX_GIC400_CloseModule( void )
 {
@@ -127,8 +127,8 @@ CBOOL	NX_GIC400_CloseModule( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicates whether the selected modules is busy or not.
- *	@return		\b CTRUE	indicates that Module is Busy. \n
- *				\b CFALSE	indicates that Module is NOT Busy.
+ *	@return		 CTRUE	indicates that Module is Busy. 
+ *				 CFALSE	indicates that Module is NOT Busy.
  */
 CBOOL	NX_GIC400_CheckBusy( void )
 {
@@ -138,8 +138,8 @@ CBOOL	NX_GIC400_CheckBusy( void )
 //------------------------------------------------------------------------------
 /**
  *	@brief		Indicaes whether the selected modules is ready to enter power-down stage
- *	@return		\b CTRUE	indicates that Ready to enter power-down stage. \n
- *				\b CFALSE	indicates that This module can't enter to power-down stage.
+ *	@return		 CTRUE	indicates that Ready to enter power-down stage. 
+ *				 CFALSE	indicates that This module can't enter to power-down stage.
  */
 CBOOL	NX_GIC400_CanPowerDown( void )
 {

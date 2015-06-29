@@ -81,7 +81,7 @@ U32 		NX_USB20OTG_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, U32* BaseAddress )
+void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, void* BaseAddress )
 {
     if( ModuleIndex == 0 ) { __g_pRegister[0] = (NX_USB20OTG_RegisterSet *)BaseAddress; }
     if( ModuleIndex == 1 ) { __g_pApbRegister[0] = (NX_USB20OTG_APB_RegisterSet *)BaseAddress; }
@@ -92,7 +92,7 @@ void	NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32*    NX_USB20OTG_GetBaseAddress(U32 ModuleIndex )
+void*    NX_USB20OTG_GetBaseAddress(U32 ModuleIndex )
 {
     if( ModuleIndex == 0 ) { return (U32*)__g_pRegister[0];	 }
     if( ModuleIndex == 1 ) { return (U32*)__g_pApbRegister[0];	 }

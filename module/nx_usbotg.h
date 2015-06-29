@@ -161,8 +161,8 @@ CBOOL NX_USB20OTG_Initialize( void );
 U32   NX_USB20OTG_GetNumberOfModule( void );
 
 U32   NX_USB20OTG_GetSizeOfRegisterSet( void );
-void  NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, U32 BaseAddress );
-U32   NX_USB20OTG_GetBaseAddress( U32 ModuleIndex );
+void  NX_USB20OTG_SetBaseAddress(  U32 ModuleIndex, void* BaseAddress );
+void* NX_USB20OTG_GetBaseAddress( U32 ModuleIndex );
 U32   NX_USB20OTG_GetPhysicalAddress ( U32 ModuleIndex );
 CBOOL NX_USB20OTG_OpenModule(  );
 CBOOL NX_USB20OTG_CloseModule(  );

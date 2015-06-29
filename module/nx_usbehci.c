@@ -75,7 +75,7 @@ U32		NX_USB20HOST_GetSizeOfRegisterSet( void )
  *	@param[in]	BaseAddress Module's base address
  *	@return		None.
  */
-void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
+void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     //NX_ASSERT( NUMBER_OF_USB20HOST_MODULE > ModuleIndex );
@@ -89,10 +89,10 @@ void	NX_USB20HOST_SetBaseAddress( U32 ModuleIndex, U32* BaseAddress )
  *	@brief		Get a base address of register set
  *	@return		Module's base address.
  */
-U32		NX_USB20HOST_GetBaseAddress( U32 ModuleIndex )
+void*	NX_USB20HOST_GetBaseAddress( U32 ModuleIndex )
 {
     //NX_ASSERT( NUMBER_OF_USB20HOST_MODULE > ModuleIndex );
-	return (U32)__g_pRegister[ModuleIndex];
+	return (void*)__g_pRegister[ModuleIndex];
 }
 
 //------------------------------------------------------------------------------
