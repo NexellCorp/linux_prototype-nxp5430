@@ -3221,3 +3221,81 @@ CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex )
 	return (CBOOL)((__g_ModuleVariables[ModuleIndex].pRegister->MLCCONTROLT & UNDERFLOW_PEND_MASK) >> UNDERFLOW_PEND_POS );
 
 }
+
+
+//------------------------------------------------------------------------------
+// Gamma Table Configuration function & structure 
+//
+void NX_MLC_SetGammaTable( U32 ModuleIndex, CBOOL Enb, struct NX_MLC_GammaTable_Parameter * p_nx_mlc_gammatable )
+{
+	U32 i, regval;
+	register struct NX_MLC_RegisterSet* pRegister;
+	
+	NX_ASSERT( NUMBER_OF_MLC_MODULE > ModuleIndex );
+	NX_ASSERT( CNULL != __g_ModuleVariables[ModuleIndex].pRegister );
+
+	NX_ASSERT( p_nx_mlc_gammatable->DITHERENB   <= 1 );
+	NX_ASSERT( p_nx_mlc_gammatable->ALPHASELECT <= 1 );
+	NX_ASSERT( p_nx_mlc_gammatable->YUVGAMMAENB <= 1 );
+	NX_ASSERT( p_nx_mlc_gammatable->RGBGAMMAENB <= 1 );
+	NX_ASSERT( p_nx_mlc_gammatable->ALLGAMMAENB <= 1 );
+
+	pRegister = __g_ModuleVariables[ModuleIndex].pRegister;
+
+	if( Enb == CTRUE ) {
+		regval = ReadIO32( &pRegister->MLCGAMMACONT ) ;
+
+		// GAMMA SRAM POWER ON
+		regval =  (1<<11) // B_PWD
+				| (1<<9)  // G_PWD
+				| (1<<3); // R_PWD
+		WriteIO32( &pRegister->MLCGAMMACONT, regval ) ;
+
+		// GAMMA SRAM SLEEP OFF
+		regval =  regval
+		  		| (1<<10) // B_SLD
+				| (1<<8)  // G_SLD
+				| (1<<2); // R_SLD
+		WriteIO32( &pRegister->MLCGAMMACONT, regval ) ;
+
+		// set R/G/B Table
+		for(i=0; i<256; i++) {
+			NX_MLC_SetRGBLayerRGammaTable( ModuleIndex, i, p_nx_mlc_gammatable->R_TABLE[i] );
+			NX_MLC_SetRGBLayerGGammaTable( ModuleIndex, i, p_nx_mlc_gammatable->G_TABLE[i] );
+			NX_MLC_SetRGBLayerBGammaTable( ModuleIndex, i, p_nx_mlc_gammatable->B_TABLE[i] );
+		}
+
+		// GAMMA ENABLE
+		regval =  regval
+		  		| ( p_nx_mlc_gammatable->ALPHASELECT<<5 ) 
+				| (
+					  p_nx_mlc_gammatable->YUVGAMMAENB<<4
+					| p_nx_mlc_gammatable->ALLGAMMAENB<<4
+				  )  
+				| (
+					  p_nx_mlc_gammatable->RGBGAMMAENB<<1
+					| p_nx_mlc_gammatable->ALLGAMMAENB<<1
+				  ) 
+				| ( p_nx_mlc_gammatable->DITHERENB<<1 ) ; 
+
+		WriteIO32( &pRegister->MLCGAMMACONT, regval ) ;
+	}
+	else {
+		// GAMMA SRAM SLEEP OFF
+		regval =  regval
+		  		& ~(1<<10) // B_SLD : set LOW
+				& ~(1<<8)  // G_SLD
+				& ~(1<<2); // R_SLD
+		WriteIO32( &pRegister->MLCGAMMACONT, regval ) ;
+
+		// GAMMA SRAM POWER OFF
+		regval =  regval
+		  		& ~(1<<11) // B_PWD
+				& ~(1<<9)  // G_PWD
+				& ~(1<<3); // R_PWD
+		WriteIO32( &pRegister->MLCGAMMACONT, regval ) ;
+	}
+}
+
+
+

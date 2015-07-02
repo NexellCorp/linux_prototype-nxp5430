@@ -514,6 +514,25 @@ void NX_MLC_SetLayerAlpha256(U32 ModuleIndex, U32 Layer, U32 Alpha);
 CBOOL	NX_MLC_IsUnderFlow( U32 ModuleIndex );
 
 
+//------------------------------------------------------------------------------
+// Gamma Table Configuration function & structure 
+//
+struct NX_MLC_GammaTable_Parameter {
+	U32 R_TABLE[256];	
+	U32 G_TABLE[256];	
+	U32 B_TABLE[256];
+
+	U32 DITHERENB  ;
+
+	U32 ALPHASELECT;
+
+	U32 YUVGAMMAENB;
+	U32 RGBGAMMAENB;
+	U32 ALLGAMMAENB;
+};
+void NX_MLC_SetGammaTable( U32 ModuleIndex, CBOOL Enb, struct NX_MLC_GammaTable_Parameter * p_nx_mlc_gammatable );
+
+
 
 #ifdef	__cplusplus
 }
