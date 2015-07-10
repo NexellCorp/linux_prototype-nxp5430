@@ -13,6 +13,8 @@
 //	Author		:
 //	History		:
 //------------------------------------------------------------------------------
+#include <linux/kernel.h>
+
 #include "nx_chip.h"
 #include "nx_hdmi.h"
 
@@ -22,7 +24,13 @@
 
 // register를 만들지 않고 define을 통해 처리한다.
 //static	NX_HDMI_RegisterSet *__g_pRegister[NUMBER_OF_HDMI_MODULE];
-U32  HDMI_BaseAddr;
+
+#ifdef	CONFIG_ARM64 
+	U32*	HDMI_BaseAddr;
+#else
+	U32	HDMI_BaseAddr;
+#endif
+
 //U32  HDMI_TXLINK_BaseAddr;
 //U32  HDMI_CEC_BaseAddr;
 //U32  HDMI_PHY_BaseAddr;
@@ -36,34 +44,51 @@ U32  HDMI_BaseAddr;
 //
 //------------------------------------------------------------------------------
 
-
-
-
 //------------------------------------------------------------------------------
 /**
- *	@brief	It is a sample function
+ *  @brief  It is a sample function
  */
-
 U32  NX_HDMI_GetReg( U32 ModuleIndex, U32 Offset )
 {
-	U32 RegAddr;
-	U32 regvalue;
+#ifdef CONFIG_ARM64
+  U32* RegAddr;
+#else
+  U32 RegAddr;
+#endif
 
-	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
+  U32 regvalue;
 
-	RegAddr = HDMI_BaseAddr + Offset;
-	regvalue = ReadIO32( (U32*)RegAddr );
-	return regvalue;
+  NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
+
+#ifdef CONFIG_ARM64
+  RegAddr = HDMI_BaseAddr + (Offset/sizeof(U32));
+  regvalue = ReadIO32( (U32*)RegAddr );
+#else
+  RegAddr = HDMI_BaseAddr + Offset;
+  regvalue = ReadIO32( (U32*)RegAddr );
+#endif
+
+  return regvalue;
 }
 
 void NX_HDMI_SetReg( U32 ModuleIndex, U32 Offset, U32 regvalue )
 {
-	U32 RegAddr;
-	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
+#ifdef CONFIG_ARM64
+  S64 OffsetNew = (S64)((S32)Offset);
+  U32* RegAddr;
+#else
+  U32 RegAddr;
+#endif
 
-	RegAddr = HDMI_BaseAddr + Offset;
+  NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
 
-	WriteIO32( (U32*)RegAddr, regvalue );
+#ifdef CONFIG_ARM64 
+  RegAddr = HDMI_BaseAddr + (OffsetNew/sizeof(U32));
+#else
+  RegAddr = HDMI_BaseAddr + Offset;
+#endif
+
+  WriteIO32((U32*)RegAddr, regvalue);
 }
 
 //------------------------------------------------------------------------------
@@ -122,7 +147,12 @@ void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 {
 	NX_ASSERT( CNULL != BaseAddress );
     NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
+
+#ifdef CONFIG_ARM64
+	HDMI_BaseAddr = (U32*)BaseAddress;
+#else
 	HDMI_BaseAddr = (U32)BaseAddress;
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -133,9 +163,9 @@ void	NX_HDMI_SetBaseAddress( U32 ModuleIndex, void* BaseAddress )
 
 void*	NX_HDMI_GetBaseAddress( U32 ModuleIndex )
 {
-    NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
+	NX_ASSERT( NUMBER_OF_HDMI_MODULE > ModuleIndex );
 
-	return (void*)HDMI_BaseAddr;
+	return (U32*)HDMI_BaseAddr;
 }
 
 //------------------------------------------------------------------------------
