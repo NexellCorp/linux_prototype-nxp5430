@@ -13,8 +13,6 @@
 //	Author		:
 //	History		:
 //------------------------------------------------------------------------------
-#include <linux/kernel.h>
-
 #include "nx_chip.h"
 #include "nx_hdmi.h"
 
