@@ -684,7 +684,7 @@ void	NX_ADC_SetInputChannel( U32 ModuleIndex, U32 Channel )
 	regvalue	 = ReadIO32(&pRegister->ADCCON);
 
 	regvalue	&= ~ASEL_MASK;
-	regvalue	 = Channel << ASEL_BITPOS;
+	regvalue	|= Channel << ASEL_BITPOS;
 
 	WriteIO32(&pRegister->ADCCON, (U16)regvalue);
 }
