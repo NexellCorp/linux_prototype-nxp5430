@@ -61,9 +61,6 @@ U32		NX_TZPC_GetSizeOfRegisterSet( void );
 
 void	NX_TZPC_SetBaseAddress( void* BaseAddress );
 void*	NX_TZPC_GetBaseAddress( void );
-=======
-void	NX_TZPC_SetBaseAddress( U32 BaseAddress );
-U32*	NX_TZPC_GetBaseAddress( void );
 
 CBOOL	NX_TZPC_OpenModule( void );
 CBOOL	NX_TZPC_CloseModule( void );
