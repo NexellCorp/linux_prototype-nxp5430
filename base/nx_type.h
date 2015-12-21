@@ -39,6 +39,7 @@ typedef unsigned int		U32;			///< 32bit unsigned integer value
 typedef unsigned long long	U64;			///< 64bit unsigned integer value
 
 
+#ifndef __KERNEL__
 #define S8_MIN			-128				///< signed char min value
 #define S8_MAX			127					///< signed char max value
 #define S16_MIN			-32768				///< signed short min value
@@ -52,6 +53,7 @@ typedef unsigned long long	U64;			///< 64bit unsigned integer value
 #define U16_MAX			65535				///< unsigned short max value
 #define U32_MIN			0					///< unsigned integer min value
 #define U32_MAX			4294967295			///< unsigned integer max value
+#endif
 /// @}
 
 //==============================================================================
